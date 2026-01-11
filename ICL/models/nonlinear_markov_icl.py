@@ -23,9 +23,9 @@ import torch.nn as nn
 import numpy as np
 from .base_icl_model import BaseICLModel
 
-MIN_W = -15
-MAX_W = 15
-MIN_Y = -50
+MIN_W = np.log(1e-6)
+MAX_W = np.log(1e6)
+MIN_Y = np.log(1e-15)
 MAX_Y = np.log(0.1)
 
 
@@ -45,7 +45,7 @@ class NonlinearMarkovICL(BaseICLModel):
                  sparsity_rho_edge_K=1.0, sparsity_rho_all_K=1.0,
                  sparsity_rho_edge_L=1.0, sparsity_rho_all_L=1.0,
                  sparsity_rho_edge_base_W=1.0, sparsity_rho_edge_base_Y=1.0,
-                 base_mask_value=0.0, symmetrize_Y=True, print_creation = True):
+                 base_mask_value=0.0, symmetrize_Y=True):
         """
         Initialize Nonlinear Markov ICL model.
         
@@ -159,29 +159,28 @@ class NonlinearMarkovICL(BaseICLModel):
                 lambda grad: grad * self.base_log_rates_Y_mask
             )
         
-        if print_creation:
-            print(f"  Initialized Nonlinear Markov ICL model (L={L} classes, "
-                f"attention over {N} context items)")
-            print(f"  Nonlinear dynamics: W p + p Y p = 0")
-            print(f"  Symmetrize Y tensor: {symmetrize_Y} (Y_ijk = Y_ikj)")
-            print(f"  Label modulation: {self.use_label_mod}")
-            print(f"  Base rates learnable W: {learn_base_rates_W}, Y: {learn_base_rates_Y}")
-            print(f"  Base mask value: {base_mask_value}")
-            print(f"  Sparsity K: rho_edge={sparsity_rho_edge_K:.3f}, rho_all={sparsity_rho_all_K:.3f}")
-            print(f"  Sparsity L: rho_edge={sparsity_rho_edge_L:.3f}, rho_all={sparsity_rho_all_L:.3f}")
-            print(f"  Sparsity base_W: rho_edge={sparsity_rho_edge_base_W:.3f}")
-            print(f"  Sparsity base_Y: rho_edge={sparsity_rho_edge_base_Y:.3f}")
-            sparsity_stats = self.get_sparsity_stats()
-            if sparsity_stats:
-                print(f"  K_params sparsity: {sparsity_stats['K_actual_sparsity']:.3f} "
-                    f"({sparsity_stats['K_num_active']}/{sparsity_stats['K_num_total']} active)")
-                print(f"  L_params sparsity: {sparsity_stats['L_actual_sparsity']:.3f} "
-                    f"({sparsity_stats['L_num_active']}/{sparsity_stats['L_num_total']} active)")
-                print(f"  base_W sparsity: {sparsity_stats['base_W_actual_sparsity']:.3f} "
-                    f"({sparsity_stats['base_W_num_active']}/{sparsity_stats['base_W_num_total']} active)")
-                print(f"  base_Y sparsity: {sparsity_stats['base_Y_actual_sparsity']:.3f} "
-                    f"({sparsity_stats['base_Y_num_active']}/{sparsity_stats['base_Y_num_total']} active)")
-            print(f"  Parameters: {self.get_num_parameters():,}")
+        print(f"  Initialized Nonlinear Markov ICL model (L={L} classes, "
+              f"attention over {N} context items)")
+        print(f"  Nonlinear dynamics: W p + p Y p = 0")
+        print(f"  Symmetrize Y tensor: {symmetrize_Y} (Y_ijk = Y_ikj)")
+        print(f"  Label modulation: {self.use_label_mod}")
+        print(f"  Base rates learnable W: {learn_base_rates_W}, Y: {learn_base_rates_Y}")
+        print(f"  Base mask value: {base_mask_value}")
+        print(f"  Sparsity K: rho_edge={sparsity_rho_edge_K:.3f}, rho_all={sparsity_rho_all_K:.3f}")
+        print(f"  Sparsity L: rho_edge={sparsity_rho_edge_L:.3f}, rho_all={sparsity_rho_all_L:.3f}")
+        print(f"  Sparsity base_W: rho_edge={sparsity_rho_edge_base_W:.3f}")
+        print(f"  Sparsity base_Y: rho_edge={sparsity_rho_edge_base_Y:.3f}")
+        sparsity_stats = self.get_sparsity_stats()
+        if sparsity_stats:
+            print(f"  K_params sparsity: {sparsity_stats['K_actual_sparsity']:.3f} "
+                  f"({sparsity_stats['K_num_active']}/{sparsity_stats['K_num_total']} active)")
+            print(f"  L_params sparsity: {sparsity_stats['L_actual_sparsity']:.3f} "
+                  f"({sparsity_stats['L_num_active']}/{sparsity_stats['L_num_total']} active)")
+            print(f"  base_W sparsity: {sparsity_stats['base_W_actual_sparsity']:.3f} "
+                  f"({sparsity_stats['base_W_num_active']}/{sparsity_stats['base_W_num_total']} active)")
+            print(f"  base_Y sparsity: {sparsity_stats['base_Y_actual_sparsity']:.3f} "
+                  f"({sparsity_stats['base_Y_num_active']}/{sparsity_stats['base_Y_num_total']} active)")
+        print(f"  Parameters: {self.get_num_parameters():,}")
     
     def _create_linear_sparsity_masks(self, z_full_dim):
         """
@@ -1179,6 +1178,12 @@ class NonlinearMarkovICL(BaseICLModel):
         return [(i.item(), j.item(), k.item()) for i, j, k in active_indices]
 
     def get_non_zero_count_L(self):
+        """
+        Get the number of non-zero elements in the L_params tensor.
+        
+        Returns:
+            int: Number of non-zero elements in L_params
+        """
         L_array = np.array(self.L_params.detach().numpy() * self.L_params_mask.detach().numpy())
         s = L_array.shape
         non_zero_count = 0
@@ -1186,50 +1191,62 @@ class NonlinearMarkovICL(BaseICLModel):
             for j in range(s[1]):
                 if i != j: 
                     for k in range(j):
-                        l_vec = L_array[i,j,k,:] + L_array[i,k,j,:] # symmetrize
+                        l_vec = L_array[i,j,k,:] + L_array[i,k,j,:]
                         for element in l_vec:
                             if np.abs(element) > 1e-10:
                                 non_zero_count += 1
         return non_zero_count
 
-    def get_non_zero_count_K(self):
-        K_array = np.array(self.K_params.detach().numpy() * self.K_params_mask.detach().numpy())
-        s = K_array.shape
-        non_zero_count = 0
-        for i in range(s[0]):
-            for j in range(s[1]):
-                if i != j: 
-                    k_vec = K_array[i,j,:]
-                    for element in k_vec:
-                        if np.abs(element) > 1e-10:
-                            non_zero_count += 1
-        return non_zero_count
 
-
-def load_model_nlm(params, path, print_creation = True):
+def load_model(params, path, print_creation=True):
     """Load a NonlinearMarkovICL model from saved weights.
     
     Args:
         params: Dictionary containing model parameters
         path: Path to directory containing model.pt file
+        print_creation: Whether to print model creation info
         
     Returns:
         model: Loaded model in evaluation mode on appropriate device
     """
-    model = NonlinearMarkovICL(n_nodes=params['n_nodes'], z_dim=params['D'], 
-                               L=params['L'], N=params['N'], 
-                               learn_base_rates_W=params['learn_base_rates_W'],
-                               learn_base_rates_Y=params['learn_base_rates_Y'], 
-                               symmetrize_Y=params['symmetrize_Y'],
-                               transform_func=params['transform_func'],
-                               sparsity_rho_edge_K=params['sparsity_rho_edge_K'], 
-                               sparsity_rho_all_K=params['sparsity_rho_all_K'],
-                               sparsity_rho_edge_L=params['sparsity_rho_edge_L'], 
-                               sparsity_rho_all_L=params['sparsity_rho_all_L'],
-                               sparsity_rho_edge_base_W=params['sparsity_rho_edge_base_W'],
-                               sparsity_rho_edge_base_Y=params['sparsity_rho_edge_base_Y'],
-                               base_mask_value=params['base_mask_value'],
-                               print_creation=print_creation)
+    # Handle backwards compatibility for params that might use old naming
+    learn_base_rates_W = params.get('learn_base_rates_W', params.get('learn_base_rates', True))
+    learn_base_rates_Y = params.get('learn_base_rates_Y', True)
+    sparsity_rho_edge_K = params.get('sparsity_rho_edge_K', params.get('sparsity_rho_edge', 1.0))
+    sparsity_rho_all_K = params.get('sparsity_rho_all_K', params.get('sparsity_rho_all', 1.0))
+    sparsity_rho_edge_L = params.get('sparsity_rho_edge_L', 1.0)
+    sparsity_rho_all_L = params.get('sparsity_rho_all_L', 1.0)
+    sparsity_rho_edge_base_W = params.get('sparsity_rho_edge_base_W', 1.0)
+    sparsity_rho_edge_base_Y = params.get('sparsity_rho_edge_base_Y', 1.0)
+    
+    # Suppress print during creation if requested
+    if not print_creation:
+        import io
+        import sys
+        old_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+    
+    model = NonlinearMarkovICL(
+        n_nodes=params['n_nodes'], 
+        z_dim=params['D'], 
+        L=params['L'], 
+        N=params['N'],
+        use_label_mod=params.get('use_label_mod', False),
+        learn_base_rates_W=learn_base_rates_W,
+        learn_base_rates_Y=learn_base_rates_Y,
+        transform_func=params.get('transform_func', 'exp'),
+        sparsity_rho_edge_K=sparsity_rho_edge_K,
+        sparsity_rho_all_K=sparsity_rho_all_K,
+        sparsity_rho_edge_L=sparsity_rho_edge_L,
+        sparsity_rho_all_L=sparsity_rho_all_L,
+        sparsity_rho_edge_base_W=sparsity_rho_edge_base_W,
+        sparsity_rho_edge_base_Y=sparsity_rho_edge_base_Y,
+        base_mask_value=params.get('base_mask_value', 0.0),
+        symmetrize_Y=params.get('symmetrize_Y', True)
+    )
+    
+    if not print_creation:
+        sys.stdout = old_stdout
     
     model_path = path + 'model.pt'
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -1240,4 +1257,9 @@ def load_model_nlm(params, path, print_creation = True):
     model.eval()
     
     return model
+
+
+
+
+
 

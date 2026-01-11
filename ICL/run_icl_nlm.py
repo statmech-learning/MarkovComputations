@@ -36,12 +36,12 @@ output_dir = args.output
 # Data Generation Parameters
 # ============================================================
 L = 128                      # Number of output classes
-K = 128                      # Number of GMM classes for data generation
+K = L                      # Number of GMM classes for data generation
 D = 4                        # Dimension of input features
 N = 4                        # Number of context examples per task
 B = 1                        # Burstiness parameter (zipfian sampling weight)
 epsilon = 1e-3               # Within-class noise (standard deviation)
-seed = args.param2                    # Random seed for reproducibility
+seed = args.param3                    # Random seed for reproducibility
 exact_copy = True            # If True, query is exact copy of a context item
 shuffle_context = True       # Whether to shuffle context order during training
 offset = 0.0                 # Offset applied to GMM centers
@@ -51,9 +51,9 @@ unique_labels = False        # If True, ensure all context labels are unique
 # ============================================================
 # Model Architecture Parameters
 # ============================================================
-n_nodes = 5                  # Number of nodes in the Markov chain
+n_nodes = args.param1                  # Number of nodes in the Markov chain
 transform_func = 'exp'       # Transformation function: 'exp', 'relu', or 'elu'
-learn_base_rates_W = False    # If True, allow gradient updates to unmasked base rates for W
+learn_base_rates_W = True    # If True, allow gradient updates to unmasked base rates for W
 learn_base_rates_Y = False    # If True, allow gradient updates to unmasked base rates for Y
 symmetrize_Y = True          # Whether to enforce Y_{i,j,k} = Y_{i,k,j} symmetry
 
@@ -81,9 +81,9 @@ base_mask_value = float('-inf')  # Value for masked base rates: 0.0 (no bias) or
 # ============================================================
 epochs = 1000                  # Number of training epochs
 lr = 0.0025                  # Learning rate
-batch_size = 64              # Batch size for training
+batch_size = 50              # Batch size for training
 train_samples = 25000        # Number of training samples
-val_samples = 2000           # Number of validation samples
+val_samples = 5000           # Number of validation samples
 
 # ============================================================
 # Inference Parameters

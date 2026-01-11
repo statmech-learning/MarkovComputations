@@ -19,7 +19,7 @@ import torch.nn as nn
 import numpy as np
 from models.base_icl_model import BaseICLModel
 
-
+WTA_TAU = 0.01
 class WinnerTakesAllICL(BaseICLModel):
     """
     Winner-Takes-All Chemical Reaction ICL model for classification.
@@ -33,7 +33,11 @@ class WinnerTakesAllICL(BaseICLModel):
     """
     
     def __init__(self, n_nodes=10, z_dim=2, L=75, N=4, use_label_mod=False,
-                 alpha=1.0, K_scale=1.0, R0=2.0, activation='softplus', beta_softplus=10.0):
+                 alpha=1.0, K_scale=1.0, R0=2.0, activation='softplus', beta_softplus=10.0,
+                 f_activation='softplus', learn_K=True, learn_beta=True,
+                 sparsity_rho_edge=1.0, sparsity_rho_all=1.0, print_creation=True,
+                 use_annealing=False, tau_start=0.5, tau_end=0.01,
+                 beta_softplus_start=1.0, beta_softplus_end=10.0, anneal_epochs=100):
         """
         Initialize WTA Chemical Reaction ICL model.
         
@@ -47,6 +51,18 @@ class WinnerTakesAllICL(BaseICLModel):
             K_scale: Base scale for K_j parameters
             R0: Initial resource level for reactions
             activation: 'relu' or 'softplus' for enforcing Y_j ≥ 0
+            f_activation: 'softplus' or 'exp' for computing f_j rates
+            learn_K: Whether to update K_j during training
+            learn_beta: Whether to update β_j during training
+            sparsity_rho_edge: Fraction of non-zero elements in per-node mask (n_nodes, 1)
+            sparsity_rho_all: Fraction of non-zero elements in per-element mask (all dims)
+            print_creation: Whether to print model info on creation
+            use_annealing: Whether to anneal tau and beta_softplus during training
+            tau_start: Initial WTA softmin temperature (higher = softer selection)
+            tau_end: Final WTA softmin temperature (lower = harder selection)
+            beta_softplus_start: Initial softplus sharpness (lower = smoother)
+            beta_softplus_end: Final softplus sharpness (higher = closer to ReLU)
+            anneal_epochs: Number of epochs over which to anneal
         """
         super().__init__(n_nodes=n_nodes, z_dim=z_dim, L=L, N=N)
         self.n_nodes = n_nodes
@@ -55,7 +71,21 @@ class WinnerTakesAllICL(BaseICLModel):
         self.R0 = R0
         self.activation = activation
         self.beta_softplus = beta_softplus
+        self.f_activation = f_activation
+        self.learn_K = learn_K
+        self.learn_beta = learn_beta
         self.leaky_relu = nn.LeakyReLU()
+        self.sparsity_rho_edge = sparsity_rho_edge
+        self.sparsity_rho_all = sparsity_rho_all
+        
+        # Annealing parameters
+        self.use_annealing = use_annealing
+        self.tau_start = tau_start
+        self.tau_end = tau_end
+        self.beta_softplus_start = beta_softplus_start
+        self.beta_softplus_end = beta_softplus_end
+        self.anneal_epochs = anneal_epochs
+        self.current_epoch = 0
         
         z_full_dim = (N + 1) * z_dim  # Flatten all context + query
         l_full_dim = N
@@ -70,18 +100,22 @@ class WinnerTakesAllICL(BaseICLModel):
         
         # w_0j: Bias terms for reaction rates
         # Shape: (n_nodes,)
-        #self.w0 = nn.Parameter(torch.ones(n_nodes))
+        #self.w0 = nn.Parameter(torch.zeros(n_nodes))
         self.w0 = torch.zeros(n_nodes)
 
         # K_j: Carrying capacity parameters (positive)
         # Shape: (n_nodes,)
-        self.log_K = nn.Parameter(torch.ones(n_nodes)) # * torch.log(K_scale))
-        #self.log_K = torch.ones(n_nodes) #* 4.0
+        if learn_K:
+            self.log_K = nn.Parameter(torch.ones(n_nodes))
+        else:
+            self.register_buffer('log_K', torch.ones(n_nodes))
  
         # β_j: Competition/death rate parameters (positive)
         # Shape: (n_nodes,)
-        self.log_beta = nn.Parameter(torch.ones(n_nodes))
-        #self.log_beta = torch.ones(n_nodes) #* 4.0
+        if learn_beta:
+            self.log_beta = nn.Parameter(torch.ones(n_nodes))
+        else:
+            self.register_buffer('log_beta', torch.ones(n_nodes))
 
         # Optional: modulate rates by context labels
         if self.use_label_mod:
@@ -95,12 +129,162 @@ class WinnerTakesAllICL(BaseICLModel):
         # Shape: (n_nodes, N)
         self.B = nn.Parameter(torch.randn(n_nodes, N) * init_scale_B)
         
-        print(f"  Initialized WTA Chemical Reaction ICL model")
-        print(f"  Species: {n_nodes}, Classes: {L}, Context: {N}")
-        print(f"  Label modulation: {self.use_label_mod}")
-        print(f"  α={alpha:.2f}, R0={R0:.2f}")
-        print(f"  Y_j non-negativity: {activation} activation")
-        print(f"  Parameters: {self.get_num_parameters():,}")
+        # Create sparsity masks for W
+        self._create_sparsity_masks(z_full_dim)
+        
+        if print_creation:
+            print(f"  Initialized WTA Chemical Reaction ICL model")
+            print(f"  Species: {n_nodes}, Classes: {L}, Context: {N}")
+            print(f"  Label modulation: {self.use_label_mod}")
+            print(f"  α={alpha:.2f}, R0={R0:.2f}")
+            print(f"  f_j activation: {f_activation}")
+            print(f"  Y_j non-negativity: {activation} activation")
+            print(f"  Learn K_j: {learn_K}, Learn β_j: {learn_beta}")
+            print(f"  Sparsity W: rho_edge={sparsity_rho_edge:.3f}, rho_all={sparsity_rho_all:.3f}")
+            sparsity_stats = self.get_sparsity_stats()
+            if sparsity_stats:
+                print(f"  W sparsity: {sparsity_stats['W_actual_sparsity']:.3f} "
+                    f"({sparsity_stats['W_num_active']}/{sparsity_stats['W_num_total']} active)")
+            if use_annealing:
+                print(f"  Annealing: tau {tau_start:.3f}→{tau_end:.3f}, "
+                      f"beta_softplus {beta_softplus_start:.1f}→{beta_softplus_end:.1f} "
+                      f"over {anneal_epochs} epochs")
+            print(f"  Parameters: {self.get_num_parameters():,}")
+    
+    def _create_sparsity_masks(self, z_full_dim):
+        """
+        Create sparsity masks for W using two-level masking.
+        
+        For W (n_nodes, z_full_dim):
+            - Per-node mask: (n_nodes, 1) - controls which nodes (species) are active
+            - Per-element mask: (n_nodes, z_full_dim) - controls sparsity within each node
+        
+        Final mask is element-wise product: only survives if both masks are 1.
+        
+        Args:
+            z_full_dim: Full dimension of z features
+        """
+        n = self.n_nodes
+        
+        # Per-node mask: same across all input dimensions
+        if self.sparsity_rho_edge < 1.0:
+            # Generate uniform [0,1] samples and keep if < rho_edge
+            node_mask_samples = torch.rand(n, 1)
+            node_mask = (node_mask_samples < self.sparsity_rho_edge).float()
+            # Broadcast to full dimension
+            node_mask = node_mask.expand(-1, z_full_dim).contiguous()
+        else:
+            node_mask = torch.ones(n, z_full_dim)
+        
+        # Per-element mask: independent for each element
+        if self.sparsity_rho_all < 1.0:
+            # Generate uniform [0,1] samples and keep if < rho_all
+            element_mask_samples = torch.rand(n, z_full_dim)
+            element_mask = (element_mask_samples < self.sparsity_rho_all).float()
+        else:
+            element_mask = torch.ones(n, z_full_dim)
+        
+        # Combine masks: element survives only if both masks are 1
+        combined_mask = node_mask * element_mask
+        
+        # Register as buffer (moves with model to device, not trained)
+        self.register_buffer('W_mask', combined_mask)
+    
+    def get_sparsity_stats(self):
+        """
+        Get statistics about W sparsity.
+        
+        Returns:
+            dict with sparsity information for W, or None if no masks exist
+        """
+        if not hasattr(self, 'W_mask'):
+            return None
+        
+        # W stats
+        mask_W = self.W_mask
+        num_total_W = mask_W.numel()
+        num_active_W = mask_W.sum().item()
+        actual_sparsity_W = 1.0 - (num_active_W / num_total_W)
+        
+        return {
+            'rho_edge': self.sparsity_rho_edge,
+            'rho_all': self.sparsity_rho_all,
+            'W_actual_sparsity': actual_sparsity_W,
+            'W_num_active': int(num_active_W),
+            'W_num_total': num_total_W,
+            'W_fraction_active': num_active_W / num_total_W
+        }
+    
+    def resample_sparsity_mask(self):
+        """
+        Re-randomize the sparsity masks with same rho values.
+        Useful for experiments testing different random masks.
+        """
+        z_full_dim = self.W.shape[1]
+        self._create_sparsity_masks(z_full_dim)
+    
+    def get_active_nodes(self):
+        """
+        Get list of node indices that have at least one active parameter.
+        
+        Returns:
+            List of node indices with active parameters
+        """
+        if not hasattr(self, 'W_mask'):
+            # No mask, all nodes are active
+            return list(range(self.n_nodes))
+        
+        # Sum across z_dim to see which nodes have any active params
+        node_active = self.W_mask.sum(dim=1) > 0  # (n_nodes,)
+        active_indices = torch.nonzero(node_active, as_tuple=False).squeeze(-1)
+        
+        return active_indices.tolist()
+    
+    def set_epoch(self, epoch):
+        """
+        Set current epoch for annealing schedule.
+        Call this at the start of each training epoch.
+        
+        Args:
+            epoch: Current epoch number (0-indexed)
+        """
+        self.current_epoch = epoch
+    
+    def get_annealed_params(self, progress=None):
+        """
+        Get annealed tau and beta_softplus based on training progress.
+        
+        Uses exponential interpolation for tau (since it's a temperature)
+        and linear interpolation for beta_softplus.
+        
+        Args:
+            progress: Float in [0, 1] indicating training progress.
+                      If None, uses self.current_epoch / self.anneal_epochs
+        
+        Returns:
+            dict with 'tau' and 'beta_softplus' values
+        """
+        if not self.use_annealing:
+            return {
+                'tau': self.tau_end,  # Use final value when not annealing
+                'beta_softplus': self.beta_softplus
+            }
+        
+        if progress is None:
+            progress = min(1.0, self.current_epoch / max(1, self.anneal_epochs))
+        
+        # Exponential annealing for tau (log-space interpolation)
+        log_tau_start = np.log(self.tau_start)
+        log_tau_end = np.log(self.tau_end)
+        tau = np.exp(log_tau_start + progress * (log_tau_end - log_tau_start))
+        
+        # Linear annealing for beta_softplus
+        beta_sp = self.beta_softplus_start + progress * (self.beta_softplus_end - self.beta_softplus_start)
+        
+        return {
+            'tau': tau,
+            'beta_softplus': beta_sp
+        }
     
     def compute_reaction_rates(self, z_batch, labels_batch=None):
         """
@@ -123,20 +307,28 @@ class WinnerTakesAllICL(BaseICLModel):
         K = torch.exp(self.log_K).unsqueeze(0).expand(batch_size, -1)  # (batch_size, n_nodes)
         beta = torch.exp(self.log_beta).unsqueeze(0).expand(batch_size, -1)  # (batch_size, n_nodes)
         
+        # Apply sparsity mask to W
+        W_masked = self.W * self.W_mask
+        
         # Compute linear combination: w_{0j} + Σ_i w_{ij}X_i
         # W @ z: (n_nodes, z_full_dim) @ (batch_size, z_full_dim).T = (n_nodes, batch_size)
         # Then transpose to get (batch_size, n_nodes)
-        linear_comb = torch.matmul(z_batch, self.W.T) + self.w0.unsqueeze(0)
+        linear_comb = torch.matmul(z_batch, W_masked.T) + self.w0.unsqueeze(0)
         
         # Optional: Add label modulation
         if self.use_label_mod and labels_batch is not None:
             label_mod = torch.matmul(labels_batch, self.label_modulation.T)
             linear_comb = linear_comb + label_mod
         
-        # Apply ReLU (max with 0) and scale
-        # f_j = α/K_j * max(linear_comb, 0)
-        # f_batch = self.alpha * torch.relu(linear_comb) / K
-        f_batch = self.alpha * torch.nn.functional.softplus(linear_comb, beta=self.beta_softplus) / K
+        # Apply activation to get positive rates
+        if self.f_activation == 'exp':
+            # Clamp linear_comb first to prevent overflow in exp
+            linear_comb_clamped = torch.clamp(linear_comb, min=-20, max=20)
+            f_batch = self.alpha * torch.exp(linear_comb_clamped) / K
+        elif self.f_activation == 'softplus':
+            f_batch = self.alpha * torch.nn.functional.softplus(linear_comb, beta=self.beta_softplus) / K
+        else:
+            raise ValueError(f"Invalid f_activation: {self.f_activation}. Use 'exp' or 'softplus'.")
         
         # Ensure numerical stability
         f_batch = torch.clamp(f_batch, min=1e-10, max=1e10)
@@ -183,7 +375,7 @@ class WinnerTakesAllICL(BaseICLModel):
         
         return Y_batch
     
-    def winner_takes_all_softplus(self, f_batch, K_batch, beta_batch, tau=0.01):
+    def winner_takes_all_softplus(self, f_batch, K_batch, beta_batch, tau=WTA_TAU, beta_softplus=None):
         """
         Alternative soft WTA using softplus for smoother gradients.
         
@@ -195,11 +387,15 @@ class WinnerTakesAllICL(BaseICLModel):
             K_batch: (batch_size, n_nodes) - carrying capacities  
             beta_batch: (batch_size, n_nodes) - competition rates
             tau: Temperature for softmin
-            beta_softplus: Sharpness of softplus (higher = closer to ReLU)
+            beta_softplus: Sharpness of softplus (higher = closer to ReLU).
+                           If None, uses self.beta_softplus.
             
         Returns:
             Y_batch: (batch_size, n_nodes) - steady-state concentrations (strictly > 0)
         """
+        if beta_softplus is None:
+            beta_softplus = self.beta_softplus
+            
         # Compute ratio β_j/f_j for each species
         ratios = beta_batch / (f_batch + 1e-10)
         
@@ -209,14 +405,14 @@ class WinnerTakesAllICL(BaseICLModel):
         # Compute Y values using softplus instead of ReLU
         # This ensures smooth gradients and strict positivity
         inside_term = self.R0 * f_batch / beta_batch - 1
-        Y_potential = K_batch * torch.nn.functional.softplus(inside_term, beta=self.beta_softplus)
+        Y_potential = K_batch * torch.nn.functional.softplus(inside_term, beta=beta_softplus)
         
         # Weight by softmin
         Y_batch = weights * Y_potential
         
         return Y_batch
     
-    def winner_takes_all_soft(self, f_batch, K_batch, beta_batch, tau=0.01):
+    def winner_takes_all_soft(self, f_batch, K_batch, beta_batch, tau=WTA_TAU):
         """
         Soft approximation of WTA using softmin for differentiability.
         
@@ -259,7 +455,7 @@ class WinnerTakesAllICL(BaseICLModel):
         
         return Y_batch
     
-    def forward(self, z_seq_batch, labels_seq_batch, method=None, temperature=1.0, wta_tau=0.01):
+    def forward(self, z_seq_batch, labels_seq_batch, method=None, temperature=1.0, wta_tau=None):
         """
         Forward pass with WTA chemical reaction dynamics.
         
@@ -275,13 +471,24 @@ class WinnerTakesAllICL(BaseICLModel):
             labels_seq_batch: (batch_size, N) - context labels (1 to L)
             method: Optional - ignored for compatibility. WTA always uses 'soft' for training
             temperature: Softmax temperature for attention
-            wta_tau: Temperature for soft WTA (only used if method='soft')
+            wta_tau: Temperature for soft WTA. If None, uses annealed value (if enabled)
+                     or WTA_TAU default.
             
         Returns:
             logits: (batch_size, L) - class log-probabilities
         """
         batch_size = z_seq_batch.shape[0]
         device = z_seq_batch.device
+        
+        # Get annealed parameters (returns defaults if annealing disabled)
+        annealed = self.get_annealed_params()
+        
+        # Use provided wta_tau or annealed/default value
+        if wta_tau is None:
+            wta_tau = annealed['tau']
+        
+        # Get beta_softplus (annealed if enabled, otherwise instance default)
+        beta_sp = annealed['beta_softplus']
         
         # Flatten z sequences
         z_flat = z_seq_batch.reshape(batch_size, -1)
@@ -293,7 +500,7 @@ class WinnerTakesAllICL(BaseICLModel):
         if self.training:
             # During training: use soft WTA for differentiability
             if self.activation == 'softplus':
-                Y_batch = self.winner_takes_all_softplus(f_batch, K_batch, beta_batch, tau=wta_tau)
+                Y_batch = self.winner_takes_all_softplus(f_batch, K_batch, beta_batch, tau=wta_tau, beta_softplus=beta_sp)
             elif self.activation == 'relu':
                 Y_batch = self.winner_takes_all_dynamics(f_batch, K_batch, beta_batch)
             else:  # default to 'relu'
@@ -302,7 +509,7 @@ class WinnerTakesAllICL(BaseICLModel):
             # During evaluation: use hard WTA for true winner-takes-all
             #Y_batch = self.winner_takes_all_dynamics(f_batch, K_batch, beta_batch)
             if self.activation == 'softplus':
-                Y_batch = self.winner_takes_all_softplus(f_batch, K_batch, beta_batch, tau=wta_tau)
+                Y_batch = self.winner_takes_all_softplus(f_batch, K_batch, beta_batch, tau=wta_tau, beta_softplus=beta_sp)
             elif self.activation == 'relu':
                 Y_batch = self.winner_takes_all_dynamics(f_batch, K_batch, beta_batch)
             else:  # default to 'relu'
@@ -363,3 +570,49 @@ class WinnerTakesAllICL(BaseICLModel):
             'Y_hard': Y_batch_hard,
             'Y_soft': Y_batch_soft
         }
+    
+    def get_non_zero_count_W(self):
+        """
+        Count non-zero elements in masked W.
+        
+        Returns:
+            int: Number of non-zero elements in W after masking
+        """
+        W_array = np.array(self.W.detach().cpu().numpy() * self.W_mask.detach().cpu().numpy())
+        non_zero_count = np.sum(np.abs(W_array) > 1e-10)
+        return int(non_zero_count)
+
+
+def load_model(params, path, print_creation = True):
+    """Load a WinnerTakesAllICL model from saved weights.
+    
+    Args:
+        params: Dictionary containing model parameters
+        path: Path to directory containing model.pt file
+        
+    Returns:
+        model: Loaded model in evaluation mode on appropriate device
+    """
+    model = WinnerTakesAllICL(n_nodes=params['n_nodes'], z_dim=params['D'], 
+                               L=params['L'], N=params['N'],
+                               use_label_mod=params.get('use_label_mod', False),
+                               alpha=params.get('alpha', 1.0),
+                               R0=params.get('R0', 2.0),
+                               activation=params.get('activation', 'softplus'),
+                               beta_softplus=params.get('beta_softplus', 10.0),
+                               f_activation=params.get('f_activation', 'softplus'),
+                               learn_K=params.get('learn_K', True),
+                               learn_beta=params.get('learn_beta', True),
+                               sparsity_rho_edge=params.get('sparsity_rho_edge', 1.0),
+                               sparsity_rho_all=params.get('sparsity_rho_all', 1.0),
+                               print_creation=print_creation)
+    
+    model_path = path + 'model.pt'
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    
+    model.load_state_dict(torch.load(model_path, map_location=device))
+    
+    model.to(device)
+    model.eval()
+    
+    return model

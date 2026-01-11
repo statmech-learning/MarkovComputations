@@ -90,7 +90,7 @@ class MatrixTreeMarkovICL(BaseICLModel):
         self.base_log_rates_W = nn.Parameter(torch.randn(n_nodes, n_nodes) * 0.1 + init_base)
         
         # Set fixed seed for sparsity mask generation (ensures reproducibility across models)
-        torch.manual_seed(42)
+        #torch.manual_seed(42)
         
         # Create sparsity masks for K_params and base rates
         self._create_sparsity_masks(z_full_dim)
@@ -223,8 +223,10 @@ class MatrixTreeMarkovICL(BaseICLModel):
         log_rates = base_expanded + rate_mod
         
         # Clamp for numerical stability
-        #log_rates = torch.clamp(log_rates, min=np.exp(np.log(1e-6)), max=np.exp(np.log(1e6)))
-        log_rates = torch.clamp(log_rates, min=-15, max=15)
+        
+        log_rates = torch.clamp(log_rates, min=np.log(1e-6), max=np.log(1e6))
+        
+        #log_rates = torch.clamp(log_rates, min=-15, max=15)
         
         # Apply transformation to get rates
         if self.transform_func == 'exp':
@@ -233,6 +235,8 @@ class MatrixTreeMarkovICL(BaseICLModel):
             rates = torch.relu(log_rates) + 1e-10
         elif self.transform_func == 'softplus':
             rates = torch.nn.functional.softplus(log_rates) + 1e-10
+        elif self.transform_func == 'sigmoid':
+            rates = 10*torch.sigmoid(log_rates / 10)
         elif self.transform_func == 'elu':
             rates = torch.nn.functional.elu(log_rates) + 1e-10
         else:

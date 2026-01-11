@@ -12,7 +12,7 @@ import numpy as np
 class GaussianMixtureModel:
     """Gaussian Mixture Model with K classes for ICL task with DISCRETE labels."""
     
-    def __init__(self, K, D, L=None, epsilon=0.1, seed=None, label_min=0.0, label_max=1.0, offset=0.0):
+    def __init__(self, K, D, L=None, epsilon=0.1, seed=None, label_min=0.0, label_max=1.0, offset=1.0, use_offset=False):
         """
         Initialize Gaussian Mixture Model.
         
@@ -31,13 +31,17 @@ class GaussianMixtureModel:
         self.epsilon = epsilon
         self.label_min = label_min
         self.label_max = label_max
-        
+        self.offset = offset
+        self.use_offset = use_offset
         if seed is not None:
             torch.manual_seed(seed)
             np.random.seed(seed)
         
         # Sample class means from standard Gaussian scaled by 1/sqrt(D)
-        self.class_means = torch.randn(K, D) / np.sqrt(D) + offset * torch.ones(K, D)
+        if use_offset:
+            self.class_means = self.offset * torch.randn(K, D) / np.sqrt(D)
+        else:
+            self.class_means = torch.randn(K, D) / np.sqrt(D)
         
         # Randomly assign each of K classes a label from {1, 2, ..., L}
         # This allows L < K (multiple classes can share the same label)
@@ -60,7 +64,10 @@ class GaussianMixtureModel:
             Tensor of shape (n_samples, D)
         """
         mu_k = self.class_means[class_idx]
-        noise = torch.randn(n_samples, self.D) / np.sqrt(self.D)
+        if self.use_offset:
+            noise = self.offset * torch.randn(n_samples, self.D) / np.sqrt(self.D)
+        else:
+            noise = torch.randn(n_samples, self.D) / np.sqrt(self.D)
         return mu_k + self.epsilon * noise
     
     def get_label(self, class_idx):

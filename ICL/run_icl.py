@@ -14,7 +14,7 @@ import time
 # Import from refactored modular structure
 from data_generation import GaussianMixtureModel, generate_icl_gmm_data
 from datasets import ICLGMMDataset, collate_fn
-from models import MatrixTreeMarkovICL
+from models import *
 from training import train_model
 from evaluation import test_icl
 
@@ -23,8 +23,10 @@ from evaluation import test_icl
 parser = argparse.ArgumentParser(description="SLURM job script with arguments.")
 
 # Define command-line arguments
+
 parser.add_argument("--param1", type=int, required=True, help="An integer parameter")
-parser.add_argument("--param2", type=int, required=False, help="An integer parameter")
+parser.add_argument("--param2", type=float, required=False, help="An integer parameter")
+parser.add_argument("--param3", type=int, required=False, help="An integer parameter")
 parser.add_argument("--output", type=str, required=True, help="A string parameter")
 
 # Parse arguments
@@ -35,13 +37,13 @@ output_dir = args.output
 # ============================================================
 # Data Generation Parameters
 # ============================================================
-L = 256                      # Number of output classes
-K = 256                      # Number of GMM classes for data generation
-D = 1                        # Dimension of input features
-N = 8                        # Number of context examples per task
+L = 128                      # Number of output classes
+K = L                      # Number of GMM classes for data generation
+D = 4                        # Dimension of input features
+N = 4                        # Number of context examples per task
 B = 1                        # Burstiness parameter (zipfian sampling weight)
 epsilon = 1e-3               # Within-class noise (standard deviation)
-seed = 20                    # Random seed for reproducibility
+seed = args.param3                     # Random seed for reproducibility
 exact_copy = True            # If True, query is exact copy of a context item
 shuffle_context = True       # Whether to shuffle context order during training
 offset = 0.0                 # Offset applied to GMM centers
@@ -51,15 +53,15 @@ unique_labels = False        # If True, ensure all context labels are unique
 # ============================================================
 # Model Architecture Parameters
 # ============================================================
-n_nodes = 8                  # Number of nodes in the Markov chain
+n_nodes = args.param1                  # Number of nodes in the Markov chain
 transform_func = 'exp'       # Transformation function: 'exp', 'relu', or 'elu'
-learn_base_rates = False     # If True, allow gradient updates to unmasked base rates
+learn_base_rates = True      # If True, allow gradient updates to unmasked base rates
 
 # ============================================================
 # Sparsity Parameters - K_params (context-dependent modulation)
 # ============================================================
-sparsity_rho_edge = 1.0      # Fraction of (i,j) edges with K parameters
-sparsity_rho_all = 1.0       # Fraction of individual K parameters to keep
+sparsity_rho_edge = 1.0       # Fraction of (i,j) edges with K parameters
+sparsity_rho_all = args.param2       # Fraction of individual K parameters to keep
 
 # ============================================================
 # Sparsity Parameters - Base Rates
@@ -70,11 +72,11 @@ base_mask_value = float('-inf')            # Value for masked base rates: 0.0 (n
 # ============================================================
 # Training Parameters
 # ============================================================
-epochs = 100                  # Number of training epochs
+epochs = 1000                # Number of training epochs
 lr = 0.0025                  # Learning rate
-batch_size = 64              # Batch size for training
-train_samples = 100000        # Number of training samples
-val_samples = 2000           # Number of validation samples
+batch_size = 50              # Batch size for training
+train_samples = 25000        # Number of training samples
+val_samples = 5000           # Number of validation samples
 
 # ============================================================
 # Inference Parameters
