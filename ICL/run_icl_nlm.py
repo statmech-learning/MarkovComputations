@@ -25,6 +25,8 @@ parser = argparse.ArgumentParser(description="SLURM job script with arguments.")
 # Define command-line arguments
 parser.add_argument("--param1", type=float, required=True, help="An integer parameter")
 parser.add_argument("--param2", type=int, required=False, help="An integer parameter")
+parser.add_argument("--param3", type=int, required=False, default=1,
+                    help="Random seed (default: 1)")
 parser.add_argument("--output", type=str, required=True, help="A string parameter")
 
 # Parse arguments

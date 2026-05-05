@@ -1,8 +1,14 @@
-output_dir = "/project/svaikunt/csfloyd/MarkovComputation/Dirs/"
-
 #################################################
 ################  Import things #################
 #################################################
+
+import argparse
+import os
+import pathlib
+import sys
+
+# Make MarkovComputations.py importable when run from any cwd
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 
 import numpy as np
 import scipy.sparse as sparse
@@ -25,6 +31,13 @@ import pickle
 
 ## here are the user-defined functions and classes
 from MarkovComputations import WeightMatrix, InputData, get_input_inds, get_output_inds, random_initial_parameters, compute_error, downsample_avg, load_and_format_mnist, load_and_format_iris, evaluate_accuracy, evaluate_accuracy_per_class
+
+parser = argparse.ArgumentParser(description="Local single-run Markov-nudging training.")
+parser.add_argument("--output", type=str, default="./output_training",
+                    help="Output directory (will be created). Default: ./output_training")
+args = parser.parse_args()
+output_dir = args.output
+os.makedirs(output_dir, exist_ok=True)
 
 
 #########################################################
@@ -132,7 +145,7 @@ end_time = time.time()
 print(f"Execution Time: {end_time - start_time:.6f} seconds")
 
    # Save to a file
-with open(output_dir + "SavedData.pkl", "wb") as file:
+with open(os.path.join(output_dir, "SavedData.pkl"), "wb") as file:
     pickle.dump((weight_matrix, input_data, accuracy_list, input_inds, output_inds), file)
 
 print("Data saved successfully.")

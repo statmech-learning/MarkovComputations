@@ -28,24 +28,30 @@ Iris, glycans, etc. It is **not** used to reproduce the ICL paper
 
 ## Running
 
-The training scripts and notebooks all do `from MarkovComputations import ...`.
-Because `MarkovComputations.py` lives at the top of this folder (not at the
-top of each subdir), you must run them with this directory on `PYTHONPATH`.
-For example:
+The Python scripts in `training/` and the notebooks in `MNIST/` and
+`dev_notebooks/` all do `from MarkovComputations import ...`. After the
+reorg, each script and notebook adds the parent directory to `sys.path`
+itself, so you can run them from any cwd without setting `PYTHONPATH`:
 
 ```bash
-cd markov-nudging
-PYTHONPATH=. python training/Training.py
+python markov-nudging/training/Training.py --output ./run_out
 ```
 
-Or from a notebook:
+Or open any of the notebooks in Jupyter — the first cell does the path
+fixup automatically.
 
-```python
-import sys, pathlib
-sys.path.insert(0, str(pathlib.Path.cwd().parent))  # adjust depth as needed
-from MarkovComputations import WeightMatrix, ...
+### Cluster paths
+
+`Training.py` now takes `--output <dir>` (defaults to `./output_training`)
+instead of writing to a hardcoded path. `RunMidwayJobs.py` reads cluster
+configuration from environment variables and falls back to the original
+UChicago Midway defaults if they are unset:
+
+```bash
+export SLURM_OUTPUT_BASE=/path/to/results
+export SLURM_PARTITION=mit_normal       # e.g. on MIT Engaging
+export SLURM_ACCOUNT=<your-pi-account>
+export SLURM_TIME=02:00:00
+export SLURM_MEM_PER_CPU=2G
+python markov-nudging/training/RunMidwayJobs.py
 ```
-
-The `TrainingMidway*.py` scripts and `RunMidwayJobs.py` also have hardcoded
-`/project/svaikunt/...` paths from the UChicago cluster, so they will need
-`output_dir` edits before they can run anywhere else.

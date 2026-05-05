@@ -2,6 +2,12 @@
 ################  Import things #################
 #################################################
 
+import pathlib
+import sys
+
+# Make MarkovComputations.py importable when run from any cwd
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
+
 import numpy as np
 import scipy.sparse as sparse
 from scipy.sparse.linalg import lsmr
