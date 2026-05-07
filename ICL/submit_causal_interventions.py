@@ -14,6 +14,7 @@ MEM_PER_CPU = os.environ.get("SLURM_MEM_PER_CPU", "8G")
 CPUS_PER_TASK = os.environ.get("SLURM_CPUS_PER_TASK", "1")
 EXTRA_MODULES = os.environ.get("SLURM_MODULES", "")
 EXTRA_SETUP = os.environ.get("SLURM_EXTRA_SETUP", "")
+DEFAULT_PYTHON = os.environ.get("TOPOLOGY_PYTHON", "python3")
 
 
 def modules_block():
@@ -49,7 +50,7 @@ def iter_run_dirs(root):
 def command_for(run_dir, args):
     output_path = os.path.join(run_dir, args.output_name)
     parts = [
-        "python3",
+        args.python,
         "-u",
         "causal_topology_interventions.py",
         "--run_dir",
@@ -68,6 +69,18 @@ def command_for(run_dir, args):
         shlex.quote(output_path),
     ]
     return " ".join(parts), output_path
+
+
+def torch_check_block(args):
+    if args.skip_torch_check:
+        return ""
+    return f"""{args.python} - <<'PY'
+import sys
+import torch
+print("Using Python:", sys.executable)
+print("Torch:", torch.__version__)
+PY
+"""
 
 
 def write_array(run_dirs, args):
@@ -103,7 +116,7 @@ def write_array(run_dirs, args):
 
 set -euo pipefail
 cd {THIS_DIR}
-{modules_block()}{setup_block()}
+{modules_block()}{setup_block()}{torch_check_block(args)}
 LINE_NUM=$((SLURM_ARRAY_TASK_ID + 1))
 CMD=$(sed -n "${{LINE_NUM}}p" {commands_path})
 OUT=$(sed -n "${{LINE_NUM}}p" {outputs_path})
@@ -137,6 +150,16 @@ def main():
     parser.add_argument("--n_repeats", type=int, default=5)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--device", default="auto")
+    parser.add_argument(
+        "--python",
+        default=DEFAULT_PYTHON,
+        help="Python command to use inside the SLURM job after setup. Defaults to TOPOLOGY_PYTHON or python3.",
+    )
+    parser.add_argument(
+        "--skip_torch_check",
+        action="store_true",
+        help="Do not insert a per-task Torch import preflight in the SLURM script.",
+    )
     parser.add_argument(
         "--interventions",
         default=(

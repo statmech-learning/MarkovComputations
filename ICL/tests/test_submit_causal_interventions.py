@@ -35,6 +35,8 @@ class SubmitCausalInterventionsTests(unittest.TestCase):
                     "2",
                     "--interventions",
                     "context_block_shuffle",
+                    "--python",
+                    "/env/bin/python",
                     "--array",
                     "--dry-run",
                 ],
@@ -52,10 +54,13 @@ class SubmitCausalInterventionsTests(unittest.TestCase):
         self.assertIn("Tasks: 1", result.stdout)
         self.assertIn("Dry run. Submit with: sbatch", result.stdout)
         self.assertIn("causal_topology_interventions.py", commands)
+        self.assertIn("/env/bin/python -u causal_topology_interventions.py", commands)
         self.assertIn("--n_samples 12", commands)
         self.assertIn("--n_repeats 2", commands)
         self.assertIn("--interventions context_block_shuffle", commands)
         self.assertIn("#SBATCH --job-name=topo_causal", script)
+        self.assertIn("/env/bin/python - <<'PY'", script)
+        self.assertIn("import torch", script)
 
 
 if __name__ == "__main__":

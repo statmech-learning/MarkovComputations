@@ -40,6 +40,8 @@ class SubmitTopologyMechanismsTests(unittest.TestCase):
                     "17",
                     "--device",
                     "cpu",
+                    "--python",
+                    "/env/bin/python",
                     "--ablate_input",
                     "--ablate_physical",
                     "--physical_epsilon",
@@ -68,6 +70,7 @@ class SubmitTopologyMechanismsTests(unittest.TestCase):
         self.assertIn("Dry run. Submit with: sbatch", result.stdout)
         self.assertEqual(len(commands), 1)
         self.assertIn("analyze_topology_model.py", commands[0])
+        self.assertTrue(commands[0].startswith("/env/bin/python -u "))
         self.assertIn("--n_samples 17", commands[0])
         self.assertIn("--device cpu", commands[0])
         self.assertIn("--ablate_input", commands[0])
@@ -75,6 +78,8 @@ class SubmitTopologyMechanismsTests(unittest.TestCase):
         self.assertIn("--physical_epsilon 0.001", commands[0])
         self.assertEqual(outputs, [os.path.join(run_dir, "mechanism_metrics.json")])
         self.assertIn("#SBATCH --array=0-0%4", script)
+        self.assertIn("/env/bin/python - <<'PY'", script)
+        self.assertIn("import torch", script)
 
 
 if __name__ == "__main__":

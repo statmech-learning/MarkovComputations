@@ -14,6 +14,7 @@ MEM_PER_CPU = os.environ.get("SLURM_MEM_PER_CPU", "8G")
 CPUS_PER_TASK = os.environ.get("SLURM_CPUS_PER_TASK", "1")
 EXTRA_MODULES = os.environ.get("SLURM_MODULES", "")
 EXTRA_SETUP = os.environ.get("SLURM_EXTRA_SETUP", "")
+DEFAULT_PYTHON = os.environ.get("TOPOLOGY_PYTHON", "python3")
 
 
 def modules_block():
@@ -39,7 +40,7 @@ def iter_run_dirs(root):
 def command_for(run_dir, args):
     output_path = os.path.join(run_dir, args.output_name)
     parts = [
-        "python3",
+        args.python,
         "-u",
         "analyze_topology_model.py",
         "--run_dir",
@@ -58,6 +59,18 @@ def command_for(run_dir, args):
     if args.physical_epsilon is not None:
         parts.extend(["--physical_epsilon", str(args.physical_epsilon)])
     return " ".join(parts), output_path
+
+
+def torch_check_block(args):
+    if args.skip_torch_check:
+        return ""
+    return f"""{args.python} - <<'PY'
+import sys
+import torch
+print("Using Python:", sys.executable)
+print("Torch:", torch.__version__)
+PY
+"""
 
 
 def write_array(run_dirs, args):
@@ -93,7 +106,7 @@ def write_array(run_dirs, args):
 
 set -euo pipefail
 cd {THIS_DIR}
-{modules_block()}{setup_block()}
+{modules_block()}{setup_block()}{torch_check_block(args)}
 LINE_NUM=$((SLURM_ARRAY_TASK_ID + 1))
 CMD=$(sed -n "${{LINE_NUM}}p" {commands_path})
 OUT=$(sed -n "${{LINE_NUM}}p" {outputs_path})
@@ -125,6 +138,17 @@ def main():
     parser.add_argument("--input_root", type=str, required=True)
     parser.add_argument("--n_samples", type=int, default=500)
     parser.add_argument("--device", type=str, default="auto")
+    parser.add_argument(
+        "--python",
+        type=str,
+        default=DEFAULT_PYTHON,
+        help="Python command to use inside the SLURM job after setup. Defaults to TOPOLOGY_PYTHON or python3.",
+    )
+    parser.add_argument(
+        "--skip_torch_check",
+        action="store_true",
+        help="Do not insert a per-task Torch import preflight in the SLURM script.",
+    )
     parser.add_argument("--output_name", type=str, default="mechanism_metrics.json")
     parser.add_argument("--ablate_input", action="store_true")
     parser.add_argument("--ablate_physical", action="store_true")
