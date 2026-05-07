@@ -31,6 +31,8 @@ class CollectMechanismResultsTests(unittest.TestCase):
                 "topology_name": "toy",
                 "n_samples": 5,
                 "target_accuracy": 80.0,
+                "target_logprob_margin": [2.0, 4.0, -1.0, 1.0, 2.0],
+                "target_correct": [1, 1, 0, 1, 0],
                 "branch_ids": [0, 0, 1, 1, 1],
                 "active_root": [2, 2, 1, 1, 3],
                 "active_tree": [10, 10, 11, 12, 12],
@@ -62,6 +64,13 @@ class CollectMechanismResultsTests(unittest.TestCase):
         self.assertAlmostEqual(float(row["branch_active_tree_unique_mean"]), 1.5)
         self.assertAlmostEqual(float(row["branch_active_root_nmi"]), 1.0)
         self.assertAlmostEqual(float(row["branch_active_tree_nmi"]), 1.0)
+        self.assertAlmostEqual(float(row["target_logprob_margin_branch_mean_min"]), 2.0 / 3.0)
+        self.assertAlmostEqual(float(row["target_logprob_margin_branch_mean_mean"]), 11.0 / 6.0)
+        self.assertAlmostEqual(float(row["target_accuracy_branch_mean_min"]), 100.0 / 3.0)
+        self.assertAlmostEqual(float(row["target_accuracy_branch_mean_mean"]), 200.0 / 3.0)
+        margin_rows = json.loads(row["target_logprob_margin_by_branch"])
+        self.assertEqual(margin_rows[0]["branch"], 0)
+        self.assertAlmostEqual(margin_rows[1]["mean"], 2.0 / 3.0)
         assignments = json.loads(row["branch_active_tree_assignment"])
         self.assertEqual(assignments[0]["dominant"], 10)
         self.assertEqual(assignments[1]["dominant"], 12)

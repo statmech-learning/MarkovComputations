@@ -292,6 +292,42 @@ def _essential_edge_summary(edge_importance: np.ndarray, fractions=(0.1, 0.2, 0.
     return summary
 
 
+def _branch_scalar_summary(branch_ids: np.ndarray, values: np.ndarray, prefix: str) -> dict:
+    branch_ids = np.asarray(branch_ids, dtype=int)
+    values = np.asarray(values, dtype=float)
+    if branch_ids.shape[0] != values.shape[0] or values.size == 0:
+        return {
+            f"{prefix}_branch_mean_min": 0.0,
+            f"{prefix}_branch_mean_mean": 0.0,
+            f"{prefix}_branch_mean_gini": 0.0,
+            f"{prefix}_by_branch": [],
+        }
+
+    rows = []
+    means = []
+    for branch in sorted(set(branch_ids.tolist())):
+        branch_values = values[branch_ids == branch]
+        if branch_values.size == 0:
+            continue
+        mean_value = float(branch_values.mean())
+        means.append(mean_value)
+        rows.append(
+            {
+                "branch": int(branch),
+                "mean": mean_value,
+                "min": float(branch_values.min()),
+                "n": int(branch_values.size),
+            }
+        )
+    means = np.asarray(means, dtype=float)
+    return {
+        f"{prefix}_branch_mean_min": float(means.min()) if means.size else 0.0,
+        f"{prefix}_branch_mean_mean": float(means.mean()) if means.size else 0.0,
+        f"{prefix}_branch_mean_gini": _gini(np.maximum(means, 0.0)) if means.size else 0.0,
+        f"{prefix}_by_branch": rows,
+    }
+
+
 def analyze_batch(
     model,
     z_seq_batch,
@@ -319,12 +355,14 @@ def analyze_batch(
         sensitivities = context_score_edge_sensitivity(model, decomposition)
         logits = None
         margins = None
+        correct = None
         accuracy = None
         if target_labels is not None and labels_seq_batch is not None:
             logits = model(z_seq_batch, labels_seq_batch, method=method, temperature=temperature)
             margins = _target_margin(logits, target_labels)
             preds = logits.argmax(dim=1) + 1
-            accuracy = (preds == target_labels.long()).float().mean()
+            correct = (preds == target_labels.long()).float()
+            accuracy = correct.mean()
 
     active_root = decomposition["active_root"].detach().cpu().numpy()
     root_entropy = (
@@ -375,13 +413,20 @@ def analyze_batch(
         )
     )
     if margins is not None:
+        margin_values = margins.detach().cpu().numpy()
+        correct_values = correct.detach().cpu().numpy()
         result.update(
             {
                 "target_logprob_margin_mean": float(margins.mean().item()),
                 "target_logprob_margin_min": float(margins.min().item()),
                 "target_accuracy": float(100.0 * accuracy.item()),
+                "target_logprob_margin": margin_values.tolist(),
+                "target_correct": correct_values.astype(int).tolist(),
             }
         )
+        result.update(_branch_scalar_summary(branch_ids, margin_values, "target_logprob_margin"))
+        accuracy_summary = _branch_scalar_summary(branch_ids, correct_values * 100.0, "target_accuracy")
+        result.update(accuracy_summary)
     return result
 
 

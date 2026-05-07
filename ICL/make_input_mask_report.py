@@ -74,6 +74,7 @@ RUN_MODELS = OrderedDict(
             "mechanism",
             [
                 ("num", "target_logprob_margin_mean"),
+                ("num", "target_logprob_margin_branch_mean_min"),
                 ("num", "branch_active_tree_mi"),
                 ("num", "branch_active_tree_nmi"),
                 ("num", "branch_active_tree_purity_mean"),
@@ -87,6 +88,7 @@ RUN_MODELS = OrderedDict(
             [
                 ("cat", "physical_topology_name"),
                 ("num", "target_logprob_margin_mean"),
+                ("num", "target_logprob_margin_branch_mean_min"),
                 ("num", "branch_active_tree_mi"),
                 ("num", "branch_active_tree_nmi"),
                 ("num", "branch_active_tree_purity_mean"),
@@ -151,6 +153,7 @@ AGGREGATE_MODELS = OrderedDict(
             "mechanism",
             [
                 ("num", "target_logprob_margin_mean_mean"),
+                ("num", "target_logprob_margin_branch_mean_min_mean"),
                 ("num", "branch_active_tree_mi_mean"),
                 ("num", "branch_active_tree_nmi_mean"),
                 ("num", "branch_active_tree_purity_mean_mean"),
@@ -164,6 +167,7 @@ AGGREGATE_MODELS = OrderedDict(
             [
                 ("cat", "physical_topology_name"),
                 ("num", "target_logprob_margin_mean_mean"),
+                ("num", "target_logprob_margin_branch_mean_min_mean"),
                 ("num", "branch_active_tree_mi_mean"),
                 ("num", "branch_active_tree_nmi_mean"),
                 ("num", "branch_active_tree_purity_mean_mean"),
@@ -184,6 +188,9 @@ CORRELATION_COLUMNS = [
     "input_edge_load_gini",
     "input_coord_load_gini",
     "target_logprob_margin_mean",
+    "target_logprob_margin_branch_mean_min",
+    "target_logprob_margin_branch_mean_gini",
+    "target_accuracy_branch_mean_min",
     "branch_active_root_mi",
     "branch_active_tree_mi",
     "branch_active_root_nmi",
@@ -601,6 +608,9 @@ def physical_family_summary(aggregate_rows):
                 ),
                 "effective_rank_D_masked_mean": mean(numeric_values(group, "effective_rank_D_masked")),
                 "input_edge_load_gini_mean": mean(numeric_values(group, "input_edge_load_gini")),
+                "target_logprob_margin_branch_mean_min_mean": mean(
+                    numeric_values(group, "target_logprob_margin_branch_mean_min_mean")
+                ),
                 "branch_active_tree_mi_mean": mean(numeric_values(group, "branch_active_tree_mi_mean")),
                 "branch_active_tree_nmi_mean": mean(numeric_values(group, "branch_active_tree_nmi_mean")),
                 "branch_active_tree_purity_mean": mean(
@@ -681,8 +691,8 @@ def experiment_table(experiments):
 
 def family_table(rows):
     lines = [
-        "| experiment | physical backbone | mask family | masks | mean ICL | best ICL | mean seed std | d_rel | branch d_rel min | tree MI | tree NMI | tree purity | input abl. loss | physical abl. loss |",
-        "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| experiment | physical backbone | mask family | masks | mean ICL | best ICL | mean seed std | d_rel | branch d_rel min | worst branch margin | tree MI | tree NMI | tree purity | input abl. loss | physical abl. loss |",
+        "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in rows:
         lines.append(
@@ -698,6 +708,7 @@ def family_table(rows):
                     fmt_acc(row["target_std_mean"]),
                     fmt(row["d_rel_mean"], 0),
                     fmt(row["comparison_branch_d_rel_min_mean"], 0),
+                    fmt(row["target_logprob_margin_branch_mean_min_mean"]),
                     fmt(row["branch_active_tree_mi_mean"]),
                     fmt(row["branch_active_tree_nmi_mean"]),
                     fmt(row["branch_active_tree_purity_mean"]),
@@ -714,8 +725,8 @@ def mask_table(rows, title):
     lines = [
         title,
         "",
-        "| experiment | mask | family | mean ICL | best ICL | seed std | d_rel | branch d_rel min | eff rank masked | edge gini | tree MI | tree NMI | tree purity |",
-        "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| experiment | mask | family | mean ICL | best ICL | seed std | d_rel | branch d_rel min | worst branch margin | eff rank masked | edge gini | tree MI | tree NMI | tree purity |",
+        "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in rows:
         lines.append(
@@ -730,6 +741,7 @@ def mask_table(rows, title):
                     fmt_acc(row.get("target_std")),
                     fmt(row.get("d_rel"), 0),
                     fmt(row.get("comparison_branch_d_rel_min"), 0),
+                    fmt(row.get("target_logprob_margin_branch_mean_min_mean")),
                     fmt(row.get("effective_rank_D_masked")),
                     fmt(row.get("input_edge_load_gini")),
                     fmt(row.get("branch_active_tree_mi_mean")),

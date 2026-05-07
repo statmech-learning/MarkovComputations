@@ -16,6 +16,14 @@ FIELDS = [
     "target_accuracy",
     "target_logprob_margin_mean",
     "target_logprob_margin_min",
+    "target_logprob_margin_branch_mean_min",
+    "target_logprob_margin_branch_mean_mean",
+    "target_logprob_margin_branch_mean_gini",
+    "target_logprob_margin_by_branch",
+    "target_accuracy_branch_mean_min",
+    "target_accuracy_branch_mean_mean",
+    "target_accuracy_branch_mean_gini",
+    "target_accuracy_by_branch",
     "branch_active_root_mi",
     "branch_active_tree_mi",
     "branch_active_root_nmi",
@@ -98,6 +106,99 @@ def _int_list(values):
             result.append(int(value))
         except (TypeError, ValueError):
             return []
+    return result
+
+
+def _float_list(values):
+    if values is None:
+        return []
+    result = []
+    for value in values:
+        try:
+            parsed = float(value)
+        except (TypeError, ValueError):
+            return []
+        if not math.isfinite(parsed):
+            return []
+        result.append(parsed)
+    return result
+
+
+def _gini(values):
+    values = [float(value) for value in values if value is not None]
+    if not values:
+        return ""
+    min_value = min(values)
+    if min_value < 0:
+        values = [value - min_value for value in values]
+    total = sum(values)
+    if abs(total) <= 1e-12:
+        return 0.0
+    values = sorted(values)
+    n = len(values)
+    weighted = sum((idx + 1) * value for idx, value in enumerate(values))
+    return float((2.0 * weighted / (n * total)) - ((n + 1.0) / n))
+
+
+def _branch_value_summary(branches, values, prefix):
+    if len(branches) != len(values) or not branches:
+        return {
+            f"{prefix}_branch_mean_min": "",
+            f"{prefix}_branch_mean_mean": "",
+            f"{prefix}_branch_mean_gini": "",
+            f"{prefix}_by_branch": "",
+        }
+    rows = []
+    means = []
+    groups = defaultdict(list)
+    for branch, value in zip(branches, values):
+        groups[branch].append(value)
+    for branch in sorted(groups):
+        branch_values = groups[branch]
+        mean_value = float(sum(branch_values) / len(branch_values))
+        means.append(mean_value)
+        rows.append(
+            {
+                "branch": int(branch),
+                "mean": mean_value,
+                "min": float(min(branch_values)),
+                "n": int(len(branch_values)),
+            }
+        )
+    return {
+        f"{prefix}_branch_mean_min": float(min(means)),
+        f"{prefix}_branch_mean_mean": float(sum(means) / len(means)),
+        f"{prefix}_branch_mean_gini": _gini(means),
+        f"{prefix}_by_branch": json.dumps(rows),
+    }
+
+
+def summarize_branch_margins(metrics):
+    branches = _int_list(metrics.get("branch_ids"))
+    margins = _float_list(metrics.get("target_logprob_margin"))
+    correct = _float_list(metrics.get("target_correct"))
+    result = {}
+    result.update(_branch_value_summary(branches, margins, "target_logprob_margin"))
+    result.update(
+        _branch_value_summary(
+            branches,
+            [100.0 * value for value in correct],
+            "target_accuracy",
+        )
+    )
+    for key in [
+        "target_logprob_margin_branch_mean_min",
+        "target_logprob_margin_branch_mean_mean",
+        "target_logprob_margin_branch_mean_gini",
+        "target_accuracy_branch_mean_min",
+        "target_accuracy_branch_mean_mean",
+        "target_accuracy_branch_mean_gini",
+    ]:
+        if result.get(key) == "" and metrics.get(key) not in (None, ""):
+            result[key] = metrics.get(key)
+    for key in ["target_logprob_margin_by_branch", "target_accuracy_by_branch"]:
+        if result.get(key) == "" and metrics.get(key) not in (None, ""):
+            result[key] = json.dumps(metrics.get(key))
     return result
 
 
@@ -264,6 +365,7 @@ def load_mechanism(path):
         "posterior_matched_comparison_energy_mean": metrics.get("posterior_matched_comparison_energy_mean"),
         "posterior_matched_comparison_gap_mean": metrics.get("posterior_matched_comparison_gap_mean"),
     }
+    row.update(summarize_branch_margins(metrics))
     row.update(summarize_branch_assignments(metrics))
     row.update(summarize_ablation(metrics, "input_edge_ablation", "input_ablation"))
     row.update(summarize_ablation(metrics, "physical_edge_ablation", "physical_ablation"))

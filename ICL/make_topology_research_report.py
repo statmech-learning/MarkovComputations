@@ -53,6 +53,7 @@ KEY_CORRELATIONS = [
     "input_edge_load_gini",
     "input_coord_load_gini",
     "target_logprob_margin_mean",
+    "target_logprob_margin_branch_mean_min",
     "branch_active_root_mi",
     "branch_active_tree_mi",
     "tree_comparison_energy_fraction_mean",
@@ -106,6 +107,7 @@ POOLED_RUN_MODELS = OrderedDict(
             [
                 "n_edges",
                 "target_logprob_margin_mean",
+                "target_logprob_margin_branch_mean_min",
                 "branch_active_tree_mi",
                 "input_ablation_max_loss",
             ],
@@ -167,6 +169,7 @@ POOLED_AGGREGATE_MODELS = OrderedDict(
             [
                 "n_edges",
                 "target_logprob_margin_mean_mean",
+                "target_logprob_margin_branch_mean_min_mean",
                 "branch_active_tree_mi_mean",
                 "input_ablation_max_loss_mean",
             ],
@@ -706,6 +709,7 @@ def correlation_table(experiments):
         ("input_edge_load_gini", "input mask edge-load heterogeneity"),
         ("input_coord_load_gini", "input mask coordinate-load heterogeneity"),
         ("target_logprob_margin_mean", "trained branch margin"),
+        ("target_logprob_margin_branch_mean_min", "worst branch mean margin"),
         ("branch_active_tree_mi", "branch-active-tree MI"),
         ("tree_comparison_energy_fraction_mean", "tree-sum comparison alignment"),
         ("posterior_matched_comparison_gap_mean", "posterior matched comparison gap"),

@@ -32,6 +32,9 @@ TOPOLOGY_COLUMNS = [
 
 MECHANISM_COLUMNS = [
     "target_logprob_margin_mean",
+    "target_logprob_margin_branch_mean_min",
+    "target_logprob_margin_branch_mean_gini",
+    "target_accuracy_branch_mean_min",
     "branch_active_root_mi",
     "branch_active_tree_mi",
     "branch_active_root_nmi",
@@ -172,6 +175,7 @@ def group_summary(rows, group_key):
             "d_rel",
             "effective_rank_D",
             "target_logprob_margin_mean",
+            "target_logprob_margin_branch_mean_min",
             "branch_active_tree_mi",
             "branch_active_tree_nmi",
             "branch_active_tree_purity_mean",
@@ -207,6 +211,9 @@ def family_within_edge_summary(rows):
                 "branch_active_tree_nmi_mean": mean_or_none("branch_active_tree_nmi"),
                 "branch_active_tree_purity_mean": mean_or_none("branch_active_tree_purity_mean"),
                 "target_logprob_margin_mean": mean_or_none("target_logprob_margin_mean"),
+                "target_logprob_margin_branch_mean_min": mean_or_none(
+                    "target_logprob_margin_branch_mean_min"
+                ),
             }
         )
     return summary

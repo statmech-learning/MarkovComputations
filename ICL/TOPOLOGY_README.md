@@ -37,7 +37,7 @@ The convention is:
   selected topology library through `run_topology_icl.py --edge_json`, with
   optional `input_mask_json` rows for explicit input-encoding topology.
 - `topology_analysis.py`: post-training active-tree, tree-projection
-  alignment, and edge-sensitivity utilities.
+  alignment, branch-wise margin, and edge-sensitivity utilities.
 - `analyze_topology_model.py`: load a trained run and write
   `mechanism_metrics.json`.
 - `submit_topology_mechanisms.py`: SLURM array generator for post-training
@@ -50,7 +50,8 @@ The convention is:
 - `collect_mechanism_results.py`: collect mechanism-analysis JSON files into a
   flat CSV table, including branch-to-root/tree assignment purity summaries
   and normalized mutual information from stored per-sample active roots and
-  active trees.
+  active trees. When per-sample margins are available, it also reports
+  worst-branch mean margin and worst-branch accuracy.
 - `summarize_topology_mechanisms.py`: join topology and mechanism result CSVs,
   then report overall and within-edge-count correlations.
 - `aggregate_topology_seeds.py`: aggregate repeated training seeds for each
