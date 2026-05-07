@@ -71,7 +71,7 @@ The convention is:
 - `recover_essential_inputmask_retrains.py`: conservative wrapper for
   interrupted essential input-mask retrains; it audits source artifacts, writes
   status manifests, optionally submits only missing retrain runs, and calls the
-  guarded finalizer only after a strict retrain audit.
+  guarded finalizer and completion verifier only after strict retrain audits.
 - `make_input_mask_report.py`: focused report for fixed-physical-graph
   input-mask sweeps, including masked tree geometry, mechanism predictors,
   extracted essential masks, and retrain retention.

@@ -122,6 +122,21 @@ def finalizer_command(experiments, seeds, output_md, output_json):
     )
 
 
+def verifier_command(experiments, seeds, output_md, output_json):
+    return python_script(
+        "verify_topology_completion.py",
+        *experiment_args(experiments),
+        "--seeds",
+        seeds,
+        "--report_kind",
+        "input_mask",
+        "--report_md",
+        output_md,
+        "--report_json",
+        output_json,
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -192,6 +207,15 @@ def main():
                 args.seeds,
                 require_retrains=True,
                 strict=True,
+            ),
+            dry_run=args.dry_run,
+        )
+        run_command(
+            verifier_command(
+                experiments,
+                args.seeds,
+                args.output_md,
+                args.output_json,
             ),
             dry_run=args.dry_run,
         )
