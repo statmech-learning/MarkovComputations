@@ -9,12 +9,14 @@ from .markov_icl import MatrixTreeMarkovICL
 from .polynomial_icl import RandomPolynomialICL
 from .wta_icl import WinnerTakesAllICL
 from .nonlinear_markov_icl import NonlinearMarkovICL
+from .markov_icl_regression import MatrixTreeMarkovICLRegression
 
 __all__ = [
     'BaseICLModel',
     'MatrixTreeMarkovICL',
     'RandomPolynomialICL',
     'WinnerTakesAllICL',
-    'NonlinearMarkovICL'
+    'NonlinearMarkovICL',
+    'MatrixTreeMarkovICLRegression'
 ]
 

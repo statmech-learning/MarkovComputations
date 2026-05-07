@@ -9,6 +9,54 @@ import torch
 import numpy as np
 
 
+def sample_full_rank_matrix(out_dim, in_dim, scale=1.0, max_tries=100):
+    """Sample a random max-rank matrix of shape (out_dim, in_dim)."""
+    target_rank = min(out_dim, in_dim)
+    for _ in range(max_tries):
+        mat = scale * torch.randn(out_dim, in_dim)
+        if torch.linalg.matrix_rank(mat).item() == target_rank:
+            return mat
+    raise RuntimeError(
+        f"Failed to sample max-rank matrix for shape=({out_dim}, {in_dim})"
+    )
+
+
+def build_input_projection_matrices(D, proj_dim=None, mode='identity', scale=1.0):
+    """
+    Build context (K_proj) and query (Q_proj) input projection matrices.
+
+    Args:
+        D: Input dimension
+        proj_dim: Output projection dimension (defaults to D)
+        mode: 'identity' or 'random'
+        scale: Std scale for random matrix entries
+
+    Returns:
+        (K_proj, Q_proj): tensors of shape (proj_dim, D)
+    """
+    proj_dim = D if proj_dim is None else proj_dim
+    if mode == 'identity':
+        mat = torch.zeros(proj_dim, D)
+        diag_dim = min(proj_dim, D)
+        mat[:diag_dim, :diag_dim] = torch.eye(diag_dim)
+        return mat, mat.clone()
+    if mode == 'random':
+        return (
+            sample_full_rank_matrix(proj_dim, D, scale=scale),
+            sample_full_rank_matrix(proj_dim, D, scale=scale),
+        )
+    raise ValueError(f"Invalid input projection mode: {mode}. Expected 'identity' or 'random'")
+
+
+def apply_context_query_projection(z_context, z_query, K_proj=None, Q_proj=None):
+    """Apply separate linear projections to context and query vectors."""
+    if K_proj is not None:
+        z_context = torch.matmul(z_context, K_proj.T)
+    if Q_proj is not None:
+        z_query = torch.matmul(z_query, Q_proj.T)
+    return z_context, z_query
+
+
 class GaussianMixtureModel:
     """Gaussian Mixture Model with K classes for ICL task with DISCRETE labels."""
     
@@ -83,7 +131,7 @@ class GaussianMixtureModel:
         return self.class_to_label[class_idx]
 
 
-def generate_icl_gmm_data(gmm, n_samples, N, novel_classes=False, exact_copy=True, B=1, L=None, shuffle_context=False, min_max_choice = None, unique_labels = False):
+def generate_icl_gmm_data(gmm, n_samples, N, novel_classes=False, exact_copy=True, B=1, L=None, shuffle_context=False, min_max_choice = None, unique_labels = False, K_proj=None, Q_proj=None):
     """
     Generate ICL data from GMM with DISCRETE labels.
     
@@ -221,12 +269,14 @@ def generate_icl_gmm_data(gmm, n_samples, N, novel_classes=False, exact_copy=Tru
                 labels = [labels[i] for i in perm]
 
         # ------------------------------------------------------------
-        z_seq = torch.stack(z_context + [z_query])
+        z_context_t = torch.stack(z_context)
+        z_context_t, z_query = apply_context_query_projection(z_context_t, z_query, K_proj=K_proj, Q_proj=Q_proj)
+        z_seq = torch.cat([z_context_t, z_query.unsqueeze(0)], dim=0)
         data.append((z_seq, torch.tensor(labels), target_label))
 
     return data
 
-def generate_iwl_gmm_data(gmm, n_samples, N, B=1, shuffle_context=False):
+def generate_iwl_gmm_data(gmm, n_samples, N, B=1, shuffle_context=False, K_proj=None, Q_proj=None):
     """
     Generate ICL data from GMM with DISCRETE labels.
     
@@ -279,7 +329,9 @@ def generate_iwl_gmm_data(gmm, n_samples, N, B=1, shuffle_context=False):
             labels = [labels[i] for i in perm]
 
         # Stack and store
-        z_seq = torch.stack(z_context + [z_query])
+        z_context_t = torch.stack(z_context)
+        z_context_t, z_query = apply_context_query_projection(z_context_t, z_query, K_proj=K_proj, Q_proj=Q_proj)
+        z_seq = torch.cat([z_context_t, z_query.unsqueeze(0)], dim=0)
         data.append((z_seq, torch.tensor(labels), target_label))
     
     return data

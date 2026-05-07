@@ -33,10 +33,12 @@ class MatrixTreeMarkovICL(BaseICLModel):
     4. Aggregate attention by label to get class logits
     """
     
-    def __init__(self, n_nodes=10, z_dim=2, L=75, N=4, use_label_mod=False, 
-                 learn_base_rates=True, transform_func='exp', 
+    def __init__(self, n_nodes=10, z_dim=2, L=75, N=4, use_label_mod=False,
+                 learn_base_rates=True, transform_func='exp',
                  sparsity_rho_edge=1.0, sparsity_rho_all=1.0,
-                 sparsity_rho_edge_base_W=1.0, base_mask_value=0.0, print_creation = True):
+                 sparsity_rho_edge_base_W=1.0, base_mask_value=0.0,
+                 context_scorer_type='linear', mlp_depth=2, mlp_width=64,
+                 print_creation=True):
         """
         Initialize Markov ICL model.
         
@@ -52,6 +54,9 @@ class MatrixTreeMarkovICL(BaseICLModel):
             sparsity_rho_all: Fraction of non-zero elements in per-element mask (all dims)
             sparsity_rho_edge_base_W: Fraction of (i,j) edges with base rates in W
             base_mask_value: Value for masked base rates (0.0 or float('-inf'))
+            context_scorer_type: 'linear' or 'mlp' mapping from steady-state to context scores
+            mlp_depth: Number of linear layers for MLP context scorer (>=2)
+            mlp_width: Hidden width used by MLP context scorer
         """
         super().__init__(n_nodes=n_nodes, z_dim=z_dim, L=L, N=N)
         self.n_nodes = n_nodes
@@ -62,6 +67,9 @@ class MatrixTreeMarkovICL(BaseICLModel):
         self.sparsity_rho_edge_base_W = sparsity_rho_edge_base_W
         self.base_mask_value = base_mask_value
         self.learn_base_rates = learn_base_rates
+        self.context_scorer_type = context_scorer_type
+        self.mlp_depth = mlp_depth
+        self.mlp_width = mlp_width
         
         z_full_dim = (N + 1) * z_dim  # Flatten all context + query
         l_full_dim = N
@@ -82,8 +90,24 @@ class MatrixTreeMarkovICL(BaseICLModel):
         else:
             self.label_modulation = None
         
-        # B maps steady state to context position scores (attention mechanism)
-        self.B = nn.Parameter(torch.randn(n_nodes, N) * init_scale_B)
+        # Context scorer maps steady-state probabilities to context position scores.
+        if context_scorer_type == 'linear':
+            self.B = nn.Parameter(torch.randn(n_nodes, N) * init_scale_B)
+            self.context_scorer = None
+        elif context_scorer_type == 'mlp':
+            if mlp_depth < 2:
+                raise ValueError("mlp_depth must be >= 2 when context_scorer_type='mlp'")
+            layers = [nn.Linear(n_nodes, mlp_width), nn.ReLU()]
+            for _ in range(mlp_depth - 2):
+                layers.extend([nn.Linear(mlp_width, mlp_width), nn.ReLU()])
+            layers.append(nn.Linear(mlp_width, N))
+            self.context_scorer = nn.Sequential(*layers)
+            self.B = None
+        else:
+            raise ValueError(
+                f"Invalid context_scorer_type: {context_scorer_type}. "
+                "Expected 'linear' or 'mlp'"
+            )
         
         # Base log rates for W
         # Note: To get zero base rates, set sparsity_rho_edge_base_W = 0.0 with base_mask_value = 0.0
@@ -110,6 +134,9 @@ class MatrixTreeMarkovICL(BaseICLModel):
                 f"attention over {N} context items)")
             print(f"  Label modulation: {self.use_label_mod}")
             print(f"  Base rates learnable: {learn_base_rates}")
+            print(f"  Context scorer: {context_scorer_type}")
+            if context_scorer_type == 'mlp':
+                print(f"  MLP scorer: depth={mlp_depth}, width={mlp_width}, activation=relu")
             print(f"  Base mask value: {base_mask_value}")
             print(f"  Sparsity K: rho_edge={sparsity_rho_edge:.3f}, rho_all={sparsity_rho_all:.3f}")
             print(f"  Sparsity base_W: rho_edge={sparsity_rho_edge_base_W:.3f}")
@@ -501,8 +528,11 @@ class MatrixTreeMarkovICL(BaseICLModel):
         else:
             raise ValueError(f"Invalid method: {method}")
         
-        # Compute context position scores: q_m = Σ_k B_{k,m} * π_k
-        q = torch.matmul(p_batch, self.B)  # (batch_size, N)
+        # Compute context position scores from steady-state probabilities.
+        if self.context_scorer_type == 'linear':
+            q = torch.matmul(p_batch, self.B)  # (batch_size, N)
+        else:
+            q = self.context_scorer(p_batch)  # (batch_size, N)
         
         # Apply temperature and softmax to get attention over context positions
         attention = torch.softmax(q / temperature, dim=1)  # (batch_size, N)
@@ -625,6 +655,9 @@ def load_model(params, path, print_creation = True):
                                sparsity_rho_all=params['sparsity_rho_all'],
                                sparsity_rho_edge_base_W=params['sparsity_rho_edge_base_W'],
                                base_mask_value=params['base_mask_value'],
+                               context_scorer_type=params.get('context_scorer_type', 'linear'),
+                               mlp_depth=params.get('mlp_depth', 2),
+                               mlp_width=params.get('mlp_width', 64),
                                print_creation=print_creation)
     
     model_path = path + 'model.pt'

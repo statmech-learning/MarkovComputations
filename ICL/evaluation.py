@@ -9,7 +9,8 @@ from data_generation import generate_icl_gmm_data, generate_iwl_gmm_data#, gener
 
 
 def test_icl(model, gmm, N, device, n_samples=1000, exact_copy=True, B=1, 
-             test_label_shifts=False, method='direct_solve', L=None, temperature=1.0, shuffle_context=False, min_max_choice=None, unique_labels = False):
+             test_label_shifts=False, method='direct_solve', L=None, temperature=1.0, shuffle_context=False, min_max_choice=None, unique_labels = False,
+             K_proj=None, Q_proj=None):
     """
     Test in-context learning on novel classes with CLASSIFICATION.
     
@@ -41,7 +42,8 @@ def test_icl(model, gmm, N, device, n_samples=1000, exact_copy=True, B=1,
     test_data_id = generate_icl_gmm_data(
         gmm, n_samples, N, novel_classes=False, 
         exact_copy=exact_copy, B=B, L=K_labels, shuffle_context=shuffle_context, 
-        min_max_choice=min_max_choice, unique_labels=unique_labels
+        min_max_choice=min_max_choice, unique_labels=unique_labels,
+        K_proj=K_proj, Q_proj=Q_proj
     )
     correct_id = 0
     total_id = 0
@@ -68,7 +70,7 @@ def test_icl(model, gmm, N, device, n_samples=1000, exact_copy=True, B=1,
     test_data_ood = generate_icl_gmm_data(
         gmm, n_samples, N, novel_classes=True,
         exact_copy=exact_copy, B=B, L=K_labels, shuffle_context=shuffle_context, 
-        min_max_choice=min_max_choice
+        min_max_choice=min_max_choice, K_proj=K_proj, Q_proj=Q_proj
     )
     correct_ood = 0
     total_ood = 0
@@ -108,7 +110,8 @@ def test_icl(model, gmm, N, device, n_samples=1000, exact_copy=True, B=1,
 
 
 def evaluate_iwl(model, gmm, N, device, n_eval_samples=500, L=None, 
-                 method='direct_solve', temperature=1.0, shuffle_context=False):
+                 method='direct_solve', temperature=1.0, shuffle_context=False,
+                 K_proj=None, Q_proj=None):
     """
     Evaluate In-Weight Learning (IWL) accuracy.
     
@@ -131,7 +134,8 @@ def evaluate_iwl(model, gmm, N, device, n_eval_samples=500, L=None,
     model.eval()
     
     iwl_data = generate_iwl_gmm_data(
-        gmm, n_eval_samples, N, B=1, shuffle_context=shuffle_context)
+        gmm, n_eval_samples, N, B=1, shuffle_context=shuffle_context,
+        K_proj=K_proj, Q_proj=Q_proj)
     
     iwl_correct = 0
     with torch.no_grad():
@@ -153,7 +157,8 @@ def evaluate_iwl(model, gmm, N, device, n_eval_samples=500, L=None,
 
 
 def evaluate_icl_novel(model, gmm, N, device, n_eval_samples=500, exact_copy=True, 
-                      B=1, L=None, method='direct_solve', temperature=1.0, shuffle_context=False, min_max_choice=None, unique_labels = False):
+                      B=1, L=None, method='direct_solve', temperature=1.0, shuffle_context=False, min_max_choice=None, unique_labels = False,
+                      K_proj=None, Q_proj=None):
     """
     Evaluate ICL Primary metric: Novel classes with B copies in context.
     
@@ -178,7 +183,8 @@ def evaluate_icl_novel(model, gmm, N, device, n_eval_samples=500, exact_copy=Tru
     
     icl_novel_data = generate_icl_gmm_data(
         gmm, n_eval_samples, N,
-        novel_classes=True, exact_copy=exact_copy, B=B, L=L, shuffle_context=shuffle_context, min_max_choice=min_max_choice, unique_labels = unique_labels
+        novel_classes=True, exact_copy=exact_copy, B=B, L=L, shuffle_context=shuffle_context,
+        min_max_choice=min_max_choice, unique_labels=unique_labels, K_proj=K_proj, Q_proj=Q_proj
     )
     
     icl_novel_correct = 0

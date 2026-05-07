@@ -23,8 +23,9 @@ from evaluation import test_icl
 parser = argparse.ArgumentParser(description="SLURM job script with arguments.")
 
 # Define command-line arguments
-parser.add_argument("--param1", type=float, required=True, help="An integer parameter")
-parser.add_argument("--param2", type=int, required=False, help="An integer parameter")
+parser.add_argument("--param1", type=int, required=True, help="An integer parameter")
+parser.add_argument("--param2", type=float, required=False, help="An integer parameter")
+parser.add_argument("--param3", type=int, required=False, help="An integer parameter")
 parser.add_argument("--output", type=str, required=True, help="A string parameter")
 
 # Parse arguments
@@ -66,8 +67,8 @@ sparsity_rho_all_K = 0.0     # Fraction of individual K parameters to keep (0.0 
 # ============================================================
 # Sparsity Parameters - L_params (nonlinear interactions)
 # ============================================================
-sparsity_rho_edge_L = args.param1    # Fraction of (i,j,k) triplets with L parameters
-sparsity_rho_all_L = 1.0    # Fraction of individual L parameters to keep
+sparsity_rho_edge_L = 1.0    # Fraction of (i,j,k) triplets with L parameters
+sparsity_rho_all_L = args.param2    # Fraction of individual L parameters to keep
 
 # ============================================================
 # Sparsity Parameters - Base Rates
