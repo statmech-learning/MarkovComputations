@@ -370,10 +370,23 @@ export SLURM_ACCOUNT=<account>
 export SLURM_TIME=08:00:00
 export SLURM_MEM_PER_CPU=8G
 export SLURM_EXTRA_SETUP='module load python/3.11; source ~/venvs/icl/bin/activate'
+export TOPOLOGY_PYTHON=python
+
+python3 - <<'PY'
+import os
+print("SLURM_EXTRA_SETUP:", os.environ.get("SLURM_EXTRA_SETUP", ""))
+print("TOPOLOGY_PYTHON:", os.environ.get("TOPOLOGY_PYTHON", "python3"))
+PY
 
 python3 submit_topology_phase1.py --phase smoke --array --dry-run
 python3 submit_topology_phase1.py --phase smoke --array
 ```
+
+The post-training SLURM submitters insert a Torch import preflight into each
+array task. If `TOPOLOGY_PYTHON` cannot import Torch after `SLURM_EXTRA_SETUP`,
+the task fails before doing mechanism or causal analysis. This is intentional:
+those jobs load trained `model.pt` files and should not run under a system
+Python without Torch.
 
 The full initial controlled sweep is:
 
@@ -511,11 +524,53 @@ python3 finalize_topology_sweep.py \
   --input_root "$SLURM_OUTPUT_BASE" \
   --submit_mechanisms \
   --ablate_input \
-  --ablate_physical
+  --ablate_physical \
+  --job_python "$TOPOLOGY_PYTHON"
 
 python3 finalize_topology_sweep.py \
   --input_root "$SLURM_OUTPUT_BASE" \
   --collect_mechanisms
+```
+
+To submit and collect both mechanism decompositions and causal
+tree/branch-alignment interventions for a completed sweep:
+
+```bash
+python3 finalize_topology_sweep.py \
+  --input_root "$SLURM_OUTPUT_BASE" \
+  --submit_mechanisms \
+  --submit_causal \
+  --ablate_input \
+  --ablate_physical \
+  --device cpu \
+  --job_python "$TOPOLOGY_PYTHON" \
+  --max-concurrent 20
+
+python3 finalize_topology_sweep.py \
+  --input_root "$SLURM_OUTPUT_BASE" \
+  --collect_mechanisms \
+  --collect_causal
+```
+
+For the currently tracked expanded hard pilots, run the same follow-up over
+each root after syncing the `topology` branch on Engaging:
+
+```bash
+for root in \
+  results/expanded_hard_sweeps/n4_m6_N3_D2 \
+  results/expanded_hard_sweeps/n5_m8_N3_D2 \
+  results/expanded_hard_sweeps/n5_m12_N3_D2
+do
+  python3 finalize_topology_sweep.py \
+    --input_root "$root" \
+    --submit_mechanisms \
+    --submit_causal \
+    --ablate_input \
+    --ablate_physical \
+    --device cpu \
+    --job_python "$TOPOLOGY_PYTHON" \
+    --max-concurrent 20
+done
 ```
 
 To test whether a trained dense topology discovered a sparse retrainable
