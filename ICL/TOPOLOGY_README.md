@@ -35,6 +35,9 @@ The convention is:
   `mechanism_metrics.json`.
 - `submit_topology_mechanisms.py`: SLURM array generator for post-training
   active-tree, edge-sensitivity, and ablation analysis over completed runs.
+- `finalize_topology_sweep.py`: convenience wrapper that collects completed
+  training runs, runs regressions, optionally submits/collects mechanism
+  analyses, and refreshes topology-level seed aggregates.
 - `collect_topology_results.py`: collect completed run directories into a flat
   CSV for regressions against raw degree count and topology-derived metrics.
 - `collect_mechanism_results.py`: collect mechanism-analysis JSON files into a
@@ -201,6 +204,27 @@ python3 aggregate_topology_seeds.py \
   --mechanism_csv "$SLURM_OUTPUT_BASE/mechanism_results.csv" \
   --output_csv "$SLURM_OUTPUT_BASE/topology_seed_aggregates.csv" \
   --output_json "$SLURM_OUTPUT_BASE/topology_seed_aggregates.json"
+```
+
+The same collection/regression/aggregation workflow can be run as one command:
+
+```bash
+python3 finalize_topology_sweep.py \
+  --input_root "$SLURM_OUTPUT_BASE"
+```
+
+To submit mechanism analysis for a completed sweep, then later collect it:
+
+```bash
+python3 finalize_topology_sweep.py \
+  --input_root "$SLURM_OUTPUT_BASE" \
+  --submit_mechanisms \
+  --ablate_input \
+  --ablate_physical
+
+python3 finalize_topology_sweep.py \
+  --input_root "$SLURM_OUTPUT_BASE" \
+  --collect_mechanisms
 ```
 
 To test whether a trained dense topology discovered a sparse retrainable
