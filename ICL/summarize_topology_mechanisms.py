@@ -32,6 +32,11 @@ MECHANISM_COLUMNS = [
     "target_logprob_margin_mean",
     "branch_active_root_mi",
     "branch_active_tree_mi",
+    "active_root_unique_count",
+    "active_tree_unique_count",
+    "branch_active_root_purity_mean",
+    "branch_active_tree_purity_mean",
+    "branch_active_tree_unique_mean",
     "edge_importance_gini",
     "essential_edges_for_50pct_importance",
     "tree_projection_norm_mean",
@@ -159,7 +164,13 @@ def group_summary(rows, group_key):
             "target_max": float(values.max()),
             "target_std": float(values.std()),
         }
-        for metric in ["d_rel", "effective_rank_D", "target_logprob_margin_mean", "branch_active_tree_mi"]:
+        for metric in [
+            "d_rel",
+            "effective_rank_D",
+            "target_logprob_margin_mean",
+            "branch_active_tree_mi",
+            "branch_active_tree_purity_mean",
+        ]:
             metric_values = [row[metric] for row in group if row.get(metric) is not None]
             if metric_values:
                 item[f"{metric}_mean"] = float(np.mean(metric_values))
@@ -188,6 +199,7 @@ def family_within_edge_summary(rows):
                 "target_max": float(values.max()),
                 "d_rel_mean": mean_or_none("d_rel"),
                 "branch_active_tree_mi_mean": mean_or_none("branch_active_tree_mi"),
+                "branch_active_tree_purity_mean": mean_or_none("branch_active_tree_purity_mean"),
                 "target_logprob_margin_mean": mean_or_none("target_logprob_margin_mean"),
             }
         )
@@ -226,7 +238,8 @@ def print_report(report):
             print(
                 f"  m={float(edge_count):.0f} n={stats['n']:3d} "
                 f"mean={stats['target_mean']:.2f} max={stats['target_max']:.2f} "
-                f"tree_mi_mean={stats.get('branch_active_tree_mi_mean', float('nan')):.3f}"
+                f"tree_mi_mean={stats.get('branch_active_tree_mi_mean', float('nan')):.3f} "
+                f"tree_purity_mean={stats.get('branch_active_tree_purity_mean_mean', float('nan')):.3f}"
             )
 
 
