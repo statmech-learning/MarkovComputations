@@ -126,9 +126,19 @@ the scientific result. If you also generate a consolidated
 `--report_kind research` and the consolidated report paths; that mode audits
 both input-mask and physical-essential retrain layouts.
 
+After verification passes, create the conservative H0/H1 interpretation:
+
+```bash
+python3 interpret_topology_report.py \
+  --report_json results/input_mask_topology_report.json \
+  --report_kind input_mask \
+  --output_md results/input_mask_topology_interpretation.md \
+  --output_json results/input_mask_topology_interpretation.json
+```
+
 ## Not Yet Complete
 
 The project is not complete until cluster-side retrains and final reports are
-completed and inspected. Local tests prove the analysis/control plane is wired,
-but they are not evidence that final trained CRN results exist or answer the
-scientific question.
+completed, verified, and interpreted. Local tests prove the analysis/control
+plane is wired, but they are not evidence that final trained CRN results exist
+or answer the scientific question.

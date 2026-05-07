@@ -87,6 +87,9 @@ The convention is:
   the strict artifact audit and validates either focused input-mask reports
   (`--report_kind input_mask`) or consolidated topology research reports
   (`--report_kind research`).
+- `interpret_topology_report.py`: read a verified report JSON and write a
+  conservative H0/H1 evidence summary comparing count baselines, topology
+  predictors, mechanism predictors, and essential-retrain retention.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
 - `tests/`: dependency-light unit coverage for matrix-tree metrics, input-mask

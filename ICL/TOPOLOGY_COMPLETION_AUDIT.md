@@ -59,12 +59,14 @@ python3 -m py_compile $(find ICL -name '*.py' -not -path '*/__pycache__/*')
 git diff --check
 python3 verify_topology_completion.py ... --report_kind input_mask --report_md ... --report_json ...
 python3 verify_topology_completion.py ... --report_kind research --report_md ... --report_json ...
+python3 interpret_topology_report.py --report_json ... --report_kind input_mask ...
+python3 interpret_topology_report.py --report_json ... --report_kind research ...
 ```
 
 Observed state:
 
 - Local branch is clean and tracking `origin/topology`.
-- Local unit suite has 67 tests and passes.
+- Local unit suite has 69 tests and passes.
 - Python syntax compilation passes.
 - `git diff --check` passes.
 - Local `ICL/results` contains only older `markov_icl_gmm_*.pt` files, not the
@@ -112,6 +114,7 @@ Observed state:
 | Provide artifact audit and safe recovery | `audit_topology_artifacts.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
 | Audit physical essential-subgraph retrain artifacts | `audit_topology_artifacts.py --essential_kind physical` | Implemented and tested |
 | Verify final report and artifact consistency in one non-mutating command | `verify_topology_completion.py --report_kind input_mask` and `--report_kind research` | Implemented and tested; research mode audits both input-mask and physical-essential layouts |
+| Produce a conservative H0/H1 interpretation from verified report JSON | `interpret_topology_report.py` | Implemented and tested; requires final cluster report JSON |
 | Avoid interfering with other agents on Engaging | Current blocker documents that only `icl:13.2` should be used | Satisfied locally; cluster work paused |
 
 ## Verification Coverage
@@ -213,4 +216,4 @@ the currently allowed pane.
 The next required action is to restore `icl:13.2` to an active Engaging
 `login005` shell, pull `origin/topology`, run the guarded recovery/finalization
 commands from `TOPOLOGY_STATUS.md`, and inspect the resulting Markdown/JSON
-reports before drawing scientific conclusions.
+reports and interpretation before drawing scientific conclusions.
