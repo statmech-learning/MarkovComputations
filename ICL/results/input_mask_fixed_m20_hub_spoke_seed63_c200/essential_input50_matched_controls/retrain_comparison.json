@@ -1,0 +1,53 @@
+{
+  "by_control_kind": {
+    "degree_rewire": {
+      "control_d_rel_mean": 283.75,
+      "control_minus_source_retrain_max_mean": -2.962499999999999,
+      "control_minus_source_retrain_mean_mean": -0.889999999999997,
+      "control_target_max_best": 93.2,
+      "control_target_max_mean": 76.92500000000001,
+      "control_target_mean_mean": 71.19999999999999,
+      "control_win_rate_max": 0.3125,
+      "control_win_rate_mean": 0.5,
+      "match_score_mean": 0.001322044721196771,
+      "n": 16,
+      "n_sources": 16,
+      "source_d_rel_mean": 283.75,
+      "source_retrain_target_max_mean": 79.88749999999999,
+      "source_retrain_target_mean_mean": 72.08999999999999
+    },
+    "random_sc": {
+      "control_d_rel_mean": 285.0,
+      "control_minus_source_retrain_max_mean": 0.4625000000000026,
+      "control_minus_source_retrain_mean_mean": 3.3308333333333384,
+      "control_target_max_best": 94.0,
+      "control_target_max_mean": 80.35,
+      "control_target_mean_mean": 75.42083333333333,
+      "control_win_rate_max": 0.5,
+      "control_win_rate_mean": 0.625,
+      "match_score_mean": 0.010786964090359502,
+      "n": 16,
+      "n_sources": 16,
+      "source_d_rel_mean": 283.75,
+      "source_retrain_target_max_mean": 79.88749999999999,
+      "source_retrain_target_mean_mean": 72.08999999999999
+    }
+  },
+  "n_joined": 32,
+  "overall": {
+    "control_d_rel_mean": 284.375,
+    "control_minus_source_retrain_max_mean": -1.2499999999999982,
+    "control_minus_source_retrain_mean_mean": 1.2204166666666707,
+    "control_target_max_best": 94.0,
+    "control_target_max_mean": 78.63749999999999,
+    "control_target_mean_mean": 73.31041666666667,
+    "control_win_rate_max": 0.40625,
+    "control_win_rate_mean": 0.5625,
+    "match_score_mean": 0.006054504405778137,
+    "n": 32,
+    "n_sources": 16,
+    "source_d_rel_mean": 283.75,
+    "source_retrain_target_max_mean": 79.88749999999999,
+    "source_retrain_target_mean_mean": 72.09
+  }
+}

@@ -1,6 +1,6 @@
 # Next-Phase Topology-ICL Evidence Report
 
-Generated: `2026-05-07T19:48:13.626592+00:00`.
+Generated: `2026-05-07T20:34:20.535633+00:00`.
 
 Scope: first-order CRNs with exponential input-dependent rates. These results do not claim a topology theory for autocatalytic or WTA CRNs.
 
@@ -167,6 +167,41 @@ Rows: `12`.
 | random_sc | 2 | 0.866 | 0.866 |
 | redundant_paths | 1 | 0.866 | 0.866 |
 | two_module | 2 | 0.866 | 0.866 |
+
+## Matched Essential-Motif Controls
+
+### random
+
+Joined controls: `32`. Source motifs represented: `16`.
+
+Matched controls retrain above the extracted motifs here, so this backbone does not support a unique extracted-motif superiority claim.
+
+| control kind | controls | sources | control mean ICL | source motif mean ICL | control-source delta | control win rate | match score |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| degree_rewire | 16 | 16 | 69.83 | 65.69 | 4.15 | 0.875 | 0.003 |
+| random_sc | 16 | 16 | 68.25 | 65.69 | 2.57 | 0.688 | 0.007 |
+
+### cycle
+
+Joined controls: `32`. Source motifs represented: `16`.
+
+Matched controls are mixed or comparable to the extracted motifs here; interpret motif retraining as evidence that small matched physical subgraphs can support ICL, not that the extracted edge set is uniquely superior.
+
+| control kind | controls | sources | control mean ICL | source motif mean ICL | control-source delta | control win rate | match score |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| degree_rewire | 16 | 16 | 66.37 | 67.40 | -1.03 | 0.375 | 0.004 |
+| random_sc | 16 | 16 | 67.94 | 67.40 | 0.54 | 0.562 | 0.011 |
+
+### hub
+
+Joined controls: `32`. Source motifs represented: `16`.
+
+Matched controls are mixed or comparable to the extracted motifs here; interpret motif retraining as evidence that small matched physical subgraphs can support ICL, not that the extracted edge set is uniquely superior.
+
+| control kind | controls | sources | control mean ICL | source motif mean ICL | control-source delta | control win rate | match score |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| degree_rewire | 16 | 16 | 71.20 | 72.09 | -0.89 | 0.500 | 0.001 |
+| random_sc | 16 | 16 | 75.42 | 72.09 | 3.33 | 0.625 | 0.011 |
 
 ## Expanded Pilot Status
 
