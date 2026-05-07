@@ -13,6 +13,7 @@ from topology_metrics import (  # noqa: E402
     directed_cycle,
     enumerate_arborescences,
     incidence_matrix,
+    masked_relative_svd_metrics,
     tree_numerators_by_determinant,
     tree_numerators_by_enumeration,
     topology_matrices,
@@ -45,6 +46,14 @@ class TopologyMetricsTests(unittest.TestCase):
         masked = compute_topology_metrics(n_nodes, edges, p=p, input_mask=zero_mask)
         self.assertEqual(full["d_rel"], full["rank_D"] * p)
         self.assertEqual(masked["d_rel"], 0)
+        self.assertEqual(masked["effective_rank_D_masked"], 0.0)
+
+    def test_masked_svd_metrics_matches_repeated_full_map(self):
+        mats = topology_matrices(3, complete_digraph(3).edges)
+        p = 3
+        stats = masked_relative_svd_metrics(mats["D"], input_mask=None, p=p)
+        one_coord = masked_relative_svd_metrics(mats["D"], input_mask=None, p=1)
+        self.assertEqual(stats["rank"], p * one_coord["rank"])
 
     def test_topology_matrices_shapes(self):
         mats = topology_matrices(3, complete_digraph(3).edges)

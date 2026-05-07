@@ -30,6 +30,13 @@ PREDICTOR_SETS = {
         "raw_physical_parameter_count",
         "d_rel",
     ],
+    "input_count": [
+        "input_coupled_parameter_count",
+    ],
+    "input_count_plus_drel": [
+        "input_coupled_parameter_count",
+        "d_rel",
+    ],
     "tree_geometry": [
         "raw_physical_parameter_count",
         "d_rel",
@@ -46,6 +53,14 @@ PREDICTOR_SETS = {
         "root_tree_count_gini",
         "edge_participation_var",
         "mean_shortest_path",
+    ],
+    "masked_tree_geometry": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "effective_rank_D_masked",
+        "condition_number_D_masked",
+        "input_edge_load_gini",
+        "input_coord_load_gini",
     ],
 }
 
@@ -211,4 +226,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

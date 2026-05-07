@@ -24,17 +24,28 @@ DEFAULT_TARGET = "test_novel_classes"
 
 STATIC_COLUMNS = [
     "topology_name",
+    "physical_topology_name",
+    "input_mask_name",
     "n_nodes",
     "n_edges",
     "p",
     "raw_physical_parameter_count",
     "input_coupled_parameter_count",
+    "input_coupled_edge_count",
+    "input_coupled_coord_count",
+    "input_parameter_density",
+    "input_edge_density",
+    "input_coord_density",
+    "input_edge_load_gini",
+    "input_coord_load_gini",
     "n_req",
     "d_rel",
     "d_rel_minus_n_req",
     "rank_D",
     "effective_rank_D",
     "condition_number_D",
+    "effective_rank_D_masked",
+    "condition_number_D_masked",
     "root_tree_count_cv",
     "root_tree_count_gini",
     "edge_participation_var",
@@ -78,6 +89,8 @@ MECHANISM_COLUMNS = [
 
 PREDICTOR_SETS = {
     "rank_only": ["d_rel"],
+    "input_count": ["input_coupled_parameter_count"],
+    "input_count_plus_drel": ["input_coupled_parameter_count", "d_rel"],
     "tree_geometry": [
         "d_rel",
         "effective_rank_D",
@@ -86,6 +99,14 @@ PREDICTOR_SETS = {
         "edge_participation_gini",
         "bottleneck_edge_fraction_095",
         "mean_shortest_path",
+    ],
+    "masked_tree_geometry": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "effective_rank_D_masked",
+        "condition_number_D_masked",
+        "input_edge_load_gini",
+        "input_coord_load_gini",
     ],
     "mechanism": [
         "target_logprob_margin_mean_mean",

@@ -431,19 +431,55 @@ def edge_participation(incidence: np.ndarray) -> np.ndarray:
 def masked_relative_dimension(D_matrix: np.ndarray, input_mask: Optional[np.ndarray], p: int) -> int:
     """Compute sum_alpha rank(D_G diag(Omega[:, alpha]))."""
 
+    return int(masked_relative_svd_metrics(D_matrix, input_mask, p)["rank"])
+
+
+def masked_relative_svd_metrics(
+    D_matrix: np.ndarray,
+    input_mask: Optional[np.ndarray],
+    p: int,
+) -> dict:
+    """SVD metrics for the block-diagonal masked relative tree map.
+
+    With an input mask Omega, coordinate alpha contributes the linear map
+    ``D_G diag(Omega[:, alpha])``. The full input-encoding map is block
+    diagonal across input coordinates, so its singular values are the union of
+    the coordinate-specific singular values.
+    """
+
     if input_mask is None:
-        return int(p * svd_metrics(D_matrix)["rank"])
-    mask = np.asarray(input_mask, dtype=float)
-    if mask.ndim != 2:
-        raise ValueError("input_mask must have shape (n_edges, p)")
-    if mask.shape[1] != p or mask.shape[0] != D_matrix.shape[1]:
-        raise ValueError(
-            f"input_mask shape {mask.shape} incompatible with D {D_matrix.shape} and p={p}"
-        )
-    total = 0
-    for alpha in range(p):
-        total += svd_metrics(D_matrix * mask[:, alpha][None, :])["rank"]
-    return int(total)
+        base = svd_metrics(D_matrix)
+        singular_values = np.asarray(base["singular_values"] * int(p), dtype=float)
+    else:
+        mask = np.asarray(input_mask, dtype=float)
+        if mask.ndim != 2:
+            raise ValueError("input_mask must have shape (n_edges, p)")
+        if mask.shape[1] != p or mask.shape[0] != D_matrix.shape[1]:
+            raise ValueError(
+                f"input_mask shape {mask.shape} incompatible with D {D_matrix.shape} and p={p}"
+            )
+        values = []
+        for alpha in range(p):
+            values.extend(svd_metrics(D_matrix * mask[:, alpha][None, :])["singular_values"])
+        singular_values = np.asarray(values, dtype=float)
+
+    positive = singular_values[singular_values > 1e-9]
+    if positive.size == 0:
+        rank = 0
+        effective_rank = 0.0
+        condition_number = math.inf
+    else:
+        rank = int(positive.size)
+        weights = positive**2
+        weights = weights / weights.sum()
+        effective_rank = float(np.exp(-np.sum(weights * np.log(weights))))
+        condition_number = float(positive.max() / positive.min())
+    return {
+        "rank": rank,
+        "singular_values": singular_values.tolist(),
+        "effective_rank": effective_rank,
+        "condition_number": condition_number,
+    }
 
 
 def graph_degree_stats(n_nodes: int, edges: Sequence[Edge]) -> dict:
@@ -499,6 +535,7 @@ def compute_topology_metrics(
     M_stats = svd_metrics(M)
     D_anchor_stats = svd_metrics(D_anchor)
     D_stats = svd_metrics(D_centered)
+    D_masked_stats = masked_relative_svd_metrics(D_centered, input_mask, p)
 
     enum_counts = [len(arborescences[root]) for root in range(n_nodes)]
     det_counts = tree_counts_by_determinant(n_nodes, edge_tuple)
@@ -517,9 +554,12 @@ def compute_topology_metrics(
         "rank_M": M_stats["rank"],
         "rank_D": D_stats["rank"],
         "rank_D_anchor": D_anchor_stats["rank"],
-        "d_rel": masked_relative_dimension(D_centered, input_mask, p),
+        "d_rel": D_masked_stats["rank"],
         "effective_rank_D": D_stats["effective_rank"],
         "condition_number_D": D_stats["condition_number"],
+        "effective_rank_D_masked": D_masked_stats["effective_rank"],
+        "condition_number_D_masked": D_masked_stats["condition_number"],
+        "singular_values_D_masked": D_masked_stats["singular_values"],
         "singular_values_D": D_stats["singular_values"],
         "singular_values_D_anchor": D_anchor_stats["singular_values"],
         "root_tree_count_cv": float(count_arr.std() / count_arr.mean()) if count_arr.mean() else 0.0,

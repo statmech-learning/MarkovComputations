@@ -21,6 +21,7 @@ from torch.utils.data import DataLoader
 from data_generation import GaussianMixtureModel, generate_icl_gmm_data
 from datasets import ICLGMMDataset, collate_fn
 from evaluation import test_icl
+from input_mask_utils import input_mask_summary, load_input_mask_json
 from models import TopologyMatrixTreeMarkovICL
 from topology_metrics import (
     compute_topology_metrics,
@@ -75,6 +76,12 @@ def parse_args():
     parser.add_argument("--input_rho_edge", type=float, default=1.0)
     parser.add_argument("--input_rho_all", type=float, default=1.0)
     parser.add_argument("--input_mask_seed", type=int, default=0)
+    parser.add_argument(
+        "--input_mask_json",
+        type=str,
+        default=None,
+        help="Optional JSON file containing an explicit binary input_mask aligned to edge order.",
+    )
 
     parser.add_argument("--transform_func", type=str, default="exp", choices=["exp", "softplus", "relu"])
     parser.add_argument("--learn_base_rates", action="store_true", default=True)
@@ -156,6 +163,33 @@ def make_input_mask(n_edges, p, rho_edge, rho_all, seed):
     return mask
 
 
+def load_input_mask(args, n_nodes, edges, p):
+    if args.input_mask_json:
+        mask, metadata = load_input_mask_json(args.input_mask_json, n_nodes, edges, p)
+        return mask.astype(float), str(metadata.get("name", "input_mask_json")), metadata
+
+    mask = make_input_mask(
+        len(edges),
+        p,
+        args.input_rho_edge,
+        args.input_rho_all,
+        seed=args.input_mask_seed,
+    )
+    if args.input_rho_edge == 1.0 and args.input_rho_all == 1.0:
+        name = "full"
+    else:
+        name = (
+            f"random_rhoedge{args.input_rho_edge:g}"
+            f"_rhoall{args.input_rho_all:g}_seed{args.input_mask_seed}"
+        )
+    return mask, name, {
+        "name": name,
+        "rho_edge": args.input_rho_edge,
+        "rho_all": args.input_rho_all,
+        "seed": args.input_mask_seed,
+    }
+
+
 def main():
     args = parse_args()
     params = vars(args).copy()
@@ -165,12 +199,9 @@ def main():
 
     n_nodes, edges, topology_name = load_topology(args)
     p = (args.N + 1) * args.D
-    input_mask = make_input_mask(
-        len(edges),
-        p,
-        args.input_rho_edge,
-        args.input_rho_all,
-        seed=args.input_mask_seed,
+    input_mask, input_mask_name, input_mask_metadata = load_input_mask(args, n_nodes, edges, p)
+    run_topology_name = (
+        topology_name if input_mask_name == "full" else f"{topology_name}__mask_{input_mask_name}"
     )
 
     if not is_strongly_connected(n_nodes, edges) and not args.allow_not_strongly_connected:
@@ -185,8 +216,10 @@ def main():
         p=p,
         input_mask=input_mask,
     )
-    topology_metrics["topology_name"] = topology_name
-    topology_metrics["input_coupled_parameter_count"] = int(input_mask.sum())
+    topology_metrics["topology_name"] = run_topology_name
+    topology_metrics["physical_topology_name"] = topology_name
+    topology_metrics["input_mask_name"] = input_mask_name
+    topology_metrics.update(input_mask_summary(input_mask))
     topology_metrics["raw_physical_parameter_count"] = int(len(edges) * p)
     topology_metrics["n_req"] = int(2 * args.N * (args.N + 1) * args.D)
     topology_metrics["d_rel_minus_n_req"] = int(topology_metrics["d_rel"] - topology_metrics["n_req"])
@@ -197,13 +230,19 @@ def main():
     print("TOPOLOGY FIRST-ORDER CRN ICL", flush=True)
     print("=" * 70, flush=True)
     print(json.dumps(json_ready(params), indent=2), flush=True)
-    print(f"Topology: {topology_name}, nodes={n_nodes}, edges={len(edges)}", flush=True)
+    print(f"Topology: {run_topology_name}, nodes={n_nodes}, edges={len(edges)}", flush=True)
+    print(
+        "Input mask: "
+        f"{input_mask_name}, coupled={topology_metrics['input_coupled_parameter_count']}/"
+        f"{len(edges) * p}",
+        flush=True,
+    )
     print(
         "Structural: "
         f"rank_D={topology_metrics['rank_D']}, "
         f"d_rel={topology_metrics['d_rel']}, "
         f"n_req={topology_metrics['n_req']}, "
-        f"effective_rank_D={topology_metrics['effective_rank_D']:.3f}",
+        f"effective_rank_D_masked={topology_metrics['effective_rank_D_masked']:.3f}",
         flush=True,
     )
     print(f"Device: {device}", flush=True)
@@ -305,7 +344,10 @@ def main():
     torch.save(model.state_dict(), os.path.join(args.output, "model.pt"))
 
     topology_payload = {
-        "name": topology_name,
+        "name": run_topology_name,
+        "physical_topology_name": topology_name,
+        "input_mask_name": input_mask_name,
+        "input_mask_metadata": json_ready(input_mask_metadata),
         "n_nodes": n_nodes,
         "edges": [list(edge) for edge in edges],
         "input_mask": input_mask.astype(int).tolist(),
@@ -335,4 +377,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

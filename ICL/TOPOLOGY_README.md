@@ -27,8 +27,14 @@ The convention is:
 - `make_topology_library.py`: generate strongly connected fixed-`m` topology
   candidates, compute pre-training matrix-tree metrics, and select a
   structurally diverse subset for training.
+- `input_mask_utils.py`: validate edge-order-aligned binary input masks and
+  summarize input-encoding support.
+- `make_input_mask_library.py`: hold the physical graph fixed, generate
+  matched-count input-encoding masks, compute masked relative tree geometry,
+  and write a `selected.csv` consumable by the library sweep submitter.
 - `submit_topology_library_sweep.py`: SLURM array generator for training the
-  selected topology library through `run_topology_icl.py --edge_json`.
+  selected topology library through `run_topology_icl.py --edge_json`, with
+  optional `input_mask_json` rows for explicit input-encoding topology.
 - `topology_analysis.py`: post-training active-tree, tree-projection
   alignment, and edge-sensitivity utilities.
 - `analyze_topology_model.py`: load a trained run and write
@@ -172,8 +178,32 @@ python3 submit_topology_library_sweep.py \
 
 Each run stores pre-training structural predictors next to training/test
 results, so regression analysis can compare novel-class ICL accuracy against
-raw degree count, `d_rel`, effective rank, root imbalance, and bottleneck
-metrics.
+raw degree count, input-coupled degree count, `d_rel`, masked effective rank,
+root imbalance, and bottleneck metrics.
+
+To separate input-encoding topology from physical reaction topology, choose one
+fixed physical graph and generate explicit masks with the same number of
+coupled input parameters:
+
+```bash
+python3 make_input_mask_library.py \
+  --edge_json results/topology_library_n6_m20/topologies/g0000_random_sc_seed1.json \
+  --output_root results/input_mask_library_n6_m20_c200 \
+  --coupled_counts 200 \
+  --candidate_seeds 1:60 \
+  --select_masks 16
+
+python3 submit_topology_library_sweep.py \
+  --library_csv results/input_mask_library_n6_m20_c200/selected.csv \
+  --output_root results/input_mask_fixed_graph_c200 \
+  --seeds 1,2 \
+  --array \
+  --max-concurrent 24
+```
+
+Rows from `make_input_mask_library.py` keep `edge_json` fixed and vary only
+`input_mask_json`. The runner validates that mask rows match the physical edge
+order exactly, then stores the canonical mask in each run's `topology.json`.
 
 After jobs finish, collect the result table:
 

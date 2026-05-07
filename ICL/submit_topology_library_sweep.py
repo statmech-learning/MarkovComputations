@@ -58,16 +58,26 @@ def parse_seeds(raw):
 
 def load_topologies(path, selected_only=True, limit=None):
     rows = []
+    base_dir = os.path.dirname(os.path.abspath(path))
     with open(path) as f:
         for row in csv.DictReader(f):
             if selected_only and str(row.get("selected", "1")) not in {"1", "True", "true"}:
                 continue
+            row["_library_dir"] = base_dir
             rows.append(row)
             if limit is not None and len(rows) >= limit:
                 break
     if not rows:
         raise SystemExit(f"No selected topology rows found in {path}")
     return rows
+
+
+def resolve_path(value, base_dir):
+    if value in (None, ""):
+        return None
+    if os.path.isabs(value):
+        return value
+    return os.path.abspath(os.path.join(base_dir, value))
 
 
 def command_for(topology_row, train_seed, args):
@@ -79,7 +89,8 @@ def command_for(topology_row, train_seed, args):
 
     label = f"{topology_row['topology_id']}_trainseed{train_seed}"
     output = os.path.abspath(os.path.join(args.output_root, label))
-    edge_json = os.path.abspath(topology_row["edge_json"])
+    base_dir = topology_row.get("_library_dir", os.getcwd())
+    edge_json = resolve_path(topology_row["edge_json"], base_dir)
     parts = [
         "python3",
         "-u",
@@ -94,6 +105,9 @@ def command_for(topology_row, train_seed, args):
         str(train_seed),
         "--no_progress",
     ]
+    input_mask_json = resolve_path(topology_row.get("input_mask_json"), base_dir)
+    if input_mask_json:
+        parts.extend(["--input_mask_json", shlex.quote(input_mask_json)])
     for key in [
         "K",
         "L",

@@ -20,14 +20,35 @@ import numpy as np
 
 DEFAULT_TARGET = "test_novel_classes"
 
-KEY_RUN_MODELS = ["raw_count", "raw_plus_drel", "tree_geometry", "trainability_geometry"]
-KEY_AGG_MODELS = ["rank_only", "tree_geometry", "mechanism", "projection_alignment"]
+KEY_RUN_MODELS = [
+    "raw_count",
+    "raw_plus_drel",
+    "input_count",
+    "input_count_plus_drel",
+    "tree_geometry",
+    "masked_tree_geometry",
+    "trainability_geometry",
+]
+KEY_AGG_MODELS = [
+    "rank_only",
+    "input_count",
+    "input_count_plus_drel",
+    "tree_geometry",
+    "masked_tree_geometry",
+    "mechanism",
+    "projection_alignment",
+]
 KEY_CORRELATIONS = [
     "d_rel",
     "effective_rank_D",
+    "effective_rank_D_masked",
     "condition_number_D",
+    "condition_number_D_masked",
     "root_tree_count_gini",
     "edge_participation_gini",
+    "input_coupled_parameter_count",
+    "input_edge_load_gini",
+    "input_coord_load_gini",
     "target_logprob_margin_mean",
     "branch_active_root_mi",
     "branch_active_tree_mi",
@@ -41,6 +62,8 @@ POOLED_RUN_MODELS = OrderedDict(
     [
         ("edge_count", ["n_edges"]),
         ("edge_plus_drel", ["n_edges", "d_rel"]),
+        ("input_count", ["input_coupled_parameter_count"]),
+        ("input_plus_drel", ["input_coupled_parameter_count", "d_rel"]),
         (
             "edge_plus_tree_geometry",
             [
@@ -51,6 +74,17 @@ POOLED_RUN_MODELS = OrderedDict(
                 "root_tree_count_gini",
                 "edge_participation_gini",
                 "mean_shortest_path",
+            ],
+        ),
+        (
+            "input_plus_masked_geometry",
+            [
+                "input_coupled_parameter_count",
+                "d_rel",
+                "effective_rank_D_masked",
+                "condition_number_D_masked",
+                "input_edge_load_gini",
+                "input_coord_load_gini",
             ],
         ),
         (
@@ -78,6 +112,8 @@ POOLED_AGGREGATE_MODELS = OrderedDict(
     [
         ("edge_count", ["n_edges"]),
         ("edge_plus_drel", ["n_edges", "d_rel"]),
+        ("input_count", ["input_coupled_parameter_count"]),
+        ("input_plus_drel", ["input_coupled_parameter_count", "d_rel"]),
         (
             "edge_plus_tree_geometry",
             [
@@ -88,6 +124,17 @@ POOLED_AGGREGATE_MODELS = OrderedDict(
                 "root_tree_count_gini",
                 "edge_participation_gini",
                 "mean_shortest_path",
+            ],
+        ),
+        (
+            "input_plus_masked_geometry",
+            [
+                "input_coupled_parameter_count",
+                "d_rel",
+                "effective_rank_D_masked",
+                "condition_number_D_masked",
+                "input_edge_load_gini",
+                "input_coord_load_gini",
             ],
         ),
         (
@@ -333,13 +380,27 @@ def summarize_library(root, run_summary):
         "library_csv": library_path,
         "n_selected": len(selected_rows) if selected_rows else None,
         "n_candidates": len(library_rows) if library_rows else None,
-        "families": sorted({row.get("family") for row in source_rows if row.get("family")}),
+        "families": sorted(
+            {
+                row.get("family") or row.get("mask_family")
+                for row in source_rows
+                if row.get("family") or row.get("mask_family")
+            }
+        ),
         "n_nodes": maybe_int(source_rows[0].get("n_nodes")) if source_rows else None,
         "n_edges": maybe_int(source_rows[0].get("n_edges")) if source_rows else None,
+        "input_coupled_parameter_count_values": sorted(
+            {
+                maybe_int(row.get("input_coupled_parameter_count"))
+                for row in source_rows
+                if maybe_int(row.get("input_coupled_parameter_count")) is not None
+            }
+        ),
         "d_rel_values": sorted(
             {maybe_int(row.get("d_rel")) for row in source_rows if maybe_int(row.get("d_rel")) is not None}
         ),
         "effective_rank_D_mean": mean(numeric_column(source_rows, "effective_rank_D")),
+        "effective_rank_D_masked_mean": mean(numeric_column(source_rows, "effective_rank_D_masked")),
         "root_tree_count_gini_mean": mean(numeric_column(source_rows, "root_tree_count_gini")),
         "edge_participation_gini_mean": mean(numeric_column(source_rows, "edge_participation_gini")),
     }
@@ -583,7 +644,11 @@ def library_table(experiments):
                     selected_text,
                     ", ".join(library.get("families") or []) or "NA",
                     ", ".join(str(value) for value in library.get("d_rel_values") or []) or "NA",
-                    fmt(library.get("effective_rank_D_mean")),
+                    fmt(
+                        library.get("effective_rank_D_masked_mean")
+                        if library.get("effective_rank_D_masked_mean") is not None
+                        else library.get("effective_rank_D_mean")
+                    ),
                     fmt(library.get("edge_participation_gini_mean")),
                 ]
             )
