@@ -78,6 +78,23 @@ PREDICTOR_SETS = {
         "input_edge_load_gini",
         "input_coord_load_gini",
     ],
+    "branch_margin_capacity": [
+        "input_coupled_parameter_count",
+        "capacity_support_fraction",
+        "capacity_support_min",
+        "capacity_linear_test_accuracy",
+        "capacity_linear_test_margin_p10",
+    ],
+    "branch_margin_capacity_plus_drel": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_support_fraction",
+        "capacity_support_min",
+        "capacity_linear_test_accuracy",
+        "capacity_linear_test_margin_p10",
+    ],
 }
 
 

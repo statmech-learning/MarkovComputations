@@ -52,6 +52,10 @@ The convention is:
 - `collect_branch_margin_capacity.py`: compute the branch-margin capacity
   probe for selected rows in a topology or input-mask library CSV and write a
   flat predictor table.
+- `join_branch_margin_capacity.py`: left-join branch-margin capacity predictor
+  tables onto seed-level topology results, with capacity columns prefixed for
+  direct use by `regress_topology_results.py` and
+  `clustered_topology_inference.py`.
 - `TOPOLOGY_THEORY_AUDIT.md`: first mandatory implementation audit for the
   next theory phase. It checks tree orientation, trainable bias treatment,
   strong-connectivity handling, pre-training selection leakage, novel-class
@@ -119,6 +123,9 @@ The convention is:
 - `make_topology_research_report.py`: consolidate fixed-edge sweeps,
   mechanism summaries, seed aggregates, physical essential-subgraph retrains,
   and essential input-mask retrains into one Markdown/JSON progress report.
+- `make_next_phase_evidence_report.py`: compact follow-up report builder for
+  clustered inference, branch-margin capacity probes, causal interventions,
+  and expanded pilot sweep status.
 - `finalize_topology_research_report.py`: report-scoped finalizer that rebuilds
   the consolidated research report, runs the strict research verifier, and
   writes the conservative H0/H1 interpretation.
@@ -135,7 +142,8 @@ The convention is:
   conservative H0/H1 evidence summary comparing count baselines, topology
   predictors, mechanism predictors, and essential-retrain retention.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
-  whether tree-geometry predictors improve on raw parameter count.
+  whether tree-geometry and branch-margin capacity predictors improve on raw
+  parameter count.
 - `clustered_topology_inference.py`: dependency-light statistical upgrade for
   nested seed data. It reports group-level regressions, clustered bootstrap
   deltas over topology/mask groups, leave-one-family/backbone-out prediction,

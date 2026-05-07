@@ -253,6 +253,66 @@ class RegressTopologyResultsTests(unittest.TestCase):
         self.assertEqual(model["n"], 4)
         self.assertGreater(model["r2"], 0.9)
 
+    def test_branch_margin_capacity_predictor_set_uses_enriched_columns(self):
+        fieldnames = [
+            "label",
+            "topology_name",
+            "n_edges",
+            "raw_physical_parameter_count",
+            "input_coupled_parameter_count",
+            "d_rel",
+            "comparison_branch_common_d_rel_min",
+            "comparison_branch_common_d_rel_gini",
+            "capacity_support_fraction",
+            "capacity_support_min",
+            "capacity_linear_test_accuracy",
+            "capacity_linear_test_margin_p10",
+            "test_novel_classes",
+        ]
+        rows = []
+        for idx in range(8):
+            capacity = 0.1 * idx
+            rows.append(
+                {
+                    "label": f"capacity{idx}",
+                    "topology_name": f"capacity_topo{idx}",
+                    "n_edges": 20,
+                    "raw_physical_parameter_count": 400,
+                    "input_coupled_parameter_count": 200,
+                    "d_rel": 100 + idx,
+                    "comparison_branch_common_d_rel_min": 3 * idx,
+                    "comparison_branch_common_d_rel_gini": 0.0,
+                    "capacity_support_fraction": 0.5 + 0.05 * idx,
+                    "capacity_support_min": idx % 3,
+                    "capacity_linear_test_accuracy": 0.45 + capacity,
+                    "capacity_linear_test_margin_p10": -0.4 + capacity,
+                    "test_novel_classes": 40 + 30 * capacity,
+                }
+            )
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_csv = os.path.join(tmpdir, "capacity_topology_results.csv")
+            output_json = os.path.join(tmpdir, "regression.json")
+            with open(input_csv, "w", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+            self.run_regression(
+                [
+                    "--input_csv",
+                    input_csv,
+                    "--output_json",
+                    output_json,
+                ]
+            )
+            with open(output_json) as f:
+                report = json.load(f)
+
+        model = report["models"]["branch_margin_capacity"]
+        self.assertEqual(model["n"], 8)
+        self.assertIn("capacity_linear_test_accuracy", model["predictors"])
+        self.assertGreater(model["r2"], 0.9)
+
 
 if __name__ == "__main__":
     unittest.main()

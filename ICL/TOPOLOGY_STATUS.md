@@ -24,21 +24,21 @@ projection geometry.
 | Matrix-tree structural metrics for arbitrary strongly connected graphs | `topology_metrics.py` | Implemented: arborescence enumeration, relative tree rank, spectra, root balance, edge participation |
 | First mandatory theory audit | `TOPOLOGY_THEORY_AUDIT.md` | Completed for the current first-order implementation; main caveats are trainable tree intercepts, nested seed dependence, and unmatched motif controls |
 | Branch-aware comparison-capacity metrics | `comparison_branch_common_d_rel_*`, `comparison_branch_d_rel_*`, `comparison_branch_input_overlap_*`, and `comparison_branch_input_count_*` in `topology_metrics.py` | Implemented, collected, regressed, and reported |
-| Sampled branch-margin capacity probe | `branch_margin_capacity.py`, `collect_branch_margin_capacity.py` | Implemented as a conservative pre-training proxy; it gates exact-copy comparison features by common context/query tree-contrast support and reports oracle plus norm-controlled linear margins for individual topologies or selected libraries |
+| Sampled branch-margin capacity probe | `branch_margin_capacity.py`, `collect_branch_margin_capacity.py`, `join_branch_margin_capacity.py` | Implemented as a conservative pre-training proxy; it gates exact-copy comparison features by common context/query tree-contrast support, reports oracle plus norm-controlled linear margins, and can be joined onto seed-level topology results for clustered regressions |
 | Controlled physical topology libraries at fixed `N_n,N_c,D,m` | `make_topology_library.py`, `submit_topology_library_sweep.py` | Implemented and dry-run/tested |
 | Expanded matched topology families | `topology_metrics.py`, `make_topology_library.py` | Added `degree_balanced`, `bottleneck_bridge`, and `redundant_paths` families beyond random/cycle/hub/two-module baselines |
 | Multi-regime expanded sweep plan | `make_topology_sweep_plan.py` | Implemented and tested; generates CSV and dry-run command script across `N_n`, edge regime, `N_c`, and `D` |
 | Controlled fixed-physical-graph input-mask libraries | `make_input_mask_library.py`, `make_input_mask_report.py` | Implemented and tested |
-| Run-level and topology-level regressions against raw count and tree geometry | `regress_topology_results.py`, `aggregate_topology_seeds.py` | Implemented and tested |
+| Run-level and topology-level regressions against raw count, tree geometry, and branch-margin capacity | `regress_topology_results.py`, `aggregate_topology_seeds.py` | Implemented and tested |
 | Cluster-aware inference for nested seed rows | `clustered_topology_inference.py` | Implemented and tested: group-level regressions, cluster bootstrap deltas, leave-one-family-out prediction, residual decomposition |
 | Novel-class ICL remains the primary collected metric | `collect_topology_results.py` field `test_novel_classes`; report defaults | Implemented |
 | Expressivity vs trainability split | `aggregate_topology_seeds.py` outputs `target_max`, `target_mean`, `target_std` | Implemented and tested |
 | Post-training active tree/root, branch MI, margins, sensitivities, and ablations | `topology_analysis.py`, `analyze_topology_model.py`, `collect_mechanism_results.py`, `summarize_topology_mechanisms.py` | Implemented; execution requires Torch-enabled trained runs |
-| Causal branch/tree-alignment interventions | `causal_topology_interventions.py`, `submit_causal_interventions.py`, `collect_causal_interventions.py` | Implemented and pure-Python helpers/submitter/collector tested; cluster execution on trained high-ICL runs still required |
+| Causal branch/tree-alignment interventions | `causal_topology_interventions.py`, `submit_causal_interventions.py`, `collect_causal_interventions.py` | Implemented and pure-Python helpers/submitter/collector tested; fixed-count cluster arrays completed for random/cycle/hub and collected under `results/next_phase_stats` on Engaging |
 | Essential physical subgraph extraction and retraining | `extract_essential_subgraphs.py`, `finalize_essential_physical_retrains.py`, `recover_essential_physical_retrains.py`, `compare_essential_retrains.py` | Implemented and tested |
 | Matched essential-motif controls | `make_matched_motif_controls.py` | Implemented and tested for retrainable random/degree-rewired physical controls matched on coarse tree-geometry features |
 | Essential input-mask extraction and retraining | `extract_essential_input_masks.py`, `finalize_essential_inputmask_retrains.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
-| Consolidated research report | `make_topology_research_report.py`, `finalize_topology_research_report.py` | Implemented; finalizer verifies both `essential_input50` and `essential_inputmask50` layouts before interpretation |
+| Consolidated research report | `make_topology_research_report.py`, `finalize_topology_research_report.py`, `make_next_phase_evidence_report.py` | Implemented; finalizer verifies both `essential_input50` and `essential_inputmask50` layouts before interpretation, and the next-phase report builder summarizes clustered inference, branch-margin probes, causal interventions, and pilot status |
 | Artifact audit and interrupted-array recovery | `audit_topology_artifacts.py`, `recover_essential_physical_retrains.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
 
 ## Verification Gates
@@ -51,7 +51,7 @@ python3 -m py_compile $(find ICL -name '*.py' -not -path '*/__pycache__/*')
 git diff --check
 ```
 
-As of the latest local run, the unittest suite has 83 tests and passes. Local
+As of the latest local run, the unittest suite has 110 tests and passes. Local
 Python does not have Torch, so training and mechanism smoke tests must run on
 the cluster or another Torch-enabled environment.
 
