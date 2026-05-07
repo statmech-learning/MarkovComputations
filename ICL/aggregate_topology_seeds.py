@@ -229,6 +229,8 @@ def usable_xy(rows, predictors, outcome):
 
 def standardize(X):
     Xs = X.copy()
+    if Xs.shape[0] == 0:
+        return Xs
     for col in range(1, Xs.shape[1]):
         scale = Xs[:, col].std()
         if scale > 1e-12:
