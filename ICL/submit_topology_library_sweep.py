@@ -126,14 +126,25 @@ def write_array(topology_rows, train_seeds, args):
 
     commands_path = os.path.join(meta_dir, "commands.txt")
     outputs_path = os.path.join(meta_dir, "outputs.txt")
+    written_tasks = 0
+    skipped_existing = 0
     with open(commands_path, "w") as commands, open(outputs_path, "w") as outputs:
         for row in topology_rows:
             for seed in train_seeds:
                 command, output = command_for(row, seed, args)
+                if args.missing_only and not args.force and os.path.exists(os.path.join(output, "results.pkl")):
+                    skipped_existing += 1
+                    continue
                 commands.write(command + "\n")
                 outputs.write(output + "\n")
+                written_tasks += 1
 
-    n_tasks = len(topology_rows) * len(train_seeds)
+    n_tasks = written_tasks
+    if n_tasks == 0:
+        raise SystemExit(
+            f"No tasks to write for {args.output_root}; "
+            f"skipped {skipped_existing} completed outputs"
+        )
     force_flag = "1" if args.force else "0"
     script_path = os.path.join(meta_dir, "run_task.sh")
     with open(script_path, "w") as f:
@@ -165,7 +176,7 @@ eval "$CMD"
 """
         )
     os.chmod(script_path, 0o755)
-    return meta_dir, script_path, n_tasks
+    return meta_dir, script_path, n_tasks, skipped_existing
 
 
 def submit_array(script_path, dry_run):
@@ -189,6 +200,11 @@ def main():
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--clean", action="store_true")
+    parser.add_argument(
+        "--missing_only",
+        action="store_true",
+        help="Only write tasks whose output directory does not already contain results.pkl.",
+    )
 
     for key, value in BASE_ARGS.items():
         value_type = int if isinstance(value, int) else float if isinstance(value, float) else str
@@ -202,7 +218,7 @@ def main():
         limit=args.limit_topologies,
     )
     train_seeds = parse_seeds(args.seeds)
-    meta_dir, script_path, n_tasks = write_array(rows, train_seeds, args)
+    meta_dir, script_path, n_tasks, skipped_existing = write_array(rows, train_seeds, args)
     print(f"Library: {os.path.abspath(args.library_csv)}")
     print(f"Output root: {os.path.abspath(args.output_root)}")
     print(f"Wrote array metadata: {meta_dir}")
@@ -210,6 +226,8 @@ def main():
     print(f"Topologies: {len(rows)}")
     print(f"Train seeds: {len(train_seeds)}")
     print(f"Tasks: {n_tasks}")
+    if skipped_existing:
+        print(f"Skipped existing outputs: {skipped_existing}")
     if args.array:
         submit_array(script_path, args.dry_run)
     else:

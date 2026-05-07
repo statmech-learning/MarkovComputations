@@ -158,6 +158,18 @@ python3 submit_topology_library_sweep.py \
   --max-concurrent 24
 ```
 
+If an array is interrupted or only some tasks are missing, resubmit only the
+unfinished outputs:
+
+```bash
+python3 submit_topology_library_sweep.py \
+  --library_csv results/topology_library_n6_m20/selected.csv \
+  --output_root results/topology_fixed_m20 \
+  --seeds 1,2 \
+  --missing_only \
+  --array
+```
+
 Each run stores pre-training structural predictors next to training/test
 results, so regression analysis can compare novel-class ICL accuracy against
 raw degree count, `d_rel`, effective rank, root imbalance, and bottleneck
