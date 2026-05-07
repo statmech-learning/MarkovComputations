@@ -21,6 +21,10 @@ import numpy as np
 
 
 DEFAULT_TARGET = "test_novel_classes"
+PREDICTOR_FALLBACKS = {
+    "comparison_branch_common_d_rel_min": "comparison_branch_d_rel_min",
+    "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+}
 
 PREDICTOR_SETS = {
     "raw_count": [
@@ -40,6 +44,8 @@ PREDICTOR_SETS = {
     "input_count_plus_branch_drel": [
         "input_coupled_parameter_count",
         "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
         "comparison_branch_d_rel_min",
         "comparison_branch_d_rel_gini",
     ],
@@ -63,6 +69,8 @@ PREDICTOR_SETS = {
     "masked_tree_geometry": [
         "input_coupled_parameter_count",
         "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
         "comparison_branch_d_rel_min",
         "comparison_branch_d_rel_gini",
         "effective_rank_D_masked",
@@ -90,11 +98,19 @@ def load_rows(path):
         return list(csv.DictReader(f))
 
 
+def row_value(row, name):
+    value = row.get(name)
+    if value not in (None, ""):
+        return value
+    fallback = PREDICTOR_FALLBACKS.get(name)
+    return row.get(fallback) if fallback else value
+
+
 def design_matrix(rows, predictors, target):
     usable = []
     for row in rows:
         y = parse_float(row.get(target))
-        xs = [parse_float(row.get(name)) for name in predictors]
+        xs = [parse_float(row_value(row, name)) for name in predictors]
         if y is not None and all(value is not None for value in xs):
             usable.append((row, xs, y))
     if not usable:

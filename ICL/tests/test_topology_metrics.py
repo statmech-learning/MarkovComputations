@@ -73,6 +73,10 @@ class TopologyMetricsTests(unittest.TestCase):
             full["comparison_branch_d_rel_values"],
             [full["rank_D"] * z_dim, full["rank_D"] * z_dim],
         )
+        self.assertEqual(
+            full["comparison_branch_common_d_rel_values"],
+            [full["rank_D"] * z_dim, full["rank_D"] * z_dim],
+        )
 
         mask = np.zeros((len(edges), p), dtype=int)
         mask[:, 0:z_dim] = 1
@@ -86,8 +90,34 @@ class TopologyMetricsTests(unittest.TestCase):
             z_dim=z_dim,
         )
         self.assertEqual(masked["comparison_branch_d_rel_values"], [full["rank_D"] * z_dim, 0])
+        self.assertEqual(
+            masked["comparison_branch_common_d_rel_values"],
+            [full["rank_D"] * z_dim, 0],
+        )
         self.assertEqual(masked["comparison_branch_d_rel_min"], 0)
+        self.assertEqual(masked["comparison_branch_common_d_rel_min"], 0)
         self.assertGreater(masked["comparison_branch_d_rel_gini"], 0.0)
+
+    def test_comparison_branch_common_rank_detects_disjoint_subspaces(self):
+        D_matrix = np.eye(2)
+        mask = np.asarray(
+            [
+                [1, 0],
+                [0, 1],
+            ],
+            dtype=int,
+        )
+        metrics = comparison_branch_rank_metrics(
+            D_matrix,
+            mask,
+            p=2,
+            n_context=1,
+            z_dim=1,
+        )
+        self.assertEqual(metrics["comparison_branch_d_rel_values"], [1])
+        self.assertEqual(metrics["comparison_branch_common_d_rel_values"], [0])
+        self.assertEqual(metrics["comparison_branch_input_count_values"], [1])
+        self.assertEqual(metrics["comparison_branch_input_overlap_values"], [0])
 
     def test_comparison_branch_rank_metrics_validates_context_shape(self):
         mats = topology_matrices(3, complete_digraph(3).edges)

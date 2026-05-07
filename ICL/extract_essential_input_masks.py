@@ -56,10 +56,18 @@ CSV_FIELDS = [
     "input_coord_load_gini",
     "d_rel",
     "d_rel_minus_n_req",
+    "comparison_branch_common_d_rel_min",
+    "comparison_branch_common_d_rel_mean",
+    "comparison_branch_common_d_rel_max",
+    "comparison_branch_common_d_rel_gini",
     "comparison_branch_d_rel_min",
     "comparison_branch_d_rel_mean",
     "comparison_branch_d_rel_max",
     "comparison_branch_d_rel_gini",
+    "comparison_branch_input_overlap_min",
+    "comparison_branch_input_overlap_mean",
+    "comparison_branch_input_overlap_max",
+    "comparison_branch_input_overlap_gini",
     "comparison_branch_input_count_min",
     "comparison_branch_input_count_mean",
     "comparison_branch_input_count_max",
@@ -331,10 +339,34 @@ def write_outputs(groups, args):
             "input_mask_json": input_mask_json,
             "d_rel": metrics["d_rel"],
             "d_rel_minus_n_req": int(metrics["d_rel"] - n_req),
+            "comparison_branch_common_d_rel_min": metrics.get(
+                "comparison_branch_common_d_rel_min"
+            ),
+            "comparison_branch_common_d_rel_mean": metrics.get(
+                "comparison_branch_common_d_rel_mean"
+            ),
+            "comparison_branch_common_d_rel_max": metrics.get(
+                "comparison_branch_common_d_rel_max"
+            ),
+            "comparison_branch_common_d_rel_gini": metrics.get(
+                "comparison_branch_common_d_rel_gini"
+            ),
             "comparison_branch_d_rel_min": metrics.get("comparison_branch_d_rel_min"),
             "comparison_branch_d_rel_mean": metrics.get("comparison_branch_d_rel_mean"),
             "comparison_branch_d_rel_max": metrics.get("comparison_branch_d_rel_max"),
             "comparison_branch_d_rel_gini": metrics.get("comparison_branch_d_rel_gini"),
+            "comparison_branch_input_overlap_min": metrics.get(
+                "comparison_branch_input_overlap_min"
+            ),
+            "comparison_branch_input_overlap_mean": metrics.get(
+                "comparison_branch_input_overlap_mean"
+            ),
+            "comparison_branch_input_overlap_max": metrics.get(
+                "comparison_branch_input_overlap_max"
+            ),
+            "comparison_branch_input_overlap_gini": metrics.get(
+                "comparison_branch_input_overlap_gini"
+            ),
             "comparison_branch_input_count_min": metrics.get("comparison_branch_input_count_min"),
             "comparison_branch_input_count_mean": metrics.get("comparison_branch_input_count_mean"),
             "comparison_branch_input_count_max": metrics.get("comparison_branch_input_count_max"),

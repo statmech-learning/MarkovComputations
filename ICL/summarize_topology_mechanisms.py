@@ -11,11 +11,17 @@ import numpy as np
 
 
 DEFAULT_TARGET = "test_novel_classes"
+BRANCH_METRIC_FALLBACKS = {
+    "comparison_branch_common_d_rel_min": "comparison_branch_d_rel_min",
+    "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+}
 
 TOPOLOGY_COLUMNS = [
     "n_edges",
     "input_coupled_parameter_count",
     "d_rel",
+    "comparison_branch_common_d_rel_min",
+    "comparison_branch_common_d_rel_gini",
     "comparison_branch_d_rel_min",
     "comparison_branch_d_rel_gini",
     "effective_rank_D",
@@ -74,7 +80,12 @@ def parse_float(value):
 
 def load_by_label(path):
     with open(path, newline="") as f:
-        return {row["label"]: row for row in csv.DictReader(f)}
+        rows = list(csv.DictReader(f))
+    for row in rows:
+        for target, fallback in BRANCH_METRIC_FALLBACKS.items():
+            if row.get(target) in (None, "") and row.get(fallback) not in (None, ""):
+                row[target] = row[fallback]
+    return {row["label"]: row for row in rows}
 
 
 def join_rows(topology_rows, mechanism_rows, target):

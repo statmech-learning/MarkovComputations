@@ -30,6 +30,8 @@ class RegressTopologyResultsTests(unittest.TestCase):
             "raw_physical_parameter_count",
             "input_coupled_parameter_count",
             "d_rel",
+            "comparison_branch_common_d_rel_min",
+            "comparison_branch_common_d_rel_gini",
             "comparison_branch_d_rel_min",
             "comparison_branch_d_rel_gini",
             "effective_rank_D",
@@ -56,6 +58,8 @@ class RegressTopologyResultsTests(unittest.TestCase):
                     "raw_physical_parameter_count": 400,
                     "input_coupled_parameter_count": 200,
                     "d_rel": 160 + branch_min,
+                    "comparison_branch_common_d_rel_min": branch_min,
+                    "comparison_branch_common_d_rel_gini": 0.5 - 0.05 * idx,
                     "comparison_branch_d_rel_min": branch_min,
                     "comparison_branch_d_rel_gini": 0.5 - 0.05 * idx,
                     "effective_rank_D": 10 + idx,
@@ -94,6 +98,8 @@ class RegressTopologyResultsTests(unittest.TestCase):
         self.assertIn("input_count_plus_branch_drel", result.stdout)
         model = report["models"]["input_count_plus_branch_drel"]
         self.assertEqual(model["n"], 6)
+        self.assertIn("comparison_branch_common_d_rel_min", model["predictors"])
+        self.assertIn("comparison_branch_common_d_rel_gini", model["predictors"])
         self.assertIn("comparison_branch_d_rel_min", model["predictors"])
         self.assertIn("comparison_branch_d_rel_gini", model["predictors"])
         self.assertGreater(model["r2"], 0.9)
@@ -107,6 +113,8 @@ class RegressTopologyResultsTests(unittest.TestCase):
             "raw_physical_parameter_count",
             "input_coupled_parameter_count",
             "d_rel",
+            "comparison_branch_common_d_rel_min",
+            "comparison_branch_common_d_rel_gini",
             "comparison_branch_d_rel_min",
             "comparison_branch_d_rel_gini",
             "effective_rank_D",
@@ -132,6 +140,8 @@ class RegressTopologyResultsTests(unittest.TestCase):
                     "raw_physical_parameter_count": 400,
                     "input_coupled_parameter_count": 200,
                     "d_rel": 100,
+                    "comparison_branch_common_d_rel_min": branch_min,
+                    "comparison_branch_common_d_rel_gini": 0.0,
                     "comparison_branch_d_rel_min": branch_min,
                     "comparison_branch_d_rel_gini": 0.0,
                     "effective_rank_D": 10,

@@ -20,6 +20,12 @@ import numpy as np
 
 
 DEFAULT_TARGET = "test_novel_classes"
+BRANCH_METRIC_FALLBACKS = {
+    "comparison_branch_common_d_rel_min": "comparison_branch_d_rel_min",
+    "comparison_branch_common_d_rel_mean": "comparison_branch_d_rel_mean",
+    "comparison_branch_common_d_rel_max": "comparison_branch_d_rel_max",
+    "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+}
 
 RUN_MODELS = OrderedDict(
     [
@@ -35,6 +41,8 @@ RUN_MODELS = OrderedDict(
             "masked_geometry",
             [
                 ("num", "d_rel"),
+                ("num", "comparison_branch_common_d_rel_min"),
+                ("num", "comparison_branch_common_d_rel_gini"),
                 ("num", "comparison_branch_d_rel_min"),
                 ("num", "comparison_branch_d_rel_gini"),
                 ("num", "effective_rank_D_masked"),
@@ -48,6 +56,8 @@ RUN_MODELS = OrderedDict(
             [
                 ("cat", "physical_topology_name"),
                 ("num", "d_rel"),
+                ("num", "comparison_branch_common_d_rel_min"),
+                ("num", "comparison_branch_common_d_rel_gini"),
                 ("num", "comparison_branch_d_rel_min"),
                 ("num", "comparison_branch_d_rel_gini"),
                 ("num", "effective_rank_D_masked"),
@@ -62,6 +72,8 @@ RUN_MODELS = OrderedDict(
                 ("cat", "physical_topology_name"),
                 ("cat", "input_mask_family"),
                 ("num", "d_rel"),
+                ("num", "comparison_branch_common_d_rel_min"),
+                ("num", "comparison_branch_common_d_rel_gini"),
                 ("num", "comparison_branch_d_rel_min"),
                 ("num", "comparison_branch_d_rel_gini"),
                 ("num", "effective_rank_D_masked"),
@@ -114,6 +126,8 @@ AGGREGATE_MODELS = OrderedDict(
             "masked_geometry",
             [
                 ("num", "d_rel"),
+                ("num", "comparison_branch_common_d_rel_min"),
+                ("num", "comparison_branch_common_d_rel_gini"),
                 ("num", "comparison_branch_d_rel_min"),
                 ("num", "comparison_branch_d_rel_gini"),
                 ("num", "effective_rank_D_masked"),
@@ -127,6 +141,8 @@ AGGREGATE_MODELS = OrderedDict(
             [
                 ("cat", "physical_topology_name"),
                 ("num", "d_rel"),
+                ("num", "comparison_branch_common_d_rel_min"),
+                ("num", "comparison_branch_common_d_rel_gini"),
                 ("num", "comparison_branch_d_rel_min"),
                 ("num", "comparison_branch_d_rel_gini"),
                 ("num", "effective_rank_D_masked"),
@@ -141,6 +157,8 @@ AGGREGATE_MODELS = OrderedDict(
                 ("cat", "physical_topology_name"),
                 ("cat", "input_mask_family"),
                 ("num", "d_rel"),
+                ("num", "comparison_branch_common_d_rel_min"),
+                ("num", "comparison_branch_common_d_rel_gini"),
                 ("num", "comparison_branch_d_rel_min"),
                 ("num", "comparison_branch_d_rel_gini"),
                 ("num", "effective_rank_D_masked"),
@@ -181,6 +199,8 @@ AGGREGATE_MODELS = OrderedDict(
 
 CORRELATION_COLUMNS = [
     "d_rel",
+    "comparison_branch_common_d_rel_min",
+    "comparison_branch_common_d_rel_gini",
     "comparison_branch_d_rel_min",
     "comparison_branch_d_rel_gini",
     "effective_rank_D_masked",
@@ -232,7 +252,12 @@ def load_csv(path):
     if not os.path.exists(path):
         return []
     with open(path, newline="") as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+    for row in rows:
+        for target, fallback in BRANCH_METRIC_FALLBACKS.items():
+            if row.get(target) in (None, "") and row.get(fallback) not in (None, ""):
+                row[target] = row[fallback]
+    return rows
 
 
 def load_json(path):
@@ -570,6 +595,9 @@ def summarize_extracted_essential_masks(selected_rows, library_rows):
         "raw_essential_edges_mean": mean(numeric_values(selected_rows, "raw_essential_edges")),
         "raw_essential_edges_max": max_or_none(numeric_values(selected_rows, "raw_essential_edges")),
         "d_rel_mean": mean(numeric_values(selected_rows, "d_rel")),
+        "comparison_branch_common_d_rel_min_mean": mean(
+            numeric_values(selected_rows, "comparison_branch_common_d_rel_min")
+        ),
         "comparison_branch_d_rel_min_mean": mean(
             numeric_values(selected_rows, "comparison_branch_d_rel_min")
         ),
@@ -606,6 +634,9 @@ def physical_family_summary(aggregate_rows):
                 "target_max": max_or_none(numeric_values(group, "target_max")),
                 "target_std_mean": mean(numeric_values(group, "target_std")),
                 "d_rel_mean": mean(numeric_values(group, "d_rel")),
+                "comparison_branch_common_d_rel_min_mean": mean(
+                    numeric_values(group, "comparison_branch_common_d_rel_min")
+                ),
                 "comparison_branch_d_rel_min_mean": mean(
                     numeric_values(group, "comparison_branch_d_rel_min")
                 ),
@@ -694,7 +725,7 @@ def experiment_table(experiments):
 
 def family_table(rows):
     lines = [
-        "| experiment | physical backbone | mask family | masks | mean ICL | best ICL | mean seed std | d_rel | branch d_rel min | worst branch margin | tree MI | tree NMI | tree purity | input abl. loss | physical abl. loss |",
+        "| experiment | physical backbone | mask family | masks | mean ICL | best ICL | mean seed std | d_rel | common branch rank | worst branch margin | tree MI | tree NMI | tree purity | input abl. loss | physical abl. loss |",
         "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in rows:
@@ -710,7 +741,7 @@ def family_table(rows):
                     fmt_acc(row["target_max"]),
                     fmt_acc(row["target_std_mean"]),
                     fmt(row["d_rel_mean"], 0),
-                    fmt(row["comparison_branch_d_rel_min_mean"], 0),
+                    fmt(row.get("comparison_branch_common_d_rel_min_mean"), 0),
                     fmt(row["target_logprob_margin_branch_mean_min_mean"]),
                     fmt(row["branch_active_tree_mi_mean"]),
                     fmt(row["branch_active_tree_nmi_mean"]),
@@ -728,7 +759,7 @@ def mask_table(rows, title):
     lines = [
         title,
         "",
-        "| experiment | mask | family | mean ICL | best ICL | seed std | d_rel | branch d_rel min | worst branch margin | eff rank masked | edge gini | tree MI | tree NMI | tree purity |",
+        "| experiment | mask | family | mean ICL | best ICL | seed std | d_rel | common branch rank | worst branch margin | eff rank masked | edge gini | tree MI | tree NMI | tree purity |",
         "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in rows:
@@ -743,7 +774,7 @@ def mask_table(rows, title):
                     fmt_acc(row.get("target_max")),
                     fmt_acc(row.get("target_std")),
                     fmt(row.get("d_rel"), 0),
-                    fmt(row.get("comparison_branch_d_rel_min"), 0),
+                    fmt(row.get("comparison_branch_common_d_rel_min"), 0),
                     fmt(row.get("target_logprob_margin_branch_mean_min_mean")),
                     fmt(row.get("effective_rank_D_masked")),
                     fmt(row.get("input_edge_load_gini")),
@@ -792,7 +823,7 @@ def essential_inputmask_table(experiments):
 
 def extracted_inputmask_table(experiments):
     lines = [
-        "| source experiment | selected/candidates | source input couplings | essential input couplings min/mean/max | raw edge rows mean/max | d_rel mean | branch d_rel min mean | source best ICL mean/best |",
+        "| source experiment | selected/candidates | source input couplings | essential input couplings min/mean/max | raw edge rows mean/max | d_rel mean | common branch rank mean | source best ICL mean/best |",
         "| --- | ---: | ---: | --- | --- | ---: | ---: | --- |",
     ]
     for experiment in experiments:
@@ -825,7 +856,7 @@ def extracted_inputmask_table(experiments):
                     coupled,
                     raw_edges,
                     fmt(summary.get("d_rel_mean"), 1),
-                    fmt(summary.get("comparison_branch_d_rel_min_mean"), 1),
+                    fmt(summary.get("comparison_branch_common_d_rel_min_mean"), 1),
                     source_icl,
                 ]
             )
@@ -838,7 +869,7 @@ def extracted_inputmask_table(experiments):
 
 def top_extracted_inputmask_table(experiments):
     lines = [
-        "| source experiment | mask | source best ICL | input couplings | source couplings | raw edge rows | d_rel | branch d_rel min | eff rank masked |",
+        "| source experiment | mask | source best ICL | input couplings | source couplings | raw edge rows | d_rel | common branch rank | eff rank masked |",
         "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for experiment in experiments:
@@ -855,7 +886,7 @@ def top_extracted_inputmask_table(experiments):
                         fmt(mask.get("source_input_coupled_parameter_count_mean"), 0),
                         fmt(mask.get("raw_essential_edges"), 0),
                         fmt(mask.get("d_rel"), 0),
-                        fmt(mask.get("comparison_branch_d_rel_min"), 0),
+                        fmt(mask.get("comparison_branch_common_d_rel_min"), 0),
                         fmt(mask.get("effective_rank_D_masked")),
                     ]
                 )

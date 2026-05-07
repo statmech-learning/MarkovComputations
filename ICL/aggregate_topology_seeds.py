@@ -21,6 +21,12 @@ import numpy as np
 
 
 DEFAULT_TARGET = "test_novel_classes"
+BRANCH_METRIC_FALLBACKS = {
+    "comparison_branch_common_d_rel_min": "comparison_branch_d_rel_min",
+    "comparison_branch_common_d_rel_mean": "comparison_branch_d_rel_mean",
+    "comparison_branch_common_d_rel_max": "comparison_branch_d_rel_max",
+    "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+}
 
 STATIC_COLUMNS = [
     "topology_name",
@@ -47,10 +53,18 @@ STATIC_COLUMNS = [
     "comparison_branch_d_rel_mean",
     "comparison_branch_d_rel_max",
     "comparison_branch_d_rel_gini",
+    "comparison_branch_common_d_rel_min",
+    "comparison_branch_common_d_rel_mean",
+    "comparison_branch_common_d_rel_max",
+    "comparison_branch_common_d_rel_gini",
     "comparison_branch_input_count_min",
     "comparison_branch_input_count_mean",
     "comparison_branch_input_count_max",
     "comparison_branch_input_count_gini",
+    "comparison_branch_input_overlap_min",
+    "comparison_branch_input_overlap_mean",
+    "comparison_branch_input_overlap_max",
+    "comparison_branch_input_overlap_gini",
     "rank_D",
     "effective_rank_D",
     "condition_number_D",
@@ -130,6 +144,8 @@ PREDICTOR_SETS = {
     "masked_tree_geometry": [
         "input_coupled_parameter_count",
         "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
         "comparison_branch_d_rel_min",
         "comparison_branch_d_rel_gini",
         "effective_rank_D_masked",
@@ -177,7 +193,12 @@ def finite_or_empty(value):
 
 def load_rows(path):
     with open(path, newline="") as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+    for row in rows:
+        for target, fallback in BRANCH_METRIC_FALLBACKS.items():
+            if row.get(target) in (None, "") and row.get(fallback) not in (None, ""):
+                row[target] = row[fallback]
+    return rows
 
 
 def mean(values):

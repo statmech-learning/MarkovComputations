@@ -16,7 +16,7 @@ projection geometry.
 | First-order CRN topology represented as an explicit directed graph | `models/topology_markov_icl.py`, `run_topology_icl.py` | Implemented; Torch training requires cluster or Torch-enabled env |
 | Separate physical topology from input-encoding topology | `input_mask_utils.py`, `make_input_mask_library.py`, `run_topology_icl.py --input_mask_json` | Implemented and covered by pure-Python tests |
 | Matrix-tree structural metrics for arbitrary strongly connected graphs | `topology_metrics.py` | Implemented: arborescence enumeration, relative tree rank, spectra, root balance, edge participation |
-| Branch-aware comparison-capacity metrics | `comparison_branch_d_rel_*` and `comparison_branch_input_count_*` in `topology_metrics.py` | Implemented, collected, regressed, and reported |
+| Branch-aware comparison-capacity metrics | `comparison_branch_common_d_rel_*`, `comparison_branch_d_rel_*`, `comparison_branch_input_overlap_*`, and `comparison_branch_input_count_*` in `topology_metrics.py` | Implemented, collected, regressed, and reported |
 | Controlled physical topology libraries at fixed `N_n,N_c,D,m` | `make_topology_library.py`, `submit_topology_library_sweep.py` | Implemented and dry-run/tested |
 | Controlled fixed-physical-graph input-mask libraries | `make_input_mask_library.py`, `make_input_mask_report.py` | Implemented and tested |
 | Run-level and topology-level regressions against raw count and tree geometry | `regress_topology_results.py`, `aggregate_topology_seeds.py` | Implemented and tested |

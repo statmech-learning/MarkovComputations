@@ -213,11 +213,15 @@ Each run stores pre-training structural predictors next to training/test
 results, so regression analysis can compare novel-class ICL accuracy against
 raw degree count, input-coupled degree count, global `d_rel`, weakest-branch
 comparison `d_rel`, masked effective rank, root imbalance, and bottleneck
-metrics. `comparison_branch_d_rel_min` is a conservative input-mask diagnostic:
-for each context position and feature dimension it takes the smaller
+metrics. `comparison_branch_d_rel_min` is a loose input-mask diagnostic: for
+each context position and feature dimension it takes the smaller
 coordinate-wise relative rank between the context coordinate and matching query
-coordinate, then sums over dimensions. This exposes masks with high total
-capacity but poor paired support for one query-context comparison branch.
+coordinate, then sums over dimensions. `comparison_branch_common_d_rel_min` is
+stricter and usually more mechanistic: it measures the intersection rank of the
+context/query relative tree-contrast subspaces, so disjoint high-rank context
+and query supports are not counted as comparison capacity. Together these
+expose masks with high total capacity but poor paired support for one
+query-context comparison branch.
 
 To separate input-encoding topology from physical reaction topology, choose one
 fixed physical graph and generate explicit masks with the same number of

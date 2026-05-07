@@ -482,6 +482,29 @@ def masked_relative_svd_metrics(
     }
 
 
+def _coordinate_relative_map(
+    D_matrix: np.ndarray,
+    input_mask: Optional[np.ndarray],
+    alpha: int,
+) -> np.ndarray:
+    if input_mask is None:
+        return D_matrix
+    return D_matrix * np.asarray(input_mask[:, alpha], dtype=float)[None, :]
+
+
+def subspace_intersection_rank(
+    left: np.ndarray,
+    right: np.ndarray,
+    tol: float = 1e-9,
+) -> int:
+    """Dimension of the intersection of two column spaces."""
+
+    rank_left = svd_metrics(left, tol=tol)["rank"]
+    rank_right = svd_metrics(right, tol=tol)["rank"]
+    union_rank = svd_metrics(np.concatenate([left, right], axis=1), tol=tol)["rank"]
+    return int(rank_left + rank_right - union_rank)
+
+
 def comparison_branch_rank_metrics(
     D_matrix: np.ndarray,
     input_mask: Optional[np.ndarray],
@@ -497,6 +520,11 @@ def comparison_branch_rank_metrics(
     rank(query_dim))`` across feature dimensions. The minimum enforces paired
     context/query support for the comparison direction rather than rewarding
     query-only or context-only capacity.
+
+    The stricter ``comparison_branch_common_d_rel_*`` fields measure the
+    intersection of the context and query coordinate column spaces.  Those
+    common relative tree directions are the ones that can support coefficients
+    with equal-and-opposite context/query dependence.
     """
 
     if n_context <= 0 or z_dim <= 0:
@@ -505,6 +533,7 @@ def comparison_branch_rank_metrics(
     if expected_p != p:
         raise ValueError(f"(n_context + 1) * z_dim = {expected_p}, expected p={p}")
 
+    mask = None
     if input_mask is None:
         coord_ranks = np.full(p, svd_metrics(D_matrix)["rank"], dtype=float)
         coord_counts = np.full(p, D_matrix.shape[1], dtype=float)
@@ -527,32 +556,74 @@ def comparison_branch_rank_metrics(
 
     query_offset = n_context * z_dim
     branch_ranks = []
+    branch_common_ranks = []
     branch_counts = []
+    branch_overlap_counts = []
     for branch in range(n_context):
         context_offset = branch * z_dim
         rank_total = 0.0
+        common_rank_total = 0.0
         count_total = 0.0
+        overlap_count_total = 0.0
         for dim in range(z_dim):
             context_idx = context_offset + dim
             query_idx = query_offset + dim
+            context_map = _coordinate_relative_map(D_matrix, mask, context_idx)
+            query_map = _coordinate_relative_map(D_matrix, mask, query_idx)
             rank_total += min(coord_ranks[context_idx], coord_ranks[query_idx])
+            common_rank_total += subspace_intersection_rank(context_map, query_map)
             count_total += min(coord_counts[context_idx], coord_counts[query_idx])
+            if input_mask is None:
+                overlap_count_total += D_matrix.shape[1]
+            else:
+                overlap_count_total += float(
+                    np.sum(
+                        (mask[:, context_idx] > 0)
+                        & (mask[:, query_idx] > 0)
+                    )
+                )
         branch_ranks.append(rank_total)
+        branch_common_ranks.append(common_rank_total)
         branch_counts.append(count_total)
+        branch_overlap_counts.append(overlap_count_total)
 
     branch_ranks = np.asarray(branch_ranks, dtype=float)
+    branch_common_ranks = np.asarray(branch_common_ranks, dtype=float)
     branch_counts = np.asarray(branch_counts, dtype=float)
+    branch_overlap_counts = np.asarray(branch_overlap_counts, dtype=float)
     return {
         "comparison_branch_d_rel_values": [int(value) for value in branch_ranks],
         "comparison_branch_d_rel_min": int(branch_ranks.min()) if branch_ranks.size else 0,
         "comparison_branch_d_rel_mean": float(branch_ranks.mean()) if branch_ranks.size else 0.0,
         "comparison_branch_d_rel_max": int(branch_ranks.max()) if branch_ranks.size else 0,
         "comparison_branch_d_rel_gini": gini(branch_ranks),
+        "comparison_branch_common_d_rel_values": [int(value) for value in branch_common_ranks],
+        "comparison_branch_common_d_rel_min": (
+            int(branch_common_ranks.min()) if branch_common_ranks.size else 0
+        ),
+        "comparison_branch_common_d_rel_mean": (
+            float(branch_common_ranks.mean()) if branch_common_ranks.size else 0.0
+        ),
+        "comparison_branch_common_d_rel_max": (
+            int(branch_common_ranks.max()) if branch_common_ranks.size else 0
+        ),
+        "comparison_branch_common_d_rel_gini": gini(branch_common_ranks),
         "comparison_branch_input_count_values": [int(value) for value in branch_counts],
         "comparison_branch_input_count_min": int(branch_counts.min()) if branch_counts.size else 0,
         "comparison_branch_input_count_mean": float(branch_counts.mean()) if branch_counts.size else 0.0,
         "comparison_branch_input_count_max": int(branch_counts.max()) if branch_counts.size else 0,
         "comparison_branch_input_count_gini": gini(branch_counts),
+        "comparison_branch_input_overlap_values": [int(value) for value in branch_overlap_counts],
+        "comparison_branch_input_overlap_min": (
+            int(branch_overlap_counts.min()) if branch_overlap_counts.size else 0
+        ),
+        "comparison_branch_input_overlap_mean": (
+            float(branch_overlap_counts.mean()) if branch_overlap_counts.size else 0.0
+        ),
+        "comparison_branch_input_overlap_max": (
+            int(branch_overlap_counts.max()) if branch_overlap_counts.size else 0
+        ),
+        "comparison_branch_input_overlap_gini": gini(branch_overlap_counts),
     }
 
 

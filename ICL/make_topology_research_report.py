@@ -19,6 +19,12 @@ import numpy as np
 
 
 DEFAULT_TARGET = "test_novel_classes"
+BRANCH_METRIC_FALLBACKS = {
+    "comparison_branch_common_d_rel_min": "comparison_branch_d_rel_min",
+    "comparison_branch_common_d_rel_mean": "comparison_branch_d_rel_mean",
+    "comparison_branch_common_d_rel_max": "comparison_branch_d_rel_max",
+    "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+}
 ESSENTIAL_LAYOUTS = [
     {
         "kind": "physical_edge_subgraph",
@@ -55,6 +61,8 @@ KEY_AGG_MODELS = [
 ]
 KEY_CORRELATIONS = [
     "d_rel",
+    "comparison_branch_common_d_rel_min",
+    "comparison_branch_common_d_rel_gini",
     "comparison_branch_d_rel_min",
     "comparison_branch_d_rel_gini",
     "effective_rank_D",
@@ -87,6 +95,8 @@ POOLED_RUN_MODELS = OrderedDict(
             [
                 "input_coupled_parameter_count",
                 "d_rel",
+                "comparison_branch_common_d_rel_min",
+                "comparison_branch_common_d_rel_gini",
                 "comparison_branch_d_rel_min",
                 "comparison_branch_d_rel_gini",
             ],
@@ -108,6 +118,8 @@ POOLED_RUN_MODELS = OrderedDict(
             [
                 "input_coupled_parameter_count",
                 "d_rel",
+                "comparison_branch_common_d_rel_min",
+                "comparison_branch_common_d_rel_gini",
                 "comparison_branch_d_rel_min",
                 "comparison_branch_d_rel_gini",
                 "effective_rank_D_masked",
@@ -149,6 +161,8 @@ POOLED_AGGREGATE_MODELS = OrderedDict(
             [
                 "input_coupled_parameter_count",
                 "d_rel",
+                "comparison_branch_common_d_rel_min",
+                "comparison_branch_common_d_rel_gini",
                 "comparison_branch_d_rel_min",
                 "comparison_branch_d_rel_gini",
             ],
@@ -170,6 +184,8 @@ POOLED_AGGREGATE_MODELS = OrderedDict(
             [
                 "input_coupled_parameter_count",
                 "d_rel",
+                "comparison_branch_common_d_rel_min",
+                "comparison_branch_common_d_rel_gini",
                 "comparison_branch_d_rel_min",
                 "comparison_branch_d_rel_gini",
                 "effective_rank_D_masked",
@@ -235,7 +251,12 @@ def load_csv(path):
     if not os.path.exists(path):
         return []
     with open(path, newline="") as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+    for row in rows:
+        for target, fallback in BRANCH_METRIC_FALLBACKS.items():
+            if row.get(target) in (None, "") and row.get(fallback) not in (None, ""):
+                row[target] = row[fallback]
+    return rows
 
 
 def maybe_int(value):
@@ -752,7 +773,11 @@ def library_table(experiments):
 def correlation_table(experiments):
     rows = [
         ("d_rel", "relative tree dimension"),
-        ("comparison_branch_d_rel_min", "weakest comparison-branch paired rank"),
+        (
+            "comparison_branch_common_d_rel_min",
+            "weakest context/query common tree-contrast rank",
+        ),
+        ("comparison_branch_d_rel_min", "weakest comparison-branch paired rank upper bound"),
         ("comparison_branch_d_rel_gini", "comparison-branch rank imbalance"),
         ("effective_rank_D", "tree spectrum effective rank"),
         ("effective_rank_D_masked", "masked relative tree effective rank"),

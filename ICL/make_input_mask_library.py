@@ -21,6 +21,8 @@ from topology_metrics import compute_topology_metrics, normalize_edges
 
 DEFAULT_FEATURES = [
     "d_rel",
+    "comparison_branch_common_d_rel_min",
+    "comparison_branch_common_d_rel_gini",
     "comparison_branch_d_rel_min",
     "comparison_branch_d_rel_gini",
     "effective_rank_D_masked",
@@ -59,10 +61,18 @@ CSV_FIELDS = [
     "comparison_branch_d_rel_mean",
     "comparison_branch_d_rel_max",
     "comparison_branch_d_rel_gini",
+    "comparison_branch_common_d_rel_min",
+    "comparison_branch_common_d_rel_mean",
+    "comparison_branch_common_d_rel_max",
+    "comparison_branch_common_d_rel_gini",
     "comparison_branch_input_count_min",
     "comparison_branch_input_count_mean",
     "comparison_branch_input_count_max",
     "comparison_branch_input_count_gini",
+    "comparison_branch_input_overlap_min",
+    "comparison_branch_input_overlap_mean",
+    "comparison_branch_input_overlap_max",
+    "comparison_branch_input_overlap_gini",
     "rank_D",
     "effective_rank_D",
     "effective_rank_D_masked",
@@ -263,10 +273,34 @@ def metric_row(idx, mask_name, family, seed, metrics, summary, edge_json, input_
         "comparison_branch_d_rel_mean": metrics.get("comparison_branch_d_rel_mean", ""),
         "comparison_branch_d_rel_max": metrics.get("comparison_branch_d_rel_max", ""),
         "comparison_branch_d_rel_gini": metrics.get("comparison_branch_d_rel_gini", ""),
+        "comparison_branch_common_d_rel_min": metrics.get(
+            "comparison_branch_common_d_rel_min", ""
+        ),
+        "comparison_branch_common_d_rel_mean": metrics.get(
+            "comparison_branch_common_d_rel_mean", ""
+        ),
+        "comparison_branch_common_d_rel_max": metrics.get(
+            "comparison_branch_common_d_rel_max", ""
+        ),
+        "comparison_branch_common_d_rel_gini": metrics.get(
+            "comparison_branch_common_d_rel_gini", ""
+        ),
         "comparison_branch_input_count_min": metrics.get("comparison_branch_input_count_min", ""),
         "comparison_branch_input_count_mean": metrics.get("comparison_branch_input_count_mean", ""),
         "comparison_branch_input_count_max": metrics.get("comparison_branch_input_count_max", ""),
         "comparison_branch_input_count_gini": metrics.get("comparison_branch_input_count_gini", ""),
+        "comparison_branch_input_overlap_min": metrics.get(
+            "comparison_branch_input_overlap_min", ""
+        ),
+        "comparison_branch_input_overlap_mean": metrics.get(
+            "comparison_branch_input_overlap_mean", ""
+        ),
+        "comparison_branch_input_overlap_max": metrics.get(
+            "comparison_branch_input_overlap_max", ""
+        ),
+        "comparison_branch_input_overlap_gini": metrics.get(
+            "comparison_branch_input_overlap_gini", ""
+        ),
         "rank_D": metrics["rank_D"],
         "effective_rank_D": metrics["effective_rank_D"],
         "effective_rank_D_masked": metrics["effective_rank_D_masked"],

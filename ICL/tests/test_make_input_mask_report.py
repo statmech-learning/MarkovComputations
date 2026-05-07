@@ -41,6 +41,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
             "n_edges",
             "input_coupled_parameter_count",
             "d_rel",
+            "comparison_branch_common_d_rel_min",
+            "comparison_branch_common_d_rel_gini",
             "comparison_branch_d_rel_min",
             "comparison_branch_d_rel_gini",
             "effective_rank_D_masked",
@@ -59,6 +61,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
             "n_edges",
             "input_coupled_parameter_count",
             "d_rel",
+            "comparison_branch_common_d_rel_min",
+            "comparison_branch_common_d_rel_gini",
             "comparison_branch_d_rel_min",
             "comparison_branch_d_rel_gini",
             "effective_rank_D_masked",
@@ -101,6 +105,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
                 "n_edges": 20,
                 "input_coupled_parameter_count": 200,
                 "d_rel": 200,
+                "comparison_branch_common_d_rel_min": 40,
+                "comparison_branch_common_d_rel_gini": 0.0,
                 "comparison_branch_d_rel_min": 40,
                 "comparison_branch_d_rel_gini": 0.0,
                 "effective_rank_D_masked": 24.0,
@@ -118,6 +124,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
                 "n_edges": 20,
                 "input_coupled_parameter_count": 200,
                 "d_rel": 160,
+                "comparison_branch_common_d_rel_min": 0,
+                "comparison_branch_common_d_rel_gini": 0.75,
                 "comparison_branch_d_rel_min": 0,
                 "comparison_branch_d_rel_gini": 0.75,
                 "effective_rank_D_masked": 12.0,
@@ -138,6 +146,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
                 "n_edges": 20,
                 "input_coupled_parameter_count": 200,
                 "d_rel": 200,
+                "comparison_branch_common_d_rel_min": 40,
+                "comparison_branch_common_d_rel_gini": 0.0,
                 "comparison_branch_d_rel_min": 40,
                 "comparison_branch_d_rel_gini": 0.0,
                 "effective_rank_D_masked": 24.0,
@@ -166,6 +176,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
                 "n_edges": 20,
                 "input_coupled_parameter_count": 200,
                 "d_rel": 160,
+                "comparison_branch_common_d_rel_min": 0,
+                "comparison_branch_common_d_rel_gini": 0.75,
                 "comparison_branch_d_rel_min": 0,
                 "comparison_branch_d_rel_gini": 0.75,
                 "effective_rank_D_masked": 12.0,
@@ -227,6 +239,7 @@ class MakeInputMaskReportTests(unittest.TestCase):
             "source_input_coupled_parameter_count_mean",
             "raw_essential_edges",
             "d_rel",
+            "comparison_branch_common_d_rel_min",
             "comparison_branch_d_rel_min",
             "effective_rank_D_masked",
             "source_test_novel_classes_max",
@@ -242,6 +255,7 @@ class MakeInputMaskReportTests(unittest.TestCase):
                     "source_input_coupled_parameter_count_mean": 200,
                     "raw_essential_edges": 4,
                     "d_rel": 60,
+                    "comparison_branch_common_d_rel_min": 12,
                     "comparison_branch_d_rel_min": 12,
                     "effective_rank_D_masked": 10.0,
                     "source_test_novel_classes_max": 92.0,
@@ -286,11 +300,12 @@ class MakeInputMaskReportTests(unittest.TestCase):
                 payload = json.load(f)
 
         self.assertIn("Wrote", result.stdout)
-        self.assertIn("branch d_rel min", markdown)
+        self.assertIn("common branch rank", markdown)
         self.assertIn("worst branch margin", markdown)
         self.assertIn("tree NMI", markdown)
         self.assertIn("Extracted Essential Input Masks", markdown)
         correlations = payload["pooled"]["run_correlations"]
+        self.assertIn("comparison_branch_common_d_rel_min", correlations)
         self.assertIn("comparison_branch_d_rel_min", correlations)
         self.assertIn("target_logprob_margin_branch_mean_min", correlations)
 
