@@ -195,6 +195,13 @@ def labels_for(items):
     }
 
 
+HARD_NEXT_PHASE_LABELS = [
+    "hard_n4_m6_N3_D2",
+    "hard_n5_m8_N3_D2",
+    "hard_n5_m12_N3_D2",
+]
+
+
 def verify_next_phase_report(report, markdown):
     failures = []
     for section in [
@@ -215,18 +222,23 @@ def verify_next_phase_report(report, markdown):
     clustered = report.get("clustered_inference")
     require(isinstance(clustered, list) and clustered, "next-phase report has no clustered inference entries", failures)
     clustered_labels = labels_for(clustered or [])
-    for label in [
-        "pooled_original",
-        "pooled_branch_capacity",
-        "hard_n4_m6_N3_D2",
-        "hard_n5_m8_N3_D2",
-        "hard_n5_m12_N3_D2",
-    ]:
+    for label in ["pooled_original", "pooled_branch_capacity", *HARD_NEXT_PHASE_LABELS]:
         require(label in clustered_labels, f"next-phase clustered inference missing {label}", failures)
     for item in clustered or []:
         label = item.get("label", "clustered")
         require(positive_number(item.get("n_run_rows")), f"{label}: no run rows", failures)
         require(positive_number(item.get("n_clusters")), f"{label}: no topology/mask clusters", failures)
+        if label in HARD_NEXT_PHASE_LABELS:
+            require(
+                item.get("family_col") == "derived_graph_family",
+                f"{label}: hard-regime heldout must use derived_graph_family, got {item.get('family_col')!r}",
+                failures,
+            )
+            require(
+                f"### {label}" in markdown and "derived_graph_family" in markdown,
+                f"{label}: Markdown does not expose derived_graph_family holdout",
+                failures,
+            )
         models = item.get("models")
         require(isinstance(models, dict) and "raw_count" in models, f"{label}: missing raw_count model", failures)
         if isinstance(models, dict):
@@ -239,7 +251,7 @@ def verify_next_phase_report(report, markdown):
     capacity = report.get("branch_margin_capacity")
     require(isinstance(capacity, list) and capacity, "next-phase report has no branch-margin capacity entries", failures)
     capacity_labels = labels_for(capacity or [])
-    for label in ["hard_n4_m6_N3_D2", "hard_n5_m8_N3_D2", "hard_n5_m12_N3_D2"]:
+    for label in HARD_NEXT_PHASE_LABELS:
         require(label in capacity_labels, f"next-phase branch capacity missing {label}", failures)
     for item in capacity or []:
         label = item.get("label", "capacity")
@@ -267,7 +279,7 @@ def verify_next_phase_report(report, markdown):
     expanded = report.get("expanded_pilot_status")
     require(isinstance(expanded, list) and expanded, "next-phase report has no expanded pilot status", failures)
     expanded_labels = labels_for(expanded or [])
-    for label in ["hard_n4_m6_N3_D2", "hard_n5_m8_N3_D2", "hard_n5_m12_N3_D2"]:
+    for label in HARD_NEXT_PHASE_LABELS:
         require(label in expanded_labels, f"next-phase expanded pilot status missing {label}", failures)
     for item in expanded or []:
         label = item.get("label", "expanded")

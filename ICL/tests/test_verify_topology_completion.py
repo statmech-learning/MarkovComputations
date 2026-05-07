@@ -112,15 +112,34 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             json.dump(payload, f)
         return report_md, report_json
 
-    def write_next_phase_report(self, tmpdir, *, include_hard=True, include_causal=True):
+    def write_next_phase_report(
+        self,
+        tmpdir,
+        *,
+        include_hard=True,
+        include_causal=True,
+        hard_family_col="derived_graph_family",
+    ):
         report_md = os.path.join(tmpdir, "next_phase.md")
         report_json = os.path.join(tmpdir, "next_phase.json")
         with open(report_md, "w") as f:
+            hard_headings = []
+            if include_hard:
+                hard_headings = [
+                    "### hard_n4_m6_N3_D2",
+                    "Rows: `60`. Groups: `12`. Families: `4` via `derived_graph_family`.",
+                    "### hard_n5_m8_N3_D2",
+                    "Rows: `60`. Groups: `12`. Families: `6` via `derived_graph_family`.",
+                    "### hard_n5_m12_N3_D2",
+                    "Rows: `60`. Groups: `12`. Families: `7` via `derived_graph_family`.",
+                ]
             f.write(
                 "\n".join(
                     [
                         "# Next-Phase Topology-ICL Evidence Report",
                         "## Clustered And Group-Aware Inference",
+                        "derived_graph_family",
+                        *hard_headings,
                         "## Causal Alignment Interventions",
                         "## Branch-Margin Capacity Probes",
                         "## Matched Essential-Motif Controls",
@@ -137,6 +156,7 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
                 "label": label,
                 "n_run_rows": 60,
                 "n_clusters": 12,
+                "family_col": hard_family_col if label.startswith("hard_") else "physical_topology_name",
                 "models": {
                     "raw_count": {"group_loo_r2": -0.1},
                     "tree_geometry": {"group_loo_r2": 0.1},
@@ -353,6 +373,27 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("no causal intervention entries", result.stdout)
+
+    def test_next_phase_report_kind_requires_derived_family_for_hard_regimes(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            report_md, report_json = self.write_next_phase_report(
+                tmpdir,
+                hard_family_col="physical_topology_name",
+            )
+            result = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    report_md,
+                    "--report_json",
+                    report_json,
+                    "--report_kind",
+                    "next_phase",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("heldout must use derived_graph_family", result.stdout)
 
     def test_research_report_kind_requires_both_essential_layouts(self):
         with tempfile.TemporaryDirectory() as tmpdir:
