@@ -1,0 +1,283 @@
+{
+  "report_kind": "input_mask",
+  "target": "test_novel_classes",
+  "min_n": 6,
+  "support_delta_threshold": 0.05,
+  "count_control": {
+    "fixed_n_edges": true,
+    "fixed_input_coupled_parameter_count": true,
+    "n_edges_values": [
+      20
+    ],
+    "input_coupled_parameter_count_values": [
+      200
+    ]
+  },
+  "model_comparisons": [
+    {
+      "scope": "run",
+      "section": "run_regressions",
+      "baseline": "raw_counts",
+      "candidate": "physical_backbone",
+      "baseline_score": -0.008385707533131503,
+      "candidate_score": 0.06793763236446826,
+      "score_metric": "LOO_R2",
+      "delta": 0.07632333989759976,
+      "n": 240,
+      "supported": true
+    },
+    {
+      "scope": "run",
+      "section": "run_regressions",
+      "baseline": "raw_counts",
+      "candidate": "mask_family",
+      "baseline_score": -0.008385707533131503,
+      "candidate_score": 0.029874551413470396,
+      "score_metric": "LOO_R2",
+      "delta": 0.0382602589466019,
+      "n": 240,
+      "supported": false
+    },
+    {
+      "scope": "run",
+      "section": "run_regressions",
+      "baseline": "raw_counts",
+      "candidate": "masked_geometry",
+      "baseline_score": -0.008385707533131503,
+      "candidate_score": 0.11606011072334865,
+      "score_metric": "LOO_R2",
+      "delta": 0.12444581825648016,
+      "n": 240,
+      "supported": true
+    },
+    {
+      "scope": "run",
+      "section": "run_regressions",
+      "baseline": "raw_counts",
+      "candidate": "mechanism",
+      "baseline_score": -0.008385707533131503,
+      "candidate_score": null,
+      "score_metric": "missing",
+      "delta": null,
+      "n": 0,
+      "supported": false
+    },
+    {
+      "scope": "mask_mean",
+      "section": "aggregate_target_mean",
+      "baseline": "raw_counts",
+      "candidate": "physical_backbone",
+      "baseline_score": -0.04300588501584346,
+      "candidate_score": 0.17165801476373022,
+      "score_metric": "LOO_R2",
+      "delta": 0.21466389977957367,
+      "n": 48,
+      "supported": true
+    },
+    {
+      "scope": "mask_mean",
+      "section": "aggregate_target_mean",
+      "baseline": "raw_counts",
+      "candidate": "mask_family",
+      "baseline_score": -0.04300588501584346,
+      "candidate_score": -0.1661812076752478,
+      "score_metric": "LOO_R2",
+      "delta": -0.12317532265940434,
+      "n": 48,
+      "supported": false
+    },
+    {
+      "scope": "mask_mean",
+      "section": "aggregate_target_mean",
+      "baseline": "raw_counts",
+      "candidate": "masked_geometry",
+      "baseline_score": -0.04300588501584346,
+      "candidate_score": 0.18868381225742037,
+      "score_metric": "LOO_R2",
+      "delta": 0.23168969727326383,
+      "n": 48,
+      "supported": true
+    },
+    {
+      "scope": "mask_mean",
+      "section": "aggregate_target_mean",
+      "baseline": "raw_counts",
+      "candidate": "mechanism",
+      "baseline_score": -0.04300588501584346,
+      "candidate_score": null,
+      "score_metric": "missing",
+      "delta": null,
+      "n": 0,
+      "supported": false
+    },
+    {
+      "scope": "mask_best",
+      "section": "aggregate_target_max",
+      "baseline": "raw_counts",
+      "candidate": "physical_backbone",
+      "baseline_score": -0.04300588501584368,
+      "candidate_score": 0.022808693583392547,
+      "score_metric": "LOO_R2",
+      "delta": 0.06581457859923623,
+      "n": 48,
+      "supported": true
+    },
+    {
+      "scope": "mask_best",
+      "section": "aggregate_target_max",
+      "baseline": "raw_counts",
+      "candidate": "mask_family",
+      "baseline_score": -0.04300588501584368,
+      "candidate_score": -0.04658803807776302,
+      "score_metric": "LOO_R2",
+      "delta": -0.0035821530619193354,
+      "n": 48,
+      "supported": false
+    },
+    {
+      "scope": "mask_best",
+      "section": "aggregate_target_max",
+      "baseline": "raw_counts",
+      "candidate": "masked_geometry",
+      "baseline_score": -0.04300588501584368,
+      "candidate_score": -0.026846213847183664,
+      "score_metric": "LOO_R2",
+      "delta": 0.016159671168660017,
+      "n": 48,
+      "supported": false
+    },
+    {
+      "scope": "mask_best",
+      "section": "aggregate_target_max",
+      "baseline": "raw_counts",
+      "candidate": "mechanism",
+      "baseline_score": -0.04300588501584368,
+      "candidate_score": null,
+      "score_metric": "missing",
+      "delta": null,
+      "n": 0,
+      "supported": false
+    },
+    {
+      "scope": "mask_seed_std",
+      "section": "aggregate_target_std",
+      "baseline": "raw_counts",
+      "candidate": "masked_geometry",
+      "baseline_score": -0.043005885015844125,
+      "candidate_score": -0.6388323991897007,
+      "score_metric": "LOO_R2",
+      "delta": -0.5958265141738566,
+      "n": 48,
+      "supported": false
+    },
+    {
+      "scope": "mask_seed_std",
+      "section": "aggregate_target_std",
+      "baseline": "raw_counts",
+      "candidate": "mechanism",
+      "baseline_score": -0.043005885015844125,
+      "candidate_score": null,
+      "score_metric": "missing",
+      "delta": null,
+      "n": 0,
+      "supported": false
+    }
+  ],
+  "support_summary": {
+    "verdict": "structural_positive",
+    "interpretation": "Topology-derived predictors improve over count baselines; mechanism evidence is weaker or unavailable.",
+    "n_supported_structural": 5,
+    "n_supported_mechanism": 0,
+    "best_deltas": [
+      {
+        "scope": "mask_mean",
+        "section": "aggregate_target_mean",
+        "baseline": "raw_counts",
+        "candidate": "masked_geometry",
+        "baseline_score": -0.04300588501584346,
+        "candidate_score": 0.18868381225742037,
+        "score_metric": "LOO_R2",
+        "delta": 0.23168969727326383,
+        "n": 48,
+        "supported": true
+      },
+      {
+        "scope": "mask_mean",
+        "section": "aggregate_target_mean",
+        "baseline": "raw_counts",
+        "candidate": "physical_backbone",
+        "baseline_score": -0.04300588501584346,
+        "candidate_score": 0.17165801476373022,
+        "score_metric": "LOO_R2",
+        "delta": 0.21466389977957367,
+        "n": 48,
+        "supported": true
+      },
+      {
+        "scope": "run",
+        "section": "run_regressions",
+        "baseline": "raw_counts",
+        "candidate": "masked_geometry",
+        "baseline_score": -0.008385707533131503,
+        "candidate_score": 0.11606011072334865,
+        "score_metric": "LOO_R2",
+        "delta": 0.12444581825648016,
+        "n": 240,
+        "supported": true
+      },
+      {
+        "scope": "run",
+        "section": "run_regressions",
+        "baseline": "raw_counts",
+        "candidate": "physical_backbone",
+        "baseline_score": -0.008385707533131503,
+        "candidate_score": 0.06793763236446826,
+        "score_metric": "LOO_R2",
+        "delta": 0.07632333989759976,
+        "n": 240,
+        "supported": true
+      },
+      {
+        "scope": "mask_best",
+        "section": "aggregate_target_max",
+        "baseline": "raw_counts",
+        "candidate": "physical_backbone",
+        "baseline_score": -0.04300588501584368,
+        "candidate_score": 0.022808693583392547,
+        "score_metric": "LOO_R2",
+        "delta": 0.06581457859923623,
+        "n": 48,
+        "supported": true
+      }
+    ]
+  },
+  "essential_retention": [
+    {
+      "experiment": "random",
+      "layout": "input mask",
+      "n_joined": 16,
+      "retention_mean_mean": 0.6246560445474783,
+      "retention_max_mean": 0.6835362244302711,
+      "retrain_mean_mean": 55.36750000000001,
+      "retrain_max_best": 72.2
+    },
+    {
+      "experiment": "cycle",
+      "layout": "input mask",
+      "n_joined": 16,
+      "retention_mean_mean": 0.618140707093195,
+      "retention_max_mean": 0.7069390858353114,
+      "retrain_mean_mean": 54.59,
+      "retrain_max_best": 73.2
+    },
+    {
+      "experiment": "hub",
+      "layout": "input mask",
+      "n_joined": 16,
+      "retention_mean_mean": 0.6372176351574668,
+      "retention_max_mean": 0.7017067563656018,
+      "retrain_mean_mean": 52.3975,
+      "retrain_max_best": 65.2
+    }
+  ]
+}

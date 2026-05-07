@@ -1,0 +1,325 @@
+{
+  "report_kind": "research",
+  "target": "test_novel_classes",
+  "min_n": 6,
+  "support_delta_threshold": 0.05,
+  "count_control": null,
+  "model_comparisons": [
+    {
+      "scope": "run",
+      "section": "run_level",
+      "baseline": "edge_count",
+      "candidate": "edge_plus_drel",
+      "baseline_score": -0.008385707533131503,
+      "candidate_score": 0.056613684968085054,
+      "score_metric": "LOO_R2",
+      "delta": 0.06499939250121656,
+      "n": 240,
+      "supported": true
+    },
+    {
+      "scope": "run",
+      "section": "run_level",
+      "baseline": "edge_count",
+      "candidate": "input_plus_masked_geometry",
+      "baseline_score": -0.008385707533131503,
+      "candidate_score": 0.11606011072334954,
+      "score_metric": "LOO_R2",
+      "delta": 0.12444581825648104,
+      "n": 240,
+      "supported": true
+    },
+    {
+      "scope": "run",
+      "section": "run_level",
+      "baseline": "edge_count",
+      "candidate": "edge_plus_mechanism",
+      "baseline_score": -0.008385707533131503,
+      "candidate_score": null,
+      "score_metric": "missing",
+      "delta": null,
+      "n": 0,
+      "supported": false
+    },
+    {
+      "scope": "run",
+      "section": "run_level",
+      "baseline": "edge_count",
+      "candidate": "edge_plus_projection",
+      "baseline_score": -0.008385707533131503,
+      "candidate_score": 0.7404015889947272,
+      "score_metric": "LOO_R2",
+      "delta": 0.7487872965278587,
+      "n": 240,
+      "supported": true
+    },
+    {
+      "scope": "topology_mean",
+      "section": "aggregate_target_mean",
+      "baseline": "edge_count",
+      "candidate": "edge_plus_drel",
+      "baseline_score": -0.04300588501584346,
+      "candidate_score": 0.14495126498743238,
+      "score_metric": "LOO_R2",
+      "delta": 0.18795715000327584,
+      "n": 48,
+      "supported": true
+    },
+    {
+      "scope": "topology_mean",
+      "section": "aggregate_target_mean",
+      "baseline": "edge_count",
+      "candidate": "input_plus_masked_geometry",
+      "baseline_score": -0.04300588501584346,
+      "candidate_score": 0.1886838122574226,
+      "score_metric": "LOO_R2",
+      "delta": 0.23168969727326605,
+      "n": 48,
+      "supported": true
+    },
+    {
+      "scope": "topology_mean",
+      "section": "aggregate_target_mean",
+      "baseline": "edge_count",
+      "candidate": "edge_plus_mechanism",
+      "baseline_score": -0.04300588501584346,
+      "candidate_score": null,
+      "score_metric": "missing",
+      "delta": null,
+      "n": 0,
+      "supported": false
+    },
+    {
+      "scope": "topology_mean",
+      "section": "aggregate_target_mean",
+      "baseline": "edge_count",
+      "candidate": "edge_plus_projection",
+      "baseline_score": -0.04300588501584346,
+      "candidate_score": 0.8092894491130684,
+      "score_metric": "LOO_R2",
+      "delta": 0.8522953341289119,
+      "n": 48,
+      "supported": true
+    },
+    {
+      "scope": "topology_best",
+      "section": "aggregate_target_max",
+      "baseline": "edge_count",
+      "candidate": "edge_plus_drel",
+      "baseline_score": -0.04300588501584368,
+      "candidate_score": 0.17960718732623704,
+      "score_metric": "LOO_R2",
+      "delta": 0.22261307234208072,
+      "n": 48,
+      "supported": true
+    },
+    {
+      "scope": "topology_best",
+      "section": "aggregate_target_max",
+      "baseline": "edge_count",
+      "candidate": "input_plus_masked_geometry",
+      "baseline_score": -0.04300588501584368,
+      "candidate_score": -0.02684621384718011,
+      "score_metric": "LOO_R2",
+      "delta": 0.01615967116866357,
+      "n": 48,
+      "supported": false
+    },
+    {
+      "scope": "topology_best",
+      "section": "aggregate_target_max",
+      "baseline": "edge_count",
+      "candidate": "edge_plus_mechanism",
+      "baseline_score": -0.04300588501584368,
+      "candidate_score": null,
+      "score_metric": "missing",
+      "delta": null,
+      "n": 0,
+      "supported": false
+    },
+    {
+      "scope": "topology_best",
+      "section": "aggregate_target_max",
+      "baseline": "edge_count",
+      "candidate": "edge_plus_projection",
+      "baseline_score": -0.04300588501584368,
+      "candidate_score": 0.5990244678805667,
+      "score_metric": "LOO_R2",
+      "delta": 0.6420303528964104,
+      "n": 48,
+      "supported": true
+    },
+    {
+      "scope": "retrain_mean",
+      "section": "retrain_target_mean",
+      "baseline": "layout_type",
+      "candidate": "layout_plus_input_plus_drel",
+      "baseline_score": 0.5097686119912274,
+      "candidate_score": 0.8209996829258707,
+      "score_metric": "LOO_R2",
+      "delta": 0.3112310709346433,
+      "n": 96,
+      "supported": true
+    },
+    {
+      "scope": "retrain_mean",
+      "section": "retrain_target_mean",
+      "baseline": "layout_type",
+      "candidate": "layout_plus_input_plus_masked_geometry",
+      "baseline_score": 0.5097686119912274,
+      "candidate_score": 0.8493997176917111,
+      "score_metric": "LOO_R2",
+      "delta": 0.3396311057004837,
+      "n": 96,
+      "supported": true
+    },
+    {
+      "scope": "retrain_best",
+      "section": "retrain_target_max",
+      "baseline": "layout_type",
+      "candidate": "layout_plus_input_plus_drel",
+      "baseline_score": 0.46505673736175346,
+      "candidate_score": 0.7740080531543752,
+      "score_metric": "LOO_R2",
+      "delta": 0.3089513157926217,
+      "n": 96,
+      "supported": true
+    },
+    {
+      "scope": "retrain_best",
+      "section": "retrain_target_max",
+      "baseline": "layout_type",
+      "candidate": "layout_plus_input_plus_masked_geometry",
+      "baseline_score": 0.46505673736175346,
+      "candidate_score": 0.7987711379664548,
+      "score_metric": "LOO_R2",
+      "delta": 0.33371440060470137,
+      "n": 96,
+      "supported": true
+    }
+  ],
+  "support_summary": {
+    "verdict": "strong_positive",
+    "interpretation": "Topology-derived predictors and trained functional diagnostics both improve over count baselines.",
+    "n_supported_structural": 9,
+    "n_supported_mechanism": 3,
+    "best_deltas": [
+      {
+        "scope": "topology_mean",
+        "section": "aggregate_target_mean",
+        "baseline": "edge_count",
+        "candidate": "edge_plus_projection",
+        "baseline_score": -0.04300588501584346,
+        "candidate_score": 0.8092894491130684,
+        "score_metric": "LOO_R2",
+        "delta": 0.8522953341289119,
+        "n": 48,
+        "supported": true
+      },
+      {
+        "scope": "run",
+        "section": "run_level",
+        "baseline": "edge_count",
+        "candidate": "edge_plus_projection",
+        "baseline_score": -0.008385707533131503,
+        "candidate_score": 0.7404015889947272,
+        "score_metric": "LOO_R2",
+        "delta": 0.7487872965278587,
+        "n": 240,
+        "supported": true
+      },
+      {
+        "scope": "topology_best",
+        "section": "aggregate_target_max",
+        "baseline": "edge_count",
+        "candidate": "edge_plus_projection",
+        "baseline_score": -0.04300588501584368,
+        "candidate_score": 0.5990244678805667,
+        "score_metric": "LOO_R2",
+        "delta": 0.6420303528964104,
+        "n": 48,
+        "supported": true
+      },
+      {
+        "scope": "retrain_mean",
+        "section": "retrain_target_mean",
+        "baseline": "layout_type",
+        "candidate": "layout_plus_input_plus_masked_geometry",
+        "baseline_score": 0.5097686119912274,
+        "candidate_score": 0.8493997176917111,
+        "score_metric": "LOO_R2",
+        "delta": 0.3396311057004837,
+        "n": 96,
+        "supported": true
+      },
+      {
+        "scope": "retrain_best",
+        "section": "retrain_target_max",
+        "baseline": "layout_type",
+        "candidate": "layout_plus_input_plus_masked_geometry",
+        "baseline_score": 0.46505673736175346,
+        "candidate_score": 0.7987711379664548,
+        "score_metric": "LOO_R2",
+        "delta": 0.33371440060470137,
+        "n": 96,
+        "supported": true
+      }
+    ]
+  },
+  "essential_retention": [
+    {
+      "experiment": "random",
+      "layout": "physical subgraph",
+      "n_joined": 16,
+      "retention_mean_mean": 0.7331775257406948,
+      "retention_max_mean": 0.8221395595521677,
+      "retrain_mean_mean": 65.6875,
+      "retrain_max_best": 90.0
+    },
+    {
+      "experiment": "random",
+      "layout": "input mask",
+      "n_joined": 16,
+      "retention_mean_mean": 0.6246560445474783,
+      "retention_max_mean": 0.6835362244302711,
+      "retrain_mean_mean": 55.36750000000001,
+      "retrain_max_best": 72.2
+    },
+    {
+      "experiment": "cycle",
+      "layout": "physical subgraph",
+      "n_joined": 16,
+      "retention_mean_mean": 0.7580217663110975,
+      "retention_max_mean": 0.8339079568034923,
+      "retrain_mean_mean": 67.4025,
+      "retrain_max_best": 88.6
+    },
+    {
+      "experiment": "cycle",
+      "layout": "input mask",
+      "n_joined": 16,
+      "retention_mean_mean": 0.618140707093195,
+      "retention_max_mean": 0.7069390858353114,
+      "retrain_mean_mean": 54.59,
+      "retrain_max_best": 73.2
+    },
+    {
+      "experiment": "hub",
+      "layout": "physical subgraph",
+      "n_joined": 16,
+      "retention_mean_mean": 0.8557884784151505,
+      "retention_max_mean": 0.9489730726190622,
+      "retrain_mean_mean": 72.08999999999999,
+      "retrain_max_best": 92.4
+    },
+    {
+      "experiment": "hub",
+      "layout": "input mask",
+      "n_joined": 16,
+      "retention_mean_mean": 0.6372176351574668,
+      "retention_max_mean": 0.7017067563656018,
+      "retrain_mean_mean": 52.3975,
+      "retrain_max_best": 65.2
+    }
+  ]
+}
