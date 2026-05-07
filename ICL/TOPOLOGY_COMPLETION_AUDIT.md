@@ -57,13 +57,14 @@ find ICL/results -maxdepth 2 -type f 2>/dev/null | head -80
 python3 -m unittest discover -s ICL/tests
 python3 -m py_compile $(find ICL -name '*.py' -not -path '*/__pycache__/*')
 git diff --check
-python3 verify_topology_completion.py ... --report_md ... --report_json ...
+python3 verify_topology_completion.py ... --report_kind input_mask --report_md ... --report_json ...
+python3 verify_topology_completion.py ... --report_kind research --report_md ... --report_json ...
 ```
 
 Observed state:
 
 - Local branch is clean and tracking `origin/topology`.
-- Local unit suite has 64 tests and passes.
+- Local unit suite has 66 tests and passes.
 - Python syntax compilation passes.
 - `git diff --check` passes.
 - Local `ICL/results` contains only older `markov_icl_gmm_*.pt` files, not the
@@ -109,7 +110,7 @@ Observed state:
 | Keep nonlinear autocatalytic/WTA outside first-order tree claims | Current implementation and docs are scoped to first-order topology | Satisfied by scope |
 | Provide final consolidated report | `make_topology_research_report.py`, `make_input_mask_report.py` | Implemented; final cluster reports missing |
 | Provide artifact audit and safe recovery | `audit_topology_artifacts.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
-| Verify final report and artifact consistency in one non-mutating command | `verify_topology_completion.py` | Implemented and tested; cannot pass until cluster reports exist |
+| Verify final report and artifact consistency in one non-mutating command | `verify_topology_completion.py --report_kind input_mask` and `--report_kind research` | Implemented and tested; cannot pass until cluster reports exist |
 | Avoid interfering with other agents on Engaging | Current blocker documents that only `icl:13.2` should be used | Satisfied locally; cluster work paused |
 
 ## Verification Coverage

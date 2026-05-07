@@ -56,19 +56,26 @@ def source_counts_have_no_unknown(report, key):
     return isinstance(counts, dict) and counts and not counts.get("unknown")
 
 
-def verify_report(report_md, report_json, experiments, target, allow_unknown_provenance=False):
+def check_common_report_fields(report, experiments, target, failures):
+    require(report.get("target") == target, f"report target is {report.get('target')!r}, expected {target!r}", failures)
+    expected_names = [name for name, _ in experiments]
+    report_experiments = report.get("experiments", [])
+    report_names = [item.get("name") for item in report_experiments if isinstance(item, dict)]
+    require(report_names == expected_names, f"report experiments {report_names!r} do not match {expected_names!r}", failures)
+    return report_experiments
+
+
+def check_provenance_counts(report, keys, failures, allow_unknown_provenance=False):
+    for key in keys:
+        if allow_unknown_provenance:
+            counts = report.get("pooled", {}).get(key)
+            require(isinstance(counts, dict) and bool(counts), f"missing pooled {key}", failures)
+        else:
+            require(source_counts_have_no_unknown(report, key), f"missing or unknown provenance in pooled {key}", failures)
+
+
+def verify_input_mask_report(report, markdown, experiments, target, allow_unknown_provenance=False):
     failures = []
-    require(os.path.exists(report_md), f"missing report Markdown: {report_md}", failures)
-    require(os.path.exists(report_json), f"missing report JSON: {report_json}", failures)
-    if not os.path.exists(report_md) or not os.path.exists(report_json):
-        return failures
-
-    require(os.path.getsize(report_md) > 0, f"empty report Markdown: {report_md}", failures)
-    require(os.path.getsize(report_json) > 0, f"empty report JSON: {report_json}", failures)
-    with open(report_md) as f:
-        markdown = f.read()
-    report = load_json(report_json)
-
     for section in [
         "Input-Mask Topology-ICL Report",
         "Pooled Fixed-Input-Count Regressions",
@@ -78,11 +85,7 @@ def verify_report(report_md, report_json, experiments, target, allow_unknown_pro
     ]:
         require(section in markdown, f"report Markdown missing section/text: {section}", failures)
 
-    require(report.get("target") == target, f"report target is {report.get('target')!r}, expected {target!r}", failures)
-    expected_names = [name for name, _ in experiments]
-    report_experiments = report.get("experiments", [])
-    report_names = [item.get("name") for item in report_experiments if isinstance(item, dict)]
-    require(report_names == expected_names, f"report experiments {report_names!r} do not match {expected_names!r}", failures)
+    report_experiments = check_common_report_fields(report, experiments, target, failures)
 
     pooled = report.get("pooled", {})
     require(positive_count(pooled, ["run_summary", "n"]) > 0, "pooled report has no run rows", failures)
@@ -91,16 +94,17 @@ def verify_report(report_md, report_json, experiments, target, allow_unknown_pro
         "pooled report has no aggregate groups",
         failures,
     )
-    for key in [
-        "run_common_branch_source_counts",
-        "aggregate_common_branch_source_counts",
-        "run_input_overlap_source_counts",
-        "aggregate_input_overlap_source_counts",
-    ]:
-        if allow_unknown_provenance:
-            require(isinstance(pooled.get(key), dict) and bool(pooled.get(key)), f"missing pooled {key}", failures)
-        else:
-            require(source_counts_have_no_unknown(report, key), f"missing or unknown provenance in pooled {key}", failures)
+    check_provenance_counts(
+        report,
+        [
+            "run_common_branch_source_counts",
+            "aggregate_common_branch_source_counts",
+            "run_input_overlap_source_counts",
+            "aggregate_input_overlap_source_counts",
+        ],
+        failures,
+        allow_unknown_provenance=allow_unknown_provenance,
+    )
 
     for item in report_experiments:
         name = item.get("name")
@@ -114,6 +118,98 @@ def verify_report(report_md, report_json, experiments, target, allow_unknown_pro
         require(joined == selected, f"{name}: retrain comparison joined {joined}/{selected}", failures)
         require(retrained == selected, f"{name}: retrain aggregate groups {retrained}/{selected}", failures)
 
+    return failures
+
+
+def verify_research_report(report, markdown, experiments, target, allow_unknown_provenance=False):
+    failures = []
+    for section in [
+        "Topology-ICL Progress Report",
+        "Pooled Fixed-Edge Regime Analysis",
+        "Common branch-rank source counts",
+        "Input-overlap source counts",
+        "Essential Motif Retraining",
+    ]:
+        require(section in markdown, f"report Markdown missing section/text: {section}", failures)
+
+    report_experiments = check_common_report_fields(report, experiments, target, failures)
+    pooled = report.get("pooled", {})
+    require(positive_count(pooled, ["run_rows"]) > 0, "pooled report has no run rows", failures)
+    require(positive_count(pooled, ["aggregate_groups"]) > 0, "pooled report has no aggregate groups", failures)
+    require(positive_count(pooled, ["retrain_groups"]) > 0, "pooled report has no retrain groups", failures)
+    check_provenance_counts(
+        report,
+        [
+            "run_common_branch_source_counts",
+            "aggregate_common_branch_source_counts",
+            "run_input_overlap_source_counts",
+            "aggregate_input_overlap_source_counts",
+        ],
+        failures,
+        allow_unknown_provenance=allow_unknown_provenance,
+    )
+
+    for item in report_experiments:
+        name = item.get("name")
+        require(positive_count(item, ["run_summary", "n_runs"]) > 0, f"{name}: no run rows", failures)
+        require(
+            positive_count(item, ["aggregate_summary", "n_topology_groups"]) > 0,
+            f"{name}: no aggregate groups",
+            failures,
+        )
+        layouts = item.get("essential_input50", {}).get("layouts", [])
+        require(layouts, f"{name}: no essential retrain layouts", failures)
+        for layout in layouts:
+            label = layout.get("label") or layout.get("source_dir") or "layout"
+            selected = positive_count(layout, ["comparison", "n_joined"])
+            retrained = positive_count(layout, ["retrain_aggregate", "n_topology_groups"])
+            require(selected > 0, f"{name} {label}: no joined retrained motifs", failures)
+            require(retrained == selected, f"{name} {label}: retrain aggregate groups {retrained}/{selected}", failures)
+
+    return failures
+
+
+def verify_report(
+    report_md,
+    report_json,
+    experiments,
+    target,
+    report_kind="input_mask",
+    allow_unknown_provenance=False,
+):
+    failures = []
+    require(os.path.exists(report_md), f"missing report Markdown: {report_md}", failures)
+    require(os.path.exists(report_json), f"missing report JSON: {report_json}", failures)
+    if not os.path.exists(report_md) or not os.path.exists(report_json):
+        return failures
+
+    require(os.path.getsize(report_md) > 0, f"empty report Markdown: {report_md}", failures)
+    require(os.path.getsize(report_json) > 0, f"empty report JSON: {report_json}", failures)
+    with open(report_md) as f:
+        markdown = f.read()
+    report = load_json(report_json)
+    if report_kind == "input_mask":
+        failures.extend(
+            verify_input_mask_report(
+                report,
+                markdown,
+                experiments,
+                target,
+                allow_unknown_provenance=allow_unknown_provenance,
+            )
+        )
+    elif report_kind == "research":
+        failures.extend(
+            verify_research_report(
+                report,
+                markdown,
+                experiments,
+                target,
+                allow_unknown_provenance=allow_unknown_provenance,
+            )
+        )
+    else:
+        failures.append(f"unknown report kind: {report_kind}")
     return failures
 
 
@@ -155,6 +251,12 @@ def main():
     parser.add_argument("--seeds", type=str, default="1,2,3,4,5")
     parser.add_argument("--report_md", type=str, required=True)
     parser.add_argument("--report_json", type=str, required=True)
+    parser.add_argument(
+        "--report_kind",
+        choices=["input_mask", "research"],
+        default="input_mask",
+        help="Expected report schema to verify.",
+    )
     parser.add_argument("--target", type=str, default=DEFAULT_TARGET)
     parser.add_argument("--allow_unknown_provenance", action="store_true")
     parser.add_argument(
@@ -181,6 +283,7 @@ def main():
             args.report_json,
             experiments,
             args.target,
+            report_kind=args.report_kind,
             allow_unknown_provenance=args.allow_unknown_provenance,
         )
     )
