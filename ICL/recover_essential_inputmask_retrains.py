@@ -9,6 +9,7 @@ retrain runs when requested, and finalize only through the completion-checked
 """
 
 import argparse
+import csv
 import os
 import subprocess
 import sys
@@ -72,8 +73,19 @@ def status_command(root, seeds):
         seeds,
         "--status_only",
         "--manifest_csv",
-        os.path.join(root, "essential_inputmask50_retrain", "task_manifest.csv"),
+        status_manifest_path(root),
     )
+
+
+def status_manifest_path(root):
+    return os.path.join(root, "essential_inputmask50_retrain", "task_manifest.csv")
+
+
+def count_missing_from_manifest(path):
+    with open(path, newline="") as f:
+        rows = list(csv.DictReader(f))
+    missing = sum(1 for row in rows if str(row.get("completed")) != "True")
+    return missing, len(rows)
 
 
 def submit_missing_command(root, seeds, max_concurrent, clean=True, dry_run=False):
@@ -131,9 +143,18 @@ def main():
     experiments = [parse_experiment(raw) for raw in args.experiment]
     run_command(audit_command(experiments, args.seeds), dry_run=args.dry_run)
 
+    submitted_missing = False
     for _, root in experiments:
         run_command(status_command(root, args.seeds), dry_run=args.dry_run)
+        missing = None
+        total = None
+        if not args.dry_run:
+            missing, total = count_missing_from_manifest(status_manifest_path(root))
+            print(f"Missing retrain tasks for {root}: {missing}/{total}")
         if args.submit_missing:
+            if missing == 0:
+                print(f"No missing retrain tasks for {root}; skipping missing-only submit")
+                continue
             run_command(
                 submit_missing_command(
                     root,
@@ -144,10 +165,18 @@ def main():
                 ),
                 dry_run=args.dry_run,
             )
+            if not args.dry_run:
+                submitted_missing = True
 
     if args.finalize_if_complete:
         if not args.output_md or not args.output_json:
             raise SystemExit("Provide both --output_md and --output_json with --finalize_if_complete")
+        if submitted_missing:
+            print(
+                "Submitted missing retrain jobs; skipping finalization in this run. "
+                "Rerun with --finalize_if_complete after jobs finish."
+            )
+            return
         run_command(
             audit_command(
                 experiments,

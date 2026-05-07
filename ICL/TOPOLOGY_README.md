@@ -406,9 +406,9 @@ python3 finalize_essential_inputmask_retrains.py \
   --output_json results/input_mask_topology_report.json
 ```
 
-The same recovery/finalization path can be driven by one wrapper. Use
-`--dry-run` first to inspect the audit, status, missing-only submit, strict
-audit, and finalizer commands:
+The same recovery/finalization path can be driven by one wrapper. Use `--dry-run`
+first to inspect the audit, status, missing-only submit, strict audit, and
+finalizer commands:
 
 ```bash
 python3 recover_essential_inputmask_retrains.py \
@@ -424,8 +424,36 @@ python3 recover_essential_inputmask_retrains.py \
   --dry-run
 ```
 
-Drop `--dry-run` to execute. If retrains are still incomplete, the strict audit
-or guarded finalizer will stop before overwriting the report.
+For execution, use the same wrapper in two passes. First submit only missing
+retrain runs:
+
+```bash
+python3 recover_essential_inputmask_retrains.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --submit_missing \
+  --max-concurrent 16
+```
+
+After the missing jobs finish, finalize if and only if the strict retrain audit
+passes:
+
+```bash
+python3 recover_essential_inputmask_retrains.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --finalize_if_complete \
+  --output_md results/input_mask_topology_report.md \
+  --output_json results/input_mask_topology_report.json
+```
+
+If there are no missing retrain tasks, the first pass only writes the status
+manifests and skips array creation. If retrains are incomplete, the second pass
+stops at the strict audit before overwriting the report.
 
 To consolidate completed sweeps into one auditable progress artifact:
 
