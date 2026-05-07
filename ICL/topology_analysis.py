@@ -43,6 +43,135 @@ def infer_exact_copy_branch(z_seq_batch: torch.Tensor) -> np.ndarray:
     return distances.argmin(dim=1).detach().cpu().numpy()
 
 
+def _comparison_difference_bases(n_context: int, z_dim: int) -> tuple[np.ndarray, list[np.ndarray]]:
+    """Build orthonormal bases for context-query difference directions."""
+
+    p = (n_context + 1) * z_dim
+    branch_bases = []
+    query_offset = n_context * z_dim
+    scale = 1.0 / np.sqrt(2.0)
+    for branch in range(n_context):
+        basis = np.zeros((p, z_dim), dtype=float)
+        context_offset = branch * z_dim
+        for dim in range(z_dim):
+            basis[context_offset + dim, dim] = scale
+            basis[query_offset + dim, dim] = -scale
+        branch_bases.append(basis)
+
+    if branch_bases:
+        raw = np.concatenate(branch_bases, axis=1)
+        full_basis, _ = np.linalg.qr(raw, mode="reduced")
+    else:
+        full_basis = np.zeros((p, 0), dtype=float)
+    return full_basis, branch_bases
+
+
+def _projection_energy_fraction(vectors: np.ndarray, basis: np.ndarray) -> np.ndarray:
+    norms_sq = np.sum(vectors * vectors, axis=1)
+    if basis.size == 0:
+        energy = np.zeros_like(norms_sq)
+    else:
+        projected = vectors @ basis
+        energy = np.sum(projected * projected, axis=1)
+    result = np.zeros_like(norms_sq)
+    valid = norms_sq > 1e-12
+    result[valid] = energy[valid] / norms_sq[valid]
+    return result
+
+
+def tree_projection_geometry(model, matrices: dict) -> dict:
+    """Summarize learned tree-sum projection alignment with comparison axes."""
+
+    M_np = np.asarray(matrices["M"], dtype=float)
+    K = (model.K_params * model.input_mask).detach().cpu().numpy()
+    theta = M_np @ K
+    norms = np.sqrt(np.sum(theta * theta, axis=1))
+    full_basis, branch_bases = _comparison_difference_bases(model.N, model.z_dim)
+    full_fraction = _projection_energy_fraction(theta, full_basis)
+    branch_fractions = np.stack(
+        [_projection_energy_fraction(theta, basis) for basis in branch_bases],
+        axis=1,
+    ) if branch_bases else np.zeros((theta.shape[0], 0), dtype=float)
+
+    return {
+        "tree_projection_norm": norms,
+        "tree_comparison_energy_fraction": full_fraction,
+        "tree_branch_comparison_energy_fraction": branch_fractions,
+        "tree_projection_norm_mean": float(norms.mean()) if norms.size else 0.0,
+        "tree_projection_norm_max": float(norms.max()) if norms.size else 0.0,
+        "tree_comparison_energy_fraction_mean": float(full_fraction.mean()) if full_fraction.size else 0.0,
+        "tree_comparison_energy_fraction_max": float(full_fraction.max()) if full_fraction.size else 0.0,
+    }
+
+
+def _active_projection_alignment_summary(
+    decomposition: dict,
+    geometry: dict,
+    branch_ids: np.ndarray,
+) -> dict:
+    active_tree = decomposition["active_tree_by_root"][
+        torch.arange(decomposition["active_root"].shape[0], device=decomposition["active_root"].device),
+        decomposition["active_root"],
+    ].detach().cpu().numpy()
+    branch_ids = np.asarray(branch_ids, dtype=int)
+    full_fraction = geometry["tree_comparison_energy_fraction"]
+    branch_fractions = geometry["tree_branch_comparison_energy_fraction"]
+
+    if active_tree.size == 0 or branch_fractions.shape[1] == 0:
+        return {
+            "active_tree_comparison_energy_fraction_mean": 0.0,
+            "active_tree_matched_comparison_energy_mean": 0.0,
+            "active_tree_matched_comparison_gap_mean": 0.0,
+            "posterior_comparison_energy_fraction_mean": 0.0,
+            "posterior_matched_comparison_energy_mean": 0.0,
+            "posterior_matched_comparison_gap_mean": 0.0,
+        }
+
+    valid = active_tree >= 0
+    clipped_branches = np.clip(branch_ids, 0, branch_fractions.shape[1] - 1)
+    active_full = np.zeros(active_tree.shape[0], dtype=float)
+    active_matched = np.zeros(active_tree.shape[0], dtype=float)
+    active_gap = np.zeros(active_tree.shape[0], dtype=float)
+    if np.any(valid):
+        active_branch_fraction = branch_fractions[active_tree[valid], :]
+        active_full[valid] = full_fraction[active_tree[valid]]
+        local_branch_ids = clipped_branches[valid]
+        active_matched[valid] = active_branch_fraction[
+            np.arange(active_branch_fraction.shape[0]),
+            local_branch_ids,
+        ]
+        if branch_fractions.shape[1] > 1:
+            other = active_branch_fraction.copy()
+            other[np.arange(other.shape[0]), local_branch_ids] = -np.inf
+            active_gap[valid] = active_matched[valid] - np.max(other, axis=1)
+
+    roots = decomposition["roots"].detach().cpu().numpy()
+    root_prob = decomposition["root_probabilities"].detach().cpu().numpy()
+    tree_post = decomposition["tree_posteriors"].detach().cpu().numpy()
+    global_tree_weights = tree_post * root_prob[:, roots]
+    posterior_full = global_tree_weights @ full_fraction
+    posterior_branch = global_tree_weights @ branch_fractions
+    posterior_matched = posterior_branch[
+        np.arange(posterior_branch.shape[0]),
+        clipped_branches,
+    ]
+    if branch_fractions.shape[1] > 1:
+        posterior_other = posterior_branch.copy()
+        posterior_other[np.arange(posterior_other.shape[0]), clipped_branches] = -np.inf
+        posterior_gap = posterior_matched - np.max(posterior_other, axis=1)
+    else:
+        posterior_gap = np.zeros_like(posterior_matched)
+
+    return {
+        "active_tree_comparison_energy_fraction_mean": float(active_full.mean()),
+        "active_tree_matched_comparison_energy_mean": float(active_matched.mean()),
+        "active_tree_matched_comparison_gap_mean": float(active_gap.mean()),
+        "posterior_comparison_energy_fraction_mean": float(posterior_full.mean()),
+        "posterior_matched_comparison_energy_mean": float(posterior_matched.mean()),
+        "posterior_matched_comparison_gap_mean": float(posterior_gap.mean()),
+    }
+
+
 def tree_decomposition_from_edge_logs(
     edge_log_rates: torch.Tensor,
     n_nodes: int,
@@ -186,6 +315,7 @@ def analyze_batch(
             edges=model.edges,
             matrices=matrices,
         )
+        projection_geometry = tree_projection_geometry(model, decomposition["matrices"])
         sensitivities = context_score_edge_sensitivity(model, decomposition)
         logits = None
         margins = None
@@ -232,7 +362,18 @@ def analyze_batch(
         "essential_edges_for_10pct_importance": essential["edges_for_10pct_importance"],
         "essential_edges_for_20pct_importance": essential["edges_for_20pct_importance"],
         "essential_edges_for_50pct_importance": essential["edges_for_50pct_importance"],
+        "tree_projection_norm_mean": projection_geometry["tree_projection_norm_mean"],
+        "tree_projection_norm_max": projection_geometry["tree_projection_norm_max"],
+        "tree_comparison_energy_fraction_mean": projection_geometry["tree_comparison_energy_fraction_mean"],
+        "tree_comparison_energy_fraction_max": projection_geometry["tree_comparison_energy_fraction_max"],
     }
+    result.update(
+        _active_projection_alignment_summary(
+            decomposition,
+            projection_geometry,
+            branch_ids,
+        )
+    )
     if margins is not None:
         result.update(
             {

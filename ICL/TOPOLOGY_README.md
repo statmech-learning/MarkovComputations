@@ -29,8 +29,8 @@ The convention is:
   structurally diverse subset for training.
 - `submit_topology_library_sweep.py`: SLURM array generator for training the
   selected topology library through `run_topology_icl.py --edge_json`.
-- `topology_analysis.py`: post-training active-tree and edge-sensitivity
-  utilities.
+- `topology_analysis.py`: post-training active-tree, tree-projection
+  alignment, and edge-sensitivity utilities.
 - `analyze_topology_model.py`: load a trained run and write
   `mechanism_metrics.json`.
 - `submit_topology_mechanisms.py`: SLURM array generator for post-training
@@ -87,8 +87,10 @@ python3 analyze_topology_model.py \
 ```
 
 The mechanism file includes branch-active-root/tree mutual information,
-active-tree entropy, matrix-tree edge sensitivity, an essential-edge summary,
-and target log-probability margins on novel-class ICL samples.
+active-tree entropy, learned tree-sum projection alignment with
+context-query comparison directions, matrix-tree edge sensitivity, an
+essential-edge summary, and target log-probability margins on novel-class ICL
+samples.
 
 For heavier post-training diagnostics, add ablation flags:
 

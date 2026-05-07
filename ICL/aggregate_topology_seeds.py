@@ -63,6 +63,15 @@ MECHANISM_COLUMNS = [
     "tree_entropy_mean",
     "edge_importance_gini",
     "essential_edges_for_50pct_importance",
+    "tree_projection_norm_mean",
+    "tree_comparison_energy_fraction_mean",
+    "tree_comparison_energy_fraction_max",
+    "active_tree_comparison_energy_fraction_mean",
+    "active_tree_matched_comparison_energy_mean",
+    "active_tree_matched_comparison_gap_mean",
+    "posterior_comparison_energy_fraction_mean",
+    "posterior_matched_comparison_energy_mean",
+    "posterior_matched_comparison_gap_mean",
     "input_ablation_max_loss",
     "physical_ablation_max_loss",
 ]
@@ -83,6 +92,12 @@ PREDICTOR_SETS = {
         "branch_active_root_mi_mean",
         "branch_active_tree_mi_mean",
         "input_ablation_max_loss_mean",
+    ],
+    "projection_alignment": [
+        "active_tree_matched_comparison_energy_mean_mean",
+        "active_tree_matched_comparison_gap_mean_mean",
+        "posterior_matched_comparison_energy_mean_mean",
+        "posterior_matched_comparison_gap_mean_mean",
     ],
 }
 
