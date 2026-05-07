@@ -41,6 +41,8 @@ The convention is:
   flat CSV table.
 - `summarize_topology_mechanisms.py`: join topology and mechanism result CSVs,
   then report overall and within-edge-count correlations.
+- `aggregate_topology_seeds.py`: aggregate repeated training seeds for each
+  topology into mean, best-seed, and seed-variance reports.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
 - `tests/test_topology_metrics.py`: exact small-graph matrix-tree checks.
@@ -183,4 +185,10 @@ python3 summarize_topology_mechanisms.py \
   --topology_csv "$SLURM_OUTPUT_BASE/topology_results.csv" \
   --mechanism_csv "$SLURM_OUTPUT_BASE/mechanism_results.csv" \
   --output_json "$SLURM_OUTPUT_BASE/mechanism_summary.json"
+
+python3 aggregate_topology_seeds.py \
+  --topology_csv "$SLURM_OUTPUT_BASE/topology_results.csv" \
+  --mechanism_csv "$SLURM_OUTPUT_BASE/mechanism_results.csv" \
+  --output_csv "$SLURM_OUTPUT_BASE/topology_seed_aggregates.csv" \
+  --output_json "$SLURM_OUTPUT_BASE/topology_seed_aggregates.json"
 ```
