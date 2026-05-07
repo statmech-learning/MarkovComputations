@@ -375,6 +375,66 @@ class RegressTopologyResultsTests(unittest.TestCase):
         self.assertIn("capacity_rooted_polytope_branch_best_rank_min", model["predictors"])
         self.assertGreater(model["r2"], 0.9)
 
+    def test_normal_fan_capacity_predictor_set_uses_active_tree_columns(self):
+        fieldnames = [
+            "label",
+            "topology_name",
+            "n_edges",
+            "raw_physical_parameter_count",
+            "input_coupled_parameter_count",
+            "d_rel",
+            "comparison_branch_common_d_rel_min",
+            "comparison_branch_common_d_rel_gini",
+            "capacity_normal_fan_branch_tree_nmi_mean",
+            "capacity_normal_fan_branch_tree_nmi_max",
+            "capacity_normal_fan_active_tree_count_mean",
+            "capacity_normal_fan_branch_active_tree_count_min_mean",
+            "test_novel_classes",
+        ]
+        rows = []
+        for idx in range(8):
+            normal_fan = 0.1 * idx
+            rows.append(
+                {
+                    "label": f"normal_fan{idx}",
+                    "topology_name": f"normal_fan_topo{idx}",
+                    "n_edges": 20,
+                    "raw_physical_parameter_count": 400,
+                    "input_coupled_parameter_count": 200,
+                    "d_rel": 100 + idx,
+                    "comparison_branch_common_d_rel_min": idx,
+                    "comparison_branch_common_d_rel_gini": 0.0,
+                    "capacity_normal_fan_branch_tree_nmi_mean": normal_fan,
+                    "capacity_normal_fan_branch_tree_nmi_max": normal_fan + 0.1,
+                    "capacity_normal_fan_active_tree_count_mean": 2 + idx,
+                    "capacity_normal_fan_branch_active_tree_count_min_mean": 1 + idx,
+                    "test_novel_classes": 45 + 25 * normal_fan,
+                }
+            )
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_csv = os.path.join(tmpdir, "normal_fan_capacity_topology_results.csv")
+            output_json = os.path.join(tmpdir, "regression.json")
+            with open(input_csv, "w", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+            self.run_regression(
+                [
+                    "--input_csv",
+                    input_csv,
+                    "--output_json",
+                    output_json,
+                ]
+            )
+            with open(output_json) as f:
+                report = json.load(f)
+
+        model = report["models"]["normal_fan_capacity"]
+        self.assertEqual(model["n"], 8)
+        self.assertIn("capacity_normal_fan_branch_tree_nmi_mean", model["predictors"])
+        self.assertGreater(model["r2"], 0.9)
+
 
 if __name__ == "__main__":
     unittest.main()

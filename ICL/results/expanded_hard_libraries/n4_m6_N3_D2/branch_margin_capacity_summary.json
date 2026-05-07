@@ -11,7 +11,9 @@
       "tropical_linear_test_accuracy_max": 0.44,
       "tropical_root_feature_effective_rank_mean": 2.676503017531485,
       "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
-      "rooted_polytope_branch_best_rank_min_mean": 3.5555555555555554
+      "rooted_polytope_branch_best_rank_min_mean": 3.5555555555555554,
+      "normal_fan_branch_tree_nmi_mean": 0.02470813566397456,
+      "normal_fan_active_tree_count_mean": 8.268518518518519
     },
     "hub_spoke": {
       "n": 1,
@@ -23,7 +25,9 @@
       "tropical_linear_test_accuracy_max": 0.444,
       "tropical_root_feature_effective_rank_mean": 2.427680846448448,
       "rooted_polytope_supported_branch_dim_fraction_mean": 0.0,
-      "rooted_polytope_branch_best_rank_min_mean": 0.0
+      "rooted_polytope_branch_best_rank_min_mean": 0.0,
+      "normal_fan_branch_tree_nmi_mean": 0.014055680081523886,
+      "normal_fan_active_tree_count_mean": 4.0
     },
     "random_sc": {
       "n": 1,
@@ -35,7 +39,9 @@
       "tropical_linear_test_accuracy_max": 0.426,
       "tropical_root_feature_effective_rank_mean": 2.6638913214157314,
       "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
-      "rooted_polytope_branch_best_rank_min_mean": 4.0
+      "rooted_polytope_branch_best_rank_min_mean": 4.0,
+      "normal_fan_branch_tree_nmi_mean": 0.018952654182300504,
+      "normal_fan_active_tree_count_mean": 7.0
     },
     "two_module": {
       "n": 1,
@@ -47,7 +53,9 @@
       "tropical_linear_test_accuracy_max": 0.452,
       "tropical_root_feature_effective_rank_mean": 2.4249435165796998,
       "rooted_polytope_supported_branch_dim_fraction_mean": 0.0,
-      "rooted_polytope_branch_best_rank_min_mean": 0.0
+      "rooted_polytope_branch_best_rank_min_mean": 0.0,
+      "normal_fan_branch_tree_nmi_mean": 0.016041106516869415,
+      "normal_fan_active_tree_count_mean": 4.0
     }
   }
 }

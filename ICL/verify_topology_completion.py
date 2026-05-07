@@ -271,6 +271,18 @@ def verify_next_phase_report(report, markdown, require_expanded_followups=False)
                         f"{label}: missing family-cluster bootstrap metric for rooted tree-polytope capacity",
                         failures,
                     )
+                normal_fan = models.get("normal_fan_capacity")
+                require(
+                    isinstance(normal_fan, dict),
+                    f"{label}: missing normal_fan_capacity model",
+                    failures,
+                )
+                if isinstance(normal_fan, dict):
+                    require(
+                        normal_fan.get("family_bootstrap_delta_mean") is not None,
+                        f"{label}: missing family-cluster bootstrap metric for normal-fan capacity",
+                        failures,
+                    )
 
     capacity = report.get("branch_margin_capacity")
     require(isinstance(capacity, list) and capacity, "next-phase report has no branch-margin capacity entries", failures)
@@ -288,6 +300,12 @@ def verify_next_phase_report(report, markdown, require_expanded_followups=False)
                     isinstance(family, dict)
                     and family.get("rooted_polytope_supported_branch_dim_fraction_mean") is not None,
                     f"{label} {family_name}: missing rooted polytope support summary",
+                    failures,
+                )
+                require(
+                    isinstance(family, dict)
+                    and family.get("normal_fan_branch_tree_nmi_mean") is not None,
+                    f"{label} {family_name}: missing normal-fan coverage summary",
                     failures,
                 )
 

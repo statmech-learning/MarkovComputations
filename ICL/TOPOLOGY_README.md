@@ -47,7 +47,8 @@ The convention is:
   probe. It gates exact-copy comparison features by common context/query
   relative tree-contrast support, reports oracle and norm-controlled linear
   margins, adds rank-weighted support, samples tropical rooted-tree random
-  features, and summarizes root-by-root tree-polytope common-rank support.
+  features, summarizes root-by-root tree-polytope common-rank support, and
+  estimates sampled normal-fan branch/tree assignment coverage.
   This is a conservative proxy for the proposed tree-polytope/branch-margin
   theory, not a solution to the full nonconvex `max_{K,B}` CRN capacity
   problem.
@@ -279,8 +280,12 @@ than the squared-distance support fields: they sample edge projections, compute
 root-wise max or log-sum-exp tree scores, normalize root log weights, and fit a
 linear decoder on those root features. Treat them as a stochastic lower-bound
 probe for branch separability under the actual rooted-tree incidence structure.
-They are not an optimized `max_{K,B}` capacity and should be compared across
-several seeds/trial counts before drawing strong conclusions.
+The normal-fan fields use the same sampled edge projections to record active
+rooted-tree assignments and their mutual information with branch labels. They
+ask whether the sampled rooted-tree normal fans create branch-specific cells,
+not whether training will find those cells. These probes are not an optimized
+`max_{K,B}` capacity and should be compared across several seeds/trial counts
+before drawing strong conclusions.
 
 ## Cluster-Aware Statistical Diagnostics
 

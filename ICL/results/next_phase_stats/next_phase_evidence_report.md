@@ -1,6 +1,6 @@
 # Next-Phase Topology-ICL Evidence Report
 
-Generated: `2026-05-07T22:36:16.243143+00:00`.
+Generated: `2026-05-07T22:49:05.103909+00:00`.
 
 Scope: first-order CRNs with exponential input-dependent rates. These results do not claim a topology theory for autocatalytic or WTA CRNs.
 
@@ -84,6 +84,8 @@ Rows: `60`. Groups: `12`. Families: `4` via `derived_graph_family`.
 | tropical_tree_capacity_plus_drel | 12 | -0.645 | 0.172 | 0.145 | [0.076, 0.315] | 1.000 | 0.153 |
 | rooted_tree_polytope_capacity | 12 | -1.585 | 0.155 | 0.143 | [0.055, 0.289] | 1.000 | 0.126 |
 | rooted_tree_polytope_capacity_plus_drel | 12 | -1.585 | 0.153 | 0.137 | [0.054, 0.292] | 1.000 | 0.124 |
+| normal_fan_capacity | 12 | -0.461 | 0.109 | 0.104 | [0.026, 0.237] | 1.000 | 0.218 |
+| normal_fan_capacity_plus_drel | 12 | -0.610 | 0.116 | 0.108 | [0.028, 0.246] | 1.000 | 0.314 |
 
 ### hard_n5_m8_N3_D2
 
@@ -103,6 +105,8 @@ Rows: `60`. Groups: `12`. Families: `6` via `derived_graph_family`.
 | tropical_tree_capacity_plus_drel | 12 | -0.960 | 0.216 | 0.173 | [0.063, 0.362] | 1.000 | -1.979 |
 | rooted_tree_polytope_capacity | 12 | -36.428 | 0.130 | 0.110 | [0.023, 0.287] | 1.000 | -1.185 |
 | rooted_tree_polytope_capacity_plus_drel | 12 | -41.290 | 0.147 | 0.118 | [0.034, 0.317] | 1.000 | -0.602 |
+| normal_fan_capacity | 12 | -1.276 | 0.171 | 0.152 | [0.029, 0.336] | 1.000 | -3.057 |
+| normal_fan_capacity_plus_drel | 12 | -2.161 | 0.202 | 0.171 | [0.049, 0.361] | 1.000 | -1.571 |
 
 ### hard_n5_m12_N3_D2
 
@@ -122,6 +126,8 @@ Rows: `60`. Groups: `12`. Families: `7` via `derived_graph_family`.
 | tropical_tree_capacity_plus_drel | 12 | -0.251 | 0.393 | 0.417 | [0.155, 0.606] | 1.000 | -1.499 |
 | rooted_tree_polytope_capacity | 12 | 0.081 | 0.307 | 0.337 | [0.091, 0.537] | 1.000 | -0.235 |
 | rooted_tree_polytope_capacity_plus_drel | 12 | 0.081 | 0.311 | 0.337 | [0.080, 0.546] | 1.000 | -0.235 |
+| normal_fan_capacity | 12 | -0.286 | 0.331 | 0.371 | [0.101, 0.570] | 1.000 | -0.534 |
+| normal_fan_capacity_plus_drel | 12 | -0.286 | 0.329 | 0.366 | [0.093, 0.566] | 1.000 | -0.534 |
 
 ## Causal Alignment Interventions
 
@@ -167,101 +173,101 @@ Rows: `1200`. Runs: `80`.
 
 Rows: `16`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| balanced | 2 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| coord_block | 1 | 0.561 | 0.561 | NA | NA | NA | NA | NA | NA | NA |
-| edge_block | 9 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| entry_random | 4 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min | normal fan tree NMI | normal fan active trees |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| balanced | 2 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| coord_block | 1 | 0.561 | 0.561 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| edge_block | 9 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| entry_random | 4 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
 
 ### cycle
 
 Rows: `16`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| balanced | 2 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| coord_block | 1 | 0.561 | 0.561 | NA | NA | NA | NA | NA | NA | NA |
-| edge_block | 7 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| entry_random | 4 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| high_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| low_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min | normal fan tree NMI | normal fan active trees |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| balanced | 2 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| coord_block | 1 | 0.561 | 0.561 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| edge_block | 7 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| entry_random | 4 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| high_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| low_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
 
 ### hub
 
 Rows: `16`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| balanced | 3 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| coord_block | 1 | 0.561 | 0.561 | NA | NA | NA | NA | NA | NA | NA |
-| edge_block | 7 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| entry_random | 3 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| high_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
-| low_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min | normal fan tree NMI | normal fan active trees |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| balanced | 3 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| coord_block | 1 | 0.561 | 0.561 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| edge_block | 7 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| entry_random | 3 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| high_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| low_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
 
 ### n5_m7
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bottleneck_bridge | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
-| cycle_chords | 9 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
-| degree_balanced | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
-| random_sc | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min | normal fan tree NMI | normal fan active trees |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| cycle_chords | 9 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| degree_balanced | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| random_sc | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
 
 ### n5_m12
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bottleneck_bridge | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
-| cycle_chords | 4 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
-| degree_balanced | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
-| hub_spoke | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
-| random_sc | 2 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
-| redundant_paths | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
-| two_module | 2 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min | normal fan tree NMI | normal fan active trees |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| cycle_chords | 4 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| degree_balanced | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| hub_spoke | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| random_sc | 2 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| redundant_paths | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
+| two_module | 2 | 0.866 | 0.866 | NA | NA | NA | NA | NA | NA | NA | NA | NA |
 
 ### hard_n4_m6_N3_D2
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| cycle_chords | 9 | 0.877 | 0.877 | 0.877 | 0.877 | 0.383 | 0.440 | 2.677 | 1.000 | 3.556 |
-| hub_spoke | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.374 | 0.444 | 2.428 | 0.000 | 0.000 |
-| random_sc | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.382 | 0.426 | 2.664 | 1.000 | 4.000 |
-| two_module | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.375 | 0.452 | 2.425 | 0.000 | 0.000 |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min | normal fan tree NMI | normal fan active trees |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| cycle_chords | 9 | 0.877 | 0.877 | 0.877 | 0.877 | 0.383 | 0.440 | 2.677 | 1.000 | 3.556 | 0.025 | 8.269 |
+| hub_spoke | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.374 | 0.444 | 2.428 | 0.000 | 0.000 | 0.014 | 4.000 |
+| random_sc | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.382 | 0.426 | 2.664 | 1.000 | 4.000 | 0.019 | 7.000 |
+| two_module | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.375 | 0.452 | 2.425 | 0.000 | 0.000 | 0.016 | 4.000 |
 
 ### hard_n5_m8_N3_D2
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bottleneck_bridge | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.391 | 0.432 | 2.692 | 1.000 | 2.000 |
-| cycle_chords | 7 | 0.877 | 0.877 | 0.877 | 0.877 | 0.391 | 0.447 | 3.070 | 1.000 | 5.429 |
-| degree_balanced | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.392 | 0.436 | 3.114 | 1.000 | 4.000 |
-| hub_spoke | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.384 | 0.417 | 3.062 | 0.000 | 0.000 |
-| random_sc | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.399 | 0.440 | 2.899 | 1.000 | 6.000 |
-| redundant_paths | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.396 | 0.456 | 2.950 | 1.000 | 6.000 |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min | normal fan tree NMI | normal fan active trees |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.391 | 0.432 | 2.692 | 1.000 | 2.000 | 0.023 | 6.000 |
+| cycle_chords | 7 | 0.877 | 0.877 | 0.877 | 0.877 | 0.391 | 0.447 | 3.070 | 1.000 | 5.429 | 0.041 | 15.107 |
+| degree_balanced | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.392 | 0.436 | 3.114 | 1.000 | 4.000 | 0.026 | 9.000 |
+| hub_spoke | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.384 | 0.417 | 3.062 | 0.000 | 0.000 | 0.017 | 5.000 |
+| random_sc | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.399 | 0.440 | 2.899 | 1.000 | 6.000 | 0.044 | 16.000 |
+| redundant_paths | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.396 | 0.456 | 2.950 | 1.000 | 6.000 | 0.033 | 11.000 |
 
 ### hard_n5_m12_N3_D2
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bottleneck_bridge | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.401 | 0.455 | 2.844 | 1.000 | 14.000 |
-| cycle_chords | 4 | 0.877 | 0.877 | 0.877 | 0.877 | 0.395 | 0.457 | 3.079 | 1.000 | 13.000 |
-| degree_balanced | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.425 | 0.500 | 3.681 | 1.000 | 12.000 |
-| hub_spoke | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.382 | 0.425 | 3.099 | 1.000 | 12.000 |
-| random_sc | 2 | 0.877 | 0.877 | 0.877 | 0.877 | 0.389 | 0.433 | 3.144 | 1.000 | 14.000 |
-| redundant_paths | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.417 | 0.468 | 3.586 | 1.000 | 12.000 |
-| two_module | 2 | 0.877 | 0.877 | 0.877 | 0.877 | 0.394 | 0.455 | 3.050 | 1.000 | 14.000 |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank | rooted support frac | rooted branch best-rank min | normal fan tree NMI | normal fan active trees |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.401 | 0.455 | 2.844 | 1.000 | 14.000 | 0.072 | 38.167 |
+| cycle_chords | 4 | 0.877 | 0.877 | 0.877 | 0.877 | 0.395 | 0.457 | 3.079 | 1.000 | 13.000 | 0.080 | 49.208 |
+| degree_balanced | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.425 | 0.500 | 3.681 | 1.000 | 12.000 | 0.097 | 68.833 |
+| hub_spoke | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.382 | 0.425 | 3.099 | 1.000 | 12.000 | 0.068 | 32.333 |
+| random_sc | 2 | 0.877 | 0.877 | 0.877 | 0.877 | 0.389 | 0.433 | 3.144 | 1.000 | 14.000 | 0.092 | 62.042 |
+| redundant_paths | 1 | 0.877 | 0.877 | 0.877 | 0.877 | 0.417 | 0.468 | 3.586 | 1.000 | 12.000 | 0.087 | 55.500 |
+| two_module | 2 | 0.877 | 0.877 | 0.877 | 0.877 | 0.394 | 0.455 | 3.050 | 1.000 | 14.000 | 0.067 | 39.667 |
 
 ## Matched Essential-Motif Controls
 

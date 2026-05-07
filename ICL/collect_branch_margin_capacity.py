@@ -102,6 +102,22 @@ FIELDS = [
     "tropical_root_feature_variance_mean",
     "tropical_root_feature_variance_max",
     "tropical_root_feature_variance_std",
+    "normal_fan_trials",
+    "normal_fan_branch_root_nmi_mean",
+    "normal_fan_branch_root_nmi_max",
+    "normal_fan_branch_root_nmi_std",
+    "normal_fan_branch_tree_nmi_mean",
+    "normal_fan_branch_tree_nmi_max",
+    "normal_fan_branch_tree_nmi_std",
+    "normal_fan_active_root_count_mean",
+    "normal_fan_active_root_count_max",
+    "normal_fan_active_root_count_std",
+    "normal_fan_active_tree_count_mean",
+    "normal_fan_active_tree_count_max",
+    "normal_fan_active_tree_count_std",
+    "normal_fan_branch_active_tree_count_min_mean",
+    "normal_fan_branch_active_tree_count_min_max",
+    "normal_fan_branch_active_tree_count_min_std",
 ]
 
 
@@ -237,6 +253,14 @@ def summary(rows: List[dict]) -> dict:
             "rooted_polytope_branch_best_rank_min_mean": family_float_mean(
                 items,
                 "rooted_polytope_branch_best_rank_min",
+            ),
+            "normal_fan_branch_tree_nmi_mean": family_float_mean(
+                items,
+                "normal_fan_branch_tree_nmi_mean",
+            ),
+            "normal_fan_active_tree_count_mean": family_float_mean(
+                items,
+                "normal_fan_active_tree_count_mean",
             ),
         }
     return out

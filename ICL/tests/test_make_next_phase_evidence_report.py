@@ -84,6 +84,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
                             "linear_test_accuracy_mean": 0.8,
                             "linear_test_accuracy_max": 0.9,
                             "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
+                            "normal_fan_branch_tree_nmi_mean": 0.2,
                         }
                     },
                 },
@@ -142,6 +143,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
         self.assertIn("family boot delta R2", markdown)
         self.assertIn("branch_margin_capacity", markdown)
         self.assertIn("rooted support frac", markdown)
+        self.assertIn("normal fan tree NMI", markdown)
         self.assertIn("edge_projection_permutation", markdown)
         self.assertIn("Matched Essential-Motif Controls", markdown)
         self.assertIn("Extracted motifs beat these matched controls", markdown)

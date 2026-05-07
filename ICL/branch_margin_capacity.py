@@ -507,6 +507,164 @@ def tropical_root_feature_matrix(
     return features
 
 
+def tropical_active_tree_assignments(
+    z: np.ndarray,
+    arborescences: Mapping[int, Sequence[Sequence[int]]],
+    n_edges: int,
+    edge_projections: np.ndarray,
+    edge_bias: Optional[np.ndarray] = None,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Return active roots and active rooted trees for tropical tree scores."""
+
+    z = np.asarray(z, dtype=float)
+    edge_projections = np.asarray(edge_projections, dtype=float)
+    if edge_projections.ndim != 2 or edge_projections.shape[0] != n_edges:
+        raise ValueError(f"edge_projections must have shape ({n_edges}, p)")
+    if z.ndim != 2 or z.shape[1] != edge_projections.shape[1]:
+        raise ValueError("z and edge_projections have incompatible input dimensions")
+    if edge_bias is None:
+        bias = np.zeros(n_edges, dtype=float)
+    else:
+        bias = np.asarray(edge_bias, dtype=float)
+        if bias.shape != (n_edges,):
+            raise ValueError(f"edge_bias must have shape ({n_edges},)")
+
+    root_scores = []
+    active_by_root = []
+    tree_offset = 0
+    for root in sorted(arborescences):
+        trees = list(arborescences[root])
+        if not trees:
+            root_scores.append(np.full(z.shape[0], -np.inf, dtype=float))
+            active_by_root.append(np.full(z.shape[0], -1, dtype=int))
+            continue
+        M_root = np.ascontiguousarray(incidence_matrix({root: trees}, n_edges), dtype=float)
+        with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+            theta = M_root @ edge_projections
+            beta = M_root @ bias
+            tree_scores = z @ theta.T + beta[None, :]
+        local_active = np.argmax(tree_scores, axis=1)
+        root_scores.append(np.max(tree_scores, axis=1))
+        active_by_root.append(local_active.astype(int) + tree_offset)
+        tree_offset += len(trees)
+
+    scores = np.column_stack(root_scores)
+    active_tree_by_root = np.column_stack(active_by_root)
+    active_root = np.argmax(scores, axis=1).astype(int)
+    active_tree = active_tree_by_root[np.arange(z.shape[0]), active_root]
+    return scores, active_root, active_tree, active_tree_by_root
+
+
+def _entropy_from_labels(values: Sequence[int]) -> float:
+    arr = np.asarray(values, dtype=int).reshape(-1)
+    if arr.size == 0:
+        return 0.0
+    _, counts = np.unique(arr, return_counts=True)
+    probs = counts.astype(float) / float(arr.size)
+    return float(-np.sum(probs * np.log(probs)))
+
+
+def normalized_mutual_information(labels: Sequence[int], assignments: Sequence[int]) -> float:
+    """Symmetric normalized mutual information for discrete assignments."""
+
+    y = np.asarray(labels, dtype=int).reshape(-1)
+    a = np.asarray(assignments, dtype=int).reshape(-1)
+    if y.shape != a.shape:
+        raise ValueError("labels and assignments must have matching shape")
+    if y.size == 0:
+        return 0.0
+    hy = _entropy_from_labels(y)
+    ha = _entropy_from_labels(a)
+    if hy <= 1e-12 or ha <= 1e-12:
+        return 0.0
+    _, y_inv = np.unique(y, return_inverse=True)
+    _, a_inv = np.unique(a, return_inverse=True)
+    table = np.zeros((y_inv.max() + 1, a_inv.max() + 1), dtype=float)
+    np.add.at(table, (y_inv, a_inv), 1.0)
+    joint = table / float(y.size)
+    py = joint.sum(axis=1, keepdims=True)
+    pa = joint.sum(axis=0, keepdims=True)
+    denom = py @ pa
+    mask = joint > 0
+    mi = float(np.sum(joint[mask] * np.log(joint[mask] / denom[mask])))
+    return float(2.0 * mi / (hy + ha))
+
+
+def _branch_assignment_count_min(assignments: Sequence[int], labels: Sequence[int]) -> float:
+    y = np.asarray(labels, dtype=int).reshape(-1)
+    a = np.asarray(assignments, dtype=int).reshape(-1)
+    counts = [len(np.unique(a[y == label])) for label in np.unique(y)]
+    return float(min(counts)) if counts else 0.0
+
+
+def tree_normal_fan_coverage(
+    arborescences: Mapping[int, Sequence[Sequence[int]]],
+    n_edges: int,
+    input_dim: int,
+    z: np.ndarray,
+    labels: Sequence[int],
+    input_mask: Optional[np.ndarray] = None,
+    n_trials: int = 8,
+    seed: int = 0,
+    projection_radius: float = 1.0,
+    edge_bias_scale: float = 0.0,
+) -> dict:
+    """Sample whether rooted-tree normal fans produce branch-specific cells."""
+
+    if n_trials <= 0:
+        return {
+            "normal_fan_trials": 0,
+            "normal_fan_branch_root_nmi_mean": None,
+            "normal_fan_branch_tree_nmi_mean": None,
+            "normal_fan_branch_tree_nmi_max": None,
+            "normal_fan_active_root_count_mean": None,
+            "normal_fan_active_tree_count_mean": None,
+            "normal_fan_branch_active_tree_count_min_mean": None,
+        }
+    if input_mask is None:
+        mask = np.ones((n_edges, input_dim), dtype=float)
+    else:
+        mask = np.asarray(input_mask, dtype=float)
+        if mask.shape != (n_edges, input_dim):
+            raise ValueError(f"input_mask must have shape ({n_edges}, {input_dim})")
+
+    rng = np.random.default_rng(seed)
+    root_nmi = []
+    tree_nmi = []
+    root_counts = []
+    tree_counts = []
+    branch_tree_count_min = []
+    for _ in range(n_trials):
+        K = rng.normal(loc=0.0, scale=1.0, size=(n_edges, input_dim)) * mask
+        norm = float(np.linalg.norm(K))
+        if norm > 1e-12 and projection_radius > 0:
+            K = K * (projection_radius / norm)
+        if edge_bias_scale:
+            edge_bias = rng.normal(loc=0.0, scale=edge_bias_scale, size=n_edges)
+        else:
+            edge_bias = np.zeros(n_edges, dtype=float)
+        _, active_root, active_tree, _ = tropical_active_tree_assignments(
+            z,
+            arborescences,
+            n_edges=n_edges,
+            edge_projections=K,
+            edge_bias=edge_bias,
+        )
+        root_nmi.append(normalized_mutual_information(labels, active_root))
+        tree_nmi.append(normalized_mutual_information(labels, active_tree))
+        root_counts.append(float(len(np.unique(active_root))))
+        tree_counts.append(float(len(np.unique(active_tree))))
+        branch_tree_count_min.append(_branch_assignment_count_min(active_tree, labels))
+
+    out = {"normal_fan_trials": int(n_trials)}
+    out.update(_summarize_trial_values(root_nmi, "normal_fan_branch_root_nmi"))
+    out.update(_summarize_trial_values(tree_nmi, "normal_fan_branch_tree_nmi"))
+    out.update(_summarize_trial_values(root_counts, "normal_fan_active_root_count"))
+    out.update(_summarize_trial_values(tree_counts, "normal_fan_active_tree_count"))
+    out.update(_summarize_trial_values(branch_tree_count_min, "normal_fan_branch_active_tree_count_min"))
+    return out
+
+
 def _summarize_trial_values(values: Sequence[float], prefix: str) -> dict:
     finite = np.asarray([value for value in values if value is not None and np.isfinite(value)], dtype=float)
     if finite.size == 0:
@@ -855,6 +1013,20 @@ def branch_margin_capacity(
             l2_radius=l2_radius,
         )
     )
+    result.update(
+        tree_normal_fan_coverage(
+            mats["arborescences"],
+            n_edges=len(edge_tuple),
+            input_dim=p,
+            z=test_z,
+            labels=test_labels,
+            input_mask=input_mask,
+            n_trials=tree_feature_trials,
+            seed=seed + 2017,
+            projection_radius=tree_feature_projection_radius,
+            edge_bias_scale=tree_feature_bias_scale,
+        )
+    )
     return result
 
 
@@ -915,6 +1087,8 @@ def markdown_report(result: dict) -> str:
             f"| test accuracy mean/max | {result.get('tropical_linear_test_accuracy_mean')} / {result.get('tropical_linear_test_accuracy_max')} |",
             f"| test p10 margin mean/max | {result.get('tropical_linear_test_margin_p10_mean')} / {result.get('tropical_linear_test_margin_p10_max')} |",
             f"| root feature effective rank mean/max | {result.get('tropical_root_feature_effective_rank_mean')} / {result.get('tropical_root_feature_effective_rank_max')} |",
+            f"| normal fan branch-tree NMI mean/max | {result.get('normal_fan_branch_tree_nmi_mean')} / {result.get('normal_fan_branch_tree_nmi_max')} |",
+            f"| normal fan active tree count mean | {result.get('normal_fan_active_tree_count_mean')} |",
         ]
     )
     lines.extend(

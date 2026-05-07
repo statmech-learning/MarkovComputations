@@ -204,6 +204,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 9,
+          "normal_fan_active_tree_count_mean": 8.268518518518519,
+          "normal_fan_branch_tree_nmi_mean": 0.02470813566397456,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 3.5555555555555554,
@@ -217,6 +219,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 4.0,
+          "normal_fan_branch_tree_nmi_mean": 0.014055680081523886,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 0.0,
@@ -230,6 +234,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 7.0,
+          "normal_fan_branch_tree_nmi_mean": 0.018952654182300504,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 4.0,
@@ -243,6 +249,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 4.0,
+          "normal_fan_branch_tree_nmi_mean": 0.016041106516869415,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 0.0,
@@ -263,6 +271,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 6.0,
+          "normal_fan_branch_tree_nmi_mean": 0.02273161113397389,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 2.0,
@@ -276,6 +286,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.8769999999999999,
           "n": 7,
+          "normal_fan_active_tree_count_mean": 15.107142857142858,
+          "normal_fan_branch_tree_nmi_mean": 0.040668745092543375,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.8769999999999999,
           "rooted_polytope_branch_best_rank_min_mean": 5.428571428571429,
@@ -289,6 +301,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 9.0,
+          "normal_fan_branch_tree_nmi_mean": 0.026277980167514998,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 4.0,
@@ -302,6 +316,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 5.0,
+          "normal_fan_branch_tree_nmi_mean": 0.017332785747874387,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 0.0,
@@ -315,6 +331,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 16.0,
+          "normal_fan_branch_tree_nmi_mean": 0.043948346616798535,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 6.0,
@@ -328,6 +346,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 11.0,
+          "normal_fan_branch_tree_nmi_mean": 0.03301292810377168,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 6.0,
@@ -348,6 +368,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 38.166666666666664,
+          "normal_fan_branch_tree_nmi_mean": 0.07236672471046258,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 14.0,
@@ -361,6 +383,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 4,
+          "normal_fan_active_tree_count_mean": 49.208333333333336,
+          "normal_fan_branch_tree_nmi_mean": 0.08020375273244264,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 13.0,
@@ -374,6 +398,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 68.83333333333333,
+          "normal_fan_branch_tree_nmi_mean": 0.09701638576594894,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 12.0,
@@ -387,6 +413,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 32.333333333333336,
+          "normal_fan_branch_tree_nmi_mean": 0.06801362771254571,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 12.0,
@@ -400,6 +428,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 2,
+          "normal_fan_active_tree_count_mean": 62.04166666666667,
+          "normal_fan_branch_tree_nmi_mean": 0.09210699463529554,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 14.0,
@@ -413,6 +443,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 1,
+          "normal_fan_active_tree_count_mean": 55.5,
+          "normal_fan_branch_tree_nmi_mean": 0.0865557843705716,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 12.0,
@@ -426,6 +458,8 @@
           "linear_test_accuracy_max": 0.877,
           "linear_test_accuracy_mean": 0.877,
           "n": 2,
+          "normal_fan_active_tree_count_mean": 39.66666666666667,
+          "normal_fan_branch_tree_nmi_mean": 0.06747180353817836,
           "rank_weighted_linear_test_accuracy_max": 0.877,
           "rank_weighted_linear_test_accuracy_mean": 0.877,
           "rooted_polytope_branch_best_rank_min_mean": 14.0,
@@ -1030,6 +1064,34 @@
           "heldout_family_pooled_r2": 0.2240105692880875,
           "heldout_family_rmse": 1.8496135041571424
         },
+        "normal_fan_capacity": {
+          "bootstrap_delta_ci95": [
+            0.025942678336672225,
+            0.23699088247058842
+          ],
+          "bootstrap_delta_mean": 0.10887988036910178,
+          "bootstrap_prob_positive": 1.0,
+          "family_bootstrap_delta_mean": 0.10376947205905185,
+          "family_bootstrap_prob_positive": 0.992,
+          "group_loo_r2": -0.4605804134560161,
+          "group_n": 12,
+          "heldout_family_pooled_r2": 0.2175361959487545,
+          "heldout_family_rmse": 1.8573134890889191
+        },
+        "normal_fan_capacity_plus_drel": {
+          "bootstrap_delta_ci95": [
+            0.02788709348154056,
+            0.24587682819696502
+          ],
+          "bootstrap_delta_mean": 0.1162976534716522,
+          "bootstrap_prob_positive": 1.0,
+          "family_bootstrap_delta_mean": 0.10794186306385885,
+          "family_bootstrap_prob_positive": 0.988,
+          "group_loo_r2": -0.60953498845372,
+          "group_n": 12,
+          "heldout_family_pooled_r2": 0.3140089320143171,
+          "heldout_family_rmse": 1.7390509862958496
+        },
         "raw_count": {
           "bootstrap_delta_ci95": null,
           "bootstrap_delta_mean": null,
@@ -1204,6 +1266,34 @@
           "group_n": 12,
           "heldout_family_pooled_r2": -0.11651754211084953,
           "heldout_family_rmse": 3.5954037952370816
+        },
+        "normal_fan_capacity": {
+          "bootstrap_delta_ci95": [
+            0.029401334917702696,
+            0.3360688329293042
+          ],
+          "bootstrap_delta_mean": 0.17054740853737707,
+          "bootstrap_prob_positive": 1.0,
+          "family_bootstrap_delta_mean": 0.1516635759281794,
+          "family_bootstrap_prob_positive": 1.0,
+          "group_loo_r2": -1.2759954621161018,
+          "group_n": 12,
+          "heldout_family_pooled_r2": -3.0573384322172243,
+          "heldout_family_rmse": 6.85386450364813
+        },
+        "normal_fan_capacity_plus_drel": {
+          "bootstrap_delta_ci95": [
+            0.04934033486421265,
+            0.3607817392999473
+          ],
+          "bootstrap_delta_mean": 0.20190871577366276,
+          "bootstrap_prob_positive": 1.0,
+          "family_bootstrap_delta_mean": 0.1707480788025767,
+          "family_bootstrap_prob_positive": 1.0,
+          "group_loo_r2": -2.161448663458836,
+          "group_n": 12,
+          "heldout_family_pooled_r2": -1.5712991548542812,
+          "heldout_family_rmse": 5.4562115506079305
         },
         "raw_count": {
           "bootstrap_delta_ci95": null,
@@ -1380,6 +1470,34 @@
           "heldout_family_pooled_r2": 0.39902581465758813,
           "heldout_family_rmse": 4.559246520512629
         },
+        "normal_fan_capacity": {
+          "bootstrap_delta_ci95": [
+            0.10054785825752338,
+            0.5701276800647762
+          ],
+          "bootstrap_delta_mean": 0.3309786069799136,
+          "bootstrap_prob_positive": 1.0,
+          "family_bootstrap_delta_mean": 0.3708455460799735,
+          "family_bootstrap_prob_positive": 1.0,
+          "group_loo_r2": -0.28602604642178164,
+          "group_n": 12,
+          "heldout_family_pooled_r2": -0.5337122597535038,
+          "heldout_family_rmse": 7.283449463270183
+        },
+        "normal_fan_capacity_plus_drel": {
+          "bootstrap_delta_ci95": [
+            0.09306520651868096,
+            0.5658580048865869
+          ],
+          "bootstrap_delta_mean": 0.32872503800807884,
+          "bootstrap_prob_positive": 1.0,
+          "family_bootstrap_delta_mean": 0.36627654603383564,
+          "family_bootstrap_prob_positive": 1.0,
+          "group_loo_r2": -0.2860260464217792,
+          "group_n": 12,
+          "heldout_family_pooled_r2": -0.53371225975351,
+          "heldout_family_rmse": 7.283449463270198
+        },
         "raw_count": {
           "bootstrap_delta_ci95": null,
           "bootstrap_delta_mean": null,
@@ -1519,7 +1637,7 @@
       "root": "results/expanded_hard_sweeps/n5_m12_N3_D2"
     }
   ],
-  "generated_at": "2026-05-07T22:36:16.243143+00:00",
+  "generated_at": "2026-05-07T22:49:05.103909+00:00",
   "matched_motif_controls": [
     {
       "by_control_kind": {

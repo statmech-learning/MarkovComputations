@@ -84,6 +84,34 @@
       "n_bootstrap_effective": 500,
       "prob_delta_positive": 1.0
     },
+    "normal_fan_capacity": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -2.886579864025407e-18,
+      "candidate": "normal_fan_capacity",
+      "candidate_r2_mean": 0.17054740853737702,
+      "delta_ci95": [
+        0.029401334917702696,
+        0.3360688329293042
+      ],
+      "delta_mean": 0.17054740853737707,
+      "delta_median": 0.1666438232440811,
+      "n_bootstrap_effective": 500,
+      "prob_delta_positive": 1.0
+    },
+    "normal_fan_capacity_plus_drel": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -2.4202861936828413e-17,
+      "candidate": "normal_fan_capacity_plus_drel",
+      "candidate_r2_mean": 0.20190871577366273,
+      "delta_ci95": [
+        0.04934033486421265,
+        0.3607817392999473
+      ],
+      "delta_mean": 0.20190871577366276,
+      "delta_median": 0.19971484295690767,
+      "n_bootstrap_effective": 500,
+      "prob_delta_positive": 1.0
+    },
     "raw_plus_drel": {
       "baseline": "raw_count",
       "baseline_r2_mean": -5.10702591327572e-18,
@@ -262,6 +290,38 @@
       ],
       "delta_mean": 0.15366589534531958,
       "delta_median": 0.15367607409022133,
+      "family_col": "derived_graph_family",
+      "n_bootstrap_effective": 500,
+      "n_families": 6,
+      "prob_delta_positive": 1.0
+    },
+    "normal_fan_capacity": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -9.325873406851316e-18,
+      "candidate": "normal_fan_capacity",
+      "candidate_r2_mean": 0.15166357592817936,
+      "delta_ci95": [
+        0.025914150244630115,
+        0.299765924079429
+      ],
+      "delta_mean": 0.1516635759281794,
+      "delta_median": 0.15089254324425583,
+      "family_col": "derived_graph_family",
+      "n_bootstrap_effective": 500,
+      "n_families": 6,
+      "prob_delta_positive": 1.0
+    },
+    "normal_fan_capacity_plus_drel": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": 2.886579864025407e-18,
+      "candidate": "normal_fan_capacity_plus_drel",
+      "candidate_r2_mean": 0.1707480788025767,
+      "delta_ci95": [
+        0.018465548295766968,
+        0.33002523399097633
+      ],
+      "delta_mean": 0.1707480788025767,
+      "delta_median": 0.17364860536759502,
       "family_col": "derived_graph_family",
       "n_bootstrap_effective": 500,
       "n_families": 6,
@@ -506,6 +566,56 @@
         ],
         "r2": 0.4877728016782832,
         "rmse": 2.7826548141352263
+      },
+      "normal_fan_capacity": {
+        "coefficients": [
+          82.50000000000001,
+          7.105427357601002e-15,
+          14.187280533642337,
+          2.7520129245280254,
+          48.18054553708496,
+          -62.094883176369784
+        ],
+        "leave_one_out_r2": 0.25659774664302304,
+        "n": 12,
+        "n_groups_or_rows": 12,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "capacity_normal_fan_branch_tree_nmi_mean",
+          "capacity_normal_fan_branch_tree_nmi_max",
+          "capacity_normal_fan_active_tree_count_mean",
+          "capacity_normal_fan_branch_active_tree_count_min_mean"
+        ],
+        "r2": 0.8629685763158486,
+        "rmse": 1.4392561810505065
+      },
+      "normal_fan_capacity_plus_drel": {
+        "coefficients": [
+          82.50000000000001,
+          4.263256414560601e-14,
+          0.1774402871743178,
+          0.17744028717426807,
+          0.0,
+          14.370601724237414,
+          2.358344427319899,
+          50.7858491850313,
+          -64.73453083846249
+        ],
+        "leave_one_out_r2": -0.05383679127801844,
+        "n": 12,
+        "n_groups_or_rows": 12,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "capacity_normal_fan_branch_tree_nmi_mean",
+          "capacity_normal_fan_branch_tree_nmi_max",
+          "capacity_normal_fan_active_tree_count_mean",
+          "capacity_normal_fan_branch_active_tree_count_min_mean"
+        ],
+        "r2": 0.8653436480638499,
+        "rmse": 1.4267288413598909
       },
       "raw_count": {
         "coefficients": [
@@ -811,6 +921,56 @@
         "r2": 0.6653931565533492,
         "rmse": 1.9682592747758059
       },
+      "normal_fan_capacity": {
+        "coefficients": [
+          75.39000000000001,
+          0.0,
+          8.454092407987012,
+          -1.6312335665208795,
+          35.12616284534089,
+          -40.31109637206154
+        ],
+        "leave_one_out_r2": -1.2759954621161018,
+        "n": 12,
+        "n_groups_or_rows": 12,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "capacity_normal_fan_branch_tree_nmi_mean",
+          "capacity_normal_fan_branch_tree_nmi_max",
+          "capacity_normal_fan_active_tree_count_mean",
+          "capacity_normal_fan_branch_active_tree_count_min_mean"
+        ],
+        "r2": 0.4817487080566538,
+        "rmse": 2.4495431478116223
+      },
+      "normal_fan_capacity_plus_drel": {
+        "coefficients": [
+          75.39000000000001,
+          4.263256414560601e-14,
+          1.0014750173864837,
+          1.0014750173864375,
+          0.0,
+          9.488759311778658,
+          -3.8531030831024324,
+          49.830526536779416,
+          -55.20929807352631
+        ],
+        "leave_one_out_r2": -2.161448663458836,
+        "n": 12,
+        "n_groups_or_rows": 12,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "capacity_normal_fan_branch_tree_nmi_mean",
+          "capacity_normal_fan_branch_tree_nmi_max",
+          "capacity_normal_fan_active_tree_count_mean",
+          "capacity_normal_fan_branch_active_tree_count_min_mean"
+        ],
+        "r2": 0.5805309213542778,
+        "rmse": 2.203762928640989
+      },
       "raw_count": {
         "coefficients": [
           75.39000000000001,
@@ -1114,6 +1274,56 @@
         ],
         "r2": 0.18608380609948105,
         "rmse": 1.5167859247850104
+      },
+      "normal_fan_capacity": {
+        "coefficients": [
+          5.533417010485645,
+          0.0,
+          4.880434550893947,
+          1.925467932553026,
+          7.935473080703676,
+          -13.814816488041853
+        ],
+        "leave_one_out_r2": 0.2738400040148684,
+        "n": 12,
+        "n_groups_or_rows": 12,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "capacity_normal_fan_branch_tree_nmi_mean",
+          "capacity_normal_fan_branch_tree_nmi_max",
+          "capacity_normal_fan_active_tree_count_mean",
+          "capacity_normal_fan_branch_active_tree_count_min_mean"
+        ],
+        "r2": 0.6296425981351623,
+        "rmse": 1.023163313249988
+      },
+      "normal_fan_capacity_plus_drel": {
+        "coefficients": [
+          5.5334170104856435,
+          9.769962616701378e-15,
+          -0.006538594884906838,
+          -0.0065385948849197165,
+          -1.7763568394002505e-15,
+          4.873679247359352,
+          1.939974439858603,
+          7.839468811450984,
+          -13.717546657293473
+        ],
+        "leave_one_out_r2": -0.005875944529867727,
+        "n": 12,
+        "n_groups_or_rows": 12,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "capacity_normal_fan_branch_tree_nmi_mean",
+          "capacity_normal_fan_branch_tree_nmi_max",
+          "capacity_normal_fan_active_tree_count_mean",
+          "capacity_normal_fan_branch_active_tree_count_min_mean"
+        ],
+        "r2": 0.6296598457195031,
+        "rmse": 1.0231394885594156
       },
       "raw_count": {
         "coefficients": [
@@ -1578,6 +1788,107 @@
         "input_coord_load_gini"
       ]
     },
+    "normal_fan_capacity": {
+      "families": [
+        {
+          "family": "bottleneck_bridge",
+          "n": 1,
+          "r2": null,
+          "rmse": 7.024976371834626
+        },
+        {
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -4.564055542311079,
+          "rmse": 8.520178272516082
+        },
+        {
+          "family": "degree_balanced",
+          "n": 1,
+          "r2": null,
+          "rmse": 0.9726404134396347
+        },
+        {
+          "family": "hub_spoke",
+          "n": 1,
+          "r2": null,
+          "rmse": 0.7895390305301362
+        },
+        {
+          "family": "random_sc",
+          "n": 1,
+          "r2": null,
+          "rmse": 0.2785952025346319
+        },
+        {
+          "family": "redundant_paths",
+          "n": 1,
+          "r2": null,
+          "rmse": 2.134040645801136
+        }
+      ],
+      "pooled_r2": -3.0573384322172243,
+      "pooled_rmse": 6.85386450364813,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_tree_nmi_max",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ]
+    },
+    "normal_fan_capacity_plus_drel": {
+      "families": [
+        {
+          "family": "bottleneck_bridge",
+          "n": 1,
+          "r2": null,
+          "rmse": 6.7623177027420525
+        },
+        {
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -1.1124224206871487,
+          "rmse": 5.24980700103096
+        },
+        {
+          "family": "degree_balanced",
+          "n": 1,
+          "r2": null,
+          "rmse": 0.053059852248622974
+        },
+        {
+          "family": "hub_spoke",
+          "n": 1,
+          "r2": null,
+          "rmse": 10.143476554113121
+        },
+        {
+          "family": "random_sc",
+          "n": 1,
+          "r2": null,
+          "rmse": 0.4384295718706426
+        },
+        {
+          "family": "redundant_paths",
+          "n": 1,
+          "r2": null,
+          "rmse": 3.9377056554877896
+        }
+      ],
+      "pooled_r2": -1.5712991548542812,
+      "pooled_rmse": 5.4562115506079305,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_tree_nmi_max",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ]
+    },
     "raw_count": {
       "families": [
         {
@@ -1977,6 +2288,22 @@
       "n_clusters": 12,
       "residual_std_between_cluster_means": 1.968259274775808,
       "residual_std_total": 6.108958823406351,
+      "residual_var_within_cluster_mean": 33.44533333333333
+    },
+    "normal_fan_capacity": {
+      "model": "normal_fan_capacity",
+      "n": 60,
+      "n_clusters": 12,
+      "residual_std_between_cluster_means": 2.449543147811618,
+      "residual_std_total": 6.280572821512713,
+      "residual_var_within_cluster_mean": 33.44533333333333
+    },
+    "normal_fan_capacity_plus_drel": {
+      "model": "normal_fan_capacity_plus_drel",
+      "n": 60,
+      "n_clusters": 12,
+      "residual_std_between_cluster_means": 2.2037629286409883,
+      "residual_std_total": 6.188853236180806,
       "residual_var_within_cluster_mean": 33.44533333333333
     },
     "raw_count": {

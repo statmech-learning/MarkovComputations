@@ -11,7 +11,9 @@
       "tropical_linear_test_accuracy_max": 0.432,
       "tropical_root_feature_effective_rank_mean": 2.6924936589314057,
       "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
-      "rooted_polytope_branch_best_rank_min_mean": 2.0
+      "rooted_polytope_branch_best_rank_min_mean": 2.0,
+      "normal_fan_branch_tree_nmi_mean": 0.02273161113397389,
+      "normal_fan_active_tree_count_mean": 6.0
     },
     "cycle_chords": {
       "n": 7,
@@ -23,7 +25,9 @@
       "tropical_linear_test_accuracy_max": 0.447,
       "tropical_root_feature_effective_rank_mean": 3.0701999123279458,
       "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
-      "rooted_polytope_branch_best_rank_min_mean": 5.428571428571429
+      "rooted_polytope_branch_best_rank_min_mean": 5.428571428571429,
+      "normal_fan_branch_tree_nmi_mean": 0.040668745092543375,
+      "normal_fan_active_tree_count_mean": 15.107142857142858
     },
     "degree_balanced": {
       "n": 1,
@@ -35,7 +39,9 @@
       "tropical_linear_test_accuracy_max": 0.436,
       "tropical_root_feature_effective_rank_mean": 3.113911398125324,
       "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
-      "rooted_polytope_branch_best_rank_min_mean": 4.0
+      "rooted_polytope_branch_best_rank_min_mean": 4.0,
+      "normal_fan_branch_tree_nmi_mean": 0.026277980167514998,
+      "normal_fan_active_tree_count_mean": 9.0
     },
     "hub_spoke": {
       "n": 1,
@@ -47,7 +53,9 @@
       "tropical_linear_test_accuracy_max": 0.417,
       "tropical_root_feature_effective_rank_mean": 3.0619821744250206,
       "rooted_polytope_supported_branch_dim_fraction_mean": 0.0,
-      "rooted_polytope_branch_best_rank_min_mean": 0.0
+      "rooted_polytope_branch_best_rank_min_mean": 0.0,
+      "normal_fan_branch_tree_nmi_mean": 0.017332785747874387,
+      "normal_fan_active_tree_count_mean": 5.0
     },
     "random_sc": {
       "n": 1,
@@ -59,7 +67,9 @@
       "tropical_linear_test_accuracy_max": 0.44,
       "tropical_root_feature_effective_rank_mean": 2.8987781131777854,
       "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
-      "rooted_polytope_branch_best_rank_min_mean": 6.0
+      "rooted_polytope_branch_best_rank_min_mean": 6.0,
+      "normal_fan_branch_tree_nmi_mean": 0.043948346616798535,
+      "normal_fan_active_tree_count_mean": 16.0
     },
     "redundant_paths": {
       "n": 1,
@@ -71,7 +81,9 @@
       "tropical_linear_test_accuracy_max": 0.456,
       "tropical_root_feature_effective_rank_mean": 2.95039727335508,
       "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
-      "rooted_polytope_branch_best_rank_min_mean": 6.0
+      "rooted_polytope_branch_best_rank_min_mean": 6.0,
+      "normal_fan_branch_tree_nmi_mean": 0.03301292810377168,
+      "normal_fan_active_tree_count_mean": 11.0
     }
   }
 }

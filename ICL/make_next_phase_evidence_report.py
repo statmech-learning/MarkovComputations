@@ -39,6 +39,8 @@ CORE_MODELS = [
     "tropical_tree_capacity_plus_drel",
     "rooted_tree_polytope_capacity",
     "rooted_tree_polytope_capacity_plus_drel",
+    "normal_fan_capacity",
+    "normal_fan_capacity_plus_drel",
 ]
 
 
@@ -156,6 +158,8 @@ def capacity_summary(entry: dict) -> dict:
                 "rooted_polytope_branch_best_rank_min_mean": stats.get(
                     "rooted_polytope_branch_best_rank_min_mean"
                 ),
+                "normal_fan_branch_tree_nmi_mean": stats.get("normal_fan_branch_tree_nmi_mean"),
+                "normal_fan_active_tree_count_mean": stats.get("normal_fan_active_tree_count_mean"),
             }
         )
     return {
@@ -371,6 +375,8 @@ def build_markdown(report: dict) -> str:
                 fmt(item.get("tropical_root_feature_effective_rank_mean")),
                 fmt(item.get("rooted_polytope_supported_branch_dim_fraction_mean")),
                 fmt(item.get("rooted_polytope_branch_best_rank_min_mean")),
+                fmt(item.get("normal_fan_branch_tree_nmi_mean")),
+                fmt(item.get("normal_fan_active_tree_count_mean")),
             ]
             for item in entry["families"]
         ]
@@ -388,6 +394,8 @@ def build_markdown(report: dict) -> str:
                     "tropical root eff-rank",
                     "rooted support frac",
                     "rooted branch best-rank min",
+                    "normal fan tree NMI",
+                    "normal fan active trees",
                 ],
                 rows,
             )

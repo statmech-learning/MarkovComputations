@@ -67,6 +67,8 @@ DEFAULT_MODELS = [
     "tropical_tree_capacity_plus_drel",
     "rooted_tree_polytope_capacity",
     "rooted_tree_polytope_capacity_plus_drel",
+    "normal_fan_capacity",
+    "normal_fan_capacity_plus_drel",
 ]
 
 

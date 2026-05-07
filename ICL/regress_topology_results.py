@@ -152,6 +152,23 @@ PREDICTOR_SETS = {
         "capacity_rooted_polytope_branch_best_rank_min",
         "capacity_rooted_polytope_root_rank_mass_gini",
     ],
+    "normal_fan_capacity": [
+        "input_coupled_parameter_count",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_tree_nmi_max",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean",
+    ],
+    "normal_fan_capacity_plus_drel": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_tree_nmi_max",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean",
+    ],
 }
 
 

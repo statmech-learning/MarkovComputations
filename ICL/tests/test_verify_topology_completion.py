@@ -121,6 +121,7 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
         hard_family_col="derived_graph_family",
         include_family_bootstrap=True,
         include_rooted_polytope=True,
+        include_normal_fan=True,
         hard_mechanism_count=0,
         hard_causal_count=0,
     ):
@@ -186,6 +187,20 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
                         if include_rooted_polytope and label.startswith("hard_")
                         else {}
                     ),
+                    **(
+                        {
+                            "normal_fan_capacity": {
+                                "group_loo_r2": 0.2,
+                                **(
+                                    {"family_bootstrap_delta_mean": 0.25}
+                                    if include_family_bootstrap and label.startswith("hard_")
+                                    else {}
+                                ),
+                            }
+                        }
+                        if include_normal_fan and label.startswith("hard_")
+                        else {}
+                    ),
                 },
             }
             for label in labels
@@ -202,6 +217,11 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
                         **(
                             {"rooted_polytope_supported_branch_dim_fraction_mean": 1.0}
                             if include_rooted_polytope
+                            else {}
+                        ),
+                        **(
+                            {"normal_fan_branch_tree_nmi_mean": 0.2}
+                            if include_normal_fan
                             else {}
                         ),
                     }
@@ -474,6 +494,28 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("missing rooted_tree_polytope_capacity model", result.stdout)
         self.assertIn("missing rooted polytope support summary", result.stdout)
+
+    def test_next_phase_report_kind_requires_normal_fan_for_hard_regimes(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            report_md, report_json = self.write_next_phase_report(
+                tmpdir,
+                include_normal_fan=False,
+            )
+            result = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    report_md,
+                    "--report_json",
+                    report_json,
+                    "--report_kind",
+                    "next_phase",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing normal_fan_capacity model", result.stdout)
+        self.assertIn("missing normal-fan coverage summary", result.stdout)
 
     def test_next_phase_report_kind_can_require_expanded_followups(self):
         with tempfile.TemporaryDirectory() as tmpdir:

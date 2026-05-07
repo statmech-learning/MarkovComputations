@@ -81,9 +81,11 @@ class CollectBranchMarginCapacityTests(unittest.TestCase):
         self.assertEqual(rows[0]["n_context"], "2")
         self.assertTrue(float(rows[0]["oracle_test_accuracy"]) >= 0.0)
         self.assertTrue(float(rows[0]["rooted_polytope_supported_branch_dim_fraction"]) >= 0.0)
+        self.assertTrue(float(rows[0]["normal_fan_branch_tree_nmi_mean"]) >= 0.0)
         self.assertEqual(summary["n_rows"], 1)
         self.assertIn("complete", summary["families"])
         self.assertIn("rooted_polytope_supported_branch_dim_fraction_mean", summary["families"]["complete"])
+        self.assertIn("normal_fan_branch_tree_nmi_mean", summary["families"]["complete"])
         self.assertIn("Wrote 1 branch-margin capacity rows", result.stdout)
 
 
