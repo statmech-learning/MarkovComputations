@@ -31,6 +31,13 @@ RETRAIN_FILES = [
 ]
 REQUIRED_RETRAIN_RUN_FILES = ["results.pkl", "topology_metrics.json", "config.json"]
 
+SOURCE_EXCLUDED_DIR_NAMES = {
+    "essential_input50",
+    "essential_input50_retrain",
+    "essential_inputmask50",
+    "essential_inputmask50_retrain",
+}
+
 
 def parse_experiment(raw):
     if "=" in raw:
@@ -142,6 +149,13 @@ def source_status(root, exclude_roots=None):
         "mechanism_metrics_json": count_files(root, "mechanism_metrics.json", exclude_roots=exclude_roots),
         "files": file_status(root, SOURCE_FILES),
     }
+
+
+def source_exclude_roots(root, args):
+    names = set(SOURCE_EXCLUDED_DIR_NAMES)
+    names.add(args.essential_directory)
+    names.add(args.retrain_directory)
+    return [os.path.join(root, name) for name in names]
 
 
 def validate_edge_json(path):
@@ -413,10 +427,7 @@ def comparison_status(root, essential_directory):
 def audit_experiment(name, root, args):
     source = source_status(
         root,
-        exclude_roots=[
-            os.path.join(root, args.essential_directory),
-            os.path.join(root, args.retrain_directory),
-        ],
+        exclude_roots=source_exclude_roots(root, args),
     )
     essential = essential_status(root, args.essential_directory, args.essential_kind)
     retrain = retrain_status(

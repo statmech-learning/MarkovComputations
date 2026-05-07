@@ -407,6 +407,13 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
             )
             with open(os.path.join(essential_dir, "retrain_comparison.json"), "w") as f:
                 json.dump({"n_joined": 1}, f)
+            other_layout_run = os.path.join(
+                root,
+                "essential_inputmask50_retrain",
+                "mask0_trainseed1",
+            )
+            for filename in ["results.pkl", "topology_metrics.json", "config.json"]:
+                self.touch(os.path.join(other_layout_run, filename), b"{}")
 
             result = self.run_audit(
                 [
@@ -420,12 +427,15 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
                     "essential_input50_retrain",
                     "--essential_kind",
                     "physical",
+                    "--require_source_results",
+                    "--require_mechanisms",
                     "--require_essential",
                     "--require_essential_retrains",
                     "--strict",
                 ]
             )
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn("source: results=1 metrics=1 mechanisms=1", result.stdout)
         self.assertIn("kind=physical", result.stdout)
         self.assertIn("status: ok", result.stdout)
 
