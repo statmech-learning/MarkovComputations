@@ -13,6 +13,72 @@ This audit maps the active research objective to concrete repository artifacts. 
 - Next-phase report verifier: `python3 ICL/verify_topology_completion.py --experiment next=ICL/results/next_phase_stats --report_md ICL/results/next_phase_stats/next_phase_evidence_report.md --report_json ICL/results/next_phase_stats/next_phase_evidence_report.json --report_kind next_phase`, passed. The verifier now requires hard-regime reports to expose `derived_graph_family` holdout and family-cluster bootstrap metrics. An optional stricter gate, `--require_expanded_followups`, intentionally fails on the current report until hard-pilot mechanism and causal follow-up counts are nonzero.
 - Main next-phase report: `ICL/results/next_phase_stats/next_phase_evidence_report.md`, refreshed with hard-regime rank-weighted and tropical rooted-tree random-feature capacity metrics. Hard-regime held-out rows now use derived graph-family labels rather than full topology-instance names, and hard-regime uncertainty tables include both topology-cluster and family-cluster bootstrap deltas. `ICL/run_expanded_hard_followups.py` now provides a guarded submit/collect/refresh/strict-verify path for the hard regimes and refuses to finalize source-light roots with no raw `results.pkl` files. `ICL/refresh_next_phase_report.py` can update only selected labeled sections after new cluster artifacts land, while preserving existing sections if the active checkout lacks raw per-run files.
 
+## Completion Criteria Audit
+
+The active objective is not a single software feature. It requires a
+statistically and theoretically defensible first-order CRN topology theory with
+inspectable evidence for every link in the chain below. Passing unit tests or a
+non-strict report verifier is not sufficient by itself, because those checks do
+not create missing mechanism or causal evidence for the expanded hard regimes.
+
+| Objective clause | Required evidence for completion | Current inspected evidence | Completion judgment |
+| --- | --- | --- | --- |
+| Audit the implementation | Orientation, bias, strong-connectivity, selection, and novel-class metric checks must be documented and enforced by verifiers/tests. | `TOPOLOGY_THEORY_AUDIT.md`, `audit_topology_artifacts.py`, `verify_topology_completion.py`, and their tests are present. | Complete for committed artifacts. |
+| Upgrade inference to hierarchical/clustered analysis | Group-level or clustered analysis must avoid treating nested seeds as fully independent and must report uncertainty beyond naive run-level regression. | `clustered_topology_inference.py`, topology-cluster bootstrap, family-cluster bootstrap, random-intercept residual decomposition, and next-phase report tables are present. | Complete for tested regimes. |
+| Expand matched topology sweeps | There must be matched fixed-count studies beyond the original `N_n=6,m=20` regime, with fixed trainable-count controls and novel-class ICL outputs. | Hard-pilot summaries exist for `n4_m6_N3_D2`, `n5_m8_N3_D2`, and `n5_m12_N3_D2`; each has `60` topology rows in `run_expanded_hard_followups.py --status`. | Partial: pilot coverage exists, but not the full planned grid. |
+| Replace `d_rel` with branch-margin/tree-polytope probes | A branch-separation capacity proxy or theory must be implemented and compared against `d_rel`. | `branch_margin_capacity.py` includes rank-weighted and tropical rooted-tree random-feature diagnostics; hard-regime branch-capacity regressions are reported. | Partial: useful lower-bound probes exist, but this is not yet a solved tree-polytope capacity law. |
+| Test held-out-family generalization | Regression must leave out graph families, not individual topology-instance labels, and report held-out-family performance. | Hard clustered reports use `family_col == "derived_graph_family"`; verifier checks this and Markdown exposes the family holdout. | Complete for current hard pilots; still limited by small family counts. |
+| Validate mechanisms with matched motifs | Extracted motifs must be compared against matched controls rather than only raw sparse masks. | `make_matched_motif_controls.py`, `compare_matched_motif_controls.py`, and matched-control report sections are present. | Complete for original fixed-count backbones; not a universal motif law. |
+| Validate mechanisms with active-tree diagnostics | Expanded hard regimes must have post-training mechanism metrics, not only pre-training structural predictors. | Original regimes have mechanism diagnostics. Hard status currently reports `mechanisms=0` for all three hard regimes. | Incomplete. |
+| Validate mechanisms with causal tree-branch interventions | Expanded hard regimes must have causal intervention summaries showing whether tree/branch alignment matters after training. | Original regimes have causal summaries. Hard status currently reports `causal=0` for all three hard regimes. | Incomplete. |
+| Preserve first-order scope | Claims must be limited to first-order CRNs with exponential input-dependent rates unless separate nonlinear theory is developed. | Next-phase report scope and interpretation guardrails explicitly limit the claim. | Complete. |
+
+The strict completion gate encodes the two currently missing expanded-regime
+mechanism requirements:
+
+```bash
+python3 ICL/verify_topology_completion.py \
+  --experiment next=ICL/results/next_phase_stats \
+  --report_md ICL/results/next_phase_stats/next_phase_evidence_report.md \
+  --report_json ICL/results/next_phase_stats/next_phase_evidence_report.json \
+  --report_kind next_phase \
+  --require_expanded_followups
+```
+
+Current strict-gate failure:
+
+| Expanded hard regime | Training rows | Mechanism files | Causal files | Status |
+| --- | ---: | ---: | ---: | --- |
+| `hard_n4_m6_N3_D2` | 60 | 0 | 0 | blocked on raw cluster run outputs |
+| `hard_n5_m8_N3_D2` | 60 | 0 | 0 | blocked on raw cluster run outputs |
+| `hard_n5_m12_N3_D2` | 60 | 0 | 0 | blocked on raw cluster run outputs |
+
+The next concrete completion step must run on the Engaging worktree containing
+the raw `results.pkl`/`model.pt` files and a Torch-enabled Python:
+
+```bash
+cd ~/repos/topology/ICL
+git fetch statmech topology
+git checkout topology
+git pull --ff-only statmech topology
+
+python3 run_expanded_hard_followups.py --status
+
+python3 run_expanded_hard_followups.py \
+  --submit_followups \
+  --device cpu \
+  --job_python "$TOPOLOGY_PYTHON" \
+  --max-concurrent 20
+
+# After the SLURM arrays finish:
+python3 run_expanded_hard_followups.py \
+  --collect_followups \
+  --refresh_report \
+  --strict_verify \
+  --device cpu \
+  --job_python "$TOPOLOGY_PYTHON"
+```
+
 ## Checklist
 
 | Requirement | Current artifact/evidence | Status | Notes |
