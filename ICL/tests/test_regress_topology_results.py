@@ -181,6 +181,78 @@ class RegressTopologyResultsTests(unittest.TestCase):
         self.assertEqual(model["n"], 4)
         self.assertIsNotNone(model["leave_one_out_r2"])
 
+    def test_branch_capacity_model_accepts_legacy_csv_without_common_rank(self):
+        fieldnames = [
+            "label",
+            "topology_name",
+            "n_edges",
+            "raw_physical_parameter_count",
+            "input_coupled_parameter_count",
+            "d_rel",
+            "comparison_branch_d_rel_min",
+            "comparison_branch_d_rel_gini",
+            "effective_rank_D",
+            "effective_rank_D_masked",
+            "condition_number_D",
+            "condition_number_D_masked",
+            "root_tree_count_gini",
+            "edge_participation_gini",
+            "edge_participation_var",
+            "bottleneck_edge_fraction_095",
+            "mean_shortest_path",
+            "input_edge_load_gini",
+            "input_coord_load_gini",
+            "test_novel_classes",
+        ]
+        rows = []
+        for idx, branch_min in enumerate([0, 10, 20, 30]):
+            rows.append(
+                {
+                    "label": f"legacy{idx}",
+                    "topology_name": "legacy_fixed_count",
+                    "n_edges": 20,
+                    "raw_physical_parameter_count": 400,
+                    "input_coupled_parameter_count": 200,
+                    "d_rel": 100,
+                    "comparison_branch_d_rel_min": branch_min,
+                    "comparison_branch_d_rel_gini": 0.0,
+                    "effective_rank_D": 10,
+                    "effective_rank_D_masked": 10,
+                    "condition_number_D": 10,
+                    "condition_number_D_masked": 10,
+                    "root_tree_count_gini": 0.1,
+                    "edge_participation_gini": 0.2,
+                    "edge_participation_var": 0.01,
+                    "bottleneck_edge_fraction_095": 0.0,
+                    "mean_shortest_path": 2.0,
+                    "input_edge_load_gini": 0.3,
+                    "input_coord_load_gini": 0.4,
+                    "test_novel_classes": 50 + branch_min,
+                }
+            )
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_csv = os.path.join(tmpdir, "legacy_topology_results.csv")
+            output_json = os.path.join(tmpdir, "regression.json")
+            with open(input_csv, "w", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+            self.run_regression(
+                [
+                    "--input_csv",
+                    input_csv,
+                    "--output_json",
+                    output_json,
+                ]
+            )
+            with open(output_json) as f:
+                report = json.load(f)
+
+        model = report["models"]["input_count_plus_branch_drel"]
+        self.assertEqual(model["n"], 4)
+        self.assertGreater(model["r2"], 0.9)
+
 
 if __name__ == "__main__":
     unittest.main()

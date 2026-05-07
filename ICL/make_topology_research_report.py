@@ -244,7 +244,21 @@ def load_json(path):
     if not os.path.exists(path):
         return None
     with open(path) as f:
-        return json.load(f)
+        payload = json.load(f)
+    return backfill_branch_metric_payload(payload)
+
+
+def backfill_branch_metric_payload(payload):
+    if isinstance(payload, dict):
+        for target, fallback in BRANCH_METRIC_FALLBACKS.items():
+            if payload.get(target) in (None, "") and payload.get(fallback) not in (None, ""):
+                payload[target] = payload[fallback]
+        for value in payload.values():
+            backfill_branch_metric_payload(value)
+    elif isinstance(payload, list):
+        for value in payload:
+            backfill_branch_metric_payload(value)
+    return payload
 
 
 def load_csv(path):

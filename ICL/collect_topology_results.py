@@ -156,6 +156,19 @@ def backfill_branch_metrics(metrics, topology_payload, config):
     for field in BRANCH_METRIC_FIELDS:
         if metrics.get(field) in (None, "") and field in backfilled:
             metrics[field] = backfilled[field]
+    fallback_pairs = {
+        "comparison_branch_common_d_rel_min": "comparison_branch_d_rel_min",
+        "comparison_branch_common_d_rel_mean": "comparison_branch_d_rel_mean",
+        "comparison_branch_common_d_rel_max": "comparison_branch_d_rel_max",
+        "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+        "comparison_branch_input_overlap_min": "comparison_branch_input_count_min",
+        "comparison_branch_input_overlap_mean": "comparison_branch_input_count_mean",
+        "comparison_branch_input_overlap_max": "comparison_branch_input_count_max",
+        "comparison_branch_input_overlap_gini": "comparison_branch_input_count_gini",
+    }
+    for target, fallback in fallback_pairs.items():
+        if metrics.get(target) in (None, "") and metrics.get(fallback) not in (None, ""):
+            metrics[target] = metrics[fallback]
     return metrics
 
 
