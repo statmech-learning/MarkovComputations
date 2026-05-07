@@ -41,7 +41,7 @@ python3 -m py_compile $(find ICL -name '*.py' -not -path '*/__pycache__/*')
 git diff --check
 ```
 
-As of the latest local run, the unittest suite has 79 tests and passes. Local
+As of the latest local run, the unittest suite has 80 tests and passes. Local
 Python does not have Torch, so training and mechanism smoke tests must run on
 the cluster or another Torch-enabled environment.
 

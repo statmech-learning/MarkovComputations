@@ -66,7 +66,7 @@ python3 interpret_topology_report.py --report_json ... --report_kind research ..
 Observed state:
 
 - Local branch is clean and tracking `origin/topology`.
-- Local unit suite has 79 tests and passes.
+- Local unit suite has 80 tests and passes.
 - Python syntax compilation passes.
 - `git diff --check` passes.
 - Local `ICL/results` contains only older `markov_icl_gmm_*.pt` files, not the

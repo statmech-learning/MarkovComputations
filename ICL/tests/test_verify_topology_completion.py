@@ -56,7 +56,7 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             json.dump(payload, f)
         return report_md, report_json
 
-    def write_research_report(self, tmpdir, *, joined=1, retrained=1):
+    def write_research_report(self, tmpdir, *, joined=1, retrained=1, layout_sources=None):
         report_md = os.path.join(tmpdir, "research.md")
         report_json = os.path.join(tmpdir, "research.json")
         with open(report_md, "w") as f:
@@ -71,6 +71,21 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
                     ]
                 )
             )
+        if layout_sources is None:
+            layout_sources = ["essential_input50", "essential_inputmask50"]
+        labels = {
+            "essential_input50": "physical subgraph",
+            "essential_inputmask50": "input mask",
+        }
+        layouts = [
+            {
+                "label": labels.get(source_dir, source_dir),
+                "source_dir": source_dir,
+                "comparison": {"n_joined": joined},
+                "retrain_aggregate": {"n_topology_groups": retrained},
+            }
+            for source_dir in layout_sources
+        ]
         payload = {
             "target": "test_novel_classes",
             "experiments": [
@@ -79,13 +94,7 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
                     "run_summary": {"n_runs": 3},
                     "aggregate_summary": {"n_topology_groups": 1},
                     "essential_input50": {
-                        "layouts": [
-                            {
-                                "label": "input mask",
-                                "comparison": {"n_joined": joined},
-                                "retrain_aggregate": {"n_topology_groups": retrained},
-                            }
-                        ]
+                        "layouts": layouts
                     },
                 }
             ],
@@ -211,6 +220,28 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("retrain aggregate groups 1/2", result.stdout)
+
+    def test_research_report_kind_requires_both_essential_layouts(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            report_md, report_json = self.write_research_report(
+                tmpdir,
+                layout_sources=["essential_inputmask50"],
+            )
+            result = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    report_md,
+                    "--report_json",
+                    report_json,
+                    "--report_kind",
+                    "research",
+                    "--skip_audit",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing physical essential_input50", result.stdout)
 
 
 if __name__ == "__main__":

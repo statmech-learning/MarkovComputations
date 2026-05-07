@@ -159,6 +159,17 @@ def verify_research_report(report, markdown, experiments, target, allow_unknown_
         )
         layouts = item.get("essential_input50", {}).get("layouts", [])
         require(layouts, f"{name}: no essential retrain layouts", failures)
+        layout_sources = {layout.get("source_dir") for layout in layouts if isinstance(layout, dict)}
+        require(
+            "essential_input50" in layout_sources,
+            f"{name}: missing physical essential_input50 retrain layout",
+            failures,
+        )
+        require(
+            "essential_inputmask50" in layout_sources,
+            f"{name}: missing input-mask essential_inputmask50 retrain layout",
+            failures,
+        )
         for layout in layouts:
             label = layout.get("label") or layout.get("source_dir") or "layout"
             selected = positive_count(layout, ["comparison", "n_joined"])
