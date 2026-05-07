@@ -46,6 +46,8 @@ The convention is:
 - `extract_essential_subgraphs.py`: convert trained-model edge importance or
   ablation scores into strongly connected candidate motifs that can be retrained
   through `submit_topology_library_sweep.py`.
+- `compare_essential_retrains.py`: join extracted motif source metadata with
+  from-scratch retrain aggregates and report performance retention.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
 - `tests/test_topology_metrics.py`: exact small-graph matrix-tree checks.
@@ -217,4 +219,9 @@ python3 submit_topology_library_sweep.py \
   --seeds 1,2 \
   --array \
   --max-concurrent 24
+
+python3 compare_essential_retrains.py \
+  --base_root "$SLURM_OUTPUT_BASE" \
+  --output_csv "$SLURM_OUTPUT_BASE/essential_input50/retrain_comparison.csv" \
+  --output_json "$SLURM_OUTPUT_BASE/essential_input50/retrain_comparison.json"
 ```
