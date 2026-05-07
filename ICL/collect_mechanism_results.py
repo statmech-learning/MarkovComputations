@@ -3,6 +3,7 @@
 import argparse
 import csv
 import json
+import math
 import os
 from collections import Counter, defaultdict
 
@@ -17,6 +18,8 @@ FIELDS = [
     "target_logprob_margin_min",
     "branch_active_root_mi",
     "branch_active_tree_mi",
+    "branch_active_root_nmi",
+    "branch_active_tree_nmi",
     "n_branches_observed",
     "active_root_unique_count",
     "active_tree_unique_count",
@@ -156,6 +159,55 @@ def _assignment_summary(branches, assignments, skip_negative=False):
     }
 
 
+def _entropy(values):
+    if not values:
+        return 0.0
+    total = float(len(values))
+    return float(
+        -sum(
+            (count / total) * math.log(count / total)
+            for count in Counter(values).values()
+        )
+    )
+
+
+def _mutual_information(branches, assignments, skip_negative=False):
+    pairs = [
+        (branch, assignment)
+        for branch, assignment in zip(branches, assignments)
+        if not (skip_negative and assignment < 0)
+    ]
+    if not pairs:
+        return None
+    joint_counts = Counter(pairs)
+    branch_counts = Counter(branch for branch, _ in pairs)
+    assignment_counts = Counter(assignment for _, assignment in pairs)
+    total = float(len(pairs))
+    value = 0.0
+    for (branch, assignment), count in joint_counts.items():
+        pxy = count / total
+        px = branch_counts[branch] / total
+        py = assignment_counts[assignment] / total
+        value += pxy * math.log(pxy / (px * py))
+    return float(value)
+
+
+def _normalized_branch_mi(branches, assignments, skip_negative=False):
+    pairs = [
+        (branch, assignment)
+        for branch, assignment in zip(branches, assignments)
+        if not (skip_negative and assignment < 0)
+    ]
+    if not pairs:
+        return ""
+    filtered_branches = [branch for branch, _ in pairs]
+    branch_entropy = _entropy(filtered_branches)
+    if branch_entropy <= 1e-12:
+        return ""
+    mi = _mutual_information(filtered_branches, [assignment for _, assignment in pairs])
+    return "" if mi is None else float(mi / branch_entropy)
+
+
 def summarize_branch_assignments(metrics):
     branches = _int_list(metrics.get("branch_ids"))
     roots = _int_list(metrics.get("active_root"))
@@ -163,6 +215,8 @@ def summarize_branch_assignments(metrics):
     root_summary = _assignment_summary(branches, roots)
     tree_summary = _assignment_summary(branches, trees, skip_negative=True)
     return {
+        "branch_active_root_nmi": _normalized_branch_mi(branches, roots),
+        "branch_active_tree_nmi": _normalized_branch_mi(branches, trees, skip_negative=True),
         "n_branches_observed": root_summary["n_observed"],
         "active_root_unique_count": root_summary["unique_count"],
         "active_tree_unique_count": tree_summary["unique_count"],

@@ -60,6 +60,8 @@ class CollectMechanismResultsTests(unittest.TestCase):
         self.assertAlmostEqual(float(row["branch_active_tree_purity_mean"]), 5.0 / 6.0)
         self.assertAlmostEqual(float(row["branch_active_tree_purity_min"]), 2.0 / 3.0)
         self.assertAlmostEqual(float(row["branch_active_tree_unique_mean"]), 1.5)
+        self.assertAlmostEqual(float(row["branch_active_root_nmi"]), 1.0)
+        self.assertAlmostEqual(float(row["branch_active_tree_nmi"]), 1.0)
         assignments = json.loads(row["branch_active_tree_assignment"])
         self.assertEqual(assignments[0]["dominant"], 10)
         self.assertEqual(assignments[1]["dominant"], 12)

@@ -48,7 +48,8 @@ The convention is:
   CSV for regressions against raw degree count and topology-derived metrics.
 - `collect_mechanism_results.py`: collect mechanism-analysis JSON files into a
   flat CSV table, including branch-to-root/tree assignment purity summaries
-  from stored per-sample active roots and active trees.
+  and normalized mutual information from stored per-sample active roots and
+  active trees.
 - `summarize_topology_mechanisms.py`: join topology and mechanism result CSVs,
   then report overall and within-edge-count correlations.
 - `aggregate_topology_seeds.py`: aggregate repeated training seeds for each

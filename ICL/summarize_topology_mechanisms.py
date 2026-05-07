@@ -32,6 +32,8 @@ MECHANISM_COLUMNS = [
     "target_logprob_margin_mean",
     "branch_active_root_mi",
     "branch_active_tree_mi",
+    "branch_active_root_nmi",
+    "branch_active_tree_nmi",
     "active_root_unique_count",
     "active_tree_unique_count",
     "branch_active_root_purity_mean",
@@ -169,6 +171,7 @@ def group_summary(rows, group_key):
             "effective_rank_D",
             "target_logprob_margin_mean",
             "branch_active_tree_mi",
+            "branch_active_tree_nmi",
             "branch_active_tree_purity_mean",
         ]:
             metric_values = [row[metric] for row in group if row.get(metric) is not None]
@@ -199,6 +202,7 @@ def family_within_edge_summary(rows):
                 "target_max": float(values.max()),
                 "d_rel_mean": mean_or_none("d_rel"),
                 "branch_active_tree_mi_mean": mean_or_none("branch_active_tree_mi"),
+                "branch_active_tree_nmi_mean": mean_or_none("branch_active_tree_nmi"),
                 "branch_active_tree_purity_mean": mean_or_none("branch_active_tree_purity_mean"),
                 "target_logprob_margin_mean": mean_or_none("target_logprob_margin_mean"),
             }
