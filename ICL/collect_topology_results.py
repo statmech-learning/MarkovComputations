@@ -124,9 +124,11 @@ def backfill_branch_metrics(metrics, topology_payload, config):
 
     if all(metrics.get(field) not in (None, "") for field in BRANCH_METRIC_FIELDS):
         if metrics.get("comparison_branch_common_d_rel_min") not in (None, ""):
-            metrics.setdefault("comparison_branch_common_d_rel_source", "artifact")
+            if metrics.get("comparison_branch_common_d_rel_source") in (None, ""):
+                metrics["comparison_branch_common_d_rel_source"] = "artifact"
         if metrics.get("comparison_branch_input_overlap_min") not in (None, ""):
-            metrics.setdefault("comparison_branch_input_overlap_source", "artifact")
+            if metrics.get("comparison_branch_input_overlap_source") in (None, ""):
+                metrics["comparison_branch_input_overlap_source"] = "artifact"
         return metrics
     try:
         n_context = int(config["N"])
@@ -184,9 +186,11 @@ def backfill_branch_metrics(metrics, topology_payload, config):
             if target.startswith("comparison_branch_input_overlap_"):
                 metrics["comparison_branch_input_overlap_source"] = "legacy_input_count_fallback"
     if metrics.get("comparison_branch_common_d_rel_min") not in (None, ""):
-        metrics.setdefault("comparison_branch_common_d_rel_source", "artifact")
+        if metrics.get("comparison_branch_common_d_rel_source") in (None, ""):
+            metrics["comparison_branch_common_d_rel_source"] = "artifact"
     if metrics.get("comparison_branch_input_overlap_min") not in (None, ""):
-        metrics.setdefault("comparison_branch_input_overlap_source", "artifact")
+        if metrics.get("comparison_branch_input_overlap_source") in (None, ""):
+            metrics["comparison_branch_input_overlap_source"] = "artifact"
     return metrics
 
 

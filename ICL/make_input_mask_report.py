@@ -260,7 +260,8 @@ def load_csv(path):
                 if target.startswith("comparison_branch_common_d_rel_"):
                     row["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
         if row.get("comparison_branch_common_d_rel_min") not in (None, ""):
-            row.setdefault("comparison_branch_common_d_rel_source", "artifact")
+            if row.get("comparison_branch_common_d_rel_source") in (None, ""):
+                row["comparison_branch_common_d_rel_source"] = "artifact"
     return rows
 
 
