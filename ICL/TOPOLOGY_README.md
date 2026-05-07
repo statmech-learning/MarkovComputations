@@ -43,6 +43,9 @@ The convention is:
   then report overall and within-edge-count correlations.
 - `aggregate_topology_seeds.py`: aggregate repeated training seeds for each
   topology into mean, best-seed, and seed-variance reports.
+- `extract_essential_subgraphs.py`: convert trained-model edge importance or
+  ablation scores into strongly connected candidate motifs that can be retrained
+  through `submit_topology_library_sweep.py`.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
 - `tests/test_topology_metrics.py`: exact small-graph matrix-tree checks.
@@ -193,4 +196,25 @@ python3 aggregate_topology_seeds.py \
   --mechanism_csv "$SLURM_OUTPUT_BASE/mechanism_results.csv" \
   --output_csv "$SLURM_OUTPUT_BASE/topology_seed_aggregates.csv" \
   --output_json "$SLURM_OUTPUT_BASE/topology_seed_aggregates.json"
+```
+
+To test whether a trained dense topology discovered a sparse retrainable
+motif, extract essential subgraphs and feed the resulting `selected.csv` back
+into the existing library-sweep trainer:
+
+```bash
+python3 extract_essential_subgraphs.py \
+  --input_root "$SLURM_OUTPUT_BASE" \
+  --topology_csv "$SLURM_OUTPUT_BASE/topology_results.csv" \
+  --output_root "$SLURM_OUTPUT_BASE/essential_input50" \
+  --importance_source input_ablation_loss \
+  --coverage_fraction 0.5 \
+  --select_topologies 16
+
+python3 submit_topology_library_sweep.py \
+  --library_csv "$SLURM_OUTPUT_BASE/essential_input50/selected.csv" \
+  --output_root "$SLURM_OUTPUT_BASE/essential_input50_retrain" \
+  --seeds 1,2 \
+  --array \
+  --max-concurrent 24
 ```
