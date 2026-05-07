@@ -39,6 +39,40 @@ class FinalizeTopologySweepTests(unittest.TestCase):
         self.assertIn("topology_seed_aggregates.csv", result.stdout)
         self.assertNotIn("submit_topology_mechanisms.py", result.stdout)
 
+    def test_submit_mechanisms_dry_run_passes_job_python(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            run_dir = os.path.join(tmpdir, "run_000")
+            os.makedirs(run_dir)
+            for filename in ("results.pkl", "config.json", "topology.json"):
+                with open(os.path.join(run_dir, filename), "w") as handle:
+                    handle.write("{}")
+
+            result = self.run_finalizer(
+                [
+                    "--input_root",
+                    tmpdir,
+                    "--submit_mechanisms",
+                    "--job_python",
+                    "/env/bin/python",
+                    "--skip_torch_check",
+                    "--dry-run",
+                ]
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+            commands_path = os.path.join(tmpdir, "_mechanism_array_meta", "commands.txt")
+            script_path = os.path.join(tmpdir, "_mechanism_array_meta", "run_mechanism_task.sh")
+            with open(commands_path) as handle:
+                commands = handle.read()
+            with open(script_path) as handle:
+                script = handle.read()
+
+        self.assertIn("submit_topology_mechanisms.py", result.stdout)
+        self.assertIn("--python /env/bin/python", result.stdout)
+        self.assertIn("--skip_torch_check", result.stdout)
+        self.assertIn("/env/bin/python -u analyze_topology_model.py", commands)
+        self.assertNotIn("import torch", script)
+
 
 if __name__ == "__main__":
     unittest.main()

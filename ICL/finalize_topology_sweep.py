@@ -74,6 +74,8 @@ def submit_mechanisms(args):
         args.input_root,
         "--n_samples",
         str(args.n_samples),
+        "--python",
+        args.job_python,
         "--array",
         "--max-concurrent",
         str(args.max_concurrent),
@@ -86,6 +88,8 @@ def submit_mechanisms(args):
         parts.append("--force")
     if args.clean_mechanism_meta:
         parts.append("--clean")
+    if args.skip_torch_check:
+        parts.append("--skip_torch_check")
     if args.dry_run:
         parts.append("--dry-run")
     run_command(parts, dry_run=False)
@@ -143,6 +147,19 @@ def main():
     parser.add_argument("--input_root", type=str, required=True)
     parser.add_argument("--n_samples", type=int, default=500)
     parser.add_argument("--max-concurrent", type=int, default=64)
+    parser.add_argument(
+        "--job_python",
+        default=os.environ.get("TOPOLOGY_PYTHON", "python3"),
+        help=(
+            "Python command to use inside submitted SLURM mechanism jobs after any "
+            "SLURM setup has run. Defaults to TOPOLOGY_PYTHON or python3."
+        ),
+    )
+    parser.add_argument(
+        "--skip_torch_check",
+        action="store_true",
+        help="Do not insert the Torch import preflight in submitted mechanism jobs.",
+    )
     parser.add_argument("--submit_mechanisms", action="store_true")
     parser.add_argument("--collect_mechanisms", action="store_true")
     parser.add_argument("--ablate_input", action="store_true")
