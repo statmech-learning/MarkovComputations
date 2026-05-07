@@ -119,6 +119,7 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
         include_hard=True,
         include_causal=True,
         hard_family_col="derived_graph_family",
+        include_family_bootstrap=True,
     ):
         report_md = os.path.join(tmpdir, "next_phase.md")
         report_json = os.path.join(tmpdir, "next_phase.json")
@@ -139,6 +140,7 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
                         "# Next-Phase Topology-ICL Evidence Report",
                         "## Clustered And Group-Aware Inference",
                         "derived_graph_family",
+                        "family boot delta R2",
                         *hard_headings,
                         "## Causal Alignment Interventions",
                         "## Branch-Margin Capacity Probes",
@@ -159,7 +161,14 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
                 "family_col": hard_family_col if label.startswith("hard_") else "physical_topology_name",
                 "models": {
                     "raw_count": {"group_loo_r2": -0.1},
-                    "tree_geometry": {"group_loo_r2": 0.1},
+                    "tree_geometry": {
+                        "group_loo_r2": 0.1,
+                        **(
+                            {"family_bootstrap_delta_mean": 0.2}
+                            if include_family_bootstrap and label.startswith("hard_")
+                            else {}
+                        ),
+                    },
                 },
             }
             for label in labels
@@ -394,6 +403,27 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("heldout must use derived_graph_family", result.stdout)
+
+    def test_next_phase_report_kind_requires_family_bootstrap_for_hard_regimes(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            report_md, report_json = self.write_next_phase_report(
+                tmpdir,
+                include_family_bootstrap=False,
+            )
+            result = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    report_md,
+                    "--report_json",
+                    report_json,
+                    "--report_kind",
+                    "next_phase",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing family-cluster bootstrap metric", result.stdout)
 
     def test_research_report_kind_requires_both_essential_layouts(self):
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -239,6 +239,11 @@ def verify_next_phase_report(report, markdown):
                 f"{label}: Markdown does not expose derived_graph_family holdout",
                 failures,
             )
+            require(
+                "family boot delta R2" in markdown,
+                f"{label}: Markdown does not expose family-cluster bootstrap delta",
+                failures,
+            )
         models = item.get("models")
         require(isinstance(models, dict) and "raw_count" in models, f"{label}: missing raw_count model", failures)
         if isinstance(models, dict):
@@ -247,6 +252,13 @@ def verify_next_phase_report(report, markdown):
                 f"{label}: missing topology geometry model",
                 failures,
             )
+            if label in HARD_NEXT_PHASE_LABELS:
+                geometry = models.get("tree_geometry") or models.get("masked_tree_geometry") or {}
+                require(
+                    geometry.get("family_bootstrap_delta_mean") is not None,
+                    f"{label}: missing family-cluster bootstrap metric for topology geometry",
+                    failures,
+                )
 
     capacity = report.get("branch_margin_capacity")
     require(isinstance(capacity, list) and capacity, "next-phase report has no branch-margin capacity entries", failures)
