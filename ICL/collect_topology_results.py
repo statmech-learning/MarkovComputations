@@ -13,6 +13,8 @@ FIELDS = [
     "topology_name",
     "physical_topology_name",
     "input_mask_name",
+    "input_mask_family",
+    "input_mask_seed",
     "seed",
     "topology_seed",
     "n_nodes",
@@ -72,6 +74,7 @@ def load_run(run_dir):
     results_path = os.path.join(run_dir, "results.pkl")
     metrics_path = os.path.join(run_dir, "topology_metrics.json")
     config_path = os.path.join(run_dir, "config.json")
+    topology_path = os.path.join(run_dir, "topology.json")
     if not os.path.exists(results_path) or not os.path.exists(metrics_path):
         return None
 
@@ -81,6 +84,11 @@ def load_run(run_dir):
         metrics = json.load(f)
     with open(config_path) as f:
         config = json.load(f)
+    topology_payload = {}
+    if os.path.exists(topology_path):
+        with open(topology_path) as f:
+            topology_payload = json.load(f)
+    input_mask_metadata = topology_payload.get("input_mask_metadata", {})
 
     history = payload.get("history", {})
     icl_values = [value for value in history.get("icl_acc", []) if value is not None]
@@ -93,6 +101,12 @@ def load_run(run_dir):
         "topology_name": metrics.get("topology_name"),
         "physical_topology_name": metrics.get("physical_topology_name"),
         "input_mask_name": metrics.get("input_mask_name"),
+        "input_mask_family": (
+            metrics.get("input_mask_family")
+            or input_mask_metadata.get("mask_family")
+            or input_mask_metadata.get("family")
+        ),
+        "input_mask_seed": metrics.get("input_mask_seed") or input_mask_metadata.get("seed"),
         "seed": config.get("seed"),
         "topology_seed": config.get("topology_seed"),
         "n_nodes": metrics.get("n_nodes"),

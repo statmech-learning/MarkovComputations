@@ -674,7 +674,10 @@ def correlation_table(experiments):
     rows = [
         ("d_rel", "relative tree dimension"),
         ("effective_rank_D", "tree spectrum effective rank"),
+        ("effective_rank_D_masked", "masked relative tree effective rank"),
         ("edge_participation_gini", "bottleneck/participation heterogeneity"),
+        ("input_edge_load_gini", "input mask edge-load heterogeneity"),
+        ("input_coord_load_gini", "input mask coordinate-load heterogeneity"),
         ("target_logprob_margin_mean", "trained branch margin"),
         ("branch_active_tree_mi", "branch-active-tree MI"),
         ("tree_comparison_energy_fraction_mean", "tree-sum comparison alignment"),

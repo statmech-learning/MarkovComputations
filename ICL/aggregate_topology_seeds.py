@@ -26,6 +26,8 @@ STATIC_COLUMNS = [
     "topology_name",
     "physical_topology_name",
     "input_mask_name",
+    "input_mask_family",
+    "input_mask_seed",
     "n_nodes",
     "n_edges",
     "p",

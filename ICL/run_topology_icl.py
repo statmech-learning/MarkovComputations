@@ -222,6 +222,8 @@ def main():
     topology_metrics["topology_name"] = run_topology_name
     topology_metrics["physical_topology_name"] = topology_name
     topology_metrics["input_mask_name"] = input_mask_name
+    topology_metrics["input_mask_family"] = input_mask_metadata.get("mask_family", "")
+    topology_metrics["input_mask_seed"] = input_mask_metadata.get("seed", "")
     topology_metrics.update(input_mask_summary(input_mask))
     topology_metrics["raw_physical_parameter_count"] = int(len(edges) * p)
     topology_metrics["n_req"] = int(2 * args.N * (args.N + 1) * args.D)

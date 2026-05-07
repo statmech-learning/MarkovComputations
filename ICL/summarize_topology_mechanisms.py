@@ -14,13 +14,18 @@ DEFAULT_TARGET = "test_novel_classes"
 
 TOPOLOGY_COLUMNS = [
     "n_edges",
+    "input_coupled_parameter_count",
     "d_rel",
     "effective_rank_D",
+    "effective_rank_D_masked",
     "condition_number_D",
+    "condition_number_D_masked",
     "root_tree_count_gini",
     "edge_participation_gini",
     "bottleneck_edge_fraction_095",
     "mean_shortest_path",
+    "input_edge_load_gini",
+    "input_coord_load_gini",
 ]
 
 MECHANISM_COLUMNS = [
