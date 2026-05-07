@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import csv
 import os
+import shlex
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -110,6 +111,7 @@ def status_rows(regimes: Iterable[HardRegime]) -> List[dict]:
                 "label": regime.label,
                 "root": regime.root,
                 "results_pkl": count_files(regime.root, "results.pkl"),
+                "model_pt": count_files(regime.root, "model.pt"),
                 "mechanisms": count_files(regime.root, "mechanism_metrics.json"),
                 "causal": count_files(regime.root, "causal_interventions.json"),
                 "topology_rows": csv_data_rows(os.path.join(regime.root, "topology_results.csv")),
@@ -119,25 +121,103 @@ def status_rows(regimes: Iterable[HardRegime]) -> List[dict]:
 
 
 def print_status(regimes: Iterable[HardRegime]) -> None:
-    print("label,root,results_pkl,mechanisms,causal,topology_rows")
+    print("label,root,results_pkl,model_pt,mechanisms,causal,topology_rows")
     for row in status_rows(regimes):
         print(
-            "{label},{root},{results_pkl},{mechanisms},{causal},{topology_rows}".format(
+            "{label},{root},{results_pkl},{model_pt},{mechanisms},{causal},{topology_rows}".format(
                 **row
             )
         )
 
 
-def ensure_raw_sources(regimes: Iterable[HardRegime], allow_source_light: bool) -> None:
-    missing = [row for row in status_rows(regimes) if row["results_pkl"] == 0]
+def ensure_raw_sources(
+    regimes: Iterable[HardRegime],
+    allow_source_light: bool,
+    require_models: bool = False,
+) -> None:
+    missing = [
+        row
+        for row in status_rows(regimes)
+        if row["results_pkl"] == 0 or (require_models and row["model_pt"] == 0)
+    ]
     if missing and not allow_source_light:
-        details = ", ".join(f"{row['label']}:{row['root']}" for row in missing)
+        details = ", ".join(
+            f"{row['label']}:{row['root']} results_pkl={row['results_pkl']} model_pt={row['model_pt']}"
+            for row in missing
+        )
         raise SystemExit(
-            "Refusing to run follow-up finalization without raw results.pkl files "
+            "Refusing to run follow-up finalization without required raw files "
             f"for: {details}. Run this on the Engaging worktree with raw training "
             "outputs, or pass --allow_source_light only if you intentionally want "
             "to bypass this safety check."
         )
+
+
+def git_summary() -> str:
+    try:
+        branch = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            check=True,
+            cwd=THIS_DIR,
+            text=True,
+            capture_output=True,
+        ).stdout.strip()
+        commit = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            check=True,
+            cwd=THIS_DIR,
+            text=True,
+            capture_output=True,
+        ).stdout.strip()
+    except subprocess.CalledProcessError:
+        return "git=unavailable"
+    return f"git={branch}@{commit}"
+
+
+def check_torch_python(job_python: str) -> tuple[bool, str]:
+    command = shlex.split(job_python) + [
+        "-c",
+        "import torch, sys; print(sys.executable); print(torch.__version__)",
+    ]
+    try:
+        result = subprocess.run(
+            command,
+            check=False,
+            text=True,
+            capture_output=True,
+        )
+    except FileNotFoundError as exc:
+        return False, str(exc)
+    output = (result.stdout + result.stderr).strip()
+    return result.returncode == 0, output
+
+
+def preflight(args, regimes: Iterable[HardRegime]) -> None:
+    rows = status_rows(regimes)
+    print(git_summary())
+    print_status(regimes)
+    failures = []
+    for row in rows:
+        if row["results_pkl"] == 0:
+            failures.append(f"{row['label']}: missing raw results.pkl files")
+        if row["model_pt"] == 0:
+            failures.append(f"{row['label']}: missing raw model.pt files")
+        if row["topology_rows"] == 0:
+            failures.append(f"{row['label']}: missing topology_results.csv rows")
+    if args.skip_torch_check:
+        print("torch_check=skipped")
+    else:
+        ok, output = check_torch_python(args.job_python)
+        print(f"torch_check_python={args.job_python}")
+        if output:
+            print(output)
+        if not ok:
+            failures.append(f"job_python cannot import torch: {args.job_python}")
+    if failures:
+        for failure in failures:
+            print(f"PREFLIGHT FAIL: {failure}", file=sys.stderr)
+        raise SystemExit("Expanded hard follow-up preflight failed")
+    print("Expanded hard follow-up preflight passed")
 
 
 def finalize_parts(args, regime: HardRegime, mode: str) -> List[str]:
@@ -180,7 +260,11 @@ def finalize_parts(args, regime: HardRegime, mode: str) -> List[str]:
 
 
 def run_finalize(args, regimes: Iterable[HardRegime], mode: str) -> None:
-    ensure_raw_sources(regimes, args.allow_source_light or args.dry_run)
+    ensure_raw_sources(
+        regimes,
+        args.allow_source_light or args.dry_run,
+        require_models=(mode == "submit"),
+    )
     for regime in regimes:
         run_command(finalize_parts(args, regime, mode), dry_run=args.dry_run)
 
@@ -230,6 +314,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--regime", type=parse_regime, action="append", default=[])
     parser.add_argument("--status", action="store_true")
+    parser.add_argument("--preflight", action="store_true")
     parser.add_argument("--submit_followups", action="store_true")
     parser.add_argument("--collect_followups", action="store_true")
     parser.add_argument("--refresh_report", action="store_true")
@@ -264,6 +349,8 @@ def main() -> None:
     regimes = selected_regimes(args.regime)
     if args.status:
         print_status(regimes)
+    if args.preflight:
+        preflight(args, regimes)
     if args.submit_followups:
         run_finalize(args, regimes, "submit")
     if args.collect_followups:

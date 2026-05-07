@@ -24,7 +24,7 @@ class RunExpandedHardFollowupsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             run_dir = os.path.join(tmpdir, "run0")
             os.makedirs(run_dir)
-            for filename in ("results.pkl", "mechanism_metrics.json", "causal_interventions.json"):
+            for filename in ("results.pkl", "model.pt", "mechanism_metrics.json", "causal_interventions.json"):
                 with open(os.path.join(run_dir, filename), "w") as handle:
                     handle.write("{}")
             with open(os.path.join(tmpdir, "topology_results.csv"), "w") as handle:
@@ -33,8 +33,8 @@ class RunExpandedHardFollowupsTests(unittest.TestCase):
             result = self.run_script(["--regime", f"hard={tmpdir}", "--status"])
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("label,root,results_pkl,mechanisms,causal,topology_rows", result.stdout)
-        self.assertIn(f"hard,{tmpdir},1,1,1,1", result.stdout)
+        self.assertIn("label,root,results_pkl,model_pt,mechanisms,causal,topology_rows", result.stdout)
+        self.assertIn(f"hard,{tmpdir},1,1,1,1,1", result.stdout)
 
     def test_submit_refuses_source_light_checkout(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -44,7 +44,51 @@ class RunExpandedHardFollowupsTests(unittest.TestCase):
             result = self.run_script(["--regime", f"hard={tmpdir}", "--submit_followups"])
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("Refusing to run follow-up finalization without raw results.pkl", result.stderr)
+        self.assertIn("Refusing to run follow-up finalization without required raw files", result.stderr)
+
+    def test_preflight_checks_raw_files_model_files_rows_and_torch(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            run_dir = os.path.join(tmpdir, "run0")
+            os.makedirs(run_dir)
+            for filename in ("results.pkl", "model.pt"):
+                with open(os.path.join(run_dir, filename), "w") as handle:
+                    handle.write("{}")
+            with open(os.path.join(tmpdir, "topology_results.csv"), "w") as handle:
+                handle.write("run_id,test_novel_classes\nrun0,0.9\n")
+
+            result = self.run_script(
+                [
+                    "--regime",
+                    f"hard={tmpdir}",
+                    "--preflight",
+                    "--skip_torch_check",
+                ]
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn("torch_check=skipped", result.stdout)
+        self.assertIn("Expanded hard follow-up preflight passed", result.stdout)
+
+    def test_preflight_fails_without_model_files(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            run_dir = os.path.join(tmpdir, "run0")
+            os.makedirs(run_dir)
+            with open(os.path.join(run_dir, "results.pkl"), "w") as handle:
+                handle.write("{}")
+            with open(os.path.join(tmpdir, "topology_results.csv"), "w") as handle:
+                handle.write("run_id,test_novel_classes\nrun0,0.9\n")
+
+            result = self.run_script(
+                [
+                    "--regime",
+                    f"hard={tmpdir}",
+                    "--preflight",
+                    "--skip_torch_check",
+                ]
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing raw model.pt files", result.stderr)
 
     def test_dry_run_prints_submit_collect_refresh_and_strict_verify(self):
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -581,6 +581,11 @@ each root after syncing the `topology` branch on Engaging:
 python3 run_expanded_hard_followups.py --status
 
 python3 run_expanded_hard_followups.py \
+  --preflight \
+  --device cpu \
+  --job_python "$TOPOLOGY_PYTHON"
+
+python3 run_expanded_hard_followups.py \
   --submit_followups \
   --device cpu \
   --job_python "$TOPOLOGY_PYTHON" \
@@ -596,7 +601,9 @@ python3 run_expanded_hard_followups.py \
 ```
 
 The wrapper refuses to submit or collect follow-ups from a source-light
-checkout with no raw `results.pkl` files, because the lower-level finalizer
+checkout with no raw `results.pkl` files, and submit preflight also requires
+raw `model.pt` checkpoints plus a Torch-enabled `--job_python`, because the
+mechanism and causal jobs need trained models. The lower-level finalizer
 recollects topology results at startup. To refresh only selected report
 sections by hand from the `ICL/` directory, use the underlying report
 refresher. It updates only labels supplied on the command line; by default it
