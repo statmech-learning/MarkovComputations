@@ -11,7 +11,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from clustered_topology_inference import (  # noqa: E402
     aggregate_seed_groups,
+    graph_family_from_name,
     run_clustered_inference,
+    with_derived_graph_family,
 )
 
 
@@ -86,6 +88,52 @@ class ClusteredTopologyInferenceTests(unittest.TestCase):
         self.assertEqual(len(holdout["families"]), 3)
         self.assertIn("residual_std_between_cluster_means", report["residual_decomposition_run_level"]["raw_plus_drel"])
 
+    def test_derives_graph_family_from_topology_instance_names(self):
+        self.assertEqual(graph_family_from_name("cycle_chords_n5_m8_seed34"), "cycle_chords")
+        self.assertEqual(graph_family_from_name("bottleneck_bridge_n5_m12_seed7"), "bottleneck_bridge")
+        self.assertEqual(graph_family_from_name("random"), "random")
+
+        rows = []
+        for family in ["cycle_chords", "random_sc"]:
+            for topo_idx in range(2):
+                for seed in range(2):
+                    rows.append(
+                        {
+                            "label": f"{family}_{topo_idx}_{seed}",
+                            "topology_name": f"{family}_n5_m8_seed{topo_idx}",
+                            "physical_topology_name": f"{family}_n5_m8_seed{topo_idx}",
+                            "seed": seed,
+                            "raw_physical_parameter_count": 100,
+                            "input_coupled_parameter_count": 50,
+                            "d_rel": topo_idx + 1,
+                            "comparison_branch_common_d_rel_min": topo_idx,
+                            "comparison_branch_common_d_rel_gini": 0.1,
+                            "comparison_branch_d_rel_min": topo_idx,
+                            "comparison_branch_d_rel_gini": 0.1,
+                            "effective_rank_D": 2,
+                            "effective_rank_D_masked": 2,
+                            "condition_number_D": 1,
+                            "condition_number_D_masked": 1,
+                            "root_tree_count_gini": 0,
+                            "edge_participation_gini": 0,
+                            "edge_participation_var": 0,
+                            "bottleneck_edge_fraction_095": 0,
+                            "mean_shortest_path": 1,
+                            "input_edge_load_gini": 0,
+                            "input_coord_load_gini": 0,
+                            "test_novel_classes": 50 + 10 * topo_idx,
+                        }
+                    )
+        derived = with_derived_graph_family(rows)
+        self.assertEqual(sorted({row["derived_graph_family"] for row in derived}), ["cycle_chords", "random_sc"])
+        report = run_clustered_inference(
+            rows,
+            n_bootstrap=5,
+            derive_graph_family=True,
+        )
+        self.assertEqual(report["family_col"], "derived_graph_family")
+        self.assertEqual(report["n_families"], 2)
+
     def test_cli_writes_json(self):
         rows = self.make_rows()
         fieldnames = sorted({key for row in rows for key in row})
@@ -104,6 +152,7 @@ class ClusteredTopologyInferenceTests(unittest.TestCase):
                     run_csv,
                     "--n_bootstrap",
                     "10",
+                    "--derive_graph_family",
                     "--output_json",
                     output_json,
                 ],

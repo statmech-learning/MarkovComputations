@@ -934,8 +934,8 @@
           "bootstrap_prob_positive": 0.9066666666666666,
           "group_loo_r2": 0.20289314893364285,
           "group_n": 12,
-          "heldout_family_pooled_r2": 0.2028931489336413,
-          "heldout_family_rmse": 1.8746118391083244
+          "heldout_family_pooled_r2": 0.29529947308105087,
+          "heldout_family_rmse": 1.762606562169831
         },
         "branch_rank_weighted_capacity_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -946,8 +946,8 @@
           "bootstrap_prob_positive": 0.9333333333333333,
           "group_loo_r2": 0.20289314893364085,
           "group_n": 12,
-          "heldout_family_pooled_r2": 0.2028931489336424,
-          "heldout_family_rmse": 1.874611839108323
+          "heldout_family_pooled_r2": 0.295299473081056,
+          "heldout_family_rmse": 1.7626065621698246
         },
         "input_count_plus_branch_drel": {
           "bootstrap_delta_ci95": [
@@ -958,8 +958,8 @@
           "bootstrap_prob_positive": 0.9133333333333333,
           "group_loo_r2": 0.20289314893363875,
           "group_n": 12,
-          "heldout_family_pooled_r2": 0.20289314893364063,
-          "heldout_family_rmse": 1.8746118391083253
+          "heldout_family_pooled_r2": 0.29529947308105364,
+          "heldout_family_rmse": 1.7626065621698275
         },
         "input_count_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -970,8 +970,8 @@
           "bootstrap_prob_positive": 0.8833333333333333,
           "group_loo_r2": 0.20289314893363952,
           "group_n": 12,
-          "heldout_family_pooled_r2": 0.20289314893364063,
-          "heldout_family_rmse": 1.8746118391083253
+          "heldout_family_pooled_r2": 0.2952994730810615,
+          "heldout_family_rmse": 1.7626065621698175
         },
         "masked_tree_geometry": {
           "bootstrap_delta_ci95": [
@@ -982,8 +982,8 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": -0.15121764930994108,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.15121764930993287,
-          "heldout_family_rmse": 2.2528475503868077
+          "heldout_family_pooled_r2": 0.2240105692880875,
+          "heldout_family_rmse": 1.8496135041571424
         },
         "raw_count": {
           "bootstrap_delta_ci95": null,
@@ -991,8 +991,8 @@
           "bootstrap_prob_positive": null,
           "group_loo_r2": -0.19008264462809454,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.19008264462809454,
-          "heldout_family_rmse": 2.290559857940825
+          "heldout_family_pooled_r2": -1.0340595954710237,
+          "heldout_family_rmse": 2.9945731141357044
         },
         "raw_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1003,8 +1003,8 @@
           "bootstrap_prob_positive": 0.8833333333333333,
           "group_loo_r2": 0.20289314893363952,
           "group_n": 12,
-          "heldout_family_pooled_r2": 0.20289314893364063,
-          "heldout_family_rmse": 1.8746118391083253
+          "heldout_family_pooled_r2": 0.2952994730810615,
+          "heldout_family_rmse": 1.7626065621698175
         },
         "tree_geometry": {
           "bootstrap_delta_ci95": [
@@ -1015,8 +1015,8 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": -0.11210101201727873,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.11210101201728406,
-          "heldout_family_rmse": 2.2142426030064892
+          "heldout_family_pooled_r2": -0.11110151757122688,
+          "heldout_family_rmse": 2.213247360379448
         },
         "tropical_tree_capacity": {
           "bootstrap_delta_ci95": [
@@ -1027,8 +1027,8 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": -0.26629100485752066,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.2662910048575118,
-          "heldout_family_rmse": 2.3627612815337677
+          "heldout_family_pooled_r2": -3.0618123297360587,
+          "heldout_family_rmse": 4.231681875225844
         },
         "tropical_tree_capacity_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1039,12 +1039,12 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": -0.0173186414160178,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.01731864141600159,
-          "heldout_family_rmse": 2.1177836245114565
+          "heldout_family_pooled_r2": -1.674911283799343,
+          "heldout_family_rmse": 3.4340591858528313
         }
       },
       "n_clusters": 12,
-      "n_families": 12,
+      "n_families": 4,
       "n_run_rows": 60,
       "path": "results/expanded_hard_stats/n4_m6_N3_D2_branch_capacity_clustered_inference.json"
     },
@@ -1060,8 +1060,8 @@
           "bootstrap_prob_positive": 0.9266666666666666,
           "group_loo_r2": -0.2603225546612469,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.26032255466124776,
-          "heldout_family_rmse": 3.8199330498861452
+          "heldout_family_pooled_r2": -0.6103528078430405,
+          "heldout_family_rmse": 4.317928180728108
         },
         "branch_rank_weighted_capacity_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1072,8 +1072,8 @@
           "bootstrap_prob_positive": 0.9566666666666667,
           "group_loo_r2": -0.2603225546612491,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.260322554661248,
-          "heldout_family_rmse": 3.8199330498861457
+          "heldout_family_pooled_r2": -0.6103528078430558,
+          "heldout_family_rmse": 4.317928180728129
         },
         "input_count_plus_branch_drel": {
           "bootstrap_delta_ci95": [
@@ -1084,8 +1084,8 @@
           "bootstrap_prob_positive": 0.9066666666666666,
           "group_loo_r2": -0.26032255466124843,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.2603225546612471,
-          "heldout_family_rmse": 3.8199330498861443
+          "heldout_family_pooled_r2": -0.6103528078430491,
+          "heldout_family_rmse": 4.31792818072812
         },
         "input_count_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1096,8 +1096,8 @@
           "bootstrap_prob_positive": 0.8933333333333333,
           "group_loo_r2": -0.26032255466124843,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.26032255466124754,
-          "heldout_family_rmse": 3.8199330498861452
+          "heldout_family_pooled_r2": -0.6103528078430656,
+          "heldout_family_rmse": 4.317928180728142
         },
         "masked_tree_geometry": {
           "bootstrap_delta_ci95": [
@@ -1108,8 +1108,8 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": -0.11019637643243163,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.11019637643243807,
-          "heldout_family_rmse": 3.585211657168532
+          "heldout_family_pooled_r2": -0.11651754211084953,
+          "heldout_family_rmse": 3.5954037952370816
         },
         "raw_count": {
           "bootstrap_delta_ci95": null,
@@ -1117,8 +1117,8 @@
           "bootstrap_prob_positive": null,
           "group_loo_r2": -0.19008264462809854,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.19008264462809854,
-          "heldout_family_rmse": 3.711961456055231
+          "heldout_family_pooled_r2": -0.4972848533007157,
+          "heldout_family_rmse": 4.163581907808512
         },
         "raw_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1129,8 +1129,8 @@
           "bootstrap_prob_positive": 0.8666666666666667,
           "group_loo_r2": -0.26032255466124843,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.26032255466124754,
-          "heldout_family_rmse": 3.8199330498861452
+          "heldout_family_pooled_r2": -0.6103528078430656,
+          "heldout_family_rmse": 4.317928180728142
         },
         "tree_geometry": {
           "bootstrap_delta_ci95": [
@@ -1141,8 +1141,8 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": 0.04054170253115219,
           "group_n": 12,
-          "heldout_family_pooled_r2": 0.040541702531159185,
-          "heldout_family_rmse": 3.332943477208172
+          "heldout_family_pooled_r2": -0.6833291894990765,
+          "heldout_family_rmse": 4.414681984367772
         },
         "tropical_tree_capacity": {
           "bootstrap_delta_ci95": [
@@ -1153,8 +1153,8 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": -1.6196742571791214,
           "group_n": 12,
-          "heldout_family_pooled_r2": -1.6196742571791347,
-          "heldout_family_rmse": 5.507297575235455
+          "heldout_family_pooled_r2": -2.002852646134084,
+          "heldout_family_rmse": 5.896331711469075
         },
         "tropical_tree_capacity_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1165,12 +1165,12 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": -1.505704281303343,
           "group_n": 12,
-          "heldout_family_pooled_r2": -1.5057042813033212,
-          "heldout_family_rmse": 5.386166874364527
+          "heldout_family_pooled_r2": -2.4446508702585743,
+          "heldout_family_rmse": 6.3152057219671605
         }
       },
       "n_clusters": 12,
-      "n_families": 12,
+      "n_families": 6,
       "n_run_rows": 60,
       "path": "results/expanded_hard_stats/n5_m8_N3_D2_branch_capacity_clustered_inference.json"
     },
@@ -1186,8 +1186,8 @@
           "bootstrap_prob_positive": 0.31,
           "group_loo_r2": -0.19008264462809832,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.19008264462809832,
-          "heldout_family_rmse": 6.41584299389519
+          "heldout_family_pooled_r2": -0.23318868937357373,
+          "heldout_family_rmse": 6.531003748386028
         },
         "branch_rank_weighted_capacity_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1198,8 +1198,8 @@
           "bootstrap_prob_positive": 0.3,
           "group_loo_r2": -0.19008264462809832,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.19008264462809832,
-          "heldout_family_rmse": 6.41584299389519
+          "heldout_family_pooled_r2": -0.23318868937357462,
+          "heldout_family_rmse": 6.53100374838603
         },
         "input_count_plus_branch_drel": {
           "bootstrap_delta_ci95": [
@@ -1210,8 +1210,8 @@
           "bootstrap_prob_positive": 0.0,
           "group_loo_r2": -0.1900826446280992,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.1900826446280992,
-          "heldout_family_rmse": 6.415842993895192
+          "heldout_family_pooled_r2": -0.2331886893735795,
+          "heldout_family_rmse": 6.531003748386043
         },
         "input_count_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1222,8 +1222,8 @@
           "bootstrap_prob_positive": 0.0,
           "group_loo_r2": -0.1900826446280992,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.1900826446280992,
-          "heldout_family_rmse": 6.415842993895192
+          "heldout_family_pooled_r2": -0.2331886893735795,
+          "heldout_family_rmse": 6.531003748386043
         },
         "masked_tree_geometry": {
           "bootstrap_delta_ci95": [
@@ -1234,8 +1234,8 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": 0.4465901607769668,
           "group_n": 12,
-          "heldout_family_pooled_r2": 0.44659016077697133,
-          "heldout_family_rmse": 4.375106254022133
+          "heldout_family_pooled_r2": 0.39902581465758813,
+          "heldout_family_rmse": 4.559246520512629
         },
         "raw_count": {
           "bootstrap_delta_ci95": null,
@@ -1243,8 +1243,8 @@
           "bootstrap_prob_positive": null,
           "group_loo_r2": -0.1900826446280992,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.1900826446280992,
-          "heldout_family_rmse": 6.415842993895192
+          "heldout_family_pooled_r2": -0.2331886893735795,
+          "heldout_family_rmse": 6.531003748386043
         },
         "raw_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1255,8 +1255,8 @@
           "bootstrap_prob_positive": 0.0,
           "group_loo_r2": -0.1900826446280992,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.1900826446280992,
-          "heldout_family_rmse": 6.415842993895192
+          "heldout_family_pooled_r2": -0.2331886893735795,
+          "heldout_family_rmse": 6.531003748386043
         },
         "tree_geometry": {
           "bootstrap_delta_ci95": [
@@ -1267,8 +1267,8 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": 0.3238604298943005,
           "group_n": 12,
-          "heldout_family_pooled_r2": 0.32386042989430786,
-          "heldout_family_rmse": 4.835967162210866
+          "heldout_family_pooled_r2": 0.10179002967999962,
+          "heldout_family_rmse": 5.5738349237581035
         },
         "tropical_tree_capacity": {
           "bootstrap_delta_ci95": [
@@ -1279,8 +1279,8 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": -0.22427420072419313,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.2242742007241898,
-          "heldout_family_rmse": 6.507355235522483
+          "heldout_family_pooled_r2": -11.875754688298809,
+          "heldout_family_rmse": 21.10335542980815
         },
         "tropical_tree_capacity_plus_drel": {
           "bootstrap_delta_ci95": [
@@ -1291,12 +1291,12 @@
           "bootstrap_prob_positive": 1.0,
           "group_loo_r2": -0.22427420072419357,
           "group_n": 12,
-          "heldout_family_pooled_r2": -0.2242742007241869,
-          "heldout_family_rmse": 6.507355235522475
+          "heldout_family_pooled_r2": -11.875754688298809,
+          "heldout_family_rmse": 21.10335542980815
         }
       },
       "n_clusters": 12,
-      "n_families": 12,
+      "n_families": 7,
       "n_run_rows": 60,
       "path": "results/expanded_hard_stats/n5_m12_N3_D2_branch_capacity_clustered_inference.json"
     }
@@ -1338,7 +1338,7 @@
       "root": "results/expanded_hard_sweeps/n5_m12_N3_D2"
     }
   ],
-  "generated_at": "2026-05-07T21:59:04.092689+00:00",
+  "generated_at": "2026-05-07T22:02:20.150547+00:00",
   "matched_motif_controls": [
     {
       "by_control_kind": {

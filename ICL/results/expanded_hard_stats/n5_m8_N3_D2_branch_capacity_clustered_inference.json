@@ -142,7 +142,7 @@
     }
   },
   "cluster_col": "topology_name",
-  "family_col": "physical_topology_name",
+  "family_col": "derived_graph_family",
   "group_level": {
     "target_max": {
       "branch_rank_weighted_capacity": {
@@ -899,80 +899,44 @@
     "branch_rank_weighted_capacity": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 2.329333333333352
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.2928813559322236
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -0.8642820164680864,
+          "rmse": 4.931837501667787
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.5474576271186606
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.524406779661021
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.4816949152542236
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.5491525423728802
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 7.044406779661003
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 6.733559322033898
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 4.456949152542364
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 3.4939999999999856
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 0.9606779661016844
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 3.879661016949157
         }
       ],
-      "pooled_r2": -0.26032255466124776,
-      "pooled_rmse": 3.8199330498861452,
+      "pooled_r2": -0.6103528078430405,
+      "pooled_rmse": 4.317928180728108,
       "predictors": [
         "input_coupled_parameter_count",
         "capacity_rank_mass_min",
@@ -985,80 +949,44 @@
     "branch_rank_weighted_capacity_plus_drel": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 2.329333333333352
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.2928813559322236
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -0.8642820164681084,
+          "rmse": 4.9318375016678155
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.5474576271186606
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.524406779661007
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.4816949152542378
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.5491525423728802
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 7.044406779661003
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 6.733559322033898
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 4.456949152542364
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 3.4939999999999856
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 0.9606779661016702
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 3.8796610169491714
         }
       ],
-      "pooled_r2": -0.260322554661248,
-      "pooled_rmse": 3.8199330498861457,
+      "pooled_r2": -0.6103528078430558,
+      "pooled_rmse": 4.317928180728129,
       "predictors": [
         "input_coupled_parameter_count",
         "d_rel",
@@ -1074,80 +1002,44 @@
     "input_count": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 3.1745454545454663
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.629090909090934
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -0.8286243868255192,
+          "rmse": 4.884444814188945
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.127272727272711
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.0872727272727047
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.0799999999999699
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.16363636363635692
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 7.298181818181831
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 6.992727272727279
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 4.003636363636346
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 1.1672727272727172
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 1.3200000000000074
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 3.436363636363623
         }
       ],
-      "pooled_r2": -0.19008264462809854,
-      "pooled_rmse": 3.711961456055231,
+      "pooled_r2": -0.4972848533007157,
+      "pooled_rmse": 4.163581907808512,
       "predictors": [
         "input_coupled_parameter_count"
       ]
@@ -1155,80 +1047,44 @@
     "input_count_plus_branch_drel": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 2.329333333333338
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.292881355932238
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -0.8642820164681011,
+          "rmse": 4.931837501667806
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.547457627118632
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.5244067796609926
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.4816949152542094
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.549152542372866
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 7.044406779661031
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 6.733559322033898
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 4.456949152542364
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 3.4939999999999998
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 0.9606779661016986
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 3.879661016949129
         }
       ],
-      "pooled_r2": -0.2603225546612471,
-      "pooled_rmse": 3.8199330498861443,
+      "pooled_r2": -0.6103528078430491,
+      "pooled_rmse": 4.31792818072812,
       "predictors": [
         "input_coupled_parameter_count",
         "d_rel",
@@ -1241,80 +1097,44 @@
     "input_count_plus_drel": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 2.3293333333333663
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.292881355932238
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -0.8642820164681229,
+          "rmse": 4.931837501667835
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.547457627118632
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.524406779661007
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.4816949152542236
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.5491525423728802
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 7.044406779661003
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 6.733559322033898
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 4.456949152542364
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 3.494000000000014
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 0.9606779661016844
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 3.879661016949143
         }
       ],
-      "pooled_r2": -0.26032255466124754,
-      "pooled_rmse": 3.8199330498861452,
+      "pooled_r2": -0.6103528078430656,
+      "pooled_rmse": 4.317928180728142,
       "predictors": [
         "input_coupled_parameter_count",
         "d_rel"
@@ -1323,80 +1143,44 @@
     "masked_tree_geometry": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 3.7504543405655397
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.3732410304310037
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -0.14760593557103197,
+          "rmse": 3.8694509555866143
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.8730238203527421
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 6.943672240861019
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 4.316521086187564
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.3666095696050604
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 5.677349040026826
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.4383081384551843
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 1.2660267620245662
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 5.62568151084831
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 1.6868404870897535
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 0.3900406550814637
         }
       ],
-      "pooled_r2": -0.11019637643243807,
-      "pooled_rmse": 3.585211657168532,
+      "pooled_r2": -0.11651754211084953,
+      "pooled_rmse": 3.5954037952370816,
       "predictors": [
         "input_coupled_parameter_count",
         "d_rel",
@@ -1413,80 +1197,44 @@
     "raw_count": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 3.1745454545454663
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.629090909090934
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -0.8286243868255192,
+          "rmse": 4.884444814188945
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.127272727272711
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.0872727272727047
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.0799999999999699
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.16363636363635692
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 7.298181818181831
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 6.992727272727279
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 4.003636363636346
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 1.1672727272727172
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 1.3200000000000074
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 3.436363636363623
         }
       ],
-      "pooled_r2": -0.19008264462809854,
-      "pooled_rmse": 3.711961456055231,
+      "pooled_r2": -0.4972848533007157,
+      "pooled_rmse": 4.163581907808512,
       "predictors": [
         "raw_physical_parameter_count"
       ]
@@ -1494,80 +1242,44 @@
     "raw_plus_drel": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 2.3293333333333663
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.292881355932238
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -0.8642820164681229,
+          "rmse": 4.931837501667835
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.547457627118632
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.524406779661007
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.4816949152542236
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.5491525423728802
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 7.044406779661003
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 6.733559322033898
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 4.456949152542364
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 3.494000000000014
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 0.9606779661016844
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 3.879661016949143
         }
       ],
-      "pooled_r2": -0.26032255466124754,
-      "pooled_rmse": 3.8199330498861452,
+      "pooled_r2": -0.6103528078430656,
+      "pooled_rmse": 4.317928180728142,
       "predictors": [
         "raw_physical_parameter_count",
         "d_rel"
@@ -1576,80 +1288,44 @@
     "tree_geometry": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 4.218708583911678
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.0074168800042003
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -0.9236712667361604,
+          "rmse": 5.009776861989534
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.5918524204038818
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 4.620754944926077
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.9066183960627683
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.4420344459667263
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.955314410287272
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.9197291512017784
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 0.5587538359429658
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 6.328062875867516
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 0.15144419552804322
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 0.10455504910646596
         }
       ],
-      "pooled_r2": 0.040541702531159185,
-      "pooled_rmse": 3.332943477208172,
+      "pooled_r2": -0.6833291894990765,
+      "pooled_rmse": 4.414681984367772,
       "predictors": [
         "raw_physical_parameter_count",
         "d_rel",
@@ -1662,80 +1338,44 @@
     "tropical_tree_capacity": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 10.942349282737126
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 4.464044679486221
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -1.6279114326370063,
+          "rmse": 5.855423558180574
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.509595190759441
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 9.28699518178881
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.46738782174179505
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 1.7366134073282353
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 8.423756831860999
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.31158208042806734
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 2.922362001399918
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 4.651253788170877
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 1.9928318159978744
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 4.828880673485983
         }
       ],
-      "pooled_r2": -1.6196742571791347,
-      "pooled_rmse": 5.507297575235455,
+      "pooled_r2": -2.002852646134084,
+      "pooled_rmse": 5.896331711469075,
       "predictors": [
         "input_coupled_parameter_count",
         "capacity_tropical_linear_test_accuracy_mean",
@@ -1748,80 +1388,44 @@
     "tropical_tree_capacity_plus_drel": {
       "families": [
         {
-          "family": "bottleneck_bridge_n5_m8_seed4",
+          "family": "bottleneck_bridge",
           "n": 1,
           "r2": null,
           "rmse": 6.555065249350065
         },
         {
-          "family": "cycle_chords_n5_m8_seed1",
-          "n": 1,
-          "r2": null,
-          "rmse": 4.0661949077652935
+          "family": "cycle_chords",
+          "n": 7,
+          "r2": -2.064857129408463,
+          "rmse": 6.323507976642349
         },
         {
-          "family": "cycle_chords_n5_m8_seed34",
-          "n": 1,
-          "r2": null,
-          "rmse": 2.3423851072782895
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed35",
-          "n": 1,
-          "r2": null,
-          "rmse": 7.810474111234626
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed62",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.8134583434474507
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed69",
-          "n": 1,
-          "r2": null,
-          "rmse": 0.4392458581771166
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed71",
-          "n": 1,
-          "r2": null,
-          "rmse": 7.093430022949605
-        },
-        {
-          "family": "cycle_chords_n5_m8_seed79",
-          "n": 1,
-          "r2": null,
-          "rmse": 3.9063153502374774
-        },
-        {
-          "family": "degree_balanced_n5_m8_seed60",
+          "family": "degree_balanced",
           "n": 1,
           "r2": null,
           "rmse": 1.8960720635877664
         },
         {
-          "family": "hub_spoke_n5_m8_seed1",
+          "family": "hub_spoke",
           "n": 1,
           "r2": null,
           "rmse": 9.832597874025112
         },
         {
-          "family": "random_sc_n5_m8_seed48",
+          "family": "random_sc",
           "n": 1,
           "r2": null,
           "rmse": 0.7588364367911424
         },
         {
-          "family": "redundant_paths_n5_m8_seed1",
+          "family": "redundant_paths",
           "n": 1,
           "r2": null,
           "rmse": 7.4064042848703195
         }
       ],
-      "pooled_r2": -1.5057042813033212,
-      "pooled_rmse": 5.386166874364527,
+      "pooled_r2": -2.4446508702585743,
+      "pooled_rmse": 6.3152057219671605,
       "predictors": [
         "input_coupled_parameter_count",
         "d_rel",
@@ -1837,7 +1441,7 @@
   },
   "n_aggregate_rows": 12,
   "n_clusters": 12,
-  "n_families": 12,
+  "n_families": 6,
   "n_run_rows": 60,
   "residual_decomposition_run_level": {
     "branch_rank_weighted_capacity": {

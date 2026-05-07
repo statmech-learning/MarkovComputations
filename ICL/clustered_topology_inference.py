@@ -21,6 +21,7 @@ import csv
 import json
 import math
 import os
+import re
 from collections import defaultdict
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
@@ -39,6 +40,19 @@ from regress_topology_results import (
 DEFAULT_TARGET = "test_novel_classes"
 DEFAULT_CLUSTER = "topology_name"
 DEFAULT_FAMILY = "physical_topology_name"
+DERIVED_FAMILY_COL = "derived_graph_family"
+GRAPH_FAMILY_PATTERNS = [
+    "bottleneck_bridge",
+    "degree_balanced",
+    "redundant_paths",
+    "bidirected_cycle",
+    "directed_cycle",
+    "cycle_chords",
+    "random_sc",
+    "hub_spoke",
+    "two_module",
+    "complete",
+]
 DEFAULT_MODELS = [
     "raw_count",
     "raw_plus_drel",
@@ -57,6 +71,46 @@ DEFAULT_MODELS = [
 def load_rows(path: str) -> List[dict]:
     with open(path, newline="") as handle:
         return list(csv.DictReader(handle))
+
+
+def graph_family_from_name(value: str) -> str:
+    """Extract a graph-family label from a topology instance name.
+
+    Library rows often name instances like ``cycle_chords_n5_m8_seed34``.
+    Leaving out those full names tests interpolation across individual
+    topology instances, not held-out graph families.  This helper provides an
+    explicit family-level label for leave-family-out diagnostics.
+    """
+
+    if value in (None, ""):
+        return ""
+    text = str(value)
+    for family in GRAPH_FAMILY_PATTERNS:
+        if text == family or text.startswith(f"{family}_"):
+            return family
+    match = re.match(r"^(.+?)_n\d+_m\d+(?:_|$)", text)
+    if match:
+        return match.group(1)
+    return text
+
+
+def with_derived_graph_family(rows: Sequence[dict]) -> List[dict]:
+    """Return copied rows with ``derived_graph_family`` filled when possible."""
+
+    out = []
+    for row in rows:
+        item = dict(row)
+        current = item.get(DERIVED_FAMILY_COL)
+        if current in (None, ""):
+            for column in ("family", "mask_family", "input_mask_family", "physical_topology_name", "topology_name"):
+                value = item.get(column)
+                if value not in (None, ""):
+                    family = graph_family_from_name(str(value))
+                    if family:
+                        item[DERIVED_FAMILY_COL] = family
+                        break
+        out.append(item)
+    return out
 
 
 def finite_or_none(value):
@@ -328,7 +382,11 @@ def run_clustered_inference(
     model_names: Sequence[str] = DEFAULT_MODELS,
     n_bootstrap: int = 500,
     seed: int = 0,
+    derive_graph_family: bool = False,
 ) -> dict:
+    if derive_graph_family:
+        run_rows = with_derived_graph_family(run_rows)
+        family_col = DERIVED_FAMILY_COL
     aggregate_rows = aggregate_seed_groups(run_rows, target=target, cluster_col=cluster_col)
     bootstrap_candidates = [name for name in model_names if name != "raw_count"]
     return {
@@ -413,6 +471,14 @@ def parse_args():
     parser.add_argument("--models", default=",".join(DEFAULT_MODELS))
     parser.add_argument("--n_bootstrap", type=int, default=500)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument(
+        "--derive_graph_family",
+        action="store_true",
+        help=(
+            "Derive held-out graph-family labels from topology instance names "
+            "such as cycle_chords_n5_m8_seed34 and use them for leave-family-out diagnostics."
+        ),
+    )
     parser.add_argument("--output_json", default=None)
     return parser.parse_args()
 
@@ -432,6 +498,7 @@ def main():
         model_names=model_names,
         n_bootstrap=args.n_bootstrap,
         seed=args.seed,
+        derive_graph_family=args.derive_graph_family,
     )
     print_summary(report)
     if args.output_json:

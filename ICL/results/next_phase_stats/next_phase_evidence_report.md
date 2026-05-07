@@ -1,6 +1,6 @@
 # Next-Phase Topology-ICL Evidence Report
 
-Generated: `2026-05-07T21:59:04.092689+00:00`.
+Generated: `2026-05-07T22:02:20.150547+00:00`.
 
 Scope: first-order CRNs with exponential input-dependent rates. These results do not claim a topology theory for autocatalytic or WTA CRNs.
 
@@ -68,54 +68,54 @@ Rows: `60`. Groups: `12`. Families: `12`.
 
 ### hard_n4_m6_N3_D2
 
-Rows: `60`. Groups: `12`. Families: `12`.
+Rows: `60`. Groups: `12`. Families: `4`.
 
 | model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
 | --- | --- | --- | --- | --- | --- | --- |
-| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
-| raw_plus_drel | 12 | 0.203 | 0.068 | [0.000, 0.189] | 0.883 | 0.203 |
-| input_count_plus_drel | 12 | 0.203 | 0.062 | [0.000, 0.155] | 0.883 | 0.203 |
-| input_count_plus_branch_drel | 12 | 0.203 | 0.067 | [0.000, 0.157] | 0.913 | 0.203 |
-| tree_geometry | 12 | -0.112 | 0.136 | [0.055, 0.267] | 1.000 | -0.112 |
-| masked_tree_geometry | 12 | -0.151 | 0.096 | [0.010, 0.213] | 1.000 | -0.151 |
-| branch_rank_weighted_capacity | 12 | 0.203 | 0.066 | [-0.000, 0.180] | 0.907 | 0.203 |
-| branch_rank_weighted_capacity_plus_drel | 12 | 0.203 | 0.069 | [-0.000, 0.175] | 0.933 | 0.203 |
-| tropical_tree_capacity | 12 | -0.266 | 0.168 | [0.062, 0.294] | 1.000 | -0.266 |
-| tropical_tree_capacity_plus_drel | 12 | -0.017 | 0.178 | [0.064, 0.304] | 1.000 | -0.017 |
+| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -1.034 |
+| raw_plus_drel | 12 | 0.203 | 0.068 | [0.000, 0.189] | 0.883 | 0.295 |
+| input_count_plus_drel | 12 | 0.203 | 0.062 | [0.000, 0.155] | 0.883 | 0.295 |
+| input_count_plus_branch_drel | 12 | 0.203 | 0.067 | [0.000, 0.157] | 0.913 | 0.295 |
+| tree_geometry | 12 | -0.112 | 0.136 | [0.055, 0.267] | 1.000 | -0.111 |
+| masked_tree_geometry | 12 | -0.151 | 0.096 | [0.010, 0.213] | 1.000 | 0.224 |
+| branch_rank_weighted_capacity | 12 | 0.203 | 0.066 | [-0.000, 0.180] | 0.907 | 0.295 |
+| branch_rank_weighted_capacity_plus_drel | 12 | 0.203 | 0.069 | [-0.000, 0.175] | 0.933 | 0.295 |
+| tropical_tree_capacity | 12 | -0.266 | 0.168 | [0.062, 0.294] | 1.000 | -3.062 |
+| tropical_tree_capacity_plus_drel | 12 | -0.017 | 0.178 | [0.064, 0.304] | 1.000 | -1.675 |
 
 ### hard_n5_m8_N3_D2
 
-Rows: `60`. Groups: `12`. Families: `12`.
+Rows: `60`. Groups: `12`. Families: `6`.
 
 | model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
 | --- | --- | --- | --- | --- | --- | --- |
-| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
-| raw_plus_drel | 12 | -0.260 | 0.020 | [0.000, 0.075] | 0.867 | -0.260 |
-| input_count_plus_drel | 12 | -0.260 | 0.019 | [0.000, 0.087] | 0.893 | -0.260 |
-| input_count_plus_branch_drel | 12 | -0.260 | 0.021 | [0.000, 0.076] | 0.907 | -0.260 |
-| tree_geometry | 12 | 0.041 | 0.209 | [0.056, 0.352] | 1.000 | 0.041 |
-| masked_tree_geometry | 12 | -0.110 | 0.179 | [0.041, 0.314] | 1.000 | -0.110 |
-| branch_rank_weighted_capacity | 12 | -0.260 | 0.019 | [-0.000, 0.077] | 0.927 | -0.260 |
-| branch_rank_weighted_capacity_plus_drel | 12 | -0.260 | 0.019 | [0.000, 0.067] | 0.957 | -0.260 |
-| tropical_tree_capacity | 12 | -1.620 | 0.192 | [0.048, 0.344] | 1.000 | -1.620 |
-| tropical_tree_capacity_plus_drel | 12 | -1.506 | 0.213 | [0.065, 0.355] | 1.000 | -1.506 |
+| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.497 |
+| raw_plus_drel | 12 | -0.260 | 0.020 | [0.000, 0.075] | 0.867 | -0.610 |
+| input_count_plus_drel | 12 | -0.260 | 0.019 | [0.000, 0.087] | 0.893 | -0.610 |
+| input_count_plus_branch_drel | 12 | -0.260 | 0.021 | [0.000, 0.076] | 0.907 | -0.610 |
+| tree_geometry | 12 | 0.041 | 0.209 | [0.056, 0.352] | 1.000 | -0.683 |
+| masked_tree_geometry | 12 | -0.110 | 0.179 | [0.041, 0.314] | 1.000 | -0.117 |
+| branch_rank_weighted_capacity | 12 | -0.260 | 0.019 | [-0.000, 0.077] | 0.927 | -0.610 |
+| branch_rank_weighted_capacity_plus_drel | 12 | -0.260 | 0.019 | [0.000, 0.067] | 0.957 | -0.610 |
+| tropical_tree_capacity | 12 | -1.620 | 0.192 | [0.048, 0.344] | 1.000 | -2.003 |
+| tropical_tree_capacity_plus_drel | 12 | -1.506 | 0.213 | [0.065, 0.355] | 1.000 | -2.445 |
 
 ### hard_n5_m12_N3_D2
 
-Rows: `60`. Groups: `12`. Families: `12`.
+Rows: `60`. Groups: `12`. Families: `7`.
 
 | model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
 | --- | --- | --- | --- | --- | --- | --- |
-| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
-| raw_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
-| input_count_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
-| input_count_plus_branch_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
-| tree_geometry | 12 | 0.324 | 0.355 | [0.124, 0.592] | 1.000 | 0.324 |
-| masked_tree_geometry | 12 | 0.447 | 0.297 | [0.093, 0.532] | 1.000 | 0.447 |
-| branch_rank_weighted_capacity | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.310 | -0.190 |
-| branch_rank_weighted_capacity_plus_drel | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.300 | -0.190 |
-| tropical_tree_capacity | 12 | -0.224 | 0.361 | [0.127, 0.630] | 1.000 | -0.224 |
-| tropical_tree_capacity_plus_drel | 12 | -0.224 | 0.344 | [0.107, 0.591] | 1.000 | -0.224 |
+| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.233 |
+| raw_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.233 |
+| input_count_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.233 |
+| input_count_plus_branch_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.233 |
+| tree_geometry | 12 | 0.324 | 0.355 | [0.124, 0.592] | 1.000 | 0.102 |
+| masked_tree_geometry | 12 | 0.447 | 0.297 | [0.093, 0.532] | 1.000 | 0.399 |
+| branch_rank_weighted_capacity | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.310 | -0.233 |
+| branch_rank_weighted_capacity_plus_drel | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.300 | -0.233 |
+| tropical_tree_capacity | 12 | -0.224 | 0.361 | [0.127, 0.630] | 1.000 | -11.876 |
+| tropical_tree_capacity_plus_drel | 12 | -0.224 | 0.344 | [0.107, 0.591] | 1.000 | -11.876 |
 
 ## Causal Alignment Interventions
 
