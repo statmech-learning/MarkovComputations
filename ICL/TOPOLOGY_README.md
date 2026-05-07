@@ -55,11 +55,24 @@ The convention is:
 - `extract_essential_subgraphs.py`: convert trained-model edge importance or
   ablation scores into strongly connected candidate motifs that can be retrained
   through `submit_topology_library_sweep.py`.
+- `extract_essential_input_masks.py`: convert trained-model edge importance or
+  ablation scores into sparse input-encoding masks while keeping the physical
+  reaction graph fixed.
 - `compare_essential_retrains.py`: join extracted motif source metadata with
   from-scratch retrain aggregates and report performance retention.
+- `finalize_essential_inputmask_retrains.py`: guarded finalizer for extracted
+  essential input-mask retrains; it refuses to collect incomplete retrain sets
+  unless `--allow_partial` is supplied.
+- `make_input_mask_report.py`: focused report for fixed-physical-graph
+  input-mask sweeps, including masked tree geometry, mechanism predictors,
+  extracted essential masks, and retrain retention.
 - `make_topology_research_report.py`: consolidate fixed-edge sweeps,
   mechanism summaries, seed aggregates, and essential motif retrain comparisons
   into one Markdown/JSON progress report.
+- `audit_topology_artifacts.py`: read-only audit of source runs, mechanism
+  outputs, extracted essential masks, retrain outputs, manifests, and comparison
+  files. Use this before recovering interrupted cluster arrays or running
+  guarded finalizers.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
 - `tests/test_topology_metrics.py`: exact small-graph matrix-tree checks.
@@ -317,6 +330,48 @@ only the learned input-coupling rows are pruned, the final collection can be
 done in one guarded step after all retrain jobs finish:
 
 ```bash
+python3 audit_topology_artifacts.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --require_source_results \
+  --require_mechanisms \
+  --require_essential_inputmask
+
+for root in \
+  results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  results/input_mask_fixed_m20_hub_spoke_seed63_c200
+do
+  python3 submit_topology_library_sweep.py \
+    --library_csv "$root/essential_inputmask50/selected.csv" \
+    --output_root "$root/essential_inputmask50_retrain" \
+    --seeds 1,2,3,4,5 \
+    --status_only \
+    --manifest_csv "$root/essential_inputmask50_retrain/task_manifest.csv"
+
+  python3 submit_topology_library_sweep.py \
+    --library_csv "$root/essential_inputmask50/selected.csv" \
+    --output_root "$root/essential_inputmask50_retrain" \
+    --seeds 1,2,3,4,5 \
+    --missing_only \
+    --clean \
+    --array \
+    --max-concurrent 16
+done
+
+python3 audit_topology_artifacts.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --require_source_results \
+  --require_mechanisms \
+  --require_essential_inputmask \
+  --require_essential_retrains \
+  --strict
+
 python3 finalize_essential_inputmask_retrains.py \
   --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
   --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
