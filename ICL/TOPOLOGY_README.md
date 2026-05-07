@@ -106,8 +106,12 @@ python3 submit_topology_phase1.py --phase smoke --array
 The full initial controlled sweep is:
 
 ```bash
+python3 submit_topology_phase1.py --phase pilot --array --max-concurrent 20
 python3 submit_topology_phase1.py --phase phase1 --array --max-concurrent 40
 ```
+
+Use `pilot` before `phase1`: it uses the same output format and matched
+topology controls, but shorter runs suitable for checking signal and runtime.
 
 Each run stores pre-training structural predictors next to training/test
 results, so regression analysis can compare novel-class ICL accuracy against

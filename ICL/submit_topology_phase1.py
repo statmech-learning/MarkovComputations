@@ -99,6 +99,46 @@ def phase_configs(phase, seeds):
                 configs.append(row)
         return configs
 
+    if phase == "pilot":
+        pilot_base = {
+            "epochs": 100,
+            "train_samples": 5000,
+            "val_samples": 1000,
+            "eval_frequency": 10,
+            "n_eval_samples": 200,
+            "test_samples": 500,
+            "n_nodes": 6,
+        }
+        for n_edges in [8, 10, 12, 20]:
+            for family in ["cycle_chords", "random_sc", "hub_spoke"]:
+                if family == "hub_spoke" and n_edges < 2 * (pilot_base["n_nodes"] - 1):
+                    continue
+                for seed in seeds:
+                    row = pilot_base.copy()
+                    row.update(
+                        {
+                            "label": f"{family}_pilot_n6_m{n_edges}_seed{seed}",
+                            "topology_family": family,
+                            "n_edges": n_edges,
+                            "seed": seed,
+                            "topology_seed": seed,
+                        }
+                    )
+                    configs.append(row)
+        for seed in seeds:
+            row = pilot_base.copy()
+            row.update(
+                {
+                    "label": f"complete_pilot_n6_seed{seed}",
+                    "topology_family": "complete",
+                    "n_edges": None,
+                    "seed": seed,
+                    "topology_seed": seed,
+                }
+            )
+            configs.append(row)
+        return configs
+
     if phase != "phase1":
         raise ValueError(f"Unknown phase: {phase}")
 
@@ -256,7 +296,7 @@ def submit_array(script_path, dry_run):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--phase", choices=["smoke", "phase1"], default="phase1")
+    parser.add_argument("--phase", choices=["smoke", "pilot", "phase1"], default="phase1")
     parser.add_argument("--seeds", type=str, default="1,2,3,4,5")
     parser.add_argument("--array", action="store_true")
     parser.add_argument("--max-concurrent", type=int, default=40)
