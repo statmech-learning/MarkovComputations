@@ -7,14 +7,14 @@ Branch: `topology`
 Latest inspected commits:
 
 ```text
-e586667 Harden input-mask provenance and recovery
-c96e32e Normalize branch metric source loaders
-d5b20bb Propagate aggregate metric provenance
-00f738d Track common branch metric provenance
-f57b2bb Validate essential mask audit references
-b0ed933 Clarify pooled retrain reporting
-6cac50f Harden essential retrain finalization
-5ca545e Backfill common branch metrics in reports
+a26ef92 Add consolidated research report finalizer
+ae9a324 Require both essential layouts in research verifier
+782ba72 Add physical essential retrain recovery
+aee61b7 Add physical essential retrain finalizer
+426fc22 Interpret recovered input-mask reports
+52d8913 Interpret topology report evidence
+68962f6 Verify recovered input-mask reports
+7c6ecdf Audit physical essential retrain layouts
 ```
 
 ## Objective Restated As Deliverables
@@ -133,7 +133,9 @@ The local test suite covers the analysis/control plane:
 - report generation,
 - artifact audit,
 - SLURM dry-run wrappers,
-- guarded essential input-mask recovery/finalization.
+- guarded essential physical-subgraph recovery/finalization,
+- guarded essential input-mask recovery/finalization,
+- consolidated research report finalization, verification, and interpretation.
 
 The local test suite does not prove:
 
@@ -155,6 +157,8 @@ results/input_mask_fixed_m20_cycle_chords_seed3_c200
 results/input_mask_fixed_m20_hub_spoke_seed63_c200
 results/input_mask_topology_report.md
 results/input_mask_topology_report.json
+results/topology_research_report.md
+results/topology_research_report.json
 ```
 
 For each fixed-input-count experiment, completion requires:
@@ -224,6 +228,19 @@ python3 audit_topology_artifacts.py \
   --require_essential \
   --require_essential_retrains \
   --strict
+```
+
+After both physical and input-mask retrain comparisons are finalized, this final
+research-report command should pass:
+
+```bash
+python3 finalize_topology_research_report.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --output_md results/topology_research_report.md \
+  --output_json results/topology_research_report.json
 ```
 
 ## Completion Verdict
