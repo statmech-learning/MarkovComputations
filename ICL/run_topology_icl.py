@@ -200,9 +200,12 @@ def main():
     n_nodes, edges, topology_name = load_topology(args)
     p = (args.N + 1) * args.D
     input_mask, input_mask_name, input_mask_metadata = load_input_mask(args, n_nodes, edges, p)
-    run_topology_name = (
-        topology_name if input_mask_name == "full" else f"{topology_name}__mask_{input_mask_name}"
-    )
+    if input_mask_name == "full":
+        run_topology_name = topology_name
+    elif input_mask_name.startswith(f"{topology_name}__mask"):
+        run_topology_name = input_mask_name
+    else:
+        run_topology_name = f"{topology_name}__mask_{input_mask_name}"
 
     if not is_strongly_connected(n_nodes, edges) and not args.allow_not_strongly_connected:
         raise SystemExit(

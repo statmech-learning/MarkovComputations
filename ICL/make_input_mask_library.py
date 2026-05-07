@@ -275,12 +275,24 @@ def standardized_matrix(rows, features):
     return (matrix - center) / scale
 
 
-def select_diverse_rows(rows, k, features):
+def select_diverse_rows(rows, k, features, family_key=None):
     if k <= 0 or k >= len(rows):
         return set(range(len(rows)))
 
     z = standardized_matrix(rows, features)
     selected = []
+    if family_key:
+        families = sorted({row.get(family_key) for row in rows if row.get(family_key)})
+        for family in families:
+            candidates = [
+                idx for idx, row in enumerate(rows) if row.get(family_key) == family and idx not in selected
+            ]
+            if not candidates:
+                continue
+            selected.append(max(candidates, key=lambda idx: float(np.linalg.norm(z[idx, :]))))
+            if len(selected) >= k:
+                return set(selected)
+
     for col in range(z.shape[1]):
         for idx in (int(np.argmin(z[:, col])), int(np.argmax(z[:, col]))):
             if idx not in selected:
@@ -411,7 +423,7 @@ def main():
         raise SystemExit("No input masks generated")
 
     features = [item.strip() for item in args.selection_features.split(",") if item.strip()]
-    selected = select_diverse_rows(rows, args.select_masks, features)
+    selected = select_diverse_rows(rows, args.select_masks, features, family_key="mask_family")
     for idx, row in enumerate(rows):
         row["selected"] = 1 if idx in selected else 0
 
