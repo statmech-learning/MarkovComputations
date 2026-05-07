@@ -72,6 +72,7 @@ class CollectTopologyResultsTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         row = rows[0]
         self.assertEqual(row["comparison_branch_d_rel_min"], "0")
+        self.assertEqual(row["comparison_branch_common_d_rel_source"], "recomputed")
         self.assertGreater(float(row["comparison_branch_d_rel_max"]), 0.0)
         self.assertGreater(float(row["comparison_branch_d_rel_gini"]), 0.0)
 

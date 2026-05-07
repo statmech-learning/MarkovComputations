@@ -301,10 +301,16 @@ class MakeInputMaskReportTests(unittest.TestCase):
 
         self.assertIn("Wrote", result.stdout)
         self.assertIn("common branch rank", markdown)
+        self.assertIn("Common branch-rank source counts", markdown)
+        self.assertIn("artifact", markdown)
         self.assertIn("worst branch margin", markdown)
         self.assertIn("tree NMI", markdown)
         self.assertIn("Extracted Essential Input Masks", markdown)
         correlations = payload["pooled"]["run_correlations"]
+        self.assertEqual(
+            payload["pooled"]["run_common_branch_source_counts"]["artifact"],
+            2,
+        )
         self.assertIn("comparison_branch_common_d_rel_min", correlations)
         self.assertIn("comparison_branch_d_rel_min", correlations)
         self.assertIn("target_logprob_margin_branch_mean_min", correlations)

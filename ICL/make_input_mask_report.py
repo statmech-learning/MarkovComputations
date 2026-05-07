@@ -257,6 +257,10 @@ def load_csv(path):
         for target, fallback in BRANCH_METRIC_FALLBACKS.items():
             if row.get(target) in (None, "") and row.get(fallback) not in (None, ""):
                 row[target] = row[fallback]
+                if target.startswith("comparison_branch_common_d_rel_"):
+                    row["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
+        if row.get("comparison_branch_common_d_rel_min") not in (None, ""):
+            row.setdefault("comparison_branch_common_d_rel_source", "artifact")
     return rows
 
 
@@ -283,6 +287,14 @@ def numeric_values(rows, key):
 def mean(values):
     values = [value for value in values if value is not None]
     return None if not values else float(np.mean(values))
+
+
+def common_branch_source_counts(rows):
+    counts = defaultdict(int)
+    for row in rows:
+        source = row.get("comparison_branch_common_d_rel_source") or "unknown"
+        counts[source] += 1
+    return dict(sorted(counts.items()))
 
 
 def std(values):
@@ -950,6 +962,8 @@ def build_report(experiments, target):
     pooled = {
         "run_summary": summarize_rows(run_rows, target),
         "aggregate_summary": summarize_rows(aggregate_rows, "target_mean"),
+        "run_common_branch_source_counts": common_branch_source_counts(run_rows),
+        "aggregate_common_branch_source_counts": common_branch_source_counts(aggregate_rows),
         "run_regressions": regression_models(run_rows, RUN_MODELS, target),
         "aggregate_target_mean": regression_models(aggregate_rows, AGGREGATE_MODELS, "target_mean"),
         "aggregate_target_max": regression_models(aggregate_rows, AGGREGATE_MODELS, "target_max"),
@@ -991,7 +1005,7 @@ def build_markdown(report):
         "",
         "Raw count controls should be weak here because `n_edges` and `input_coupled_parameter_count` were fixed by construction. Physical-backbone and mask-family terms test controlled topology effects; mechanism terms test what trained models actually used.",
         "",
-        "For legacy CSVs generated before `comparison_branch_common_d_rel_*` existed, common branch-rank fields are backfilled from the older loose `comparison_branch_d_rel_*` upper-bound metrics. Regenerate collection artifacts to get exact common-subspace ranks.",
+        f"Common branch-rank source counts: run rows `{pooled['run_common_branch_source_counts']}`, mask groups `{pooled['aggregate_common_branch_source_counts']}`. Legacy fallback means `comparison_branch_common_d_rel_*` was approximated from the older loose `comparison_branch_d_rel_*` upper-bound metric; regenerate collection artifacts to get exact common-subspace ranks.",
         "",
         *fit_table(pooled["run_regressions"], "### Run-Level Novel-Class ICL"),
         "",

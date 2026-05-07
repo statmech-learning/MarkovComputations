@@ -42,6 +42,7 @@ FIELDS = [
     "comparison_branch_common_d_rel_mean",
     "comparison_branch_common_d_rel_max",
     "comparison_branch_common_d_rel_gini",
+    "comparison_branch_common_d_rel_source",
     "comparison_branch_input_count_min",
     "comparison_branch_input_count_mean",
     "comparison_branch_input_count_max",
@@ -50,6 +51,7 @@ FIELDS = [
     "comparison_branch_input_overlap_mean",
     "comparison_branch_input_overlap_max",
     "comparison_branch_input_overlap_gini",
+    "comparison_branch_input_overlap_source",
     "rank_D",
     "effective_rank_D",
     "condition_number_D",
@@ -121,6 +123,10 @@ def backfill_branch_metrics(metrics, topology_payload, config):
     """Backfill branch-comparison structural metrics for older run artifacts."""
 
     if all(metrics.get(field) not in (None, "") for field in BRANCH_METRIC_FIELDS):
+        if metrics.get("comparison_branch_common_d_rel_min") not in (None, ""):
+            metrics.setdefault("comparison_branch_common_d_rel_source", "artifact")
+        if metrics.get("comparison_branch_input_overlap_min") not in (None, ""):
+            metrics.setdefault("comparison_branch_input_overlap_source", "artifact")
         return metrics
     try:
         n_context = int(config["N"])
@@ -156,6 +162,10 @@ def backfill_branch_metrics(metrics, topology_payload, config):
     for field in BRANCH_METRIC_FIELDS:
         if metrics.get(field) in (None, "") and field in backfilled:
             metrics[field] = backfilled[field]
+            if field.startswith("comparison_branch_common_d_rel_"):
+                metrics["comparison_branch_common_d_rel_source"] = "recomputed"
+            if field.startswith("comparison_branch_input_overlap_"):
+                metrics["comparison_branch_input_overlap_source"] = "recomputed"
     fallback_pairs = {
         "comparison_branch_common_d_rel_min": "comparison_branch_d_rel_min",
         "comparison_branch_common_d_rel_mean": "comparison_branch_d_rel_mean",
@@ -169,6 +179,14 @@ def backfill_branch_metrics(metrics, topology_payload, config):
     for target, fallback in fallback_pairs.items():
         if metrics.get(target) in (None, "") and metrics.get(fallback) not in (None, ""):
             metrics[target] = metrics[fallback]
+            if target.startswith("comparison_branch_common_d_rel_"):
+                metrics["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
+            if target.startswith("comparison_branch_input_overlap_"):
+                metrics["comparison_branch_input_overlap_source"] = "legacy_input_count_fallback"
+    if metrics.get("comparison_branch_common_d_rel_min") not in (None, ""):
+        metrics.setdefault("comparison_branch_common_d_rel_source", "artifact")
+    if metrics.get("comparison_branch_input_overlap_min") not in (None, ""):
+        metrics.setdefault("comparison_branch_input_overlap_source", "artifact")
     return metrics
 
 
@@ -238,6 +256,7 @@ def load_run(run_dir):
         "comparison_branch_common_d_rel_mean": metrics.get("comparison_branch_common_d_rel_mean"),
         "comparison_branch_common_d_rel_max": metrics.get("comparison_branch_common_d_rel_max"),
         "comparison_branch_common_d_rel_gini": metrics.get("comparison_branch_common_d_rel_gini"),
+        "comparison_branch_common_d_rel_source": metrics.get("comparison_branch_common_d_rel_source"),
         "comparison_branch_input_count_min": metrics.get("comparison_branch_input_count_min"),
         "comparison_branch_input_count_mean": metrics.get("comparison_branch_input_count_mean"),
         "comparison_branch_input_count_max": metrics.get("comparison_branch_input_count_max"),
@@ -246,6 +265,7 @@ def load_run(run_dir):
         "comparison_branch_input_overlap_mean": metrics.get("comparison_branch_input_overlap_mean"),
         "comparison_branch_input_overlap_max": metrics.get("comparison_branch_input_overlap_max"),
         "comparison_branch_input_overlap_gini": metrics.get("comparison_branch_input_overlap_gini"),
+        "comparison_branch_input_overlap_source": metrics.get("comparison_branch_input_overlap_source"),
         "rank_D": metrics.get("rank_D"),
         "effective_rank_D": metrics.get("effective_rank_D"),
         "condition_number_D": metrics.get("condition_number_D"),

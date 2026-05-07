@@ -260,6 +260,10 @@ def backfill_branch_metric_payload(payload):
         for target, fallback in BRANCH_METRIC_FALLBACKS.items():
             if payload.get(target) in (None, "") and payload.get(fallback) not in (None, ""):
                 payload[target] = payload[fallback]
+                if target.startswith("comparison_branch_common_d_rel_"):
+                    payload["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
+        if payload.get("comparison_branch_common_d_rel_min") not in (None, ""):
+            payload.setdefault("comparison_branch_common_d_rel_source", "artifact")
         for value in payload.values():
             backfill_branch_metric_payload(value)
     elif isinstance(payload, list):
@@ -277,6 +281,10 @@ def load_csv(path):
         for target, fallback in BRANCH_METRIC_FALLBACKS.items():
             if row.get(target) in (None, "") and row.get(fallback) not in (None, ""):
                 row[target] = row[fallback]
+                if target.startswith("comparison_branch_common_d_rel_"):
+                    row["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
+        if row.get("comparison_branch_common_d_rel_min") not in (None, ""):
+            row.setdefault("comparison_branch_common_d_rel_source", "artifact")
     return rows
 
 
@@ -304,6 +312,14 @@ def std(values):
 
 def numeric_column(rows, name):
     return [parse_float(row.get(name)) for row in rows]
+
+
+def source_counts(rows, key):
+    counts = OrderedDict()
+    for row in rows:
+        source = row.get(key) or "unknown"
+        counts[source] = counts.get(source, 0) + 1
+    return dict(counts)
 
 
 def standardize_design(X):
@@ -674,6 +690,18 @@ def pooled_report(experiments, target):
         "run_rows": len(run_rows),
         "aggregate_groups": len(aggregate_rows),
         "retrain_groups": len(retrain_rows),
+        "run_common_branch_source_counts": source_counts(
+            run_rows,
+            "comparison_branch_common_d_rel_source",
+        ),
+        "aggregate_common_branch_source_counts": source_counts(
+            aggregate_rows,
+            "comparison_branch_common_d_rel_source",
+        ),
+        "retrain_common_branch_source_counts": source_counts(
+            retrain_rows,
+            "comparison_branch_common_d_rel_source",
+        ),
         "run_level": regression_models(run_rows, POOLED_RUN_MODELS, target),
         "aggregate_target_mean": regression_models(
             aggregate_rows,
@@ -971,7 +999,7 @@ def build_markdown(report):
         "",
         "These models test whether tree-geometry and post-training mechanism features explain accuracy beyond edge count when `m` varies across regimes.",
         "",
-        "For legacy CSVs generated before `comparison_branch_common_d_rel_*` existed, common branch-rank fields are backfilled from the older loose `comparison_branch_d_rel_*` upper-bound metrics. Regenerate collection artifacts to get exact common-subspace ranks.",
+        f"Common branch-rank source counts: run rows `{pooled.get('run_common_branch_source_counts', {})}`, topology groups `{pooled.get('aggregate_common_branch_source_counts', {})}`, retrained groups `{pooled.get('retrain_common_branch_source_counts', {})}`. Legacy fallback means `comparison_branch_common_d_rel_*` was approximated from the older loose `comparison_branch_d_rel_*` upper-bound metric; regenerate collection artifacts to get exact common-subspace ranks.",
         "",
         *pooled_regression_table(pooled, "run_level", "### Run-Level Novel-Class ICL"),
         "",
