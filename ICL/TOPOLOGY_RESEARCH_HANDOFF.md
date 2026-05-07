@@ -689,6 +689,7 @@ Core theory and metrics:
 ICL/topology_metrics.py
 ICL/topology_analysis.py
 ICL/branch_margin_capacity.py
+ICL/collect_branch_margin_capacity.py
 ```
 
 `branch_margin_capacity.py` is the first implementation of the proposed
@@ -697,6 +698,10 @@ query/context comparison features by common relative tree-contrast support, and
 reports oracle plus norm-controlled linear margins. It is intentionally a
 pre-training proxy, not a solution to the full nonconvex `max_{K,B}` capacity
 problem.
+
+`collect_branch_margin_capacity.py` applies this probe to every selected row
+in a topology or input-mask library CSV, producing a flat predictor table that
+can be joined to training results.
 
 Model and training:
 

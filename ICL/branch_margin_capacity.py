@@ -421,6 +421,9 @@ def parse_args():
             "random_sc",
             "hub_spoke",
             "two_module",
+            "degree_balanced",
+            "bottleneck_bridge",
+            "redundant_paths",
         ],
     )
     parser.add_argument("--n_nodes", type=int, default=6)

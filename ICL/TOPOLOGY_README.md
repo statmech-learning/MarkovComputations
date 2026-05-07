@@ -49,6 +49,9 @@ The convention is:
   linear margins. This is a conservative proxy for the proposed
   tree-polytope/branch-margin theory, not a solution to the full nonconvex
   `max_{K,B}` CRN capacity problem.
+- `collect_branch_margin_capacity.py`: compute the branch-margin capacity
+  probe for selected rows in a topology or input-mask library CSV and write a
+  flat predictor table.
 - `TOPOLOGY_THEORY_AUDIT.md`: first mandatory implementation audit for the
   next theory phase. It checks tree orientation, trainable bias treatment,
   strong-connectivity handling, pre-training selection leakage, novel-class
@@ -237,6 +240,17 @@ common context/query support in the relative tree-contrast map, gates
 
 Use it as a branch-specific topology predictor to compare against `d_rel`; do
 not interpret it as proof that a trained CRN will realize the optimum.
+
+For a whole selected library:
+
+```bash
+python3 collect_branch_margin_capacity.py \
+  --library_csv results/expanded_pilot_libraries/n5_m7_N2_D1/selected.csv \
+  --output_csv results/expanded_pilot_libraries/n5_m7_N2_D1/branch_margin_capacity.csv \
+  --output_json results/expanded_pilot_libraries/n5_m7_N2_D1/branch_margin_capacity_summary.json \
+  --N 2 \
+  --D 1
+```
 
 ## Cluster-Aware Statistical Diagnostics
 
