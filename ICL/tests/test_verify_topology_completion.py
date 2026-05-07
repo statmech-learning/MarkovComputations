@@ -120,6 +120,8 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
         include_causal=True,
         hard_family_col="derived_graph_family",
         include_family_bootstrap=True,
+        hard_mechanism_count=0,
+        hard_causal_count=0,
     ):
         report_md = os.path.join(tmpdir, "next_phase.md")
         report_json = os.path.join(tmpdir, "next_phase.json")
@@ -202,8 +204,8 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             {
                 "label": label,
                 "results_pkl_count": 60,
-                "mechanism_count": 0,
-                "causal_count": 0,
+                "mechanism_count": hard_mechanism_count,
+                "causal_count": hard_causal_count,
             }
             for label in labels
             if label.startswith("hard_")
@@ -424,6 +426,47 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("missing family-cluster bootstrap metric", result.stdout)
+
+    def test_next_phase_report_kind_can_require_expanded_followups(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            missing_md, missing_json = self.write_next_phase_report(tmpdir)
+            missing = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    missing_md,
+                    "--report_json",
+                    missing_json,
+                    "--report_kind",
+                    "next_phase",
+                    "--require_expanded_followups",
+                ]
+            )
+        self.assertNotEqual(missing.returncode, 0)
+        self.assertIn("expanded follow-up mechanisms required", missing.stdout)
+        self.assertIn("expanded follow-up causal runs required", missing.stdout)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            report_md, report_json = self.write_next_phase_report(
+                tmpdir,
+                hard_mechanism_count=60,
+                hard_causal_count=60,
+            )
+            result = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    report_md,
+                    "--report_json",
+                    report_json,
+                    "--report_kind",
+                    "next_phase",
+                    "--require_expanded_followups",
+                ]
+            )
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
 
     def test_research_report_kind_requires_both_essential_layouts(self):
         with tempfile.TemporaryDirectory() as tmpdir:

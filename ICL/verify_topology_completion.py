@@ -202,7 +202,7 @@ HARD_NEXT_PHASE_LABELS = [
 ]
 
 
-def verify_next_phase_report(report, markdown):
+def verify_next_phase_report(report, markdown, require_expanded_followups=False):
     failures = []
     for section in [
         "Next-Phase Topology-ICL Evidence Report",
@@ -296,6 +296,17 @@ def verify_next_phase_report(report, markdown):
     for item in expanded or []:
         label = item.get("label", "expanded")
         require(positive_number(item.get("results_pkl_count")), f"{label}: no completed training runs in expanded status", failures)
+        if require_expanded_followups and label in HARD_NEXT_PHASE_LABELS:
+            require(
+                positive_number(item.get("mechanism_count")),
+                f"{label}: expanded follow-up mechanisms required but mechanism_count is {item.get('mechanism_count')!r}",
+                failures,
+            )
+            require(
+                positive_number(item.get("causal_count")),
+                f"{label}: expanded follow-up causal runs required but causal_count is {item.get('causal_count')!r}",
+                failures,
+            )
 
     return failures
 
@@ -307,6 +318,7 @@ def verify_report(
     target,
     report_kind="input_mask",
     allow_unknown_provenance=False,
+    require_expanded_followups=False,
 ):
     failures = []
     require(os.path.exists(report_md), f"missing report Markdown: {report_md}", failures)
@@ -340,7 +352,13 @@ def verify_report(
             )
         )
     elif report_kind == "next_phase":
-        failures.extend(verify_next_phase_report(report, markdown))
+        failures.extend(
+            verify_next_phase_report(
+                report,
+                markdown,
+                require_expanded_followups=require_expanded_followups,
+            )
+        )
     else:
         failures.append(f"unknown report kind: {report_kind}")
     return failures
@@ -404,6 +422,14 @@ def main():
     parser.add_argument("--target", type=str, default=DEFAULT_TARGET)
     parser.add_argument("--allow_unknown_provenance", action="store_true")
     parser.add_argument(
+        "--require_expanded_followups",
+        action="store_true",
+        help=(
+            "For next_phase reports, require hard expanded pilot status rows "
+            "to contain nonzero mechanism and causal follow-up counts."
+        ),
+    )
+    parser.add_argument(
         "--skip_audit",
         action="store_true",
         help="Only validate report files. Intended for unit tests and diagnostics.",
@@ -433,6 +459,7 @@ def main():
             args.target,
             report_kind=args.report_kind,
             allow_unknown_provenance=args.allow_unknown_provenance,
+            require_expanded_followups=args.require_expanded_followups,
         )
     )
     if failures:
