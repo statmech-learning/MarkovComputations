@@ -1,0 +1,219 @@
+{
+  "name": "cycle_chords_n4_m6_seed16",
+  "family": "cycle_chords",
+  "seed": 16,
+  "n_nodes": 4,
+  "edges": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      3
+    ]
+  ],
+  "metrics": {
+    "n_nodes": 4,
+    "n_edges": 6,
+    "p": 8,
+    "strongly_connected": true,
+    "edges": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        0,
+        3
+      ]
+    ],
+    "tree_counts_enum": [
+      2,
+      2,
+      1,
+      3
+    ],
+    "tree_counts_det": [
+      2,
+      2,
+      1,
+      3
+    ],
+    "tree_counts_match_det": true,
+    "tree_enumeration_truncated": false,
+    "max_trees_per_root": null,
+    "n_trees_total_enum": 8,
+    "rank_M": 6,
+    "rank_D": 5,
+    "rank_D_anchor": 5,
+    "d_rel": 40,
+    "effective_rank_D": 3.852268343954263,
+    "condition_number_D": 3.292720864447208,
+    "effective_rank_D_masked": 30.818146751634075,
+    "condition_number_D_masked": 3.292720864447208,
+    "singular_values_D_masked": [
+      2.067259995879306,
+      1.8965353432518903,
+      1.2187791855947347,
+      1.0,
+      0.6278272835697428,
+      1.0968883031414771e-16,
+      2.067259995879306,
+      1.8965353432518903,
+      1.2187791855947347,
+      1.0,
+      0.6278272835697428,
+      1.0968883031414771e-16,
+      2.067259995879306,
+      1.8965353432518903,
+      1.2187791855947347,
+      1.0,
+      0.6278272835697428,
+      1.0968883031414771e-16,
+      2.067259995879306,
+      1.8965353432518903,
+      1.2187791855947347,
+      1.0,
+      0.6278272835697428,
+      1.0968883031414771e-16,
+      2.067259995879306,
+      1.8965353432518903,
+      1.2187791855947347,
+      1.0,
+      0.6278272835697428,
+      1.0968883031414771e-16,
+      2.067259995879306,
+      1.8965353432518903,
+      1.2187791855947347,
+      1.0,
+      0.6278272835697428,
+      1.0968883031414771e-16,
+      2.067259995879306,
+      1.8965353432518903,
+      1.2187791855947347,
+      1.0,
+      0.6278272835697428,
+      1.0968883031414771e-16,
+      2.067259995879306,
+      1.8965353432518903,
+      1.2187791855947347,
+      1.0,
+      0.6278272835697428,
+      1.0968883031414771e-16
+    ],
+    "singular_values_D": [
+      2.067259995879306,
+      1.8965353432518903,
+      1.2187791855947347,
+      1.0,
+      0.6278272835697428,
+      1.0968883031414771e-16
+    ],
+    "singular_values_D_anchor": [
+      3.063426921654758,
+      2.0637369615157586,
+      1.7108891660143368,
+      1.0156428710789145,
+      0.6306608196137674,
+      1.3213517863825043e-16
+    ],
+    "root_tree_count_cv": 0.3535533905932738,
+    "root_tree_count_gini": 0.1875,
+    "edge_participation": [
+      0.5,
+      0.75,
+      0.5,
+      0.625,
+      0.375,
+      0.25
+    ],
+    "edge_participation_mean": 0.5,
+    "edge_participation_var": 0.026041666666666668,
+    "edge_participation_gini": 0.18055555555555558,
+    "bottleneck_edge_fraction_095": 0.0,
+    "mean_shortest_path": 1.5833333333333333,
+    "comparison_branch_d_rel_values": [
+      10,
+      10,
+      10
+    ],
+    "comparison_branch_d_rel_min": 10,
+    "comparison_branch_d_rel_mean": 10.0,
+    "comparison_branch_d_rel_max": 10,
+    "comparison_branch_d_rel_gini": 0.0,
+    "comparison_branch_common_d_rel_values": [
+      10,
+      10,
+      10
+    ],
+    "comparison_branch_common_d_rel_min": 10,
+    "comparison_branch_common_d_rel_mean": 10.0,
+    "comparison_branch_common_d_rel_max": 10,
+    "comparison_branch_common_d_rel_gini": 0.0,
+    "comparison_branch_input_count_values": [
+      12,
+      12,
+      12
+    ],
+    "comparison_branch_input_count_min": 12,
+    "comparison_branch_input_count_mean": 12.0,
+    "comparison_branch_input_count_max": 12,
+    "comparison_branch_input_count_gini": 0.0,
+    "comparison_branch_input_overlap_values": [
+      12,
+      12,
+      12
+    ],
+    "comparison_branch_input_overlap_min": 12,
+    "comparison_branch_input_overlap_mean": 12.0,
+    "comparison_branch_input_overlap_max": 12,
+    "comparison_branch_input_overlap_gini": 0.0,
+    "in_degree": [
+      2,
+      1,
+      1,
+      2
+    ],
+    "out_degree": [
+      2,
+      1,
+      2,
+      1
+    ],
+    "in_degree_cv": 0.3333333333333333,
+    "out_degree_cv": 0.3333333333333333
+  }
+}

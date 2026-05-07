@@ -1,0 +1,213 @@
+{
+  "target": "test_novel_classes",
+  "n_rows_total": 60,
+  "models": {
+    "raw_count": {
+      "n": 60,
+      "r2": -2.220446049250313e-16,
+      "coefficients": [
+        69.20333333333333,
+        0.0
+      ],
+      "rmse": 4.806175425660431,
+      "predictors": [
+        "raw_physical_parameter_count"
+      ],
+      "leave_one_out_r2": -0.03418557885665119,
+      "n_topology_families": 12
+    },
+    "raw_plus_drel": {
+      "n": 60,
+      "r2": 0.06804249667739137,
+      "coefficients": [
+        69.20333333333333,
+        0.0,
+        1.253688779384884
+      ],
+      "rmse": 4.639783040904679,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel"
+      ],
+      "leave_one_out_r2": 0.016301811086215645,
+      "n_topology_families": 12
+    },
+    "input_count": {
+      "n": 60,
+      "r2": -2.220446049250313e-16,
+      "coefficients": [
+        69.20333333333333,
+        0.0
+      ],
+      "rmse": 4.806175425660431,
+      "predictors": [
+        "input_coupled_parameter_count"
+      ],
+      "leave_one_out_r2": -0.03418557885665119,
+      "n_topology_families": 12
+    },
+    "input_count_plus_drel": {
+      "n": 60,
+      "r2": 0.06804249667739137,
+      "coefficients": [
+        69.20333333333333,
+        0.0,
+        1.253688779384884
+      ],
+      "rmse": 4.639783040904679,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel"
+      ],
+      "leave_one_out_r2": 0.016301811086215645,
+      "n_topology_families": 12
+    },
+    "input_count_plus_branch_drel": {
+      "n": 60,
+      "r2": 0.06804249667739137,
+      "coefficients": [
+        69.20333333333333,
+        0.0,
+        0.41789625979496053,
+        0.4178962597949603,
+        0.0,
+        0.4178962597949604,
+        0.0
+      ],
+      "rmse": 4.639783040904679,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini"
+      ],
+      "leave_one_out_r2": 0.016301811086214868,
+      "n_topology_families": 12
+    },
+    "tree_geometry": {
+      "n": 60,
+      "r2": 0.11310894496167645,
+      "coefficients": [
+        69.20333333333335,
+        2.7755575615628914e-16,
+        -0.15645535034564348,
+        0.3313777398240876,
+        1.420266996170199,
+        -0.15819735255129028,
+        0.0
+      ],
+      "rmse": 4.526210584621186,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel",
+        "effective_rank_D",
+        "root_tree_count_gini",
+        "edge_participation_gini",
+        "bottleneck_edge_fraction_095"
+      ],
+      "leave_one_out_r2": -0.054160200915653656,
+      "n_topology_families": 12
+    },
+    "trainability_geometry": {
+      "n": 60,
+      "r2": 0.11377525841681535,
+      "coefficients": [
+        69.20333333333333,
+        -1.0547118733938987e-15,
+        -0.7230894163164387,
+        1.0893892128110392,
+        -0.04047405442541347,
+        1.1696420514232029,
+        -0.11245280279905306,
+        0.3615977675681261
+      ],
+      "rmse": 4.524510014038603,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel",
+        "effective_rank_D",
+        "condition_number_D",
+        "root_tree_count_gini",
+        "edge_participation_var",
+        "mean_shortest_path"
+      ],
+      "leave_one_out_r2": -0.1287476423113727,
+      "n_topology_families": 12
+    },
+    "masked_tree_geometry": {
+      "n": 60,
+      "r2": 0.0768938185220851,
+      "coefficients": [
+        69.20333333333333,
+        0.0,
+        -0.3160563752773313,
+        -0.31605637527733155,
+        0.0,
+        -0.31605637527733155,
+        0.0,
+        1.8261067413515781,
+        0.759019044406994,
+        0.0,
+        0.0
+      ],
+      "rmse": 4.617697167559117,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini",
+        "effective_rank_D_masked",
+        "condition_number_D_masked",
+        "input_edge_load_gini",
+        "input_coord_load_gini"
+      ],
+      "leave_one_out_r2": -0.05566924570139653,
+      "n_topology_families": 12
+    },
+    "branch_margin_capacity": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "capacity_support_fraction",
+        "capacity_support_min",
+        "capacity_linear_test_accuracy",
+        "capacity_linear_test_margin_p10"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "branch_margin_capacity_plus_drel": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_support_fraction",
+        "capacity_support_min",
+        "capacity_linear_test_accuracy",
+        "capacity_linear_test_margin_p10"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    }
+  },
+  "by_edge_count": {
+    "6": {
+      "n": 60,
+      "mean": 69.20333333333335,
+      "max": 80.2,
+      "std": 4.80617542566043
+    }
+  }
+}

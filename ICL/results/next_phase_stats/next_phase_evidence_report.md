@@ -1,6 +1,6 @@
 # Next-Phase Topology-ICL Evidence Report
 
-Generated: `2026-05-07T20:34:20.535633+00:00`.
+Generated: `2026-05-07T21:13:07.909384+00:00`.
 
 Scope: first-order CRNs with exponential input-dependent rates. These results do not claim a topology theory for autocatalytic or WTA CRNs.
 
@@ -65,6 +65,51 @@ Rows: `60`. Groups: `12`. Families: `12`.
 | masked_tree_geometry | 12 | -0.427 | 0.036 | [0.006, 0.102] | 1.000 | -0.427 |
 | branch_margin_capacity | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.177 | -0.190 |
 | branch_margin_capacity_plus_drel | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.187 | -0.190 |
+
+### hard_n4_m6_N3_D2
+
+Rows: `60`. Groups: `12`. Families: `12`.
+
+| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- |
+| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
+| raw_plus_drel | 12 | 0.203 | 0.067 | [0.000, 0.146] | 0.913 | 0.203 |
+| input_count_plus_drel | 12 | 0.203 | 0.072 | [0.000, 0.166] | 0.913 | 0.203 |
+| input_count_plus_branch_drel | 12 | 0.203 | 0.067 | [0.000, 0.165] | 0.900 | 0.203 |
+| tree_geometry | 12 | -0.112 | 0.131 | [0.041, 0.268] | 1.000 | -0.112 |
+| masked_tree_geometry | 12 | -0.151 | 0.098 | [0.011, 0.205] | 1.000 | -0.151 |
+| branch_margin_capacity | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.110 | -0.190 |
+| branch_margin_capacity_plus_drel | 12 | 0.203 | 0.070 | [0.000, 0.171] | 0.910 | 0.203 |
+
+### hard_n5_m8_N3_D2
+
+Rows: `60`. Groups: `12`. Families: `12`.
+
+| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- |
+| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
+| raw_plus_drel | 12 | -0.260 | 0.018 | [0.000, 0.076] | 0.900 | -0.260 |
+| input_count_plus_drel | 12 | -0.260 | 0.020 | [0.000, 0.080] | 0.923 | -0.260 |
+| input_count_plus_branch_drel | 12 | -0.260 | 0.020 | [0.000, 0.083] | 0.890 | -0.260 |
+| tree_geometry | 12 | 0.041 | 0.203 | [0.050, 0.336] | 1.000 | 0.041 |
+| masked_tree_geometry | 12 | -0.110 | 0.189 | [0.044, 0.348] | 1.000 | -0.110 |
+| branch_margin_capacity | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.117 | -0.190 |
+| branch_margin_capacity_plus_drel | 12 | -0.260 | 0.019 | [0.000, 0.081] | 0.917 | -0.260 |
+
+### hard_n5_m12_N3_D2
+
+Rows: `60`. Groups: `12`. Families: `12`.
+
+| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- |
+| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
+| raw_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
+| input_count_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
+| input_count_plus_branch_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
+| tree_geometry | 12 | 0.324 | 0.347 | [0.122, 0.557] | 1.000 | 0.324 |
+| masked_tree_geometry | 12 | 0.447 | 0.299 | [0.105, 0.521] | 1.000 | 0.447 |
+| branch_margin_capacity | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.163 | -0.190 |
+| branch_margin_capacity_plus_drel | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.157 | -0.190 |
 
 ## Causal Alignment Interventions
 
@@ -168,6 +213,44 @@ Rows: `12`.
 | redundant_paths | 1 | 0.866 | 0.866 |
 | two_module | 2 | 0.866 | 0.866 |
 
+### hard_n4_m6_N3_D2
+
+Rows: `12`.
+
+| family | n | linear accuracy mean | linear accuracy max |
+| --- | --- | --- | --- |
+| cycle_chords | 9 | 0.892 | 0.892 |
+| hub_spoke | 1 | 0.892 | 0.892 |
+| random_sc | 1 | 0.892 | 0.892 |
+| two_module | 1 | 0.892 | 0.892 |
+
+### hard_n5_m8_N3_D2
+
+Rows: `12`.
+
+| family | n | linear accuracy mean | linear accuracy max |
+| --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.892 | 0.892 |
+| cycle_chords | 7 | 0.892 | 0.892 |
+| degree_balanced | 1 | 0.892 | 0.892 |
+| hub_spoke | 1 | 0.892 | 0.892 |
+| random_sc | 1 | 0.892 | 0.892 |
+| redundant_paths | 1 | 0.892 | 0.892 |
+
+### hard_n5_m12_N3_D2
+
+Rows: `12`.
+
+| family | n | linear accuracy mean | linear accuracy max |
+| --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.892 | 0.892 |
+| cycle_chords | 4 | 0.892 | 0.892 |
+| degree_balanced | 1 | 0.892 | 0.892 |
+| hub_spoke | 1 | 0.892 | 0.892 |
+| random_sc | 2 | 0.892 | 0.892 |
+| redundant_paths | 1 | 0.892 | 0.892 |
+| two_module | 2 | 0.892 | 0.892 |
+
 ## Matched Essential-Motif Controls
 
 ### random
@@ -209,6 +292,9 @@ Matched controls are mixed or comparable to the extracted motifs here; interpret
 | --- | --- | --- | --- | --- |
 | n5_m7 | `results/expanded_pilot_sweeps/n5_m7_N2_D1` | 60 | 0 | 0 |
 | n5_m12 | `results/expanded_pilot_sweeps/n5_m12_N2_D1` | 60 | 0 | 0 |
+| hard_n4_m6_N3_D2 | `results/expanded_hard_sweeps/n4_m6_N3_D2` | 60 | 0 | 0 |
+| hard_n5_m8_N3_D2 | `results/expanded_hard_sweeps/n5_m8_N3_D2` | 60 | 0 | 0 |
+| hard_n5_m12_N3_D2 | `results/expanded_hard_sweeps/n5_m12_N3_D2` | 60 | 0 | 0 |
 
 ## Interpretation Guardrails
 

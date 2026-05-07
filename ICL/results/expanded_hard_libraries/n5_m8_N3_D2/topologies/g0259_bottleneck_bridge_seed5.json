@@ -1,0 +1,240 @@
+{
+  "name": "bottleneck_bridge_n5_m8_seed5",
+  "family": "bottleneck_bridge",
+  "seed": 5,
+  "n_nodes": 5,
+  "edges": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      4
+    ]
+  ],
+  "metrics": {
+    "n_nodes": 5,
+    "n_edges": 8,
+    "p": 8,
+    "strongly_connected": true,
+    "edges": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        4
+      ]
+    ],
+    "tree_counts_enum": [
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "tree_counts_det": [
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "tree_counts_match_det": true,
+    "tree_enumeration_truncated": false,
+    "max_trees_per_root": null,
+    "n_trees_total_enum": 6,
+    "rank_M": 6,
+    "rank_D": 5,
+    "rank_D_anchor": 5,
+    "d_rel": 40,
+    "effective_rank_D": 3.5738124737782,
+    "condition_number_D": 3.2255049266776936,
+    "effective_rank_D_masked": 28.590499790225614,
+    "condition_number_D_masked": 3.2255049266776936,
+    "singular_values_D_masked": [
+      2.1357792050698565,
+      1.4142135623730951,
+      1.0000000000000002,
+      0.8164965809277261,
+      0.6621534468619563,
+      4.067935039900201e-16,
+      2.1357792050698565,
+      1.4142135623730951,
+      1.0000000000000002,
+      0.8164965809277261,
+      0.6621534468619563,
+      4.067935039900201e-16,
+      2.1357792050698565,
+      1.4142135623730951,
+      1.0000000000000002,
+      0.8164965809277261,
+      0.6621534468619563,
+      4.067935039900201e-16,
+      2.1357792050698565,
+      1.4142135623730951,
+      1.0000000000000002,
+      0.8164965809277261,
+      0.6621534468619563,
+      4.067935039900201e-16,
+      2.1357792050698565,
+      1.4142135623730951,
+      1.0000000000000002,
+      0.8164965809277261,
+      0.6621534468619563,
+      4.067935039900201e-16,
+      2.1357792050698565,
+      1.4142135623730951,
+      1.0000000000000002,
+      0.8164965809277261,
+      0.6621534468619563,
+      4.067935039900201e-16,
+      2.1357792050698565,
+      1.4142135623730951,
+      1.0000000000000002,
+      0.8164965809277261,
+      0.6621534468619563,
+      4.067935039900201e-16,
+      2.1357792050698565,
+      1.4142135623730951,
+      1.0000000000000002,
+      0.8164965809277261,
+      0.6621534468619563,
+      4.067935039900201e-16
+    ],
+    "singular_values_D": [
+      2.1357792050698565,
+      1.4142135623730951,
+      1.0000000000000002,
+      0.8164965809277261,
+      0.6621534468619563,
+      4.067935039900201e-16
+    ],
+    "singular_values_D_anchor": [
+      4.4196811554192434,
+      1.4142135623730954,
+      1.1505234165997797,
+      0.8378171701704483,
+      0.6639101909559507
+    ],
+    "root_tree_count_cv": 0.33333333333333337,
+    "root_tree_count_gini": 0.1333333333333333,
+    "edge_participation": [
+      0.8333333333333334,
+      0.16666666666666666,
+      0.3333333333333333,
+      0.8333333333333334,
+      0.6666666666666666,
+      0.6666666666666666,
+      0.3333333333333333,
+      0.16666666666666666
+    ],
+    "edge_participation_mean": 0.5,
+    "edge_participation_var": 0.06944444444444445,
+    "edge_participation_gini": 0.2916666666666665,
+    "bottleneck_edge_fraction_095": 0.0,
+    "mean_shortest_path": 1.9,
+    "comparison_branch_d_rel_values": [
+      10,
+      10,
+      10
+    ],
+    "comparison_branch_d_rel_min": 10,
+    "comparison_branch_d_rel_mean": 10.0,
+    "comparison_branch_d_rel_max": 10,
+    "comparison_branch_d_rel_gini": 0.0,
+    "comparison_branch_common_d_rel_values": [
+      10,
+      10,
+      10
+    ],
+    "comparison_branch_common_d_rel_min": 10,
+    "comparison_branch_common_d_rel_mean": 10.0,
+    "comparison_branch_common_d_rel_max": 10,
+    "comparison_branch_common_d_rel_gini": 0.0,
+    "comparison_branch_input_count_values": [
+      16,
+      16,
+      16
+    ],
+    "comparison_branch_input_count_min": 16,
+    "comparison_branch_input_count_mean": 16.0,
+    "comparison_branch_input_count_max": 16,
+    "comparison_branch_input_count_gini": 0.0,
+    "comparison_branch_input_overlap_values": [
+      16,
+      16,
+      16
+    ],
+    "comparison_branch_input_overlap_min": 16,
+    "comparison_branch_input_overlap_mean": 16.0,
+    "comparison_branch_input_overlap_max": 16,
+    "comparison_branch_input_overlap_gini": 0.0,
+    "in_degree": [
+      1,
+      2,
+      2,
+      1,
+      2
+    ],
+    "out_degree": [
+      1,
+      2,
+      3,
+      1,
+      1
+    ],
+    "in_degree_cv": 0.30618621784789724,
+    "out_degree_cv": 0.5
+  }
+}

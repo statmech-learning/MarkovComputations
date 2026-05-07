@@ -1,0 +1,213 @@
+{
+  "target": "test_novel_classes",
+  "n_rows_total": 60,
+  "models": {
+    "raw_count": {
+      "n": 60,
+      "r2": 0.0,
+      "coefficients": [
+        85.58333333333334,
+        0.0
+      ],
+      "rmse": 8.713613231923686,
+      "predictors": [
+        "raw_physical_parameter_count"
+      ],
+      "leave_one_out_r2": -0.03418557885665008,
+      "n_topology_families": 12
+    },
+    "raw_plus_drel": {
+      "n": 60,
+      "r2": 0.0,
+      "coefficients": [
+        85.58333333333334,
+        0.0,
+        0.0
+      ],
+      "rmse": 8.713613231923686,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel"
+      ],
+      "leave_one_out_r2": -0.03418557885665008,
+      "n_topology_families": 12
+    },
+    "input_count": {
+      "n": 60,
+      "r2": 0.0,
+      "coefficients": [
+        85.58333333333334,
+        0.0
+      ],
+      "rmse": 8.713613231923686,
+      "predictors": [
+        "input_coupled_parameter_count"
+      ],
+      "leave_one_out_r2": -0.03418557885665008,
+      "n_topology_families": 12
+    },
+    "input_count_plus_drel": {
+      "n": 60,
+      "r2": 0.0,
+      "coefficients": [
+        85.58333333333334,
+        0.0,
+        0.0
+      ],
+      "rmse": 8.713613231923686,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel"
+      ],
+      "leave_one_out_r2": -0.03418557885665008,
+      "n_topology_families": 12
+    },
+    "input_count_plus_branch_drel": {
+      "n": 60,
+      "r2": 0.0,
+      "coefficients": [
+        85.58333333333334,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rmse": 8.713613231923686,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini"
+      ],
+      "leave_one_out_r2": -0.03418557885665008,
+      "n_topology_families": 12
+    },
+    "tree_geometry": {
+      "n": 60,
+      "r2": 0.3340167779018025,
+      "coefficients": [
+        85.58333333333336,
+        8.881784197001252e-16,
+        0.0,
+        2.5374954732184203,
+        -1.8735193021236995,
+        -2.574961421015995,
+        0.0
+      ],
+      "rmse": 7.110987632060523,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel",
+        "effective_rank_D",
+        "root_tree_count_gini",
+        "edge_participation_gini",
+        "bottleneck_edge_fraction_095"
+      ],
+      "leave_one_out_r2": 0.23686838039464697,
+      "n_topology_families": 12
+    },
+    "trainability_geometry": {
+      "n": 60,
+      "r2": 0.4107410256328,
+      "coefficients": [
+        85.58333333333334,
+        -4.440892098500626e-16,
+        -8.881784197001252e-16,
+        2.2674272241020135,
+        -1.1868041913651883,
+        0.9768874211940822,
+        -3.9286697189167805,
+        -2.9700079387792093
+      ],
+      "rmse": 6.688848845906751,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel",
+        "effective_rank_D",
+        "condition_number_D",
+        "root_tree_count_gini",
+        "edge_participation_var",
+        "mean_shortest_path"
+      ],
+      "leave_one_out_r2": 0.2832045425006716,
+      "n_topology_families": 12
+    },
+    "masked_tree_geometry": {
+      "n": 60,
+      "r2": 0.28933851058098126,
+      "coefficients": [
+        85.58333333333334,
+        -8.881784197001252e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.925497210378067,
+        -1.2459345999524358,
+        0.0,
+        0.0
+      ],
+      "rmse": 7.345640502251093,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini",
+        "effective_rank_D_masked",
+        "condition_number_D_masked",
+        "input_edge_load_gini",
+        "input_coord_load_gini"
+      ],
+      "leave_one_out_r2": 0.22125303445383848,
+      "n_topology_families": 12
+    },
+    "branch_margin_capacity": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "capacity_support_fraction",
+        "capacity_support_min",
+        "capacity_linear_test_accuracy",
+        "capacity_linear_test_margin_p10"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "branch_margin_capacity_plus_drel": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_support_fraction",
+        "capacity_support_min",
+        "capacity_linear_test_accuracy",
+        "capacity_linear_test_margin_p10"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    }
+  },
+  "by_edge_count": {
+    "12": {
+      "n": 60,
+      "mean": 85.58333333333333,
+      "max": 98.6,
+      "std": 8.713613231923686
+    }
+  }
+}

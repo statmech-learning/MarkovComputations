@@ -1,0 +1,261 @@
+{
+  "name": "cycle_chords_n5_m8_seed74",
+  "family": "cycle_chords",
+  "seed": 74,
+  "n_nodes": 5,
+  "edges": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      3,
+      1
+    ]
+  ],
+  "metrics": {
+    "n_nodes": 5,
+    "n_edges": 8,
+    "p": 8,
+    "strongly_connected": true,
+    "edges": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        3,
+        1
+      ]
+    ],
+    "tree_counts_enum": [
+      5,
+      4,
+      4,
+      2,
+      1
+    ],
+    "tree_counts_det": [
+      5,
+      4,
+      4,
+      2,
+      1
+    ],
+    "tree_counts_match_det": true,
+    "tree_enumeration_truncated": false,
+    "max_trees_per_root": null,
+    "n_trees_total_enum": 16,
+    "rank_M": 8,
+    "rank_D": 7,
+    "rank_D_anchor": 7,
+    "d_rel": 56,
+    "effective_rank_D": 4.959692050463011,
+    "condition_number_D": 4.454503345574722,
+    "effective_rank_D_masked": 39.67753640370408,
+    "condition_number_D_masked": 4.454503345574722,
+    "singular_values_D_masked": [
+      2.9714663841242697,
+      2.800548909133972,
+      2.5831936138670644,
+      1.6997370013594244,
+      1.3512205401347295,
+      0.7871077634416628,
+      0.6670701879876779,
+      2.682314792074085e-16,
+      2.9714663841242697,
+      2.800548909133972,
+      2.5831936138670644,
+      1.6997370013594244,
+      1.3512205401347295,
+      0.7871077634416628,
+      0.6670701879876779,
+      2.682314792074085e-16,
+      2.9714663841242697,
+      2.800548909133972,
+      2.5831936138670644,
+      1.6997370013594244,
+      1.3512205401347295,
+      0.7871077634416628,
+      0.6670701879876779,
+      2.682314792074085e-16,
+      2.9714663841242697,
+      2.800548909133972,
+      2.5831936138670644,
+      1.6997370013594244,
+      1.3512205401347295,
+      0.7871077634416628,
+      0.6670701879876779,
+      2.682314792074085e-16,
+      2.9714663841242697,
+      2.800548909133972,
+      2.5831936138670644,
+      1.6997370013594244,
+      1.3512205401347295,
+      0.7871077634416628,
+      0.6670701879876779,
+      2.682314792074085e-16,
+      2.9714663841242697,
+      2.800548909133972,
+      2.5831936138670644,
+      1.6997370013594244,
+      1.3512205401347295,
+      0.7871077634416628,
+      0.6670701879876779,
+      2.682314792074085e-16,
+      2.9714663841242697,
+      2.800548909133972,
+      2.5831936138670644,
+      1.6997370013594244,
+      1.3512205401347295,
+      0.7871077634416628,
+      0.6670701879876779,
+      2.682314792074085e-16,
+      2.9714663841242697,
+      2.800548909133972,
+      2.5831936138670644,
+      1.6997370013594244,
+      1.3512205401347295,
+      0.7871077634416628,
+      0.6670701879876779,
+      2.682314792074085e-16
+    ],
+    "singular_values_D": [
+      2.9714663841242697,
+      2.800548909133972,
+      2.5831936138670644,
+      1.6997370013594244,
+      1.3512205401347295,
+      0.7871077634416628,
+      0.6670701879876779,
+      2.682314792074085e-16
+    ],
+    "singular_values_D_anchor": [
+      5.719667565527621,
+      2.9699838974564434,
+      2.595792527274886,
+      1.898755313709957,
+      1.5659781969029316,
+      1.0491171245278101,
+      0.7538259404862525,
+      4.062443058891664e-16
+    ],
+    "root_tree_count_cv": 0.4592793267718459,
+    "root_tree_count_gini": 0.25,
+    "edge_participation": [
+      0.6875,
+      0.5,
+      0.75,
+      0.5,
+      0.5,
+      0.25,
+      0.4375,
+      0.375
+    ],
+    "edge_participation_mean": 0.5,
+    "edge_participation_var": 0.0224609375,
+    "edge_participation_gini": 0.1640625,
+    "bottleneck_edge_fraction_095": 0.0,
+    "mean_shortest_path": 1.9,
+    "comparison_branch_d_rel_values": [
+      14,
+      14,
+      14
+    ],
+    "comparison_branch_d_rel_min": 14,
+    "comparison_branch_d_rel_mean": 14.0,
+    "comparison_branch_d_rel_max": 14,
+    "comparison_branch_d_rel_gini": 0.0,
+    "comparison_branch_common_d_rel_values": [
+      14,
+      14,
+      14
+    ],
+    "comparison_branch_common_d_rel_min": 14,
+    "comparison_branch_common_d_rel_mean": 14.0,
+    "comparison_branch_common_d_rel_max": 14,
+    "comparison_branch_common_d_rel_gini": 0.0,
+    "comparison_branch_input_count_values": [
+      16,
+      16,
+      16
+    ],
+    "comparison_branch_input_count_min": 16,
+    "comparison_branch_input_count_mean": 16.0,
+    "comparison_branch_input_count_max": 16,
+    "comparison_branch_input_count_gini": 0.0,
+    "comparison_branch_input_overlap_values": [
+      16,
+      16,
+      16
+    ],
+    "comparison_branch_input_overlap_min": 16,
+    "comparison_branch_input_overlap_mean": 16.0,
+    "comparison_branch_input_overlap_max": 16,
+    "comparison_branch_input_overlap_gini": 0.0,
+    "in_degree": [
+      2,
+      3,
+      1,
+      1,
+      1
+    ],
+    "out_degree": [
+      1,
+      2,
+      1,
+      2,
+      2
+    ],
+    "in_degree_cv": 0.5,
+    "out_degree_cv": 0.30618621784789724
+  }
+}
