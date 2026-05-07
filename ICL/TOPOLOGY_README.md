@@ -48,6 +48,9 @@ The convention is:
   through `submit_topology_library_sweep.py`.
 - `compare_essential_retrains.py`: join extracted motif source metadata with
   from-scratch retrain aggregates and report performance retention.
+- `make_topology_research_report.py`: consolidate fixed-edge sweeps,
+  mechanism summaries, seed aggregates, and essential motif retrain comparisons
+  into one Markdown/JSON progress report.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
 - `tests/test_topology_metrics.py`: exact small-graph matrix-tree checks.
@@ -224,4 +227,14 @@ python3 compare_essential_retrains.py \
   --base_root "$SLURM_OUTPUT_BASE" \
   --output_csv "$SLURM_OUTPUT_BASE/essential_input50/retrain_comparison.csv" \
   --output_json "$SLURM_OUTPUT_BASE/essential_input50/retrain_comparison.json"
+```
+
+To consolidate completed sweeps into one auditable progress artifact:
+
+```bash
+python3 make_topology_research_report.py \
+  --experiment m20=results/topology_fixed_m20_library \
+  --experiment m12=results/topology_fixed_m12_library \
+  --output_md results/topology_research_report.md \
+  --output_json results/topology_research_report.json
 ```
