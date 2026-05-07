@@ -185,6 +185,60 @@ def validate_input_mask_json(path):
     return None
 
 
+def input_mask_matrix(payload):
+    return payload.get("input_mask") if isinstance(payload, dict) else payload
+
+
+def edge_mask_pair_status(rows):
+    invalid = []
+    for row in rows:
+        edge_path = row.get("edge_json")
+        mask_path = row.get("input_mask_json")
+        if not edge_path or not mask_path:
+            continue
+        if not os.path.exists(edge_path) or not os.path.exists(mask_path):
+            continue
+        try:
+            edge_payload = read_json(edge_path)
+            mask_payload = read_json(mask_path)
+            edges = edge_payload.get("edges") if isinstance(edge_payload, dict) else None
+            matrix = input_mask_matrix(mask_payload)
+        except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
+            invalid.append(f"{edge_path} + {mask_path}: {exc}")
+            continue
+        if not isinstance(edges, list) or not isinstance(matrix, list):
+            continue
+        if len(matrix) != len(edges):
+            invalid.append(
+                f"{mask_path}: input_mask rows {len(matrix)} do not match edge count {len(edges)}"
+            )
+            continue
+        expected_p = None
+        if isinstance(mask_payload, dict) and mask_payload.get("p") not in (None, ""):
+            expected_p = mask_payload.get("p")
+        elif row.get("p") not in (None, ""):
+            expected_p = row.get("p")
+        if expected_p is not None:
+            try:
+                expected_p = int(expected_p)
+            except (TypeError, ValueError):
+                invalid.append(f"{mask_path}: invalid p={expected_p!r}")
+                continue
+            width = len(matrix[0]) if matrix else 0
+            if width != expected_p:
+                invalid.append(
+                    f"{mask_path}: input_mask width {width} does not match p={expected_p}"
+                )
+                continue
+        mask_edges = mask_payload.get("edges") if isinstance(mask_payload, dict) else None
+        if mask_edges is not None and mask_edges != edges:
+            invalid.append(f"{mask_path}: edge order does not match {edge_path}")
+    return {
+        "invalid": len(invalid),
+        "invalid_examples": invalid[:5],
+    }
+
+
 def referenced_file_status(rows, field, validator=None):
     missing = []
     invalid = []
@@ -284,6 +338,7 @@ def essential_inputmask_status(root, directory):
             "input_mask_json",
             validate_input_mask_json,
         ),
+        "edge_mask_pair": edge_mask_pair_status(selected_rows),
     }
 
 
@@ -364,6 +419,8 @@ def audit_experiment(name, root, args):
             failures.append("selected essential masks reference invalid edge_json files")
         if essential["input_mask_json"]["invalid"]:
             failures.append("selected essential masks reference invalid input_mask_json files")
+        if essential["edge_mask_pair"]["invalid"]:
+            failures.append("selected essential masks have edge/input-mask mismatches")
     if args.require_essential_retrains:
         if retrain["expected_results"] is None:
             failures.append("cannot infer expected retrain count without selected.csv")
@@ -441,7 +498,8 @@ def print_experiment(report):
         f"edge_json_missing={essential['edge_json']['missing']} "
         f"edge_json_invalid={essential['edge_json']['invalid']} "
         f"input_mask_json_missing={essential['input_mask_json']['missing']} "
-        f"input_mask_json_invalid={essential['input_mask_json']['invalid']}"
+        f"input_mask_json_invalid={essential['input_mask_json']['invalid']} "
+        f"edge_mask_pair_invalid={essential['edge_mask_pair']['invalid']}"
     )
     completed = (
         retrain["completed_exact"]

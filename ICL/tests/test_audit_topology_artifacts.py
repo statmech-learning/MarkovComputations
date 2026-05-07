@@ -304,6 +304,24 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
         self.assertIn("invalid edge_json", result.stdout)
         self.assertIn("invalid input_mask_json", result.stdout)
 
+    def test_strict_essential_requirement_fails_on_edge_mask_mismatch(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = self.make_experiment(tmpdir, selected_count=1)
+            ref_dir = os.path.join(root, "essential_inputmask50", "refs")
+            with open(os.path.join(ref_dir, "mask0.json"), "w") as f:
+                json.dump({"input_mask": [[1, 0], [0, 1]]}, f)
+            result = self.run_audit(
+                [
+                    "--experiment",
+                    f"exp={root}",
+                    "--require_essential_inputmask",
+                    "--strict",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("edge/input-mask mismatches", result.stdout)
+        self.assertIn("edge_mask_pair_invalid=1", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
