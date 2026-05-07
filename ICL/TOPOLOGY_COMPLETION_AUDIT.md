@@ -4,9 +4,10 @@ Date: 2026-05-07
 
 Branch: `topology`
 
-Latest inspected commits:
+Recent implementation commits inspected:
 
 ```text
+3115fb0 Refresh topology completion audit
 a26ef92 Add consolidated research report finalizer
 ae9a324 Require both essential layouts in research verifier
 782ba72 Add physical essential retrain recovery
@@ -14,7 +15,6 @@ aee61b7 Add physical essential retrain finalizer
 426fc22 Interpret recovered input-mask reports
 52d8913 Interpret topology report evidence
 68962f6 Verify recovered input-mask reports
-7c6ecdf Audit physical essential retrain layouts
 ```
 
 ## Objective Restated As Deliverables
