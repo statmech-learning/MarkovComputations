@@ -180,7 +180,8 @@ def multiclass_margins(scores: np.ndarray, labels: Sequence[int]) -> np.ndarray:
     true_scores = scores[np.arange(scores.shape[0]), labels]
     masked = scores.copy()
     masked[np.arange(scores.shape[0]), labels] = -np.inf
-    return true_scores - masked.max(axis=1)
+    with np.errstate(invalid="ignore"):
+        return true_scores - masked.max(axis=1)
 
 
 def accuracy_from_scores(scores: np.ndarray, labels: Sequence[int]) -> float:
@@ -233,11 +234,21 @@ def linear_scores(features: np.ndarray, weights: np.ndarray, bias: np.ndarray) -
 
 def summarize_margin_scores(scores: np.ndarray, labels: Sequence[int], prefix: str) -> dict:
     margins = multiclass_margins(scores, labels)
+    finite = margins[np.isfinite(margins)]
+    if finite.size:
+        margin_mean = float(np.mean(finite))
+        margin_min = float(np.min(finite))
+        margin_p10 = float(np.quantile(finite, 0.10))
+    else:
+        margin_mean = None
+        margin_min = None
+        margin_p10 = None
     return {
         f"{prefix}_accuracy": accuracy_from_scores(scores, labels),
-        f"{prefix}_margin_mean": float(np.mean(margins)),
-        f"{prefix}_margin_min": float(np.min(margins)),
-        f"{prefix}_margin_p10": float(np.quantile(margins, 0.10)),
+        f"{prefix}_margin_mean": margin_mean,
+        f"{prefix}_margin_min": margin_min,
+        f"{prefix}_margin_p10": margin_p10,
+        f"{prefix}_margin_finite_fraction": float(finite.size / margins.size) if margins.size else 0.0,
     }
 
 

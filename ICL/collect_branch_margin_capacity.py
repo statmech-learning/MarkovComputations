@@ -39,9 +39,11 @@ FIELDS = [
     "oracle_test_accuracy",
     "oracle_test_margin_mean",
     "oracle_test_margin_p10",
+    "oracle_test_margin_finite_fraction",
     "linear_test_accuracy",
     "linear_test_margin_mean",
     "linear_test_margin_p10",
+    "linear_test_margin_finite_fraction",
     "linear_weight_norm",
 ]
 

@@ -15,6 +15,7 @@ from branch_margin_capacity import (  # noqa: E402
     markdown_report,
     oracle_branch_scores,
     sample_exact_copy_branches,
+    summarize_margin_scores,
 )
 from topology_metrics import complete_digraph, compute_topology_metrics, topology_matrices, centered_tree_matrix  # noqa: E402
 
@@ -86,6 +87,14 @@ class BranchMarginCapacityTests(unittest.TestCase):
         self.assertIn("linear_test_margin_mean", result)
         self.assertIn("d_rel", result)
         self.assertIn("Branch-Margin Capacity Probe", markdown_report(result))
+
+    def test_margin_summary_handles_nonfinite_margins(self):
+        scores = np.asarray([[0.0, -np.inf], [-np.inf, -np.inf]])
+        labels = np.asarray([0, 1])
+        summary = summarize_margin_scores(scores, labels, "toy")
+        self.assertEqual(summary["toy_accuracy"], 0.5)
+        self.assertEqual(summary["toy_margin_finite_fraction"], 0.0)
+        self.assertIsNone(summary["toy_margin_mean"])
 
 
 if __name__ == "__main__":
