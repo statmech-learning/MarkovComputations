@@ -39,12 +39,56 @@ def count_selected(path):
         )
 
 
+def selected_topology_ids(path):
+    rows = []
+    missing = []
+    with open(path, newline="") as f:
+        for idx, row in enumerate(csv.DictReader(f)):
+            if str(row.get("selected", "1")) not in {"1", "True", "true"}:
+                continue
+            topology_id = row.get("topology_id")
+            if not topology_id:
+                missing.append(str(idx))
+                continue
+            rows.append(topology_id)
+    if missing:
+        raise ValueError(
+            f"{path}: selected rows missing topology_id at CSV row indexes "
+            + ", ".join(missing[:5])
+        )
+    return rows
+
+
 def count_files(root, filename):
     total = 0
     for _, _, files in os.walk(root):
         if filename in files:
             total += 1
     return total
+
+
+def find_files(root, filename):
+    paths = []
+    for current, _, files in os.walk(root):
+        if filename in files:
+            paths.append(os.path.join(current, filename))
+    return sorted(paths)
+
+
+def exact_retrain_status(root, topology_ids, seeds):
+    expected_paths = [
+        os.path.join(root, f"{topology_id}_trainseed{seed}", "results.pkl")
+        for topology_id in topology_ids
+        for seed in seeds
+    ]
+    missing = [path for path in expected_paths if not os.path.exists(path)]
+    unexpected = sorted(set(find_files(root, "results.pkl")) - set(expected_paths))
+    return {
+        "expected_paths": expected_paths,
+        "completed": len(expected_paths) - len(missing),
+        "missing": missing,
+        "unexpected": unexpected,
+    }
 
 
 def run_command(parts, dry_run=False):
@@ -77,16 +121,31 @@ def check_completion(name, root, seeds):
     selected_csv = paths["selected_csv"]
     if not os.path.exists(selected_csv):
         raise FileNotFoundError(f"{name}: missing {selected_csv}")
-    selected = count_selected(selected_csv)
+    topology_ids = selected_topology_ids(selected_csv)
+    selected = len(topology_ids)
     expected = selected * len(seeds)
-    completed = count_files(paths["retrain_root"], "results.pkl")
-    print(f"{name}: selected_masks={selected} seeds={len(seeds)} expected={expected} completed={completed}")
+    exact = exact_retrain_status(paths["retrain_root"], topology_ids, seeds)
+    completed = exact["completed"]
+    total_results = completed + len(exact["unexpected"])
+    print(
+        f"{name}: selected_masks={selected} seeds={len(seeds)} "
+        f"expected={expected} completed={completed} total_results={total_results}"
+    )
+    if exact["missing"]:
+        print("  missing examples:")
+        for path in exact["missing"][:5]:
+            print(f"    {path}")
+    if exact["unexpected"]:
+        print("  unexpected result examples:")
+        for path in exact["unexpected"][:5]:
+            print(f"    {path}")
     return {
         "name": name,
         "root": root,
         "selected": selected,
         "expected": expected,
         "completed": completed,
+        "unexpected": len(exact["unexpected"]),
         "paths": paths,
     }
 
@@ -139,6 +198,7 @@ def main():
     )
     parser.add_argument("--seeds", type=str, default="1,2,3,4,5")
     parser.add_argument("--allow_partial", action="store_true")
+    parser.add_argument("--allow_extra", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--output_md", type=str, default=None)
     parser.add_argument("--output_json", type=str, default=None)
@@ -152,6 +212,11 @@ def main():
         for status in statuses
         if status["completed"] != status["expected"]
     ]
+    unexpected = [
+        status
+        for status in statuses
+        if status["unexpected"]
+    ]
     if incomplete and not args.allow_partial:
         for status in incomplete:
             print(
@@ -159,6 +224,13 @@ def main():
                 f"{status['completed']}/{status['expected']} results.pkl files"
             )
         raise SystemExit("Retrain outputs are incomplete; use --allow_partial only for diagnostics")
+    if unexpected and not args.allow_extra:
+        for status in unexpected:
+            print(
+                f"Unexpected retrain outputs: {status['name']} has "
+                f"{status['unexpected']} extra results.pkl files"
+            )
+        raise SystemExit("Retrain output root contains unexpected results; remove them or use --allow_extra")
 
     for status in statuses:
         finalize_experiment(status, args)

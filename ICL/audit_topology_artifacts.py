@@ -104,6 +104,36 @@ def file_status(root, filenames):
     return {name: exists(os.path.join(root, name)) for name in filenames}
 
 
+def selected_rows_only(rows):
+    return [
+        row
+        for row in rows
+        if str(row.get("selected", "1")) in {"1", "True", "true"}
+    ]
+
+
+def selected_topology_ids(rows):
+    ids = []
+    missing = []
+    for idx, row in enumerate(rows):
+        topology_id = row.get("topology_id")
+        if topology_id:
+            ids.append(topology_id)
+        else:
+            missing.append(str(idx))
+    return ids, missing
+
+
+def find_files(root, filename):
+    paths = []
+    if not os.path.isdir(root):
+        return paths
+    for current, _, files in os.walk(root):
+        if filename in files:
+            paths.append(os.path.join(current, filename))
+    return sorted(paths)
+
+
 def source_status(root, exclude_roots=None):
     return {
         "results_pkl": count_files(root, "results.pkl", exclude_roots=exclude_roots),
@@ -113,21 +143,102 @@ def source_status(root, exclude_roots=None):
     }
 
 
-def referenced_file_status(rows, field):
+def validate_edge_json(path):
+    payload = read_json(path)
+    if not isinstance(payload, dict):
+        return "not a JSON object"
+    try:
+        n_nodes = int(payload["n_nodes"])
+    except (KeyError, TypeError, ValueError):
+        return "missing integer n_nodes"
+    edges = payload.get("edges")
+    if not isinstance(edges, list) or not edges:
+        return "missing non-empty edges list"
+    for edge in edges:
+        if not isinstance(edge, list) or len(edge) != 2:
+            return "edge entries must be length-2 lists"
+        try:
+            source, target = int(edge[0]), int(edge[1])
+        except (TypeError, ValueError):
+            return "edge endpoints must be integers"
+        if not 0 <= source < n_nodes or not 0 <= target < n_nodes:
+            return "edge endpoint outside n_nodes"
+    return None
+
+
+def validate_input_mask_json(path):
+    payload = read_json(path)
+    matrix = payload.get("input_mask") if isinstance(payload, dict) else payload
+    if not isinstance(matrix, list) or not matrix:
+        return "missing non-empty input_mask matrix"
+    width = None
+    for row in matrix:
+        if not isinstance(row, list) or not row:
+            return "input_mask rows must be non-empty lists"
+        if width is None:
+            width = len(row)
+        elif len(row) != width:
+            return "input_mask rows must be rectangular"
+        for value in row:
+            if value not in (0, 1, False, True):
+                return "input_mask values must be binary"
+    return None
+
+
+def referenced_file_status(rows, field, validator=None):
     missing = []
+    invalid = []
     present = 0
     for row in rows:
         path = row.get(field)
         if not path:
             missing.append("")
-        elif os.path.exists(path):
-            present += 1
-        else:
+        elif not os.path.exists(path):
             missing.append(path)
+        else:
+            present += 1
+            if validator is not None:
+                try:
+                    error = validator(path)
+                except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
+                    error = str(exc)
+                if error:
+                    invalid.append(f"{path}: {error}")
     return {
         "present": present,
         "missing": len(missing),
         "missing_examples": missing[:5],
+        "invalid": len(invalid),
+        "invalid_examples": invalid[:5],
+    }
+
+
+def retrain_exact_status(retrain_root, topology_ids, seeds):
+    if not topology_ids:
+        return {
+            "exact_path_check": False,
+            "completed_exact": None,
+            "missing_exact": None,
+            "unexpected_results": None,
+            "missing_examples": [],
+            "unexpected_examples": [],
+        }
+    expected_paths = [
+        os.path.join(retrain_root, f"{topology_id}_trainseed{seed}", "results.pkl")
+        for topology_id in topology_ids
+        for seed in seeds
+    ]
+    existing = set(find_files(retrain_root, "results.pkl"))
+    expected_set = set(expected_paths)
+    missing = sorted(expected_set - existing)
+    unexpected = sorted(existing - expected_set)
+    return {
+        "exact_path_check": True,
+        "completed_exact": len(expected_paths) - len(missing),
+        "missing_exact": len(missing),
+        "unexpected_results": len(unexpected),
+        "missing_examples": missing[:5],
+        "unexpected_examples": unexpected[:5],
     }
 
 
@@ -154,27 +265,35 @@ def essential_inputmask_status(root, directory):
     library_csv = os.path.join(essential_root, "library.csv")
     selected_csv = os.path.join(essential_root, "selected.csv")
     summary_json = os.path.join(essential_root, "summary.json")
-    selected_rows = read_csv_rows(selected_csv)
+    selected_rows = selected_rows_only(read_csv_rows(selected_csv))
+    topology_ids, missing_topology_id = selected_topology_ids(selected_rows)
     return {
         "root": essential_root,
         "library_csv": exists(library_csv),
         "selected_csv": exists(selected_csv),
         "summary_json": exists(summary_json),
         "library_rows": count_csv_rows(library_csv),
-        "selected_rows": count_csv_rows(selected_csv, selected_only=True),
+        "selected_rows": len(selected_rows) if os.path.exists(selected_csv) else None,
+        "selected_topology_ids": topology_ids,
+        "missing_topology_id": len(missing_topology_id),
+        "missing_topology_id_examples": missing_topology_id[:5],
         "summary": read_json(summary_json),
-        "edge_json": referenced_file_status(selected_rows, "edge_json"),
-        "input_mask_json": referenced_file_status(selected_rows, "input_mask_json"),
+        "edge_json": referenced_file_status(selected_rows, "edge_json", validate_edge_json),
+        "input_mask_json": referenced_file_status(
+            selected_rows,
+            "input_mask_json",
+            validate_input_mask_json,
+        ),
     }
 
 
-def retrain_status(root, directory, selected_rows, seeds):
+def retrain_status(root, directory, selected_rows, topology_ids, seeds):
     retrain_root = os.path.join(root, directory)
     expected = None if selected_rows is None else selected_rows * len(seeds)
     completed = count_files(retrain_root, "results.pkl")
     manifest = os.path.join(retrain_root, "task_manifest.csv")
     commands = os.path.join(retrain_root, "_array_meta", "commands.txt")
-    return {
+    status = {
         "root": retrain_root,
         "exists": os.path.isdir(retrain_root),
         "expected_results": expected,
@@ -184,6 +303,8 @@ def retrain_status(root, directory, selected_rows, seeds):
         "manifest": manifest_status(manifest),
         "array_commands": count_lines(commands),
     }
+    status.update(retrain_exact_status(retrain_root, topology_ids, seeds))
+    return status
 
 
 def comparison_status(root, essential_directory):
@@ -211,6 +332,7 @@ def audit_experiment(name, root, args):
         root,
         args.retrain_directory,
         essential["selected_rows"],
+        essential["selected_topology_ids"],
         args.seeds,
     )
     comparison = comparison_status(root, args.essential_directory)
@@ -232,13 +354,30 @@ def audit_experiment(name, root, args):
             failures.append(f"missing {args.essential_directory}/summary.json")
         if not essential["selected_rows"]:
             failures.append("no selected essential input masks")
+        if essential["missing_topology_id"]:
+            failures.append("selected essential masks missing topology_id")
         if essential["edge_json"]["missing"]:
             failures.append("selected essential masks reference missing edge_json files")
         if essential["input_mask_json"]["missing"]:
             failures.append("selected essential masks reference missing input_mask_json files")
+        if essential["edge_json"]["invalid"]:
+            failures.append("selected essential masks reference invalid edge_json files")
+        if essential["input_mask_json"]["invalid"]:
+            failures.append("selected essential masks reference invalid input_mask_json files")
     if args.require_essential_retrains:
         if retrain["expected_results"] is None:
             failures.append("cannot infer expected retrain count without selected.csv")
+        elif retrain["exact_path_check"]:
+            if retrain["completed_exact"] != retrain["expected_results"]:
+                failures.append(
+                    "essential retrains incomplete: "
+                    f"{retrain['completed_exact']}/{retrain['expected_results']}"
+                )
+            if retrain["unexpected_results"]:
+                failures.append(
+                    "essential retrains have unexpected results: "
+                    f"{retrain['unexpected_results']} extra results.pkl files"
+                )
         elif retrain["completed_results"] != retrain["expected_results"]:
             failures.append(
                 "essential retrains incomplete: "
@@ -253,6 +392,18 @@ def audit_experiment(name, root, args):
             failures.append("missing retrain summary files: " + ", ".join(missing_retrain_files))
         if not comparison["comparison_csv"] or not comparison["comparison_json"]:
             failures.append("missing essential retrain comparison files")
+        elif essential["selected_rows"] is not None:
+            if comparison["comparison_rows"] != essential["selected_rows"]:
+                failures.append(
+                    "essential retrain comparison row count mismatch: "
+                    f"{comparison['comparison_rows']}/{essential['selected_rows']}"
+                )
+            joined = (comparison["summary"] or {}).get("n_joined")
+            if joined is not None and joined != essential["selected_rows"]:
+                failures.append(
+                    "essential retrain comparison n_joined mismatch: "
+                    f"{joined}/{essential['selected_rows']}"
+                )
 
     return {
         "name": name,
@@ -286,14 +437,28 @@ def print_experiment(report):
         "  essential_inputmask: "
         f"library={essential['library_rows']} "
         f"selected={essential['selected_rows']} "
+        f"missing_topology_id={essential['missing_topology_id']} "
         f"edge_json_missing={essential['edge_json']['missing']} "
-        f"input_mask_json_missing={essential['input_mask_json']['missing']}"
+        f"edge_json_invalid={essential['edge_json']['invalid']} "
+        f"input_mask_json_missing={essential['input_mask_json']['missing']} "
+        f"input_mask_json_invalid={essential['input_mask_json']['invalid']}"
+    )
+    completed = (
+        retrain["completed_exact"]
+        if retrain.get("exact_path_check")
+        else retrain["completed_results"]
+    )
+    missing = (
+        retrain["missing_exact"]
+        if retrain.get("exact_path_check")
+        else retrain["missing_results"]
     )
     print(
         "  essential_retrain: "
-        f"completed={retrain['completed_results']} "
+        f"completed={completed} "
         f"expected={retrain['expected_results']} "
-        f"missing={retrain['missing_results']} "
+        f"missing={missing} "
+        f"unexpected={retrain['unexpected_results']} "
         f"manifest_rows={retrain['manifest']['rows']} "
         f"array_commands={retrain['array_commands']}"
     )

@@ -178,20 +178,20 @@ def main():
             )
             return
         run_command(
-            audit_command(
-                experiments,
-                args.seeds,
-                require_retrains=True,
-                strict=True,
-            ),
-            dry_run=args.dry_run,
-        )
-        run_command(
             finalizer_command(
                 experiments,
                 args.seeds,
                 args.output_md,
                 args.output_json,
+            ),
+            dry_run=args.dry_run,
+        )
+        run_command(
+            audit_command(
+                experiments,
+                args.seeds,
+                require_retrains=True,
+                strict=True,
             ),
             dry_run=args.dry_run,
         )

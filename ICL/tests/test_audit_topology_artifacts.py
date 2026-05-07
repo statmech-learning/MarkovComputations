@@ -43,37 +43,57 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
 
         essential_dir = os.path.join(root, "essential_inputmask50")
         ref_dir = os.path.join(essential_dir, "refs")
+        os.makedirs(ref_dir, exist_ok=True)
         rows = []
         for idx in range(selected_count):
             edge_json = os.path.join(ref_dir, f"edge{idx}.json")
             mask_json = os.path.join(ref_dir, f"mask{idx}.json")
             if not missing_reference or idx > 0:
-                self.touch(edge_json, b"{}")
-                self.touch(mask_json, b"{}")
+                with open(edge_json, "w") as f:
+                    json.dump(
+                        {
+                            "n_nodes": 3,
+                            "edges": [[0, 1], [1, 2], [2, 0]],
+                        },
+                        f,
+                    )
+                with open(mask_json, "w") as f:
+                    json.dump(
+                        {
+                            "input_mask": [
+                                [1, 1],
+                                [1, 1],
+                                [1, 1],
+                            ]
+                        },
+                        f,
+                    )
             rows.append(
                 {
                     "selected": "1",
+                    "topology_id": f"mask{idx}",
                     "topology_name": f"mask{idx}",
                     "edge_json": edge_json,
                     "input_mask_json": mask_json,
                 }
             )
         rows.append(
-            {
-                "selected": "0",
-                "topology_name": "not_selected",
-                "edge_json": "",
-                "input_mask_json": "",
+                {
+                    "selected": "0",
+                    "topology_id": "not_selected",
+                    "topology_name": "not_selected",
+                    "edge_json": "",
+                    "input_mask_json": "",
             }
         )
         self.write_csv(
             os.path.join(essential_dir, "library.csv"),
-            ["selected", "topology_name", "edge_json", "input_mask_json"],
+            ["selected", "topology_id", "topology_name", "edge_json", "input_mask_json"],
             rows,
         )
         self.write_csv(
             os.path.join(essential_dir, "selected.csv"),
-            ["selected", "topology_name", "edge_json", "input_mask_json"],
+            ["selected", "topology_id", "topology_name", "edge_json", "input_mask_json"],
             rows[:selected_count],
         )
         with open(os.path.join(essential_dir, "summary.json"), "w") as f:
@@ -81,12 +101,26 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
 
         retrain_dir = os.path.join(root, "essential_inputmask50_retrain")
         for idx in range(retrain_count):
-            self.touch(os.path.join(retrain_dir, f"run{idx}", "results.pkl"), b"done")
+            topology_idx = idx // 2
+            seed = (idx % 2) + 1
+            if topology_idx >= selected_count:
+                break
+            self.touch(
+                os.path.join(
+                    retrain_dir,
+                    f"mask{topology_idx}_trainseed{seed}",
+                    "results.pkl",
+                ),
+                b"done",
+            )
         self.write_csv(
             os.path.join(retrain_dir, "task_manifest.csv"),
             ["completed", "results_path"],
             [
-                {"completed": "True", "results_path": f"run{idx}/results.pkl"}
+                {
+                    "completed": "True",
+                    "results_path": f"mask{idx // 2}_trainseed{(idx % 2) + 1}/results.pkl",
+                }
                 for idx in range(retrain_count)
             ],
         )
@@ -103,7 +137,7 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
             self.write_csv(
                 os.path.join(essential_dir, "retrain_comparison.csv"),
                 ["topology_name"],
-                [{"topology_name": "mask0"}],
+                [{"topology_name": f"mask{idx}"} for idx in range(selected_count)],
             )
             with open(os.path.join(essential_dir, "retrain_comparison.json"), "w") as f:
                 json.dump({"n_joined": selected_count}, f)
@@ -180,6 +214,57 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("status: ok", result.stdout)
 
+    def test_strict_retrain_requirement_fails_on_wrong_output_paths(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = self.make_experiment(tmpdir, selected_count=1, retrain_count=0)
+            self.touch(
+                os.path.join(root, "essential_inputmask50_retrain", "wrong_run", "results.pkl"),
+                b"done",
+            )
+            result = self.run_audit(
+                [
+                    "--experiment",
+                    f"exp={root}",
+                    "--seeds",
+                    "1",
+                    "--require_essential_retrains",
+                    "--strict",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("essential retrains incomplete: 0/1", result.stdout)
+        self.assertIn("unexpected results", result.stdout)
+
+    def test_strict_retrain_requirement_fails_on_incomplete_comparison(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = self.make_experiment(
+                tmpdir,
+                selected_count=2,
+                retrain_count=4,
+                finalized=True,
+            )
+            essential_dir = os.path.join(root, "essential_inputmask50")
+            self.write_csv(
+                os.path.join(essential_dir, "retrain_comparison.csv"),
+                ["topology_name"],
+                [{"topology_name": "mask0"}],
+            )
+            with open(os.path.join(essential_dir, "retrain_comparison.json"), "w") as f:
+                json.dump({"n_joined": 1}, f)
+            result = self.run_audit(
+                [
+                    "--experiment",
+                    f"exp={root}",
+                    "--seeds",
+                    "1,2",
+                    "--require_essential_retrains",
+                    "--strict",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("comparison row count mismatch: 1/2", result.stdout)
+        self.assertIn("comparison n_joined mismatch: 1/2", result.stdout)
+
     def test_strict_essential_requirement_fails_on_missing_references(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = self.make_experiment(
@@ -198,6 +283,26 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("missing edge_json", result.stdout)
         self.assertIn("missing input_mask_json", result.stdout)
+
+    def test_strict_essential_requirement_fails_on_invalid_references(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = self.make_experiment(tmpdir, selected_count=1)
+            ref_dir = os.path.join(root, "essential_inputmask50", "refs")
+            with open(os.path.join(ref_dir, "edge0.json"), "w") as f:
+                json.dump({}, f)
+            with open(os.path.join(ref_dir, "mask0.json"), "w") as f:
+                json.dump({"input_mask": [[1, 0], [0.5, 1]]}, f)
+            result = self.run_audit(
+                [
+                    "--experiment",
+                    f"exp={root}",
+                    "--require_essential_inputmask",
+                    "--strict",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("invalid edge_json", result.stdout)
+        self.assertIn("invalid input_mask_json", result.stdout)
 
 
 if __name__ == "__main__":

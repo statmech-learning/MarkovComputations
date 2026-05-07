@@ -137,6 +137,19 @@ class TopologyMetricsTests(unittest.TestCase):
         det = tree_numerators_by_determinant(n_nodes, edges, rates)
         np.testing.assert_allclose(enum, det, rtol=1e-10, atol=1e-10)
 
+    def test_capped_tree_enumeration_is_flagged(self):
+        metrics = compute_topology_metrics(
+            4,
+            complete_digraph(4).edges,
+            p=2,
+            max_trees_per_root=1,
+        )
+        self.assertFalse(metrics["tree_counts_match_det"])
+        self.assertTrue(metrics["tree_enumeration_truncated"])
+        self.assertEqual(metrics["max_trees_per_root"], 1)
+        self.assertEqual(metrics["tree_counts_enum"], [1, 1, 1, 1])
+        self.assertEqual(metrics["tree_counts_det"], [16, 16, 16, 16])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -79,6 +79,9 @@ class RecoverEssentialInputMaskRetrainsTests(unittest.TestCase):
         self.assertIn("finalize_essential_inputmask_retrains.py", stdout)
         self.assertIn("random=", stdout)
         self.assertIn("hub=", stdout)
+        finalizer_pos = stdout.index("finalize_essential_inputmask_retrains.py")
+        strict_pos = stdout.rindex("--require_essential_retrains")
+        self.assertLess(finalizer_pos, strict_pos)
 
     def test_finalize_requires_both_report_paths(self):
         with tempfile.TemporaryDirectory() as tmpdir:

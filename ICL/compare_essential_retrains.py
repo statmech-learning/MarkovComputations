@@ -144,6 +144,11 @@ def joined_rows(selected_rows, retrain_rows):
     return rows
 
 
+def name_examples(rows, key):
+    names = [row.get(key) for row in rows if row.get(key)]
+    return ", ".join(names[:5]) if names else "none"
+
+
 def summary(rows):
     return {
         "n_joined": len(rows),
@@ -241,7 +246,15 @@ def main():
         selected_csv = args.selected_csv
         retrain_csv = args.retrain_aggregate_csv
 
-    rows = joined_rows(load_rows(selected_csv), load_rows(retrain_csv))
+    selected_rows = load_rows(selected_csv)
+    retrain_rows = load_rows(retrain_csv)
+    rows = joined_rows(selected_rows, retrain_rows)
+    if not rows:
+        raise SystemExit(
+            "No retrained motifs joined by topology_name. "
+            f"selected examples: {name_examples(selected_rows, 'topology_name')}; "
+            f"retrain examples: {name_examples(retrain_rows, 'topology_name')}"
+        )
     rows.sort(
         key=lambda row: (
             row["retrain_target_max"] if row["retrain_target_max"] is not None else -1.0,

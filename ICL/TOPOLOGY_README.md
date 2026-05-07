@@ -441,8 +441,8 @@ python3 recover_essential_inputmask_retrains.py \
   --max-concurrent 16
 ```
 
-After the missing jobs finish, finalize if and only if the strict retrain audit
-passes:
+After the missing jobs finish, finalize through the guarded exact-path
+completion check, then run the strict post-finalization audit:
 
 ```bash
 python3 recover_essential_inputmask_retrains.py \
@@ -457,7 +457,10 @@ python3 recover_essential_inputmask_retrains.py \
 
 If there are no missing retrain tasks, the first pass only writes the status
 manifests and skips array creation. If retrains are incomplete, the second pass
-stops at the strict audit before overwriting the report.
+stops in `finalize_essential_inputmask_retrains.py` before overwriting the
+report. The finalizer checks exact outputs named
+`<topology_id>_trainseed<seed>/results.pkl`; stale extra outputs fail unless
+`--allow_extra` is supplied for diagnostics.
 
 To consolidate completed sweeps into one auditable progress artifact:
 

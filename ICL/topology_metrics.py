@@ -686,6 +686,11 @@ def compute_topology_metrics(
 
     enum_counts = [len(arborescences[root]) for root in range(n_nodes)]
     det_counts = tree_counts_by_determinant(n_nodes, edge_tuple)
+    tree_counts_match_det = enum_counts == det_counts
+    tree_enumeration_truncated = any(
+        enum_count < det_count
+        for enum_count, det_count in zip(enum_counts, det_counts)
+    )
     participation = edge_participation(M)
     count_arr = np.asarray(enum_counts, dtype=float)
 
@@ -697,6 +702,9 @@ def compute_topology_metrics(
         "edges": [list(edge) for edge in edge_tuple],
         "tree_counts_enum": enum_counts,
         "tree_counts_det": det_counts,
+        "tree_counts_match_det": tree_counts_match_det,
+        "tree_enumeration_truncated": tree_enumeration_truncated,
+        "max_trees_per_root": max_trees_per_root,
         "n_trees_total_enum": int(sum(enum_counts)),
         "rank_M": M_stats["rank"],
         "rank_D": D_stats["rank"],

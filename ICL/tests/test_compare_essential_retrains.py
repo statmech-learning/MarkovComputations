@@ -146,6 +146,55 @@ class CompareEssentialRetrainsTests(unittest.TestCase):
         self.assertEqual(summary["retrain_input_coupled_parameter_count_mean"], 48.0)
         self.assertEqual(summary["comparison_branch_d_rel_min_mean"], 12.0)
 
+    def test_zero_join_fails_with_clear_message(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            selected_csv = os.path.join(tmpdir, "selected.csv")
+            retrain_csv = os.path.join(tmpdir, "retrain_aggregates.csv")
+            output_csv = os.path.join(tmpdir, "comparison.csv")
+            output_json = os.path.join(tmpdir, "comparison.json")
+
+            self.write_csv(
+                selected_csv,
+                ["topology_name", "source_test_novel_classes_max", "source_test_novel_classes_mean"],
+                [
+                    {
+                        "topology_name": "selected_mask",
+                        "source_test_novel_classes_max": 90.0,
+                        "source_test_novel_classes_mean": 80.0,
+                    }
+                ],
+            )
+            self.write_csv(
+                retrain_csv,
+                ["group", "topology_name", "target_max", "target_mean"],
+                [
+                    {
+                        "group": "other_group",
+                        "topology_name": "other_mask",
+                        "target_max": 70.0,
+                        "target_mean": 60.0,
+                    }
+                ],
+            )
+
+            result = self.run_compare(
+                [
+                    "--selected_csv",
+                    selected_csv,
+                    "--retrain_aggregate_csv",
+                    retrain_csv,
+                    "--output_csv",
+                    output_csv,
+                    "--output_json",
+                    output_json,
+                ]
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("No retrained motifs joined by topology_name", result.stderr + result.stdout)
+        self.assertIn("selected_mask", result.stderr + result.stdout)
+        self.assertIn("other_mask", result.stderr + result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
