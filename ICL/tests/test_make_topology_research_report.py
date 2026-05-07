@@ -233,6 +233,65 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
                 f,
             )
 
+        physical_essential_dir = os.path.join(root, "essential_input50")
+        physical_comparison_fields = [
+            "topology_name",
+            "n_edges",
+            "d_rel",
+            "source_test_novel_classes_mean",
+            "retrain_target_mean",
+            "retrain_target_max",
+            "retrain_retention_mean",
+            "retrain_retention_max",
+        ]
+        self.write_csv(
+            os.path.join(physical_essential_dir, "retrain_comparison.csv"),
+            physical_comparison_fields,
+            [
+                {
+                    "topology_name": "physical_essential_toy",
+                    "n_edges": 5,
+                    "d_rel": 24,
+                    "source_test_novel_classes_mean": 84.0,
+                    "retrain_target_mean": 72.0,
+                    "retrain_target_max": 78.0,
+                    "retrain_retention_mean": 0.86,
+                    "retrain_retention_max": 0.93,
+                }
+            ],
+        )
+        with open(os.path.join(physical_essential_dir, "retrain_comparison.json"), "w") as f:
+            json.dump(
+                {
+                    "n_joined": 1,
+                    "source_mean_mean": 84.0,
+                    "retrain_mean_mean": 72.0,
+                    "retrain_max_best": 78.0,
+                    "retention_mean_mean": 0.86,
+                    "retention_max_mean": 0.93,
+                    "n_edges_mean": 5.0,
+                    "n_edges_min": 5,
+                    "n_edges_max": 5,
+                },
+                f,
+            )
+        physical_retrain_root = os.path.join(root, "essential_input50_retrain")
+        self.write_csv(
+            os.path.join(physical_retrain_root, "topology_seed_aggregates.csv"),
+            aggregate_fields,
+            [
+                dict(
+                    aggregates[0],
+                    group="physical_essential_toy",
+                    topology_name="physical_essential_toy",
+                    n_edges=5,
+                    d_rel=24,
+                )
+            ],
+        )
+        with open(os.path.join(physical_retrain_root, "topology_seed_aggregates.json"), "w") as f:
+            json.dump({"regressions": {"target_mean": {}, "target_max": {}, "target_std": {}}}, f)
+
         essential_dir = os.path.join(root, "essential_inputmask50")
         comparison_fields = [
             "topology_name",
@@ -310,7 +369,10 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
         self.assertIn("worst branch mean margin", markdown)
         self.assertIn("input_plus_branch_drel", markdown)
         self.assertIn("Essential Motif Retraining", markdown)
+        self.assertIn("physical subgraph", markdown)
         self.assertIn("input mask", markdown)
+        self.assertIn("toy (physical subgraph)", markdown)
+        self.assertIn("toy (input mask)", markdown)
 
         pooled_model = payload["pooled"]["run_level"]["input_plus_branch_drel"]
         self.assertIn("comparison_branch_d_rel_min", pooled_model["predictors"])
@@ -323,10 +385,8 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
             payload["experiments"][0]["essential_input50"]["comparison"]["n_joined"],
             1,
         )
-        self.assertEqual(
-            payload["experiments"][0]["essential_input50"]["source_dir"],
-            "essential_inputmask50",
-        )
+        layouts = payload["experiments"][0]["essential_input50"]["layouts"]
+        self.assertEqual([layout["source_dir"] for layout in layouts], ["essential_input50", "essential_inputmask50"])
 
 
 if __name__ == "__main__":

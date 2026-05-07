@@ -659,14 +659,22 @@ def regression_table(experiments, outcome, model_names, source):
     lines.append("| " + " | ".join(header) + " |")
     lines.append("| " + " | ".join(["---"] * len(header)) + " |")
     for experiment in experiments:
+        if source == "essential_retrain":
+            layouts = essential_layouts(experiment)
+            if not layouts:
+                row = [experiment["name"]] + ["NA/NA" for _ in model_names]
+                lines.append("| " + " | ".join(row) + " |")
+                continue
+            for layout in layouts:
+                models = layout.get("retrain_aggregate_regressions", {}).get(outcome, {})
+                row = [f"{experiment['name']} ({layout.get('label', 'NA')})"]
+                for model in model_names:
+                    fit = models.get(model, {})
+                    row.append(f"{fmt(fit.get('r2'))}/{fmt(fit.get('leave_one_out_r2'))}")
+                lines.append("| " + " | ".join(row) + " |")
+            continue
         if source == "aggregate":
             models = experiment.get("aggregate_regressions", {}).get(outcome, {})
-        elif source == "essential_retrain":
-            models = (
-                experiment.get("essential_input50", {})
-                .get("retrain_aggregate_regressions", {})
-                .get(outcome, {})
-            )
         else:
             models = experiment.get("run_regressions", {})
         row = [experiment["name"]]
