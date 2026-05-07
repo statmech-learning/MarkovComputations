@@ -150,6 +150,9 @@ def load_run(run_dir):
     topology_path = os.path.join(run_dir, "topology.json")
     if not os.path.exists(results_path) or not os.path.exists(metrics_path):
         return None
+    if not os.path.exists(config_path):
+        print(f"Skipping {run_dir}: missing config.json")
+        return None
 
     with open(results_path, "rb") as f:
         payload = pickle.load(f)

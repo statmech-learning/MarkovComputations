@@ -75,6 +75,32 @@ class CollectTopologyResultsTests(unittest.TestCase):
         self.assertGreater(float(row["comparison_branch_d_rel_max"]), 0.0)
         self.assertGreater(float(row["comparison_branch_d_rel_gini"]), 0.0)
 
+    def test_skips_partial_run_without_config(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            run_dir = os.path.join(tmpdir, "partial")
+            os.makedirs(run_dir)
+            with open(os.path.join(run_dir, "topology_metrics.json"), "w") as f:
+                json.dump({"topology_name": "partial"}, f)
+            with open(os.path.join(run_dir, "results.pkl"), "wb") as f:
+                pickle.dump({"history": {}, "results": {}}, f)
+            output_csv = os.path.join(tmpdir, "topology_results.csv")
+
+            result = self.run_collector(
+                [
+                    "--input_root",
+                    tmpdir,
+                    "--output_csv",
+                    output_csv,
+                ]
+            )
+            with open(output_csv, newline="") as f:
+                rows = list(csv.DictReader(f))
+
+        self.assertIn("Skipping", result.stdout)
+        self.assertIn("missing config.json", result.stdout)
+        self.assertIn("Wrote 0 rows", result.stdout)
+        self.assertEqual(rows, [])
+
 
 if __name__ == "__main__":
     unittest.main()
