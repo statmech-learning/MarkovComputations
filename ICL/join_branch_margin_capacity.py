@@ -25,6 +25,7 @@ DEFAULT_SKIP_COLUMNS = {
     "edge_json",
     "input_mask_json",
 }
+NONINFORMATIVE_KEYS = {"", "full", "none", "None", "NA", "nan"}
 
 
 def load_csv(path: str) -> List[dict]:
@@ -40,12 +41,18 @@ def write_csv(path: str, rows: Sequence[dict], fieldnames: Sequence[str]) -> Non
         writer.writerows({field: row.get(field, "") for field in fieldnames} for row in rows)
 
 
-def first_present(row: dict, keys: Sequence[str]) -> str:
+def candidate_values(row: dict, keys: Sequence[str]) -> List[str]:
+    values = []
     for key in keys:
         value = row.get(key)
-        if value not in (None, ""):
-            return str(value)
-    return ""
+        if value in (None, ""):
+            continue
+        value = str(value)
+        if value in NONINFORMATIVE_KEYS:
+            continue
+        if value not in values:
+            values.append(value)
+    return values
 
 
 def prefixed_capacity_fields(
@@ -72,10 +79,17 @@ def capacity_index(
     capacity_keys: Sequence[str],
 ) -> Dict[str, dict]:
     index = {}
+    duplicates = set()
     for row in capacity_rows:
-        key = first_present(row, capacity_keys)
-        if key and key not in index:
+        for key in candidate_values(row, capacity_keys):
+            if key in duplicates:
+                continue
+            if key in index and index[key] is not row:
+                duplicates.add(key)
+                index.pop(key, None)
+                continue
             index[key] = row
+    index["_duplicate_key_count"] = len(duplicates)
     return index
 
 
@@ -90,6 +104,7 @@ def join_rows(
     """Return topology rows enriched with prefixed capacity columns."""
 
     index = capacity_index(capacity_rows, capacity_keys)
+    duplicate_key_count = index.pop("_duplicate_key_count", 0)
     capacity_fields = prefixed_capacity_fields(capacity_rows, prefix, skip_columns)
     skip_set = set(skip_columns)
 
@@ -98,8 +113,12 @@ def join_rows(
     missing = 0
     for row in topology_rows:
         out = dict(row)
-        key = first_present(row, topology_keys)
-        capacity = index.get(key)
+        keys = candidate_values(row, topology_keys)
+        capacity = None
+        for key in keys:
+            capacity = index.get(key)
+            if capacity is not None:
+                break
         if capacity is None:
             missing += 1
             for field in capacity_fields:
@@ -124,6 +143,7 @@ def join_rows(
         "n_matched_rows": matched,
         "n_missing_rows": missing,
         "capacity_keys_indexed": len(index),
+        "capacity_duplicate_keys_ignored": duplicate_key_count,
     }
     return output_rows, fieldnames, report
 
@@ -137,8 +157,14 @@ def main():
     parser.add_argument("--topology_csv", required=True)
     parser.add_argument("--capacity_csv", required=True, nargs="+")
     parser.add_argument("--output_csv", required=True)
-    parser.add_argument("--topology_keys", default="input_mask_name,mask_name,topology_name,label")
-    parser.add_argument("--capacity_keys", default="topology_name,mask_name,input_mask_name,topology_id")
+    parser.add_argument(
+        "--topology_keys",
+        default="physical_topology_name,topology_name,input_mask_name,mask_name,label",
+    )
+    parser.add_argument(
+        "--capacity_keys",
+        default="physical_topology_name,topology_name,mask_name,input_mask_name,topology_id",
+    )
     parser.add_argument("--prefix", default="capacity_")
     args = parser.parse_args()
 

@@ -58,6 +58,50 @@ class JoinBranchMarginCapacityTests(unittest.TestCase):
         self.assertEqual(rows[1]["capacity_linear_test_margin_p10"], "0.2")
         self.assertEqual(rows[2]["capacity_linear_test_accuracy"], "")
 
+    def test_ignores_duplicate_and_noninformative_keys(self):
+        topology_rows = [
+            {
+                "label": "g0_seed1",
+                "topology_name": "cycle_n4_m6_seed1",
+                "physical_topology_name": "cycle_n4_m6_seed1",
+                "input_mask_name": "full",
+            },
+            {
+                "label": "g1_seed1",
+                "topology_name": "cycle_n4_m6_seed2",
+                "physical_topology_name": "cycle_n4_m6_seed2",
+                "input_mask_name": "full",
+            },
+        ]
+        capacity_rows = [
+            {
+                "topology_id": "g0",
+                "topology_name": "cycle_chords",
+                "physical_topology_name": "cycle_n4_m6_seed1",
+                "input_mask_name": "full",
+                "linear_test_accuracy": "0.80",
+            },
+            {
+                "topology_id": "g1",
+                "topology_name": "cycle_chords",
+                "physical_topology_name": "cycle_n4_m6_seed2",
+                "input_mask_name": "full",
+                "linear_test_accuracy": "0.90",
+            },
+        ]
+
+        rows, _, report = join_rows(
+            topology_rows,
+            capacity_rows,
+            topology_keys=["physical_topology_name", "topology_name", "input_mask_name"],
+            capacity_keys=["physical_topology_name", "topology_name", "input_mask_name"],
+        )
+
+        self.assertEqual(report["n_matched_rows"], 2)
+        self.assertGreaterEqual(report["capacity_duplicate_keys_ignored"], 1)
+        self.assertEqual(rows[0]["capacity_linear_test_accuracy"], "0.80")
+        self.assertEqual(rows[1]["capacity_linear_test_accuracy"], "0.90")
+
     def test_cli_writes_enriched_csv(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             topology_csv = os.path.join(tmpdir, "topology.csv")
