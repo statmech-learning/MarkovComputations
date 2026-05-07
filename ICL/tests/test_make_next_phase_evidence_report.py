@@ -132,6 +132,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
         self.assertIn("branch_margin_capacity", markdown)
         self.assertIn("edge_projection_permutation", markdown)
         self.assertIn("Matched Essential-Motif Controls", markdown)
+        self.assertIn("Extracted motifs beat these matched controls", markdown)
         self.assertIn("random_sc", markdown)
         self.assertIn("results.pkl", markdown)
         self.assertEqual(payload["clustered_inference"][0]["n_clusters"], 4)

@@ -154,6 +154,38 @@ def matched_motif_summary(entry: dict) -> dict:
     }
 
 
+def matched_motif_interpretation(entry: dict) -> str:
+    kind_stats = list((entry.get("by_control_kind") or {}).values())
+    deltas = [
+        stats.get("control_minus_source_retrain_mean_mean")
+        for stats in kind_stats
+        if stats.get("control_minus_source_retrain_mean_mean") is not None
+    ]
+    win_rates = [
+        stats.get("control_win_rate_mean")
+        for stats in kind_stats
+        if stats.get("control_win_rate_mean") is not None
+    ]
+    if deltas and all(float(delta) < 0.0 for delta in deltas):
+        if not win_rates or all(float(rate) < 0.5 for rate in win_rates):
+            return (
+                "Extracted motifs beat these matched controls on mean retrain ICL, "
+                "supporting a functionally specific motif-retention interpretation "
+                "within this tested first-order regime."
+            )
+    if deltas and all(float(delta) > 0.0 for delta in deltas):
+        return (
+            "Matched controls retrain above the extracted motifs here, so this "
+            "backbone does not support a unique extracted-motif superiority claim."
+        )
+    return (
+        "Matched controls are mixed or comparable to the extracted motifs here; "
+        "interpret motif retraining as evidence that small matched physical "
+        "subgraphs can support ICL, not that the extracted edge set is uniquely "
+        "superior."
+    )
+
+
 def read_count(root: str, filename: str) -> int:
     total = 0
     for _, _, files in os.walk(root):
@@ -306,6 +338,8 @@ def build_markdown(report: dict) -> str:
                 f"### {entry['label']}",
                 "",
                 f"Joined controls: `{entry['n_joined']}`. Source motifs represented: `{overall.get('n_sources', 'NA')}`.",
+                "",
+                matched_motif_interpretation(entry),
                 "",
             ]
         )
