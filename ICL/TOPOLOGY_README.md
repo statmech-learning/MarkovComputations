@@ -82,6 +82,8 @@ The convention is:
   outputs, extracted essential masks, retrain outputs, manifests, and comparison
   files. Use this before recovering interrupted cluster arrays or running
   guarded finalizers.
+- `verify_topology_completion.py`: final non-mutating completion gate that runs
+  the strict artifact audit and validates the final Markdown/JSON report shape.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
 - `tests/`: dependency-light unit coverage for matrix-tree metrics, input-mask
