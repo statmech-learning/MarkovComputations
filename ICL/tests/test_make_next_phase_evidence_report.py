@@ -33,6 +33,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
                     "n_run_rows": 12,
                     "n_clusters": 4,
                     "n_families": 2,
+                    "family_col": "derived_graph_family",
                     "group_level": {
                         "target_mean": {
                             "raw_count": {"n": 4, "leave_one_out_r2": -0.1},
@@ -129,6 +130,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
                 payload = json.load(handle)
 
         self.assertIn("Next-Phase Topology-ICL Evidence Report", markdown)
+        self.assertIn("Families: `2` via `derived_graph_family`", markdown)
         self.assertIn("branch_margin_capacity", markdown)
         self.assertIn("edge_projection_permutation", markdown)
         self.assertIn("Matched Essential-Motif Controls", markdown)
@@ -136,6 +138,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
         self.assertIn("random_sc", markdown)
         self.assertIn("results.pkl", markdown)
         self.assertEqual(payload["clustered_inference"][0]["n_clusters"], 4)
+        self.assertEqual(payload["clustered_inference"][0]["family_col"], "derived_graph_family")
         self.assertEqual(payload["matched_motif_controls"][0]["n_joined"], 4)
         self.assertIn("Wrote next-phase evidence report", result.stdout)
 

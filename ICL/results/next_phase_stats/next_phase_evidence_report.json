@@ -923,6 +923,7 @@
       "path": "results/expanded_pilot_sweeps/n5_m12_N2_D1/branch_capacity_clustered_inference.json"
     },
     {
+      "family_col": "derived_graph_family",
       "label": "hard_n4_m6_N3_D2",
       "models": {
         "branch_rank_weighted_capacity": {
@@ -1049,6 +1050,7 @@
       "path": "results/expanded_hard_stats/n4_m6_N3_D2_branch_capacity_clustered_inference.json"
     },
     {
+      "family_col": "derived_graph_family",
       "label": "hard_n5_m8_N3_D2",
       "models": {
         "branch_rank_weighted_capacity": {
@@ -1175,6 +1177,7 @@
       "path": "results/expanded_hard_stats/n5_m8_N3_D2_branch_capacity_clustered_inference.json"
     },
     {
+      "family_col": "derived_graph_family",
       "label": "hard_n5_m12_N3_D2",
       "models": {
         "branch_rank_weighted_capacity": {
@@ -1338,7 +1341,7 @@
       "root": "results/expanded_hard_sweeps/n5_m12_N3_D2"
     }
   ],
-  "generated_at": "2026-05-07T22:02:20.150547+00:00",
+  "generated_at": "2026-05-07T22:03:57.245337+00:00",
   "matched_motif_controls": [
     {
       "by_control_kind": {

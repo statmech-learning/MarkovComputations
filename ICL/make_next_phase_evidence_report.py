@@ -101,6 +101,7 @@ def clustered_summary(entry: dict) -> dict:
         "n_run_rows": payload.get("n_run_rows"),
         "n_clusters": payload.get("n_clusters"),
         "n_families": payload.get("n_families"),
+        "family_col": payload.get("family_col"),
         "models": models,
     }
 
@@ -267,11 +268,20 @@ def build_markdown(report: dict) -> str:
     if not report["clustered_inference"]:
         lines.append("No clustered inference artifacts were supplied.")
     for entry in report["clustered_inference"]:
+        family_col = entry.get("family_col")
+        family_text = (
+            f"Families: `{entry['n_families']}` via `{family_col}`."
+            if family_col
+            else f"Families: `{entry['n_families']}`."
+        )
         lines.extend(
             [
                 f"### {entry['label']}",
                 "",
-                f"Rows: `{entry['n_run_rows']}`. Groups: `{entry['n_clusters']}`. Families: `{entry['n_families']}`.",
+                (
+                    f"Rows: `{entry['n_run_rows']}`. Groups: `{entry['n_clusters']}`. "
+                    f"{family_text}"
+                ),
                 "",
             ]
         )
