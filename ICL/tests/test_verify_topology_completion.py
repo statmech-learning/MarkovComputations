@@ -120,6 +120,7 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
         include_causal=True,
         hard_family_col="derived_graph_family",
         include_family_bootstrap=True,
+        include_rooted_polytope=True,
         hard_mechanism_count=0,
         hard_causal_count=0,
     ):
@@ -171,6 +172,20 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
                             else {}
                         ),
                     },
+                    **(
+                        {
+                            "rooted_tree_polytope_capacity": {
+                                "group_loo_r2": 0.2,
+                                **(
+                                    {"family_bootstrap_delta_mean": 0.3}
+                                    if include_family_bootstrap and label.startswith("hard_")
+                                    else {}
+                                ),
+                            }
+                        }
+                        if include_rooted_polytope and label.startswith("hard_")
+                        else {}
+                    ),
                 },
             }
             for label in labels
@@ -179,7 +194,18 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             {
                 "label": label,
                 "n_rows": 12,
-                "families": [{"family": "random_sc", "n": 1, "linear_test_accuracy_mean": 0.8}],
+                "families": [
+                    {
+                        "family": "random_sc",
+                        "n": 1,
+                        "linear_test_accuracy_mean": 0.8,
+                        **(
+                            {"rooted_polytope_supported_branch_dim_fraction_mean": 1.0}
+                            if include_rooted_polytope
+                            else {}
+                        ),
+                    }
+                ],
             }
             for label in labels
             if label.startswith("hard_")
@@ -426,6 +452,28 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("missing family-cluster bootstrap metric", result.stdout)
+
+    def test_next_phase_report_kind_requires_rooted_polytope_for_hard_regimes(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            report_md, report_json = self.write_next_phase_report(
+                tmpdir,
+                include_rooted_polytope=False,
+            )
+            result = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    report_md,
+                    "--report_json",
+                    report_json,
+                    "--report_kind",
+                    "next_phase",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing rooted_tree_polytope_capacity model", result.stdout)
+        self.assertIn("missing rooted polytope support summary", result.stdout)
 
     def test_next_phase_report_kind_can_require_expanded_followups(self):
         with tempfile.TemporaryDirectory() as tmpdir:

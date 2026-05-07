@@ -259,6 +259,18 @@ def verify_next_phase_report(report, markdown, require_expanded_followups=False)
                     f"{label}: missing family-cluster bootstrap metric for topology geometry",
                     failures,
                 )
+                rooted = models.get("rooted_tree_polytope_capacity")
+                require(
+                    isinstance(rooted, dict),
+                    f"{label}: missing rooted_tree_polytope_capacity model",
+                    failures,
+                )
+                if isinstance(rooted, dict):
+                    require(
+                        rooted.get("family_bootstrap_delta_mean") is not None,
+                        f"{label}: missing family-cluster bootstrap metric for rooted tree-polytope capacity",
+                        failures,
+                    )
 
     capacity = report.get("branch_margin_capacity")
     require(isinstance(capacity, list) and capacity, "next-phase report has no branch-margin capacity entries", failures)
@@ -269,6 +281,15 @@ def verify_next_phase_report(report, markdown, require_expanded_followups=False)
         label = item.get("label", "capacity")
         require(positive_number(item.get("n_rows")), f"{label}: no branch capacity rows", failures)
         require(isinstance(item.get("families"), list) and item.get("families"), f"{label}: no capacity family summary", failures)
+        if label in HARD_NEXT_PHASE_LABELS and isinstance(item.get("families"), list):
+            for family in item.get("families") or []:
+                family_name = family.get("family", "family") if isinstance(family, dict) else "family"
+                require(
+                    isinstance(family, dict)
+                    and family.get("rooted_polytope_supported_branch_dim_fraction_mean") is not None,
+                    f"{label} {family_name}: missing rooted polytope support summary",
+                    failures,
+                )
 
     causal = report.get("causal_interventions")
     require(isinstance(causal, list) and causal, "next-phase report has no causal intervention entries", failures)

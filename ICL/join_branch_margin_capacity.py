@@ -36,7 +36,7 @@ def load_csv(path: str) -> List[dict]:
 def write_csv(path: str, rows: Sequence[dict], fieldnames: Sequence[str]) -> None:
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows({field: row.get(field, "") for field in fieldnames} for row in rows)
 

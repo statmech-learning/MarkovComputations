@@ -3,43 +3,51 @@
   "families": {
     "cycle_chords": {
       "n": 9,
-      "linear_test_accuracy_mean": 0.88,
-      "linear_test_accuracy_max": 0.88,
-      "rank_weighted_linear_test_accuracy_mean": 0.88,
-      "rank_weighted_linear_test_accuracy_max": 0.88,
-      "tropical_linear_test_accuracy_mean": 0.35392361111111115,
-      "tropical_linear_test_accuracy_max": 0.41375,
-      "tropical_root_feature_effective_rank_mean": 2.680518266365594
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877,
+      "tropical_linear_test_accuracy_mean": 0.38277777777777783,
+      "tropical_linear_test_accuracy_max": 0.44,
+      "tropical_root_feature_effective_rank_mean": 2.676503017531485,
+      "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
+      "rooted_polytope_branch_best_rank_min_mean": 3.5555555555555554
     },
     "hub_spoke": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.88,
-      "linear_test_accuracy_max": 0.88,
-      "rank_weighted_linear_test_accuracy_mean": 0.88,
-      "rank_weighted_linear_test_accuracy_max": 0.88,
-      "tropical_linear_test_accuracy_mean": 0.35260416666666666,
-      "tropical_linear_test_accuracy_max": 0.415,
-      "tropical_root_feature_effective_rank_mean": 2.429534430177988
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877,
+      "tropical_linear_test_accuracy_mean": 0.3740833333333333,
+      "tropical_linear_test_accuracy_max": 0.444,
+      "tropical_root_feature_effective_rank_mean": 2.427680846448448,
+      "rooted_polytope_supported_branch_dim_fraction_mean": 0.0,
+      "rooted_polytope_branch_best_rank_min_mean": 0.0
     },
     "random_sc": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.88,
-      "linear_test_accuracy_max": 0.88,
-      "rank_weighted_linear_test_accuracy_mean": 0.88,
-      "rank_weighted_linear_test_accuracy_max": 0.88,
-      "tropical_linear_test_accuracy_mean": 0.3485416666666667,
-      "tropical_linear_test_accuracy_max": 0.3925,
-      "tropical_root_feature_effective_rank_mean": 2.661824649745826
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877,
+      "tropical_linear_test_accuracy_mean": 0.3819166666666666,
+      "tropical_linear_test_accuracy_max": 0.426,
+      "tropical_root_feature_effective_rank_mean": 2.6638913214157314,
+      "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
+      "rooted_polytope_branch_best_rank_min_mean": 4.0
     },
     "two_module": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.88,
-      "linear_test_accuracy_max": 0.88,
-      "rank_weighted_linear_test_accuracy_mean": 0.88,
-      "rank_weighted_linear_test_accuracy_max": 0.88,
-      "tropical_linear_test_accuracy_mean": 0.351875,
-      "tropical_linear_test_accuracy_max": 0.40375,
-      "tropical_root_feature_effective_rank_mean": 2.428968603365227
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877,
+      "tropical_linear_test_accuracy_mean": 0.37525000000000003,
+      "tropical_linear_test_accuracy_max": 0.452,
+      "tropical_root_feature_effective_rank_mean": 2.4249435165796998,
+      "rooted_polytope_supported_branch_dim_fraction_mean": 0.0,
+      "rooted_polytope_branch_best_rank_min_mean": 0.0
     }
   }
 }

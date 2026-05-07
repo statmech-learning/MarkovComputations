@@ -177,8 +177,8 @@ def capacity_row(row: dict, base_dir: str, args) -> dict:
         "physical_topology_name": row.get("physical_topology_name", topology_name),
         "mask_name": row.get("mask_name", ""),
         "input_mask_name": input_mask_name,
-        "edge_json": edge_path,
-        "input_mask_json": mask_path or "",
+        "edge_json": row.get("edge_json") or edge_path,
+        "input_mask_json": row.get("input_mask_json") or mask_path or "",
         **{field: result.get(field) for field in FIELDS if field not in {
             "topology_id",
             "topology_name",
@@ -195,7 +195,7 @@ def capacity_row(row: dict, base_dir: str, args) -> dict:
 def write_csv(path: str, rows: List[dict]) -> None:
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=FIELDS)
+        writer = csv.DictWriter(handle, fieldnames=FIELDS, lineterminator="\n")
         writer.writeheader()
         writer.writerows({field: finite_or_empty(row.get(field)) for field in FIELDS} for row in rows)
 
