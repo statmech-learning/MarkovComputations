@@ -310,7 +310,8 @@ def fit_ols(X, y):
 
 
 def leave_one_out_r2(X, y):
-    if X.shape[0] < X.shape[1] + 2:
+    effective_rank = np.linalg.matrix_rank(X) if X.shape[0] else 0
+    if X.shape[0] < effective_rank + 2:
         return None
     predictions = np.zeros(X.shape[0], dtype=float)
     for idx in range(X.shape[0]):

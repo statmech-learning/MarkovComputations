@@ -143,7 +143,8 @@ def standardize_columns(X):
 
 def leave_one_out_r2(X, y):
     n = X.shape[0]
-    if n < X.shape[1] + 2:
+    effective_rank = np.linalg.matrix_rank(X) if n else 0
+    if n < effective_rank + 2:
         return None
     predictions = np.zeros(n, dtype=float)
     for idx in range(n):
