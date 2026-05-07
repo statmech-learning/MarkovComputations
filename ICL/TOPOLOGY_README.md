@@ -87,6 +87,9 @@ The convention is:
 - `make_topology_research_report.py`: consolidate fixed-edge sweeps,
   mechanism summaries, seed aggregates, physical essential-subgraph retrains,
   and essential input-mask retrains into one Markdown/JSON progress report.
+- `finalize_topology_research_report.py`: report-scoped finalizer that rebuilds
+  the consolidated research report, runs the strict research verifier, and
+  writes the conservative H0/H1 interpretation.
 - `audit_topology_artifacts.py`: read-only audit of source runs, mechanism
   outputs, extracted essential masks, retrain outputs, manifests, and comparison
   files. Use this before recovering interrupted cluster arrays or running
@@ -501,19 +504,24 @@ report. The finalizer checks exact outputs named
 `<topology_id>_trainseed<seed>/results.pkl`; stale extra outputs fail unless
 `--allow_extra` is supplied for diagnostics.
 
-To consolidate completed sweeps into one auditable progress artifact:
+To consolidate completed sweeps into one auditable progress artifact and write
+the conservative H0/H1 interpretation:
 
 ```bash
-python3 make_topology_research_report.py \
+python3 finalize_topology_research_report.py \
   --experiment m20=results/topology_fixed_m20_library \
   --experiment m12=results/topology_fixed_m12_library \
+  --seeds 1,2,3,4,5 \
   --output_md results/topology_research_report.md \
   --output_json results/topology_research_report.json
 ```
 
-When multiple experiments are supplied, the report also includes pooled
-cross-regime regressions that compare edge-count predictors with tree-geometry,
-mechanism, and projection-alignment predictors.
+This wrapper first runs `make_topology_research_report.py`, then
+`verify_topology_completion.py --report_kind research`, then
+`interpret_topology_report.py --report_kind research`. When multiple
+experiments are supplied, the report also includes pooled cross-regime
+regressions that compare edge-count predictors with tree-geometry, mechanism,
+and projection-alignment predictors.
 
 If an experiment root contains `essential_input50/retrain_comparison.json` or
 `essential_inputmask50/retrain_comparison.json`, the same consolidated report

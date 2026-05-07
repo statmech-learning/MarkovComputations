@@ -28,7 +28,7 @@ projection geometry.
 | Post-training active tree/root, branch MI, margins, sensitivities, and ablations | `topology_analysis.py`, `analyze_topology_model.py`, `collect_mechanism_results.py`, `summarize_topology_mechanisms.py` | Implemented; execution requires Torch-enabled trained runs |
 | Essential physical subgraph extraction and retraining | `extract_essential_subgraphs.py`, `finalize_essential_physical_retrains.py`, `recover_essential_physical_retrains.py`, `compare_essential_retrains.py` | Implemented and tested |
 | Essential input-mask extraction and retraining | `extract_essential_input_masks.py`, `finalize_essential_inputmask_retrains.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
-| Consolidated research report | `make_topology_research_report.py` | Implemented; supports both `essential_input50` and `essential_inputmask50` layouts |
+| Consolidated research report | `make_topology_research_report.py`, `finalize_topology_research_report.py` | Implemented; finalizer verifies both `essential_input50` and `essential_inputmask50` layouts before interpretation |
 | Artifact audit and interrupted-array recovery | `audit_topology_artifacts.py`, `recover_essential_physical_retrains.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
 
 ## Verification Gates
@@ -41,7 +41,7 @@ python3 -m py_compile $(find ICL -name '*.py' -not -path '*/__pycache__/*')
 git diff --check
 ```
 
-As of the latest local run, the unittest suite has 80 tests and passes. Local
+As of the latest local run, the unittest suite has 83 tests and passes. Local
 Python does not have Torch, so training and mechanism smoke tests must run on
 the cluster or another Torch-enabled environment.
 
@@ -149,22 +149,26 @@ python3 recover_essential_physical_retrains.py \
   --finalize_if_complete
 ```
 
-Then generate the consolidated research report explicitly:
+Then generate, verify, and interpret the consolidated research report:
 
 ```bash
-python3 make_topology_research_report.py \
+python3 finalize_topology_research_report.py \
   --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
   --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
   --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
   --output_md results/topology_research_report.md \
   --output_json results/topology_research_report.json
 ```
 
-If you generate a consolidated `make_topology_research_report.py` report, rerun
-the same verifier with `--report_kind research` and the consolidated report
-paths; that mode audits both input-mask and physical-essential retrain layouts.
+The report finalizer runs `make_topology_research_report.py`,
+`verify_topology_completion.py --report_kind research`, and
+`interpret_topology_report.py --report_kind research` in that order. The
+research verifier audits both input-mask and physical-essential retrain layouts
+and requires both layouts to be present in the report JSON.
 
-After verification passes, create the conservative H0/H1 interpretation:
+For the focused input-mask report, create the conservative H0/H1 interpretation
+after verification passes:
 
 ```bash
 python3 interpret_topology_report.py \

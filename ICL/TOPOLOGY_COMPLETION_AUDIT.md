@@ -61,12 +61,13 @@ python3 verify_topology_completion.py ... --report_kind input_mask --report_md .
 python3 verify_topology_completion.py ... --report_kind research --report_md ... --report_json ...
 python3 interpret_topology_report.py --report_json ... --report_kind input_mask ...
 python3 interpret_topology_report.py --report_json ... --report_kind research ...
+python3 finalize_topology_research_report.py --experiment ... --output_md ... --output_json ...
 ```
 
 Observed state:
 
 - Local branch is clean and tracking `origin/topology`.
-- Local unit suite has 80 tests and passes.
+- Local unit suite has 83 tests and passes.
 - Python syntax compilation passes.
 - `git diff --check` passes.
 - Local `ICL/results` contains only older `markov_icl_gmm_*.pt` files, not the
@@ -110,10 +111,10 @@ Observed state:
 | Do not conflate input-coupling ablation with physical edge ablation | Separate ablation fields and `extract_essential_input_masks.py` vs `extract_essential_subgraphs.py` | Implemented |
 | Avoid clustering as the primary hypothesis | Reports emphasize regressions, branch metrics, mechanisms, and essential motifs | Implemented in report structure |
 | Keep nonlinear autocatalytic/WTA outside first-order tree claims | Current implementation and docs are scoped to first-order topology | Satisfied by scope |
-| Provide final consolidated report | `make_topology_research_report.py`, `make_input_mask_report.py` | Implemented; final cluster reports missing |
+| Provide final consolidated report | `make_topology_research_report.py`, `finalize_topology_research_report.py`, `make_input_mask_report.py` | Implemented; final cluster reports missing |
 | Provide artifact audit and safe recovery | `audit_topology_artifacts.py`, `recover_essential_physical_retrains.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
 | Audit physical essential-subgraph retrain artifacts | `audit_topology_artifacts.py --essential_kind physical` | Implemented and tested |
-| Verify final report and artifact consistency in one non-mutating command | `verify_topology_completion.py --report_kind input_mask` and `--report_kind research` | Implemented and tested; research mode audits both input-mask and physical-essential layouts |
+| Verify final report and artifact consistency in one non-mutating command | `verify_topology_completion.py --report_kind input_mask` and `--report_kind research`, `finalize_topology_research_report.py` | Implemented and tested; research mode audits both input-mask and physical-essential layouts and requires both layouts in the report JSON |
 | Produce a conservative H0/H1 interpretation from verified report JSON | `interpret_topology_report.py` | Implemented and tested; requires final cluster report JSON |
 | Avoid interfering with other agents on Engaging | Current blocker documents that only `icl:13.2` should be used | Satisfied locally; cluster work paused |
 
