@@ -68,6 +68,10 @@ The convention is:
 - `finalize_essential_inputmask_retrains.py`: guarded finalizer for extracted
   essential input-mask retrains; it refuses to collect incomplete retrain sets
   unless `--allow_partial` is supplied.
+- `recover_essential_inputmask_retrains.py`: conservative wrapper for
+  interrupted essential input-mask retrains; it audits source artifacts, writes
+  status manifests, optionally submits only missing retrain runs, and calls the
+  guarded finalizer only after a strict retrain audit.
 - `make_input_mask_report.py`: focused report for fixed-physical-graph
   input-mask sweeps, including masked tree geometry, mechanism predictors,
   extracted essential masks, and retrain retention.
@@ -401,6 +405,27 @@ python3 finalize_essential_inputmask_retrains.py \
   --output_md results/input_mask_topology_report.md \
   --output_json results/input_mask_topology_report.json
 ```
+
+The same recovery/finalization path can be driven by one wrapper. Use
+`--dry-run` first to inspect the audit, status, missing-only submit, strict
+audit, and finalizer commands:
+
+```bash
+python3 recover_essential_inputmask_retrains.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --submit_missing \
+  --finalize_if_complete \
+  --output_md results/input_mask_topology_report.md \
+  --output_json results/input_mask_topology_report.json \
+  --max-concurrent 16 \
+  --dry-run
+```
+
+Drop `--dry-run` to execute. If retrains are still incomplete, the strict audit
+or guarded finalizer will stop before overwriting the report.
 
 To consolidate completed sweeps into one auditable progress artifact:
 
