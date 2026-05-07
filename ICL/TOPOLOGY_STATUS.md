@@ -2,6 +2,9 @@
 
 Current branch: `topology`
 
+For a prompt-to-artifact completion audit, see
+`TOPOLOGY_COMPLETION_AUDIT.md`.
+
 ## Objective
 
 Build a theory and simulation framework for testing whether first-order CRN
