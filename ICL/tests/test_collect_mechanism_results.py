@@ -75,6 +75,30 @@ class CollectMechanismResultsTests(unittest.TestCase):
         self.assertEqual(assignments[0]["dominant"], 10)
         self.assertEqual(assignments[1]["dominant"], 12)
 
+    def test_skips_malformed_mechanism_json(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            bad_dir = os.path.join(tmpdir, "bad")
+            os.makedirs(bad_dir)
+            with open(os.path.join(bad_dir, "mechanism_metrics.json"), "w") as f:
+                f.write("{not json")
+            output_csv = os.path.join(tmpdir, "mechanism_results.csv")
+
+            result = self.run_collector(
+                [
+                    "--input_root",
+                    tmpdir,
+                    "--output_csv",
+                    output_csv,
+                ]
+            )
+            with open(output_csv, newline="") as f:
+                rows = list(csv.DictReader(f))
+
+        self.assertIn("Skipping", result.stdout)
+        self.assertIn("invalid JSON", result.stdout)
+        self.assertIn("Wrote 0 rows", result.stdout)
+        self.assertEqual(rows, [])
+
 
 if __name__ == "__main__":
     unittest.main()

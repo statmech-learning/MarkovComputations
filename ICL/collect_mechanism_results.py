@@ -333,8 +333,12 @@ def summarize_branch_assignments(metrics):
 
 
 def load_mechanism(path):
-    with open(path) as f:
-        metrics = json.load(f)
+    try:
+        with open(path) as f:
+            metrics = json.load(f)
+    except json.JSONDecodeError:
+        print(f"Skipping {path}: invalid JSON")
+        return None
     run_dir = metrics.get("run_dir") or os.path.dirname(path)
     row = {
         "run_dir": run_dir,
@@ -385,10 +389,11 @@ def main():
     parser.add_argument("--metrics_filename", type=str, default="mechanism_metrics.json")
     args = parser.parse_args()
 
-    rows = [
-        load_mechanism(path)
-        for path in sorted(iter_mechanism_files(args.input_root, args.metrics_filename))
-    ]
+    rows = []
+    for path in sorted(iter_mechanism_files(args.input_root, args.metrics_filename)):
+        row = load_mechanism(path)
+        if row is not None:
+            rows.append(row)
 
     os.makedirs(os.path.dirname(os.path.abspath(args.output_csv)), exist_ok=True)
     with open(args.output_csv, "w", newline="") as f:
