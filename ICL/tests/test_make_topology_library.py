@@ -74,6 +74,39 @@ class MakeTopologyLibraryTests(unittest.TestCase):
             self.assertIn("Generated candidates", result.stdout)
             self.assertIn("Selected topologies: 2", result.stdout)
 
+    def test_selection_prefers_family_coverage_when_possible(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_root = os.path.join(tmpdir, "topology_library")
+            result = self.run_library(
+                [
+                    "--output_root",
+                    output_root,
+                    "--n_nodes",
+                    "5",
+                    "--n_edges",
+                    "12",
+                    "--N",
+                    "2",
+                    "--D",
+                    "1",
+                    "--families",
+                    "cycle_chords,random_sc,degree_balanced",
+                    "--candidate_seeds",
+                    "1:8",
+                    "--select_topologies",
+                    "3",
+                ]
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            with open(os.path.join(output_root, "selected.csv"), newline="") as f:
+                selected_rows = list(csv.DictReader(f))
+
+        self.assertEqual(len(selected_rows), 3)
+        self.assertEqual(
+            {row["family"] for row in selected_rows},
+            {"cycle_chords", "random_sc", "degree_balanced"},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

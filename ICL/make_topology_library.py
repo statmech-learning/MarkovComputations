@@ -152,20 +152,37 @@ def standardized_matrix(rows, features):
     return (matrix - center) / scale
 
 
-def select_diverse_rows(rows, k, features):
+def select_diverse_rows(rows, k, features, family_key=None):
     if k <= 0 or k >= len(rows):
         return set(range(len(rows)))
 
     z = standardized_matrix(rows, features)
     selected = []
 
-    def add_if_new_metric_point(idx):
+    def add_if_new_metric_point(idx, allow_duplicate_metric=False):
         if idx in selected:
             return False
-        if any(np.allclose(z[idx, :], z[existing, :], atol=1e-9) for existing in selected):
+        if not allow_duplicate_metric and any(
+            np.allclose(z[idx, :], z[existing, :], atol=1e-9) for existing in selected
+        ):
             return False
         selected.append(idx)
         return True
+
+    if family_key:
+        families = sorted({row.get(family_key) for row in rows if row.get(family_key)})
+        for family in families:
+            candidates = [
+                idx
+                for idx, row in enumerate(rows)
+                if row.get(family_key) == family and idx not in selected
+            ]
+            if not candidates:
+                continue
+            candidate = max(candidates, key=lambda idx: float(np.linalg.norm(z[idx, :])))
+            add_if_new_metric_point(candidate, allow_duplicate_metric=True)
+            if len(selected) >= k:
+                return set(selected)
 
     for col in range(z.shape[1]):
         for idx in (int(np.argmin(z[:, col])), int(np.argmax(z[:, col]))):
@@ -174,6 +191,9 @@ def select_diverse_rows(rows, k, features):
                 return set(selected)
 
     while len(selected) < k:
+        if not selected:
+            selected.append(int(np.argmax(np.linalg.norm(z, axis=1))))
+            continue
         selected_z = z[selected, :]
         distances = np.sqrt(((z[:, None, :] - selected_z[None, :, :]) ** 2).sum(axis=2))
         min_distances = distances.min(axis=1)
@@ -274,7 +294,7 @@ def main():
         raise SystemExit("No strongly connected candidate topologies generated")
 
     features = [item.strip() for item in args.selection_features.split(",") if item.strip()]
-    selected = select_diverse_rows(rows, args.select_topologies, features)
+    selected = select_diverse_rows(rows, args.select_topologies, features, family_key="family")
     for idx, row in enumerate(rows):
         row["selected"] = 1 if idx in selected else 0
 
