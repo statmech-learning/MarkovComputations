@@ -217,7 +217,7 @@ def analyze_batch(
         decomposition["active_root"],
     ].detach().cpu().numpy()
 
-    return {
+    result = {
         "active_root": active_root.tolist(),
         "active_tree": active_tree_for_active_root.tolist(),
         "branch_ids": branch_ids.tolist(),
