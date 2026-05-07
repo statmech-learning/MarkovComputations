@@ -184,7 +184,15 @@ def fit_ols(X, y):
             "rmse": None,
         }
     coefficients = np.linalg.lstsq(X, y, rcond=None)[0]
-    predictions = X @ coefficients
+    with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+        predictions = X @ coefficients
+    if not np.all(np.isfinite(predictions)):
+        return {
+            "n": int(X.shape[0]),
+            "r2": None,
+            "coefficients": coefficients.tolist(),
+            "rmse": None,
+        }
     residual = y - predictions
     ss_res = float(np.sum(residual**2))
     ss_tot = float(np.sum((y - y.mean()) ** 2))

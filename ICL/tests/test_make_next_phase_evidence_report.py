@@ -47,6 +47,13 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
                             "prob_delta_positive": 1.0,
                         }
                     },
+                    "family_cluster_bootstrap_run_level": {
+                        "branch_margin_capacity": {
+                            "delta_mean": 0.15,
+                            "delta_ci95": [0.05, 0.25],
+                            "prob_delta_positive": 1.0,
+                        }
+                    },
                     "leave_family_out_group_target_mean": {
                         "branch_margin_capacity": {"pooled_r2": 0.25, "pooled_rmse": 3.0}
                     },
@@ -131,6 +138,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
 
         self.assertIn("Next-Phase Topology-ICL Evidence Report", markdown)
         self.assertIn("Families: `2` via `derived_graph_family`", markdown)
+        self.assertIn("family boot delta R2", markdown)
         self.assertIn("branch_margin_capacity", markdown)
         self.assertIn("edge_projection_permutation", markdown)
         self.assertIn("Matched Essential-Motif Controls", markdown)

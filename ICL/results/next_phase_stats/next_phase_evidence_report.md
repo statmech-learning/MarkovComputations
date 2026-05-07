@@ -1,6 +1,6 @@
 # Next-Phase Topology-ICL Evidence Report
 
-Generated: `2026-05-07T22:03:57.245337+00:00`.
+Generated: `2026-05-07T22:09:55.604437+00:00`.
 
 Scope: first-order CRNs with exponential input-dependent rates. These results do not claim a topology theory for autocatalytic or WTA CRNs.
 
@@ -12,110 +12,110 @@ Conservative headline: in the tested fixed-count regimes, topology-associated st
 
 Rows: `240`. Groups: `48`. Families: `3`.
 
-| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
-| --- | --- | --- | --- | --- | --- | --- |
-| input_count_plus_branch_drel | 48 | 0.034 | 0.125 | [0.032, 0.234] | 1.000 | -0.257 |
-| input_count_plus_drel | 48 | 0.145 | 0.077 | [0.000, 0.177] | 0.967 | -0.131 |
-| masked_tree_geometry | 48 | 0.189 | 0.204 | [0.092, 0.327] | 1.000 | -0.185 |
-| raw_count | 48 | -0.043 | NA | [NA, NA] | NA | -0.340 |
-| raw_plus_drel | 48 | 0.145 | 0.072 | [0.000, 0.170] | 0.950 | -0.131 |
-| tree_geometry | 48 | 0.409 | 0.169 | [0.070, 0.281] | 1.000 | 0.131 |
+| model | n | group LOO R2 | boot delta R2 | family boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| input_count_plus_branch_drel | 48 | 0.034 | 0.125 | NA | [0.032, 0.234] | 1.000 | -0.257 |
+| input_count_plus_drel | 48 | 0.145 | 0.077 | NA | [0.000, 0.177] | 0.967 | -0.131 |
+| masked_tree_geometry | 48 | 0.189 | 0.204 | NA | [0.092, 0.327] | 1.000 | -0.185 |
+| raw_count | 48 | -0.043 | NA | NA | [NA, NA] | NA | -0.340 |
+| raw_plus_drel | 48 | 0.145 | 0.072 | NA | [0.000, 0.170] | 0.950 | -0.131 |
+| tree_geometry | 48 | 0.409 | 0.169 | NA | [0.070, 0.281] | 1.000 | 0.131 |
 
 ### pooled_branch_capacity
 
 Rows: `240`. Groups: `48`. Families: `3`.
 
-| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
-| --- | --- | --- | --- | --- | --- | --- |
-| branch_margin_capacity | 48 | 0.145 | 0.075 | [0.000, 0.169] | 0.963 | -0.131 |
-| branch_margin_capacity_plus_drel | 48 | 0.044 | 0.086 | [0.012, 0.180] | 1.000 | -0.195 |
-| input_count_plus_branch_drel | 48 | 0.034 | 0.125 | [0.035, 0.230] | 1.000 | -0.257 |
-| input_count_plus_drel | 48 | 0.145 | 0.074 | [0.000, 0.187] | 0.960 | -0.131 |
-| masked_tree_geometry | 48 | 0.189 | 0.201 | [0.087, 0.322] | 1.000 | -0.185 |
-| raw_count | 48 | -0.043 | NA | [NA, NA] | NA | -0.340 |
-| raw_plus_drel | 48 | 0.145 | 0.070 | [0.000, 0.162] | 0.940 | -0.131 |
-| tree_geometry | 48 | 0.409 | 0.165 | [0.072, 0.271] | 1.000 | 0.131 |
+| model | n | group LOO R2 | boot delta R2 | family boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| branch_margin_capacity | 48 | 0.145 | 0.075 | NA | [0.000, 0.169] | 0.963 | -0.131 |
+| branch_margin_capacity_plus_drel | 48 | 0.044 | 0.086 | NA | [0.012, 0.180] | 1.000 | -0.195 |
+| input_count_plus_branch_drel | 48 | 0.034 | 0.125 | NA | [0.035, 0.230] | 1.000 | -0.257 |
+| input_count_plus_drel | 48 | 0.145 | 0.074 | NA | [0.000, 0.187] | 0.960 | -0.131 |
+| masked_tree_geometry | 48 | 0.189 | 0.201 | NA | [0.087, 0.322] | 1.000 | -0.185 |
+| raw_count | 48 | -0.043 | NA | NA | [NA, NA] | NA | -0.340 |
+| raw_plus_drel | 48 | 0.145 | 0.070 | NA | [0.000, 0.162] | 0.940 | -0.131 |
+| tree_geometry | 48 | 0.409 | 0.165 | NA | [0.072, 0.271] | 1.000 | 0.131 |
 
 ### n5_m7
 
 Rows: `60`. Groups: `12`. Families: `12`.
 
-| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
-| --- | --- | --- | --- | --- | --- | --- |
-| branch_margin_capacity | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.197 | -0.190 |
-| branch_margin_capacity_plus_drel | 12 | -1394.386 | 0.002 | [-0.000, 0.007] | 0.677 | -0.209 |
-| input_count_plus_branch_drel | 12 | -2701.327 | 0.002 | [0.000, 0.009] | 0.647 | -0.209 |
-| input_count_plus_drel | 12 | -410.923 | 0.002 | [0.000, 0.010] | 0.620 | -0.209 |
-| masked_tree_geometry | 12 | -2739.092 | 0.058 | [0.010, 0.168] | 1.000 | -0.789 |
-| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
-| raw_plus_drel | 12 | -410.923 | 0.002 | [0.000, 0.009] | 0.630 | -0.209 |
-| tree_geometry | 12 | -460.075 | 0.076 | [0.016, 0.193] | 1.000 | -2.822 |
+| model | n | group LOO R2 | boot delta R2 | family boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| branch_margin_capacity | 12 | -0.190 | 0.000 | NA | [-0.000, 0.000] | 0.197 | -0.190 |
+| branch_margin_capacity_plus_drel | 12 | -1394.386 | 0.002 | NA | [-0.000, 0.007] | 0.677 | -0.209 |
+| input_count_plus_branch_drel | 12 | -2701.327 | 0.002 | NA | [0.000, 0.009] | 0.647 | -0.209 |
+| input_count_plus_drel | 12 | -410.923 | 0.002 | NA | [0.000, 0.010] | 0.620 | -0.209 |
+| masked_tree_geometry | 12 | -2739.092 | 0.058 | NA | [0.010, 0.168] | 1.000 | -0.789 |
+| raw_count | 12 | -0.190 | NA | NA | [NA, NA] | NA | -0.190 |
+| raw_plus_drel | 12 | -410.923 | 0.002 | NA | [0.000, 0.009] | 0.630 | -0.209 |
+| tree_geometry | 12 | -460.075 | 0.076 | NA | [0.016, 0.193] | 1.000 | -2.822 |
 
 ### n5_m12
 
 Rows: `60`. Groups: `12`. Families: `12`.
 
-| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
-| --- | --- | --- | --- | --- | --- | --- |
-| branch_margin_capacity | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.177 | -0.190 |
-| branch_margin_capacity_plus_drel | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.187 | -0.190 |
-| input_count_plus_branch_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
-| input_count_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
-| masked_tree_geometry | 12 | -0.427 | 0.036 | [0.006, 0.102] | 1.000 | -0.427 |
-| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
-| raw_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
-| tree_geometry | 12 | -0.710 | 0.070 | [0.021, 0.154] | 1.000 | -0.710 |
+| model | n | group LOO R2 | boot delta R2 | family boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| branch_margin_capacity | 12 | -0.190 | 0.000 | NA | [-0.000, 0.000] | 0.177 | -0.190 |
+| branch_margin_capacity_plus_drel | 12 | -0.190 | -0.000 | NA | [-0.000, 0.000] | 0.187 | -0.190 |
+| input_count_plus_branch_drel | 12 | -0.190 | 0.000 | NA | [0.000, 0.000] | 0.000 | -0.190 |
+| input_count_plus_drel | 12 | -0.190 | 0.000 | NA | [0.000, 0.000] | 0.000 | -0.190 |
+| masked_tree_geometry | 12 | -0.427 | 0.036 | NA | [0.006, 0.102] | 1.000 | -0.427 |
+| raw_count | 12 | -0.190 | NA | NA | [NA, NA] | NA | -0.190 |
+| raw_plus_drel | 12 | -0.190 | 0.000 | NA | [0.000, 0.000] | 0.000 | -0.190 |
+| tree_geometry | 12 | -0.710 | 0.070 | NA | [0.021, 0.154] | 1.000 | -0.710 |
 
 ### hard_n4_m6_N3_D2
 
 Rows: `60`. Groups: `12`. Families: `4` via `derived_graph_family`.
 
-| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
-| --- | --- | --- | --- | --- | --- | --- |
-| branch_rank_weighted_capacity | 12 | 0.203 | 0.066 | [-0.000, 0.180] | 0.907 | 0.295 |
-| branch_rank_weighted_capacity_plus_drel | 12 | 0.203 | 0.069 | [-0.000, 0.175] | 0.933 | 0.295 |
-| input_count_plus_branch_drel | 12 | 0.203 | 0.067 | [0.000, 0.157] | 0.913 | 0.295 |
-| input_count_plus_drel | 12 | 0.203 | 0.062 | [0.000, 0.155] | 0.883 | 0.295 |
-| masked_tree_geometry | 12 | -0.151 | 0.096 | [0.010, 0.213] | 1.000 | 0.224 |
-| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -1.034 |
-| raw_plus_drel | 12 | 0.203 | 0.068 | [0.000, 0.189] | 0.883 | 0.295 |
-| tree_geometry | 12 | -0.112 | 0.136 | [0.055, 0.267] | 1.000 | -0.111 |
-| tropical_tree_capacity | 12 | -0.266 | 0.168 | [0.062, 0.294] | 1.000 | -3.062 |
-| tropical_tree_capacity_plus_drel | 12 | -0.017 | 0.178 | [0.064, 0.304] | 1.000 | -1.675 |
+| model | n | group LOO R2 | boot delta R2 | family boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| raw_count | 12 | -0.190 | NA | NA | [NA, NA] | NA | -1.034 |
+| raw_plus_drel | 12 | 0.203 | 0.068 | 0.077 | [0.000, 0.189] | 0.883 | 0.295 |
+| input_count_plus_drel | 12 | 0.203 | 0.062 | 0.075 | [0.000, 0.155] | 0.883 | 0.295 |
+| input_count_plus_branch_drel | 12 | 0.203 | 0.067 | 0.081 | [0.000, 0.157] | 0.913 | 0.295 |
+| tree_geometry | 12 | -0.112 | 0.136 | 0.119 | [0.055, 0.267] | 1.000 | -0.111 |
+| masked_tree_geometry | 12 | -0.151 | 0.096 | 0.093 | [0.010, 0.213] | 1.000 | 0.224 |
+| branch_rank_weighted_capacity | 12 | 0.203 | 0.066 | 0.079 | [-0.000, 0.180] | 0.907 | 0.295 |
+| branch_rank_weighted_capacity_plus_drel | 12 | 0.203 | 0.069 | 0.074 | [-0.000, 0.175] | 0.933 | 0.295 |
+| tropical_tree_capacity | 12 | -0.266 | 0.168 | 0.151 | [0.062, 0.294] | 1.000 | -3.062 |
+| tropical_tree_capacity_plus_drel | 12 | -0.017 | 0.178 | 0.154 | [0.064, 0.304] | 1.000 | -1.675 |
 
 ### hard_n5_m8_N3_D2
 
 Rows: `60`. Groups: `12`. Families: `6` via `derived_graph_family`.
 
-| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
-| --- | --- | --- | --- | --- | --- | --- |
-| branch_rank_weighted_capacity | 12 | -0.260 | 0.019 | [-0.000, 0.077] | 0.927 | -0.610 |
-| branch_rank_weighted_capacity_plus_drel | 12 | -0.260 | 0.019 | [0.000, 0.067] | 0.957 | -0.610 |
-| input_count_plus_branch_drel | 12 | -0.260 | 0.021 | [0.000, 0.076] | 0.907 | -0.610 |
-| input_count_plus_drel | 12 | -0.260 | 0.019 | [0.000, 0.087] | 0.893 | -0.610 |
-| masked_tree_geometry | 12 | -0.110 | 0.179 | [0.041, 0.314] | 1.000 | -0.117 |
-| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.497 |
-| raw_plus_drel | 12 | -0.260 | 0.020 | [0.000, 0.075] | 0.867 | -0.610 |
-| tree_geometry | 12 | 0.041 | 0.209 | [0.056, 0.352] | 1.000 | -0.683 |
-| tropical_tree_capacity | 12 | -1.620 | 0.192 | [0.048, 0.344] | 1.000 | -2.003 |
-| tropical_tree_capacity_plus_drel | 12 | -1.506 | 0.213 | [0.065, 0.355] | 1.000 | -2.445 |
+| model | n | group LOO R2 | boot delta R2 | family boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| raw_count | 12 | -0.190 | NA | NA | [NA, NA] | NA | -0.497 |
+| raw_plus_drel | 12 | -0.260 | 0.020 | 0.019 | [0.000, 0.075] | 0.867 | -0.610 |
+| input_count_plus_drel | 12 | -0.260 | 0.019 | 0.017 | [0.000, 0.087] | 0.893 | -0.610 |
+| input_count_plus_branch_drel | 12 | -0.260 | 0.021 | 0.018 | [0.000, 0.076] | 0.907 | -0.610 |
+| tree_geometry | 12 | 0.041 | 0.209 | 0.171 | [0.056, 0.352] | 1.000 | -0.683 |
+| masked_tree_geometry | 12 | -0.110 | 0.179 | 0.151 | [0.041, 0.314] | 1.000 | -0.117 |
+| branch_rank_weighted_capacity | 12 | -0.260 | 0.019 | 0.016 | [-0.000, 0.077] | 0.927 | -0.610 |
+| branch_rank_weighted_capacity_plus_drel | 12 | -0.260 | 0.019 | 0.019 | [0.000, 0.067] | 0.957 | -0.610 |
+| tropical_tree_capacity | 12 | -1.620 | 0.192 | 0.161 | [0.048, 0.344] | 1.000 | -2.003 |
+| tropical_tree_capacity_plus_drel | 12 | -1.506 | 0.213 | 0.180 | [0.065, 0.355] | 1.000 | -2.445 |
 
 ### hard_n5_m12_N3_D2
 
 Rows: `60`. Groups: `12`. Families: `7` via `derived_graph_family`.
 
-| model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
-| --- | --- | --- | --- | --- | --- | --- |
-| branch_rank_weighted_capacity | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.310 | -0.233 |
-| branch_rank_weighted_capacity_plus_drel | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.300 | -0.233 |
-| input_count_plus_branch_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.233 |
-| input_count_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.233 |
-| masked_tree_geometry | 12 | 0.447 | 0.297 | [0.093, 0.532] | 1.000 | 0.399 |
-| raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.233 |
-| raw_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.233 |
-| tree_geometry | 12 | 0.324 | 0.355 | [0.124, 0.592] | 1.000 | 0.102 |
-| tropical_tree_capacity | 12 | -0.224 | 0.361 | [0.127, 0.630] | 1.000 | -11.876 |
-| tropical_tree_capacity_plus_drel | 12 | -0.224 | 0.344 | [0.107, 0.591] | 1.000 | -11.876 |
+| model | n | group LOO R2 | boot delta R2 | family boot delta R2 | CI95 | P(delta>0) | heldout R2 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| raw_count | 12 | -0.190 | NA | NA | [NA, NA] | NA | -0.233 |
+| raw_plus_drel | 12 | -0.190 | 0.000 | 0.000 | [0.000, 0.000] | 0.000 | -0.233 |
+| input_count_plus_drel | 12 | -0.190 | 0.000 | 0.000 | [0.000, 0.000] | 0.000 | -0.233 |
+| input_count_plus_branch_drel | 12 | -0.190 | 0.000 | 0.000 | [0.000, 0.000] | 0.000 | -0.233 |
+| tree_geometry | 12 | 0.324 | 0.355 | 0.381 | [0.124, 0.592] | 1.000 | 0.102 |
+| masked_tree_geometry | 12 | 0.447 | 0.297 | 0.312 | [0.093, 0.532] | 1.000 | 0.399 |
+| branch_rank_weighted_capacity | 12 | -0.190 | -0.000 | 0.000 | [-0.000, 0.000] | 0.310 | -0.233 |
+| branch_rank_weighted_capacity_plus_drel | 12 | -0.190 | -0.000 | -0.000 | [-0.000, 0.000] | 0.300 | -0.233 |
+| tropical_tree_capacity | 12 | -0.224 | 0.361 | 0.371 | [0.127, 0.630] | 1.000 | -11.876 |
+| tropical_tree_capacity_plus_drel | 12 | -0.224 | 0.344 | 0.387 | [0.107, 0.591] | 1.000 | -11.876 |
 
 ## Causal Alignment Interventions
 

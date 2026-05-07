@@ -319,6 +319,85 @@ def _bootstrap_r2_delta(
     }
 
 
+def _score_model_on_sample(rows: Sequence[dict], target: str, model_name: str) -> Optional[float]:
+    _, X, y = design_matrix(rows, PREDICTOR_SETS[model_name], target)
+    if y.shape[0] < 3:
+        return None
+    score = fit_ols(standardize_columns(X), y)["r2"]
+    return score if score is not None else None
+
+
+def _family_cluster_bootstrap_r2_delta(
+    rows: Sequence[dict],
+    target: str,
+    cluster_col: str,
+    family_col: str,
+    baseline: str,
+    candidate: str,
+    n_bootstrap: int,
+    seed: int,
+) -> dict:
+    """Two-stage bootstrap: resample families, then clusters within families."""
+
+    family_to_clusters: Dict[str, Dict[str, List[dict]]] = defaultdict(lambda: defaultdict(list))
+    for row in rows:
+        family = row.get(family_col)
+        if family in (None, ""):
+            continue
+        family_to_clusters[str(family)][cluster_key(row, cluster_col)].append(row)
+    families = sorted(family_to_clusters)
+    rng = np.random.default_rng(seed)
+    deltas = []
+    baseline_scores = []
+    candidate_scores = []
+    for _ in range(n_bootstrap):
+        if not families:
+            break
+        sampled_families = rng.choice(families, size=len(families), replace=True)
+        sample = []
+        for family in sampled_families:
+            clusters = family_to_clusters[family]
+            cluster_keys = sorted(clusters)
+            if not cluster_keys:
+                continue
+            sampled_clusters = rng.choice(cluster_keys, size=len(cluster_keys), replace=True)
+            for key in sampled_clusters:
+                sample.extend(clusters[key])
+        score0 = _score_model_on_sample(sample, target, baseline)
+        score1 = _score_model_on_sample(sample, target, candidate)
+        if score0 is None or score1 is None:
+            continue
+        baseline_scores.append(score0)
+        candidate_scores.append(score1)
+        deltas.append(score1 - score0)
+
+    arr = np.asarray(deltas, dtype=float)
+    if arr.size == 0:
+        return {
+            "baseline": baseline,
+            "candidate": candidate,
+            "family_col": family_col,
+            "n_families": len(families),
+            "n_bootstrap_effective": 0,
+            "delta_mean": None,
+            "delta_ci95": [None, None],
+            "prob_delta_positive": None,
+        }
+    return {
+        "baseline": baseline,
+        "candidate": candidate,
+        "family_col": family_col,
+        "n_families": len(families),
+        "n_bootstrap_effective": int(arr.size),
+        "baseline_r2_mean": float(np.mean(baseline_scores)),
+        "candidate_r2_mean": float(np.mean(candidate_scores)),
+        "delta_mean": float(arr.mean()),
+        "delta_median": float(np.median(arr)),
+        "delta_ci95": [float(np.quantile(arr, 0.025)), float(np.quantile(arr, 0.975))],
+        "prob_delta_positive": float(np.mean(arr > 0.0)),
+    }
+
+
 def clustered_bootstrap_deltas(
     rows: Sequence[dict],
     target: str,
@@ -333,6 +412,31 @@ def clustered_bootstrap_deltas(
             rows,
             target=target,
             cluster_col=cluster_col,
+            baseline=baseline,
+            candidate=candidate,
+            n_bootstrap=n_bootstrap,
+            seed=seed + idx,
+        )
+        for idx, candidate in enumerate(candidates)
+    }
+
+
+def family_cluster_bootstrap_deltas(
+    rows: Sequence[dict],
+    target: str,
+    cluster_col: str,
+    family_col: str,
+    baseline: str,
+    candidates: Sequence[str],
+    n_bootstrap: int,
+    seed: int,
+) -> dict:
+    return {
+        candidate: _family_cluster_bootstrap_r2_delta(
+            rows,
+            target=target,
+            cluster_col=cluster_col,
+            family_col=family_col,
             baseline=baseline,
             candidate=candidate,
             n_bootstrap=n_bootstrap,
@@ -411,6 +515,16 @@ def run_clustered_inference(
             n_bootstrap=n_bootstrap,
             seed=seed,
         ),
+        "family_cluster_bootstrap_run_level": family_cluster_bootstrap_deltas(
+            run_rows,
+            target=target,
+            cluster_col=cluster_col,
+            family_col=family_col,
+            baseline="raw_count",
+            candidates=bootstrap_candidates,
+            n_bootstrap=n_bootstrap,
+            seed=seed + 10000,
+        ),
         "leave_family_out_group_target_mean": leave_family_out(
             aggregate_rows,
             target="target_mean",
@@ -450,6 +564,18 @@ def print_summary(report: dict):
         print(f"  {name:28s} n={fit['n']:3d} LOO_R2={loo_text}")
     print("\nCluster bootstrap run-level delta R2 vs raw_count:")
     for name, item in report["cluster_bootstrap_run_level"].items():
+        delta = item["delta_mean"]
+        if delta is None:
+            print(f"  {name:28s} insufficient")
+            continue
+        lo, hi = item["delta_ci95"]
+        print(
+            f"  {name:28s} mean={delta:.3f} "
+            f"CI95=[{lo:.3f}, {hi:.3f}] "
+            f"P(delta>0)={item['prob_delta_positive']:.3f}"
+        )
+    print("\nFamily-cluster bootstrap run-level delta R2 vs raw_count:")
+    for name, item in report.get("family_cluster_bootstrap_run_level", {}).items():
         delta = item["delta_mean"]
         if delta is None:
             print(f"  {name:28s} insufficient")

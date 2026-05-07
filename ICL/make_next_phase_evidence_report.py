@@ -78,6 +78,7 @@ def clustered_summary(entry: dict) -> dict:
     payload = entry["payload"]
     group = payload.get("group_level", {}).get("target_mean", {})
     bootstrap = payload.get("cluster_bootstrap_run_level", {})
+    family_bootstrap = payload.get("family_cluster_bootstrap_run_level", {})
     holdout = payload.get("leave_family_out_group_target_mean", {})
     models = {}
     for name in CORE_MODELS:
@@ -92,6 +93,8 @@ def clustered_summary(entry: dict) -> dict:
             "bootstrap_delta_mean": (boot or {}).get("delta_mean"),
             "bootstrap_delta_ci95": (boot or {}).get("delta_ci95"),
             "bootstrap_prob_positive": (boot or {}).get("prob_delta_positive"),
+            "family_bootstrap_delta_mean": (family_bootstrap.get(name) or {}).get("delta_mean"),
+            "family_bootstrap_prob_positive": (family_bootstrap.get(name) or {}).get("prob_delta_positive"),
             "heldout_family_pooled_r2": (held or {}).get("pooled_r2"),
             "heldout_family_rmse": (held or {}).get("pooled_rmse"),
         }
@@ -294,6 +297,7 @@ def build_markdown(report: dict) -> str:
                     str(stats.get("group_n") or "NA"),
                     fmt(stats.get("group_loo_r2")),
                     fmt(stats.get("bootstrap_delta_mean")),
+                    fmt(stats.get("family_bootstrap_delta_mean")),
                     f"[{fmt(ci[0])}, {fmt(ci[1])}]",
                     fmt(stats.get("bootstrap_prob_positive")),
                     fmt(stats.get("heldout_family_pooled_r2")),
@@ -301,7 +305,16 @@ def build_markdown(report: dict) -> str:
             )
         lines.extend(
             markdown_table(
-                ["model", "n", "group LOO R2", "boot delta R2", "CI95", "P(delta>0)", "heldout R2"],
+                [
+                    "model",
+                    "n",
+                    "group LOO R2",
+                    "boot delta R2",
+                    "family boot delta R2",
+                    "CI95",
+                    "P(delta>0)",
+                    "heldout R2",
+                ],
                 rows,
             )
         )

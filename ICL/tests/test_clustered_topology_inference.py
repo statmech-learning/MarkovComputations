@@ -84,6 +84,9 @@ class ClusteredTopologyInferenceTests(unittest.TestCase):
         delta = report["cluster_bootstrap_run_level"]["raw_plus_drel"]
         self.assertEqual(delta["n_bootstrap_effective"], 25)
         self.assertGreater(delta["delta_mean"], 0.0)
+        family_delta = report["family_cluster_bootstrap_run_level"]["raw_plus_drel"]
+        self.assertEqual(family_delta["n_families"], 3)
+        self.assertEqual(family_delta["n_bootstrap_effective"], 25)
         holdout = report["leave_family_out_group_target_mean"]["raw_plus_drel"]
         self.assertEqual(len(holdout["families"]), 3)
         self.assertIn("residual_std_between_cluster_means", report["residual_decomposition_run_level"]["raw_plus_drel"])
