@@ -92,19 +92,23 @@ def load_mechanism(path):
     return {field: finite_or_empty(row.get(field)) for field in FIELDS}
 
 
-def iter_mechanism_files(root):
+def iter_mechanism_files(root, metrics_filename):
     for current, _, files in os.walk(root):
-        if "mechanism_metrics.json" in files:
-            yield os.path.join(current, "mechanism_metrics.json")
+        if metrics_filename in files:
+            yield os.path.join(current, metrics_filename)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input_root", type=str, required=True)
     parser.add_argument("--output_csv", type=str, required=True)
+    parser.add_argument("--metrics_filename", type=str, default="mechanism_metrics.json")
     args = parser.parse_args()
 
-    rows = [load_mechanism(path) for path in sorted(iter_mechanism_files(args.input_root))]
+    rows = [
+        load_mechanism(path)
+        for path in sorted(iter_mechanism_files(args.input_root, args.metrics_filename))
+    ]
 
     os.makedirs(os.path.dirname(os.path.abspath(args.output_csv)), exist_ok=True)
     with open(args.output_csv, "w", newline="") as f:

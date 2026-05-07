@@ -28,8 +28,12 @@ The convention is:
   utilities.
 - `analyze_topology_model.py`: load a trained run and write
   `mechanism_metrics.json`.
+- `submit_topology_mechanisms.py`: SLURM array generator for post-training
+  active-tree, edge-sensitivity, and ablation analysis over completed runs.
 - `collect_topology_results.py`: collect completed run directories into a flat
   CSV for regressions against raw degree count and topology-derived metrics.
+- `collect_mechanism_results.py`: collect mechanism-analysis JSON files into a
+  flat CSV table.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
 - `tests/test_topology_metrics.py`: exact small-graph matrix-tree checks.
@@ -132,4 +136,20 @@ Then run the first nested-model diagnostic:
 python3 regress_topology_results.py \
   --input_csv "$SLURM_OUTPUT_BASE/topology_results.csv" \
   --output_json "$SLURM_OUTPUT_BASE/topology_regression.json"
+```
+
+For a full post-training mechanism pass over completed runs:
+
+```bash
+python3 submit_topology_mechanisms.py \
+  --input_root "$SLURM_OUTPUT_BASE" \
+  --n_samples 500 \
+  --ablate_input \
+  --ablate_physical \
+  --array \
+  --max-concurrent 20
+
+python3 collect_mechanism_results.py \
+  --input_root "$SLURM_OUTPUT_BASE" \
+  --output_csv "$SLURM_OUTPUT_BASE/mechanism_results.csv"
 ```
