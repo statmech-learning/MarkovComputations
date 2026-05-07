@@ -227,6 +227,8 @@ def fmt_acc(value):
 
 
 def load_csv(path):
+    if not path:
+        return []
     if not os.path.exists(path):
         return []
     with open(path, newline="") as f:
