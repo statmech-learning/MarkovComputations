@@ -66,13 +66,14 @@ class JoinBranchMarginCapacityTests(unittest.TestCase):
             with open(topology_csv, "w", newline="") as handle:
                 writer = csv.DictWriter(
                     handle,
-                    fieldnames=["label", "topology_name", "test_novel_classes"],
+                    fieldnames=["label", "topology_name", "input_mask_name", "test_novel_classes"],
                 )
                 writer.writeheader()
                 writer.writerow(
                     {
                         "label": "seed1",
-                        "topology_name": "topoA",
+                        "topology_name": "duplicated_wrapper_topoA",
+                        "input_mask_name": "topoA",
                         "test_novel_classes": "60",
                     }
                 )

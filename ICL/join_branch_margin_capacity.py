@@ -137,7 +137,7 @@ def main():
     parser.add_argument("--topology_csv", required=True)
     parser.add_argument("--capacity_csv", required=True, nargs="+")
     parser.add_argument("--output_csv", required=True)
-    parser.add_argument("--topology_keys", default="topology_name,mask_name,input_mask_name,label")
+    parser.add_argument("--topology_keys", default="input_mask_name,mask_name,topology_name,label")
     parser.add_argument("--capacity_keys", default="topology_name,mask_name,input_mask_name,topology_id")
     parser.add_argument("--prefix", default="capacity_")
     args = parser.parse_args()
