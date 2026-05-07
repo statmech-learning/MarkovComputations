@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Topological Control of In-Context Learning in CRNs</title>
+    <meta
+      name="description"
+      content="A verified research report on how first-order chemical reaction network topology controls in-context learning through relative spanning-tree projection geometry."
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [["\\(", "\\)"], ["$", "$"]] },
+        svg: { fontCache: "global" }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+    <script defer src="assets/site.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Topology ICL home">Topology-ICL</a>
+      <nav aria-label="Main sections">
+        <a href="#result">Result</a>
+        <a href="#theory">Theory</a>
+        <a href="#evidence">Evidence</a>
+        <a href="#motifs">Motifs</a>
+        <a href="#artifacts">Artifacts</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <canvas id="flowCanvas" aria-hidden="true"></canvas>
+        <div class="hero-copy">
+          <p class="eyebrow">Verified cluster study, May 7 2026</p>
+          <h1>Topological control of in-context learning in chemical reaction networks</h1>
+          <p class="lead">
+            We built and verified a first-order CRN simulation framework showing that reaction topology
+            predicts novel-class in-context learning beyond raw trainable degree count. The mechanism is
+            relative spanning-tree projection geometry.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#result">Read the result</a>
+            <a class="button" href="reports/topology_research_report.md">Full report</a>
+            <a class="button" href="reports/topology_research_report_interpretation.md">Interpretation</a>
+          </div>
+        </div>
+        <aside class="verdict-panel" aria-labelledby="verdict-label">
+          <span id="verdict-label">Final verdict</span>
+          <strong id="verdictText">strong_positive</strong>
+          <p>Topology-derived predictors and trained functional diagnostics both improve over count baselines.</p>
+        </aside>
+      </section>
+
+      <section class="summary-strip" aria-label="Experiment summary">
+        <div>
+          <span class="metric" id="runRows">240</span>
+          <span class="label">source runs</span>
+        </div>
+        <div>
+          <span class="metric" id="topologyGroups">48</span>
+          <span class="label">topology groups</span>
+        </div>
+        <div>
+          <span class="metric" id="retrainGroups">96</span>
+          <span class="label">retrained motif groups</span>
+        </div>
+        <div>
+          <span class="metric">480</span>
+          <span class="label">essential retrain jobs</span>
+        </div>
+      </section>
+
+      <section id="result" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">What was achieved</p>
+          <h2>A complete first-order topology test, not just a code scaffold</h2>
+        </div>
+        <div class="two-col">
+          <article class="text-block">
+            <p>
+              The original question was whether CRN topology matters for ICL after raw degrees of freedom
+              are controlled. We implemented the required theory, ran matched fixed-edge experiments on
+              Engaging, computed pre-training tree geometry, analyzed trained mechanisms, retrained
+              extracted essential subgraphs and input masks, and passed strict artifact verification.
+            </p>
+            <p>
+              The answer is positive for this first-order setting. Raw edge count alone had essentially
+              no explanatory power in the fixed-edge regime. Relative tree dimension, masked tree geometry,
+              and especially post-training projection alignment explained substantial residual variation
+              in novel-class ICL accuracy.
+            </p>
+          </article>
+          <div class="callout">
+            <h3>Scientific claim supported</h3>
+            <p>
+              Successful CRN ICL requires enough relative spanning-tree projection capacity to cover
+              query-context comparison branches. Trained networks realize this through active tree
+              ensembles and essential physical motifs.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section compact">
+        <div class="section-heading">
+          <p class="eyebrow">Controlled source sweeps</p>
+          <h2>Matched physical edge count, different topology families</h2>
+        </div>
+        <div class="chart-grid">
+          <article class="chart-card">
+            <div class="card-title">
+              <h3>Novel-class ICL by source topology family</h3>
+              <span>80 runs each</span>
+            </div>
+            <canvas id="coverageChart"></canvas>
+          </article>
+          <article class="chart-card">
+            <div class="card-title">
+              <h3>Model comparison beyond edge count</h3>
+              <span>LOO R2</span>
+            </div>
+            <canvas id="modelChart"></canvas>
+          </article>
+        </div>
+      </section>
+
+      <section id="theory" class="section theory">
+        <div class="section-heading">
+          <p class="eyebrow">Mathematical spine</p>
+          <h2>Topology enters through rooted spanning trees</h2>
+        </div>
+        <div class="theory-layout">
+          <article class="math-card">
+            <p>
+              For a strongly connected first-order CRN, the steady state is governed by the
+              matrix-tree theorem:
+            </p>
+            <p class="formula">
+              \[
+              \bar C_r(z)=\frac{\tau_r(z)}{\sum_s \tau_s(z)},\qquad
+              \tau_r(z)=\sum_{T\in\mathcal T_r(G)}\prod_{e\in T} k_e(z).
+              \]
+            </p>
+            <p>
+              With exponential encoding \(k_e(z)=\exp(b_e+K_e^\top z)\), each tree contributes
+              a learned projection:
+            </p>
+            <p class="formula">
+              \[
+              \prod_{e\in T}k_e(z)=
+              \exp\left(\beta_T+\Theta_T^\top z\right),
+              \quad
+              \Theta_T=\sum_{e\in T}K_e.
+              \]
+            </p>
+          </article>
+          <article class="diagram-card" aria-label="Topology to ICL chain">
+            <svg viewBox="0 0 740 360" role="img">
+              <title>Reaction graph to ICL prediction chain</title>
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L8,3 z" fill="#354052"></path>
+                </marker>
+              </defs>
+              <g class="nodes">
+                <circle cx="80" cy="155" r="26"></circle>
+                <circle cx="150" cy="85" r="26"></circle>
+                <circle cx="220" cy="155" r="26"></circle>
+                <circle cx="150" cy="225" r="26"></circle>
+                <path d="M104 145 C126 114,126 105,136 94" marker-end="url(#arrow)"></path>
+                <path d="M174 94 C197 106,207 121,214 141" marker-end="url(#arrow)"></path>
+                <path d="M205 174 C183 203,177 212,166 220" marker-end="url(#arrow)"></path>
+                <path d="M126 220 C99 207,88 188,83 171" marker-end="url(#arrow)"></path>
+                <path d="M105 160 C138 176,178 176,202 160" marker-end="url(#arrow)"></path>
+              </g>
+              <g class="flow">
+                <rect x="305" y="58" width="158" height="62" rx="8"></rect>
+                <rect x="305" y="149" width="158" height="62" rx="8"></rect>
+                <rect x="305" y="240" width="158" height="62" rx="8"></rect>
+                <text x="384" y="92" text-anchor="middle">rooted trees</text>
+                <text x="384" y="183" text-anchor="middle">tree sums</text>
+                <text x="384" y="274" text-anchor="middle">relative scores</text>
+                <path d="M246 155 H294" marker-end="url(#arrow)"></path>
+                <path d="M384 120 V139" marker-end="url(#arrow)"></path>
+                <path d="M384 211 V230" marker-end="url(#arrow)"></path>
+                <path d="M464 180 H535" marker-end="url(#arrow)"></path>
+                <rect x="545" y="118" width="150" height="124" rx="8"></rect>
+                <text x="620" y="165" text-anchor="middle">steady state</text>
+                <text x="620" y="193" text-anchor="middle">decodes branch</text>
+              </g>
+            </svg>
+            <p>
+              The key object is not the raw edge vector \(K_e\). It is the set of relative
+              tree-sum projections \(K^\top(s_T-s_{T_0})\) that survive normalization.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="evidence" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Evidence hierarchy</p>
+          <h2>From raw counts to functional mechanism</h2>
+        </div>
+        <div class="evidence-grid">
+          <article>
+            <span class="step">1</span>
+            <h3>Raw count baseline</h3>
+            <p>Fixed-edge libraries intentionally make raw edge count uninformative. Run-level LOO R2 was -0.008.</p>
+          </article>
+          <article>
+            <span class="step">2</span>
+            <h3>Tree geometry</h3>
+            <p>Adding \(d_{rel}\) improved topology-mean LOO R2 from -0.043 to 0.145.</p>
+          </article>
+          <article>
+            <span class="step">3</span>
+            <h3>Masked geometry</h3>
+            <p>Input-aware tree geometry improved topology-mean LOO R2 to 0.189.</p>
+          </article>
+          <article>
+            <span class="step">4</span>
+            <h3>Projection diagnostics</h3>
+            <p>Post-training projection alignment reached topology-mean LOO R2 of 0.809.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="motifs" class="section compact">
+        <div class="section-heading">
+          <p class="eyebrow">Essential subgraphs</p>
+          <h2>Physical motifs retrain better than input masks alone</h2>
+        </div>
+        <div class="chart-grid">
+          <article class="chart-card">
+            <div class="card-title">
+              <h3>Retrained essential motifs</h3>
+              <span>mean novel-class ICL</span>
+            </div>
+            <canvas id="motifChart"></canvas>
+          </article>
+          <article class="table-card">
+            <div class="card-title">
+              <h3>Retention summary</h3>
+              <span>16 motifs per layout</span>
+            </div>
+            <div class="table-wrap">
+              <table id="retentionTable">
+                <thead>
+                  <tr>
+                    <th>Experiment</th>
+                    <th>Layout</th>
+                    <th>Retention</th>
+                    <th>Retrain mean</th>
+                    <th>Best</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section compact">
+        <div class="section-heading">
+          <p class="eyebrow">Mechanistic readout</p>
+          <h2>Trained models used tree organization, not just parameter volume</h2>
+        </div>
+        <div class="mechanism-grid">
+          <article class="mechanism-card">
+            <strong>0.821 / 0.776 / 0.752</strong>
+            <span>branch-active-tree MI correlations for random, cycle, hub</span>
+          </article>
+          <article class="mechanism-card">
+            <strong>0.877 / 0.832 / 0.744</strong>
+            <span>trained branch margin correlations with novel-class ICL</span>
+          </article>
+          <article class="mechanism-card">
+            <strong>0.640 / 0.566 / 0.488</strong>
+            <span>posterior matched comparison-gap correlations</span>
+          </article>
+        </div>
+      </section>
+
+      <section id="artifacts" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Reproducibility</p>
+          <h2>What is now in the git repository</h2>
+        </div>
+        <div class="artifact-list">
+          <a href="reports/topology_research_report.md">
+            <span>Consolidated research report</span>
+            <code>docs/topology-icl/reports/topology_research_report.md</code>
+          </a>
+          <a href="data/topology_research_report.json">
+            <span>Machine-readable research report</span>
+            <code>docs/topology-icl/data/topology_research_report.json</code>
+          </a>
+          <a href="reports/topology_research_report_interpretation.md">
+            <span>Conservative H0/H1 interpretation</span>
+            <code>docs/topology-icl/reports/topology_research_report_interpretation.md</code>
+          </a>
+          <a href="reports/input_mask_topology_report.md">
+            <span>Focused input-mask report</span>
+            <code>docs/topology-icl/reports/input_mask_topology_report.md</code>
+          </a>
+        </div>
+        <div class="note">
+          <p>
+            Raw SLURM run directories and model outputs remain on Engaging. The repository contains the
+            verified summaries and report JSONs needed to audit the scientific claims and render this site.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Topology-ICL research site</span>
+      <span>Built from verified reports committed on branch <code>topology</code>.</span>
+    </footer>
+  </body>
+</html>
