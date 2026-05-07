@@ -274,3 +274,7 @@ python3 make_topology_research_report.py \
   --output_md results/topology_research_report.md \
   --output_json results/topology_research_report.json
 ```
+
+When multiple experiments are supplied, the report also includes pooled
+cross-regime regressions that compare edge-count predictors with tree-geometry,
+mechanism, and projection-alignment predictors.

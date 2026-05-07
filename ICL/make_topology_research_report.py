@@ -37,6 +37,80 @@ KEY_CORRELATIONS = [
     "physical_ablation_max_loss",
 ]
 
+POOLED_RUN_MODELS = OrderedDict(
+    [
+        ("edge_count", ["n_edges"]),
+        ("edge_plus_drel", ["n_edges", "d_rel"]),
+        (
+            "edge_plus_tree_geometry",
+            [
+                "n_edges",
+                "d_rel",
+                "effective_rank_D",
+                "condition_number_D",
+                "root_tree_count_gini",
+                "edge_participation_gini",
+                "mean_shortest_path",
+            ],
+        ),
+        (
+            "edge_plus_mechanism",
+            [
+                "n_edges",
+                "target_logprob_margin_mean",
+                "branch_active_tree_mi",
+                "input_ablation_max_loss",
+            ],
+        ),
+        (
+            "edge_plus_projection",
+            [
+                "n_edges",
+                "posterior_matched_comparison_gap_mean",
+                "tree_comparison_energy_fraction_mean",
+                "active_tree_matched_comparison_gap_mean",
+            ],
+        ),
+    ]
+)
+
+POOLED_AGGREGATE_MODELS = OrderedDict(
+    [
+        ("edge_count", ["n_edges"]),
+        ("edge_plus_drel", ["n_edges", "d_rel"]),
+        (
+            "edge_plus_tree_geometry",
+            [
+                "n_edges",
+                "d_rel",
+                "effective_rank_D",
+                "condition_number_D",
+                "root_tree_count_gini",
+                "edge_participation_gini",
+                "mean_shortest_path",
+            ],
+        ),
+        (
+            "edge_plus_mechanism",
+            [
+                "n_edges",
+                "target_logprob_margin_mean_mean",
+                "branch_active_tree_mi_mean",
+                "input_ablation_max_loss_mean",
+            ],
+        ),
+        (
+            "edge_plus_projection",
+            [
+                "n_edges",
+                "posterior_matched_comparison_gap_mean_mean",
+                "tree_comparison_energy_fraction_mean_mean",
+                "active_tree_matched_comparison_gap_mean_mean",
+            ],
+        ),
+    ]
+)
+
 
 def parse_float(value):
     if value is None or value == "":
@@ -99,6 +173,72 @@ def std(values):
 
 def numeric_column(rows, name):
     return [parse_float(row.get(name)) for row in rows]
+
+
+def standardize_design(X):
+    Xs = X.copy()
+    if Xs.shape[0] == 0:
+        return Xs
+    for col in range(1, Xs.shape[1]):
+        scale = Xs[:, col].std()
+        if scale > 1e-12:
+            Xs[:, col] = (Xs[:, col] - Xs[:, col].mean()) / scale
+        else:
+            Xs[:, col] = 0.0
+    return Xs
+
+
+def design_matrix(rows, predictors, outcome):
+    usable = []
+    for row in rows:
+        y = parse_float(row.get(outcome))
+        xs = [parse_float(row.get(predictor)) for predictor in predictors]
+        if y is not None and all(value is not None for value in xs):
+            usable.append((xs, y))
+    if not usable:
+        return np.zeros((0, len(predictors) + 1)), np.zeros(0)
+    X = np.asarray([[1.0] + xs for xs, _ in usable], dtype=float)
+    y = np.asarray([y for _, y in usable], dtype=float)
+    return standardize_design(X), y
+
+
+def fit_ols(X, y):
+    if X.shape[0] == 0:
+        return {"n": 0, "r2": None, "leave_one_out_r2": None, "rmse": None}
+    coefficients = np.linalg.lstsq(X, y, rcond=None)[0]
+    prediction = X @ coefficients
+    residual = y - prediction
+    ss_res = float(np.sum(residual**2))
+    ss_tot = float(np.sum((y - y.mean()) ** 2))
+    return {
+        "n": int(X.shape[0]),
+        "r2": None if ss_tot == 0.0 else float(1.0 - ss_res / ss_tot),
+        "leave_one_out_r2": leave_one_out_r2(X, y),
+        "rmse": float(np.sqrt(np.mean(residual**2))),
+    }
+
+
+def leave_one_out_r2(X, y):
+    if X.shape[0] < X.shape[1] + 2:
+        return None
+    predictions = np.zeros(X.shape[0], dtype=float)
+    for idx in range(X.shape[0]):
+        keep = np.arange(X.shape[0]) != idx
+        coefficients = np.linalg.lstsq(X[keep], y[keep], rcond=None)[0]
+        predictions[idx] = X[idx] @ coefficients
+    ss_res = float(np.sum((y - predictions) ** 2))
+    ss_tot = float(np.sum((y - y.mean()) ** 2))
+    return None if ss_tot == 0.0 else float(1.0 - ss_res / ss_tot)
+
+
+def regression_models(rows, model_map, outcome):
+    report = OrderedDict()
+    for name, predictors in model_map.items():
+        X, y = design_matrix(rows, predictors, outcome)
+        fit = fit_ols(X, y)
+        fit["predictors"] = predictors
+        report[name] = fit
+    return report
 
 
 def parse_experiment(raw):
@@ -297,6 +437,72 @@ def summarize_experiment(name, root, target):
     }
 
 
+def rows_with_experiment(experiment, relative_path):
+    path = os.path.join(experiment["root"], relative_path)
+    rows = []
+    for row in load_csv(path):
+        item = dict(row)
+        item["experiment"] = experiment["name"]
+        rows.append(item)
+    return rows
+
+
+def join_mechanism_rows(run_rows, experiment):
+    mechanism_rows = {
+        row["label"]: row
+        for row in load_csv(os.path.join(experiment["root"], "mechanism_results.csv"))
+        if row.get("label")
+    }
+    joined = []
+    for row in run_rows:
+        mechanism = mechanism_rows.get(row.get("label"))
+        item = dict(row)
+        if mechanism:
+            for key, value in mechanism.items():
+                if key not in item:
+                    item[key] = value
+        joined.append(item)
+    return joined
+
+
+def pooled_report(experiments, target):
+    run_rows = []
+    aggregate_rows = []
+    retrain_rows = []
+    for experiment in experiments:
+        experiment_run_rows = rows_with_experiment(experiment, "topology_results.csv")
+        run_rows.extend(join_mechanism_rows(experiment_run_rows, experiment))
+        aggregate_rows.extend(rows_with_experiment(experiment, "topology_seed_aggregates.csv"))
+        retrain_rows.extend(rows_with_experiment(experiment, "essential_input50_retrain/topology_seed_aggregates.csv"))
+
+    return {
+        "run_rows": len(run_rows),
+        "aggregate_groups": len(aggregate_rows),
+        "retrain_groups": len(retrain_rows),
+        "run_level": regression_models(run_rows, POOLED_RUN_MODELS, target),
+        "aggregate_target_mean": regression_models(
+            aggregate_rows,
+            POOLED_AGGREGATE_MODELS,
+            "target_mean",
+        ),
+        "aggregate_target_max": regression_models(
+            aggregate_rows,
+            POOLED_AGGREGATE_MODELS,
+            "target_max",
+        ),
+        "retrain_target_mean": regression_models(
+            retrain_rows,
+            POOLED_AGGREGATE_MODELS,
+            "target_mean",
+        ),
+        "retrain_target_max": regression_models(
+            retrain_rows,
+            POOLED_AGGREGATE_MODELS,
+            "target_max",
+        ),
+    }
+
+
 def model_cell(fit, key="leave_one_out_r2"):
     if not fit:
         return "NA"
@@ -477,8 +683,34 @@ def top_motif_table(experiments):
     return lines
 
 
+def pooled_regression_table(pooled, key, title):
+    lines = [
+        title,
+        "",
+        "| model | n | R2 | LOO_R2 | RMSE | predictors |",
+        "| --- | ---: | ---: | ---: | ---: | --- |",
+    ]
+    for name, fit in pooled.get(key, {}).items():
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    name,
+                    str(fit.get("n", "NA")),
+                    fmt(fit.get("r2")),
+                    fmt(fit.get("leave_one_out_r2")),
+                    fmt(fit.get("rmse")),
+                    ", ".join(fit.get("predictors", [])),
+                ]
+            )
+            + " |"
+        )
+    return lines
+
+
 def build_markdown(report):
     experiments = report["experiments"]
+    pooled = report.get("pooled", {})
     lines = [
         "# Topology-ICL Progress Report",
         "",
@@ -491,6 +723,18 @@ def build_markdown(report):
         "## Topology Library Provenance",
         "",
         *library_table(experiments),
+        "",
+        "## Pooled Fixed-Edge Regime Analysis",
+        "",
+        f"Rows pooled across supplied regimes: run-level `{pooled.get('run_rows', 0)}`, topology groups `{pooled.get('aggregate_groups', 0)}`, retrained motif groups `{pooled.get('retrain_groups', 0)}`.",
+        "",
+        "These models test whether tree-geometry and post-training mechanism features explain accuracy beyond edge count when `m` varies across regimes.",
+        "",
+        *pooled_regression_table(pooled, "run_level", "### Run-Level Novel-Class ICL"),
+        "",
+        *pooled_regression_table(pooled, "aggregate_target_mean", "### Topology Mean Across Seeds"),
+        "",
+        *pooled_regression_table(pooled, "aggregate_target_max", "### Topology Best Seed"),
         "",
         "## Fixed-Topology Seed Aggregates",
         "",
@@ -537,6 +781,12 @@ def build_markdown(report):
         "### Retrain Best Seed",
         "",
         *regression_table(experiments, "target_max", KEY_AGG_MODELS, "essential_retrain"),
+        "",
+        "### Pooled Retrained Motifs",
+        "",
+        *pooled_regression_table(pooled, "retrain_target_mean", "#### Retrain Mean Across Seeds"),
+        "",
+        *pooled_regression_table(pooled, "retrain_target_max", "#### Retrain Best Seed"),
         "",
         "## Current Interpretation",
         "",
@@ -587,6 +837,7 @@ def main():
         "target": args.target,
         "experiments": experiments,
     }
+    report["pooled"] = pooled_report(experiments, args.target)
     markdown = build_markdown(report)
 
     os.makedirs(os.path.dirname(os.path.abspath(args.output_md)), exist_ok=True)
