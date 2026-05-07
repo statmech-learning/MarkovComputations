@@ -313,6 +313,68 @@ class RegressTopologyResultsTests(unittest.TestCase):
         self.assertIn("capacity_linear_test_accuracy", model["predictors"])
         self.assertGreater(model["r2"], 0.9)
 
+    def test_rooted_tree_polytope_capacity_predictor_set_uses_rooted_columns(self):
+        fieldnames = [
+            "label",
+            "topology_name",
+            "n_edges",
+            "raw_physical_parameter_count",
+            "input_coupled_parameter_count",
+            "d_rel",
+            "comparison_branch_common_d_rel_min",
+            "comparison_branch_common_d_rel_gini",
+            "capacity_rooted_polytope_supported_branch_dim_fraction",
+            "capacity_rooted_polytope_branch_root_support_min",
+            "capacity_rooted_polytope_branch_root_support_gini",
+            "capacity_rooted_polytope_branch_best_rank_min",
+            "capacity_rooted_polytope_root_rank_mass_gini",
+            "test_novel_classes",
+        ]
+        rows = []
+        for idx in range(8):
+            rooted = 0.1 * idx
+            rows.append(
+                {
+                    "label": f"rooted{idx}",
+                    "topology_name": f"rooted_topo{idx}",
+                    "n_edges": 20,
+                    "raw_physical_parameter_count": 400,
+                    "input_coupled_parameter_count": 200,
+                    "d_rel": 100 + idx,
+                    "comparison_branch_common_d_rel_min": idx,
+                    "comparison_branch_common_d_rel_gini": 0.0,
+                    "capacity_rooted_polytope_supported_branch_dim_fraction": 0.3 + rooted,
+                    "capacity_rooted_polytope_branch_root_support_min": idx % 4,
+                    "capacity_rooted_polytope_branch_root_support_gini": 0.2,
+                    "capacity_rooted_polytope_branch_best_rank_min": 2 * idx,
+                    "capacity_rooted_polytope_root_rank_mass_gini": 0.1,
+                    "test_novel_classes": 35 + 25 * rooted,
+                }
+            )
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            input_csv = os.path.join(tmpdir, "rooted_capacity_topology_results.csv")
+            output_json = os.path.join(tmpdir, "regression.json")
+            with open(input_csv, "w", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+            self.run_regression(
+                [
+                    "--input_csv",
+                    input_csv,
+                    "--output_json",
+                    output_json,
+                ]
+            )
+            with open(output_json) as f:
+                report = json.load(f)
+
+        model = report["models"]["rooted_tree_polytope_capacity"]
+        self.assertEqual(model["n"], 8)
+        self.assertIn("capacity_rooted_polytope_branch_best_rank_min", model["predictors"])
+        self.assertGreater(model["r2"], 0.9)
+
 
 if __name__ == "__main__":
     unittest.main()

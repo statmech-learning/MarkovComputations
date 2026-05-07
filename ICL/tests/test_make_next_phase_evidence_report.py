@@ -83,6 +83,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
                             "n": 3,
                             "linear_test_accuracy_mean": 0.8,
                             "linear_test_accuracy_max": 0.9,
+                            "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
                         }
                     },
                 },
@@ -140,6 +141,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
         self.assertIn("Families: `2` via `derived_graph_family`", markdown)
         self.assertIn("family boot delta R2", markdown)
         self.assertIn("branch_margin_capacity", markdown)
+        self.assertIn("rooted support frac", markdown)
         self.assertIn("edge_projection_permutation", markdown)
         self.assertIn("Matched Essential-Motif Controls", markdown)
         self.assertIn("Extracted motifs beat these matched controls", markdown)

@@ -133,6 +133,25 @@ PREDICTOR_SETS = {
         "capacity_tropical_root_feature_effective_rank_mean",
         "capacity_tropical_root_feature_variance_mean",
     ],
+    "rooted_tree_polytope_capacity": [
+        "input_coupled_parameter_count",
+        "capacity_rooted_polytope_supported_branch_dim_fraction",
+        "capacity_rooted_polytope_branch_root_support_min",
+        "capacity_rooted_polytope_branch_root_support_gini",
+        "capacity_rooted_polytope_branch_best_rank_min",
+        "capacity_rooted_polytope_root_rank_mass_gini",
+    ],
+    "rooted_tree_polytope_capacity_plus_drel": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_rooted_polytope_supported_branch_dim_fraction",
+        "capacity_rooted_polytope_branch_root_support_min",
+        "capacity_rooted_polytope_branch_root_support_gini",
+        "capacity_rooted_polytope_branch_best_rank_min",
+        "capacity_rooted_polytope_root_rank_mass_gini",
+    ],
 }
 
 

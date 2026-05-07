@@ -16,6 +16,8 @@ from branch_margin_capacity import (  # noqa: E402
     normalized_rank_weights,
     oracle_branch_scores,
     rank_geometry_summary,
+    rooted_common_rank_tensor,
+    rooted_polytope_support_summary,
     sample_exact_copy_branches,
     summarize_margin_scores,
     tropical_root_feature_matrix,
@@ -92,9 +94,33 @@ class BranchMarginCapacityTests(unittest.TestCase):
         self.assertIn("linear_test_margin_mean", result)
         self.assertIn("rank_weighted_oracle_test_margin_mean", result)
         self.assertIn("tropical_linear_test_accuracy_mean", result)
+        self.assertIn("rooted_polytope_supported_branch_dim_fraction", result)
+        self.assertIn("rooted_common_rank_by_root_branch_dim", result)
         self.assertIn("rank_mass_gini", result)
         self.assertIn("d_rel", result)
         self.assertIn("Branch-Margin Capacity Probe", markdown_report(result))
+
+    def test_rooted_polytope_support_summarizes_per_root_common_rank(self):
+        n_nodes = 3
+        n_context = 2
+        z_dim = 1
+        edges = complete_digraph(n_nodes).edges
+        mats = topology_matrices(n_nodes, edges)
+        ranks = rooted_common_rank_tensor(
+            mats["arborescences"],
+            n_edges=len(edges),
+            input_mask=None,
+            n_context=n_context,
+            z_dim=z_dim,
+        )
+        self.assertEqual(ranks.shape, (n_nodes, n_context, z_dim))
+        self.assertTrue(np.all(ranks > 0))
+
+        summary = rooted_polytope_support_summary(ranks)
+        self.assertEqual(summary["rooted_polytope_n_roots"], n_nodes)
+        self.assertEqual(summary["rooted_polytope_supported_branch_dim_fraction"], 1.0)
+        self.assertEqual(summary["rooted_polytope_branch_root_support_min"], float(n_nodes))
+        self.assertGreater(summary["rooted_polytope_root_rank_mass_effective"], 1.0)
 
     def test_tropical_tree_features_have_root_shape_and_capacity_summary(self):
         n_nodes = 3

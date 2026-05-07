@@ -37,6 +37,8 @@ CORE_MODELS = [
     "branch_rank_weighted_capacity_plus_drel",
     "tropical_tree_capacity",
     "tropical_tree_capacity_plus_drel",
+    "rooted_tree_polytope_capacity",
+    "rooted_tree_polytope_capacity_plus_drel",
 ]
 
 
@@ -147,6 +149,12 @@ def capacity_summary(entry: dict) -> dict:
                 "tropical_linear_test_accuracy_max": stats.get("tropical_linear_test_accuracy_max"),
                 "tropical_root_feature_effective_rank_mean": stats.get(
                     "tropical_root_feature_effective_rank_mean"
+                ),
+                "rooted_polytope_supported_branch_dim_fraction_mean": stats.get(
+                    "rooted_polytope_supported_branch_dim_fraction_mean"
+                ),
+                "rooted_polytope_branch_best_rank_min_mean": stats.get(
+                    "rooted_polytope_branch_best_rank_min_mean"
                 ),
             }
         )
@@ -361,6 +369,8 @@ def build_markdown(report: dict) -> str:
                 fmt(item.get("tropical_linear_test_accuracy_mean")),
                 fmt(item.get("tropical_linear_test_accuracy_max")),
                 fmt(item.get("tropical_root_feature_effective_rank_mean")),
+                fmt(item.get("rooted_polytope_supported_branch_dim_fraction_mean")),
+                fmt(item.get("rooted_polytope_branch_best_rank_min_mean")),
             ]
             for item in entry["families"]
         ]
@@ -376,6 +386,8 @@ def build_markdown(report: dict) -> str:
                     "tropical accuracy mean",
                     "tropical accuracy max",
                     "tropical root eff-rank",
+                    "rooted support frac",
+                    "rooted branch best-rank min",
                 ],
                 rows,
             )

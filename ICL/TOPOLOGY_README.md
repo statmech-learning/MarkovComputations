@@ -45,10 +45,12 @@ The convention is:
   alignment, branch-wise margin, and edge-sensitivity utilities.
 - `branch_margin_capacity.py`: pre-training sampled branch-margin capacity
   probe. It gates exact-copy comparison features by common context/query
-  relative tree-contrast support, then reports oracle and norm-controlled
-  linear margins. This is a conservative proxy for the proposed
-  tree-polytope/branch-margin theory, not a solution to the full nonconvex
-  `max_{K,B}` CRN capacity problem.
+  relative tree-contrast support, reports oracle and norm-controlled linear
+  margins, adds rank-weighted support, samples tropical rooted-tree random
+  features, and summarizes root-by-root tree-polytope common-rank support.
+  This is a conservative proxy for the proposed tree-polytope/branch-margin
+  theory, not a solution to the full nonconvex `max_{K,B}` CRN capacity
+  problem.
 - `collect_branch_margin_capacity.py`: compute the branch-margin capacity
   probe for selected rows in a topology or input-mask library CSV and write a
   flat predictor table.

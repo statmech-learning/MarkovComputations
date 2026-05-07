@@ -65,6 +65,8 @@ DEFAULT_MODELS = [
     "branch_rank_weighted_capacity_plus_drel",
     "tropical_tree_capacity",
     "tropical_tree_capacity_plus_drel",
+    "rooted_tree_polytope_capacity",
+    "rooted_tree_polytope_capacity_plus_drel",
 ]
 
 

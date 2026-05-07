@@ -253,6 +253,104 @@ def rank_geometry_summary(common_ranks: np.ndarray) -> dict:
     }
 
 
+def rooted_common_rank_tensor(
+    arborescences: Mapping[int, Sequence[Sequence[int]]],
+    n_edges: int,
+    input_mask: Optional[np.ndarray],
+    n_context: int,
+    z_dim: int,
+    tol: float = 1e-9,
+) -> np.ndarray:
+    """Common context/query support inside each rooted tree polytope.
+
+    Global relative tree rank can be high because it mixes trees from all
+    roots.  In the tropical matrix-tree view, however, each concentration
+    numerator is controlled by the normal fan of one rooted-tree polytope.
+    This tensor measures, root by root, whether that root's tree-difference
+    span contains common context/query directions for each ICL branch.
+    """
+
+    rows = []
+    for root in sorted(arborescences):
+        M_root = incidence_matrix({root: arborescences[root]}, n_edges)
+        D_root = centered_tree_matrix(M_root)
+        rows.append(
+            coordinate_common_rank_matrix(
+                D_root,
+                input_mask=input_mask,
+                n_context=n_context,
+                z_dim=z_dim,
+                tol=tol,
+            )
+        )
+    if not rows:
+        return np.zeros((0, n_context, z_dim), dtype=int)
+    return np.stack(rows, axis=0).astype(int)
+
+
+def rooted_polytope_support_summary(rooted_ranks: np.ndarray) -> dict:
+    """Summarize rooted-tree-polytope branch support."""
+
+    ranks = np.asarray(rooted_ranks, dtype=float)
+    if ranks.ndim != 3:
+        raise ValueError("rooted_ranks must have shape (n_roots, n_context, z_dim)")
+    if ranks.size == 0 or ranks.shape[0] == 0:
+        return {
+            "rooted_polytope_n_roots": int(ranks.shape[0]) if ranks.ndim == 3 else 0,
+            "rooted_polytope_common_rank_total": 0.0,
+            "rooted_polytope_common_rank_mean": 0.0,
+            "rooted_polytope_common_rank_max": 0.0,
+            "rooted_polytope_supported_branch_dim_fraction": 0.0,
+            "rooted_polytope_branch_root_support_min": 0.0,
+            "rooted_polytope_branch_root_support_mean": 0.0,
+            "rooted_polytope_branch_root_support_max": 0.0,
+            "rooted_polytope_branch_root_support_gini": 0.0,
+            "rooted_polytope_branch_best_rank_min": 0.0,
+            "rooted_polytope_branch_best_rank_mean": 0.0,
+            "rooted_polytope_branch_best_rank_max": 0.0,
+            "rooted_polytope_branch_best_rank_gini": 0.0,
+            "rooted_polytope_root_rank_mass_min": 0.0,
+            "rooted_polytope_root_rank_mass_mean": 0.0,
+            "rooted_polytope_root_rank_mass_max": 0.0,
+            "rooted_polytope_root_rank_mass_gini": 0.0,
+            "rooted_polytope_root_rank_mass_effective": 0.0,
+        }
+
+    root_branch_mass = ranks.sum(axis=2)
+    branch_root_support = np.sum(root_branch_mass > 0, axis=0).astype(float)
+    branch_best_rank = np.max(root_branch_mass, axis=0)
+    root_mass = ranks.sum(axis=(1, 2))
+    branch_dim_best = np.max(ranks, axis=0)
+    total = float(root_mass.sum())
+    if total > 1e-12:
+        probs = root_mass / total
+        probs = probs[probs > 0]
+        root_effective = float(np.exp(-np.sum(probs * np.log(probs))))
+    else:
+        root_effective = 0.0
+
+    return {
+        "rooted_polytope_n_roots": int(ranks.shape[0]),
+        "rooted_polytope_common_rank_total": float(np.sum(ranks)),
+        "rooted_polytope_common_rank_mean": float(np.mean(ranks)),
+        "rooted_polytope_common_rank_max": float(np.max(ranks)),
+        "rooted_polytope_supported_branch_dim_fraction": float(np.mean(branch_dim_best > 0)),
+        "rooted_polytope_branch_root_support_min": float(np.min(branch_root_support)),
+        "rooted_polytope_branch_root_support_mean": float(np.mean(branch_root_support)),
+        "rooted_polytope_branch_root_support_max": float(np.max(branch_root_support)),
+        "rooted_polytope_branch_root_support_gini": _gini(branch_root_support),
+        "rooted_polytope_branch_best_rank_min": float(np.min(branch_best_rank)),
+        "rooted_polytope_branch_best_rank_mean": float(np.mean(branch_best_rank)),
+        "rooted_polytope_branch_best_rank_max": float(np.max(branch_best_rank)),
+        "rooted_polytope_branch_best_rank_gini": _gini(branch_best_rank),
+        "rooted_polytope_root_rank_mass_min": float(np.min(root_mass)),
+        "rooted_polytope_root_rank_mass_mean": float(np.mean(root_mass)),
+        "rooted_polytope_root_rank_mass_max": float(np.max(root_mass)),
+        "rooted_polytope_root_rank_mass_gini": _gini(root_mass),
+        "rooted_polytope_root_rank_mass_effective": root_effective,
+    }
+
+
 def oracle_branch_scores(
     features: np.ndarray,
     n_context: int,
@@ -596,6 +694,13 @@ def branch_margin_capacity(
         z_dim=z_dim,
     )
     support = common_ranks > 0
+    rooted_ranks = rooted_common_rank_tensor(
+        mats["arborescences"],
+        n_edges=len(edge_tuple),
+        input_mask=input_mask,
+        n_context=n_context,
+        z_dim=z_dim,
+    )
 
     train_z, train_labels = sample_exact_copy_branches(
         train_samples,
@@ -674,6 +779,7 @@ def branch_margin_capacity(
         "ridge": ridge,
         "l2_radius": l2_radius,
         "common_rank_by_branch_dim": common_ranks.tolist(),
+        "rooted_common_rank_by_root_branch_dim": rooted_ranks.tolist(),
         "support_by_branch_dim": support.astype(int).tolist(),
         "rank_weight_by_branch_dim": rank_weights.tolist(),
         "support_fraction": float(np.mean(support)) if support.size else 0.0,
@@ -684,6 +790,7 @@ def branch_margin_capacity(
         "weighted_linear_weight_norm": float(np.linalg.norm(weighted_weights)),
     }
     result.update(rank_geometry_summary(common_ranks))
+    result.update(rooted_polytope_support_summary(rooted_ranks))
     for key in [
         "d_rel",
         "rank_D",
@@ -771,6 +878,9 @@ def markdown_report(result: dict) -> str:
         f"| support min/mean/max | {result['support_min']} / {result['support_mean']:.2f} / {result['support_max']} |",
         f"| rank mass min/mean/max | {result['rank_mass_min']:.2f} / {result['rank_mass_mean']:.2f} / {result['rank_mass_max']:.2f} |",
         f"| rank mass gini | {result['rank_mass_gini']:.3f} |",
+        f"| rooted polytope branch-dim support | {result.get('rooted_polytope_supported_branch_dim_fraction'):.3f} |",
+        f"| rooted branch root support min/mean/max | {result.get('rooted_polytope_branch_root_support_min'):.2f} / {result.get('rooted_polytope_branch_root_support_mean'):.2f} / {result.get('rooted_polytope_branch_root_support_max'):.2f} |",
+        f"| rooted branch best-rank min/mean/max | {result.get('rooted_polytope_branch_best_rank_min'):.2f} / {result.get('rooted_polytope_branch_best_rank_mean'):.2f} / {result.get('rooted_polytope_branch_best_rank_max'):.2f} |",
         "",
         "## Margins",
         "",
