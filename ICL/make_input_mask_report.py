@@ -489,19 +489,58 @@ def summarize_experiment(name, root, target):
 
 
 def summarize_essential_inputmask(root):
+    selected_csv = os.path.join(root, "essential_inputmask50", "selected.csv")
+    library_csv = os.path.join(root, "essential_inputmask50", "library.csv")
     comparison_json = os.path.join(root, "essential_inputmask50", "retrain_comparison.json")
     comparison_csv = os.path.join(root, "essential_inputmask50", "retrain_comparison.csv")
     retrain_aggregate_csv = os.path.join(root, "essential_inputmask50_retrain", "topology_seed_aggregates.csv")
+    selected_rows = load_csv(selected_csv)
+    library_rows = load_csv(library_csv)
     comparison = load_json(comparison_json)
     comparison_rows = load_csv(comparison_csv)
     retrain_rows = load_csv(retrain_aggregate_csv)
-    if not comparison and not retrain_rows:
+    if not selected_rows and not comparison and not retrain_rows:
         return {}
     return {
+        "selected_csv": selected_csv if os.path.exists(selected_csv) else None,
+        "library_csv": library_csv if os.path.exists(library_csv) else None,
+        "selected_summary": summarize_extracted_essential_masks(selected_rows, library_rows),
+        "top_extracted_masks": selected_rows[:5],
         "comparison_path": comparison_json if os.path.exists(comparison_json) else None,
         "comparison": comparison or {},
         "top_retrained_masks": comparison_rows[:5],
         "retrain_aggregate": summarize_rows(retrain_rows, "target_mean"),
+    }
+
+
+def summarize_extracted_essential_masks(selected_rows, library_rows):
+    if not selected_rows:
+        return {}
+    return {
+        "n_selected": len(selected_rows),
+        "n_candidates": len(library_rows) if library_rows else None,
+        "input_coupled_parameter_count_min": min_or_none(
+            numeric_values(selected_rows, "input_coupled_parameter_count")
+        ),
+        "input_coupled_parameter_count_mean": mean(
+            numeric_values(selected_rows, "input_coupled_parameter_count")
+        ),
+        "input_coupled_parameter_count_max": max_or_none(
+            numeric_values(selected_rows, "input_coupled_parameter_count")
+        ),
+        "source_input_coupled_parameter_count_mean": mean(
+            numeric_values(selected_rows, "source_input_coupled_parameter_count_mean")
+        ),
+        "raw_essential_edges_mean": mean(numeric_values(selected_rows, "raw_essential_edges")),
+        "raw_essential_edges_max": max_or_none(numeric_values(selected_rows, "raw_essential_edges")),
+        "d_rel_mean": mean(numeric_values(selected_rows, "d_rel")),
+        "effective_rank_D_masked_mean": mean(numeric_values(selected_rows, "effective_rank_D_masked")),
+        "source_test_novel_classes_max_mean": mean(
+            numeric_values(selected_rows, "source_test_novel_classes_max")
+        ),
+        "source_test_novel_classes_max_best": max_or_none(
+            numeric_values(selected_rows, "source_test_novel_classes_max")
+        ),
     }
 
 
@@ -694,6 +733,80 @@ def essential_inputmask_table(experiments):
     return lines
 
 
+def extracted_inputmask_table(experiments):
+    lines = [
+        "| source experiment | selected/candidates | source input couplings | essential input couplings min/mean/max | raw edge rows mean/max | d_rel mean | source best ICL mean/best |",
+        "| --- | ---: | ---: | --- | --- | ---: | --- |",
+    ]
+    for experiment in experiments:
+        summary = experiment.get("essential_inputmask50", {}).get("selected_summary", {})
+        if not summary:
+            continue
+        selected = summary.get("n_selected")
+        candidates = summary.get("n_candidates")
+        selected_text = f"{selected or 'NA'}/{candidates or 'NA'}"
+        coupled = (
+            f"{fmt(summary.get('input_coupled_parameter_count_min'), 0)}/"
+            f"{fmt(summary.get('input_coupled_parameter_count_mean'), 1)}/"
+            f"{fmt(summary.get('input_coupled_parameter_count_max'), 0)}"
+        )
+        raw_edges = (
+            f"{fmt(summary.get('raw_essential_edges_mean'), 1)}/"
+            f"{fmt(summary.get('raw_essential_edges_max'), 0)}"
+        )
+        source_icl = (
+            f"{fmt_acc(summary.get('source_test_novel_classes_max_mean'))}/"
+            f"{fmt_acc(summary.get('source_test_novel_classes_max_best'))}"
+        )
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    experiment["name"],
+                    selected_text,
+                    fmt(summary.get("source_input_coupled_parameter_count_mean"), 1),
+                    coupled,
+                    raw_edges,
+                    fmt(summary.get("d_rel_mean"), 1),
+                    source_icl,
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| none | 0 | NA | NA | NA | NA | NA |")
+    return lines
+
+
+def top_extracted_inputmask_table(experiments):
+    lines = [
+        "| source experiment | mask | source best ICL | input couplings | source couplings | raw edge rows | d_rel | eff rank masked |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for experiment in experiments:
+        masks = experiment.get("essential_inputmask50", {}).get("top_extracted_masks", [])[:3]
+        for mask in masks:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        experiment["name"],
+                        mask.get("topology_name", "NA"),
+                        fmt_acc(mask.get("source_test_novel_classes_max")),
+                        fmt(mask.get("input_coupled_parameter_count"), 0),
+                        fmt(mask.get("source_input_coupled_parameter_count_mean"), 0),
+                        fmt(mask.get("raw_essential_edges"), 0),
+                        fmt(mask.get("d_rel"), 0),
+                        fmt(mask.get("effective_rank_D_masked")),
+                    ]
+                )
+                + " |"
+            )
+    if len(lines) == 2:
+        lines.append("| none | NA | NA | NA | NA | NA | NA | NA |")
+    return lines
+
+
 def top_retrained_inputmask_table(experiments):
     lines = [
         "| source experiment | mask | source ICL | retrain mean | retrain max | retention mean/max | input couplings | d_rel |",
@@ -813,6 +926,16 @@ def build_markdown(report):
         "## Essential Input-Mask Retraining",
         "",
         "Input-ablation 50%-coverage essential masks keep the physical graph fixed and prune only input-coupling rows, then retrain those masks from scratch.",
+        "",
+        "### Extracted Essential Input Masks",
+        "",
+        *extracted_inputmask_table(experiments),
+        "",
+        "### Top Extracted Essential Input Masks",
+        "",
+        *top_extracted_inputmask_table(experiments),
+        "",
+        "### Retrain Retention",
         "",
         *essential_inputmask_table(experiments),
         "",
