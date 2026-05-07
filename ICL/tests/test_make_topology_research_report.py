@@ -233,12 +233,12 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
                 f,
             )
 
-        essential_dir = os.path.join(root, "essential_input50")
+        essential_dir = os.path.join(root, "essential_inputmask50")
         comparison_fields = [
             "topology_name",
-            "n_edges",
             "d_rel",
             "source_test_novel_classes_mean",
+            "retrain_input_coupled_parameter_count",
             "retrain_target_mean",
             "retrain_target_max",
             "retrain_retention_mean",
@@ -250,9 +250,9 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
             [
                 {
                     "topology_name": "essential_toy",
-                    "n_edges": 5,
                     "d_rel": 24,
                     "source_test_novel_classes_mean": 82.0,
+                    "retrain_input_coupled_parameter_count": 48,
                     "retrain_target_mean": 70.0,
                     "retrain_target_max": 76.0,
                     "retrain_retention_mean": 0.85,
@@ -269,13 +269,11 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
                     "retrain_max_best": 76.0,
                     "retention_mean_mean": 0.85,
                     "retention_max_mean": 0.92,
-                    "n_edges_mean": 5.0,
-                    "n_edges_min": 5,
-                    "n_edges_max": 5,
+                    "retrain_input_coupled_parameter_count_mean": 48.0,
                 },
                 f,
             )
-        retrain_root = os.path.join(root, "essential_input50_retrain")
+        retrain_root = os.path.join(root, "essential_inputmask50_retrain")
         self.write_csv(
             os.path.join(retrain_root, "topology_seed_aggregates.csv"),
             aggregate_fields,
@@ -312,6 +310,7 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
         self.assertIn("worst branch mean margin", markdown)
         self.assertIn("input_plus_branch_drel", markdown)
         self.assertIn("Essential Motif Retraining", markdown)
+        self.assertIn("input mask", markdown)
 
         pooled_model = payload["pooled"]["run_level"]["input_plus_branch_drel"]
         self.assertIn("comparison_branch_d_rel_min", pooled_model["predictors"])
@@ -323,6 +322,10 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
         self.assertEqual(
             payload["experiments"][0]["essential_input50"]["comparison"]["n_joined"],
             1,
+        )
+        self.assertEqual(
+            payload["experiments"][0]["essential_input50"]["source_dir"],
+            "essential_inputmask50",
         )
 
 

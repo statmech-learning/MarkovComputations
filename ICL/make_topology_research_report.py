@@ -19,6 +19,20 @@ import numpy as np
 
 
 DEFAULT_TARGET = "test_novel_classes"
+ESSENTIAL_LAYOUTS = [
+    {
+        "kind": "physical_edge_subgraph",
+        "source_dir": "essential_input50",
+        "retrain_dir": "essential_input50_retrain",
+        "label": "physical subgraph",
+    },
+    {
+        "kind": "input_encoding_mask",
+        "source_dir": "essential_inputmask50",
+        "retrain_dir": "essential_inputmask50_retrain",
+        "label": "input mask",
+    },
+]
 
 KEY_RUN_MODELS = [
     "raw_count",
@@ -481,17 +495,23 @@ def extract_correlations(report):
     }
 
 
-def summarize_essential(root):
-    comparison_json = os.path.join(root, "essential_input50", "retrain_comparison.json")
+def summarize_essential_layout(root, layout):
+    source_dir = layout["source_dir"]
+    retrain_dir = layout["retrain_dir"]
+    comparison_json = os.path.join(root, source_dir, "retrain_comparison.json")
     comparison = load_json(comparison_json)
-    retrain_aggregate_csv = os.path.join(root, "essential_input50_retrain", "topology_seed_aggregates.csv")
-    retrain_aggregate_json = os.path.join(root, "essential_input50_retrain", "topology_seed_aggregates.json")
-    retrain_mechanism_json = os.path.join(root, "essential_input50_retrain", "mechanism_summary.json")
+    retrain_aggregate_csv = os.path.join(root, retrain_dir, "topology_seed_aggregates.csv")
+    retrain_aggregate_json = os.path.join(root, retrain_dir, "topology_seed_aggregates.json")
+    retrain_mechanism_json = os.path.join(root, retrain_dir, "mechanism_summary.json")
     retrain_rows = load_csv(retrain_aggregate_csv)
-    comparison_rows = load_csv(os.path.join(root, "essential_input50", "retrain_comparison.csv"))
+    comparison_rows = load_csv(os.path.join(root, source_dir, "retrain_comparison.csv"))
     if not comparison and not retrain_rows:
         return {}
     return {
+        "kind": layout["kind"],
+        "label": layout["label"],
+        "source_dir": source_dir,
+        "retrain_dir": retrain_dir,
         "comparison_path": comparison_json if os.path.exists(comparison_json) else None,
         "comparison": comparison or {},
         "top_retrained_motifs": comparison_rows[:5],
@@ -499,6 +519,22 @@ def summarize_essential(root):
         "retrain_aggregate_regressions": extract_aggregate_regressions(load_json(retrain_aggregate_json)),
         "retrain_mechanism_correlations": extract_correlations(load_json(retrain_mechanism_json)),
     }
+
+
+def summarize_essential(root):
+    layouts = [
+        summary
+        for summary in (
+            summarize_essential_layout(root, layout)
+            for layout in ESSENTIAL_LAYOUTS
+        )
+        if summary
+    ]
+    if not layouts:
+        return {}
+    summary = dict(layouts[0])
+    summary["layouts"] = layouts
+    return summary
 
 
 def summarize_experiment(name, root, target):
@@ -575,7 +611,13 @@ def pooled_report(experiments, target):
         experiment_run_rows = rows_with_experiment(experiment, "topology_results.csv")
         run_rows.extend(join_mechanism_rows(experiment_run_rows, experiment))
         aggregate_rows.extend(rows_with_experiment(experiment, "topology_seed_aggregates.csv"))
-        retrain_rows.extend(rows_with_experiment(experiment, "essential_input50_retrain/topology_seed_aggregates.csv"))
+        for layout in ESSENTIAL_LAYOUTS:
+            retrain_rows.extend(
+                rows_with_experiment(
+                    experiment,
+                    os.path.join(layout["retrain_dir"], "topology_seed_aggregates.csv"),
+                )
+            )
 
     return {
         "run_rows": len(run_rows),
@@ -727,71 +769,95 @@ def correlation_table(experiments):
     return lines
 
 
-def essential_table(experiments):
-    lines = [
-        "| source experiment | joined motifs | source mean ICL | retrain mean ICL | retrain best ICL | retention mean/max | motif edges mean/min/max |",
-        "| --- | ---: | ---: | ---: | ---: | ---: | --- |",
-    ]
-    for experiment in experiments:
-        comparison = experiment.get("essential_input50", {}).get("comparison", {})
-        if not comparison:
-            continue
-        edge_text = (
-            f"{fmt(comparison.get('n_edges_mean'), 2)}/"
+def essential_layouts(experiment):
+    summary = experiment.get("essential_input50", {})
+    layouts = summary.get("layouts") if summary else None
+    if layouts:
+        return layouts
+    if summary:
+        return [summary]
+    return []
+
+
+def comparison_size_text(comparison):
+    if parse_float(comparison.get("n_edges_mean")) is not None:
+        return (
+            f"edges {fmt(comparison.get('n_edges_mean'), 2)}/"
             f"{fmt(comparison.get('n_edges_min'), 0)}/"
             f"{fmt(comparison.get('n_edges_max'), 0)}"
         )
-        retention = (
-            f"{fmt(comparison.get('retention_mean_mean'))}/"
-            f"{fmt(comparison.get('retention_max_mean'))}"
-        )
-        lines.append(
-            "| "
-            + " | ".join(
-                [
-                    experiment["name"],
-                    str(comparison.get("n_joined", "NA")),
-                    fmt_acc(comparison.get("source_mean_mean")),
-                    fmt_acc(comparison.get("retrain_mean_mean")),
-                    fmt_acc(comparison.get("retrain_max_best")),
-                    retention,
-                    edge_text,
-                ]
-            )
-            + " |"
-        )
-    if len(lines) == 2:
-        lines.append("| none | 0 | NA | NA | NA | NA | NA |")
-    return lines
+    if parse_float(comparison.get("retrain_input_coupled_parameter_count_mean")) is not None:
+        return f"input couplings {fmt(comparison.get('retrain_input_coupled_parameter_count_mean'), 1)}"
+    return "NA"
 
 
-def top_motif_table(experiments):
+def essential_table(experiments):
     lines = [
-        "| source experiment | motif | edges | d_rel | source ICL | retrain mean | retrain max | retention mean/max |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| source experiment | type | joined motifs | source mean ICL | retrain mean ICL | retrain best ICL | retention mean/max | motif size |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
     for experiment in experiments:
-        motifs = experiment.get("essential_input50", {}).get("top_retrained_motifs", [])[:3]
-        for motif in motifs:
-            retention = f"{fmt(motif.get('retrain_retention_mean'))}/{fmt(motif.get('retrain_retention_max'))}"
+        for layout in essential_layouts(experiment):
+            comparison = layout.get("comparison", {})
+            if not comparison:
+                continue
+            retention = (
+                f"{fmt(comparison.get('retention_mean_mean'))}/"
+                f"{fmt(comparison.get('retention_max_mean'))}"
+            )
             lines.append(
                 "| "
                 + " | ".join(
                     [
                         experiment["name"],
-                        motif.get("topology_name", "NA"),
-                        fmt(motif.get("n_edges"), 0),
-                        fmt(motif.get("d_rel"), 0),
-                        fmt_acc(motif.get("source_test_novel_classes_mean")),
-                        fmt_acc(motif.get("retrain_target_mean")),
-                        fmt_acc(motif.get("retrain_target_max")),
+                        layout.get("label", "NA"),
+                        str(comparison.get("n_joined", "NA")),
+                        fmt_acc(comparison.get("source_mean_mean")),
+                        fmt_acc(comparison.get("retrain_mean_mean")),
+                        fmt_acc(comparison.get("retrain_max_best")),
                         retention,
+                        comparison_size_text(comparison),
                     ]
                 )
                 + " |"
             )
     if len(lines) == 2:
-        lines.append("| none | NA | NA | NA | NA | NA | NA | NA |")
+        lines.append("| none | NA | 0 | NA | NA | NA | NA | NA |")
+    return lines
+
+
+def top_motif_table(experiments):
+    lines = [
+        "| source experiment | type | motif | size | d_rel | source ICL | retrain mean | retrain max | retention mean/max |",
+        "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for experiment in experiments:
+        for layout in essential_layouts(experiment):
+            motifs = layout.get("top_retrained_motifs", [])[:3]
+            for motif in motifs:
+                retention = f"{fmt(motif.get('retrain_retention_mean'))}/{fmt(motif.get('retrain_retention_max'))}"
+                size = motif.get("n_edges")
+                if parse_float(size) is None:
+                    size = motif.get("retrain_input_coupled_parameter_count")
+                lines.append(
+                    "| "
+                    + " | ".join(
+                        [
+                            experiment["name"],
+                            layout.get("label", "NA"),
+                            motif.get("topology_name", "NA"),
+                            fmt(size, 0),
+                            fmt(motif.get("d_rel"), 0),
+                            fmt_acc(motif.get("source_test_novel_classes_mean")),
+                            fmt_acc(motif.get("retrain_target_mean")),
+                            fmt_acc(motif.get("retrain_target_max")),
+                            retention,
+                        ]
+                    )
+                    + " |"
+                )
+    if len(lines) == 2:
+        lines.append("| none | NA | NA | NA | NA | NA | NA | NA | NA |")
     return lines
 
 
@@ -874,7 +940,7 @@ def build_markdown(report):
         "",
         "## Essential Motif Retraining",
         "",
-        "Input-ablation 50%-coverage essential subgraphs were extracted with strong-connectivity repair and retrained from scratch.",
+        "Input-ablation 50%-coverage essential physical subgraphs or input-encoding masks were extracted and retrained from scratch.",
         "",
         *essential_table(experiments),
         "",
