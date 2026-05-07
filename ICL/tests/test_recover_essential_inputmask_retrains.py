@@ -79,13 +79,18 @@ class RecoverEssentialInputMaskRetrainsTests(unittest.TestCase):
         self.assertIn("finalize_essential_inputmask_retrains.py", stdout)
         self.assertIn("verify_topology_completion.py", stdout)
         self.assertIn("--report_kind input_mask", stdout)
+        self.assertIn("interpret_topology_report.py", stdout)
+        self.assertIn("report_interpretation.md", stdout)
+        self.assertIn("report_interpretation.json", stdout)
         self.assertIn("random=", stdout)
         self.assertIn("hub=", stdout)
         finalizer_pos = stdout.index("finalize_essential_inputmask_retrains.py")
         strict_pos = stdout.rindex("--require_essential_retrains")
         verifier_pos = stdout.index("verify_topology_completion.py")
+        interpreter_pos = stdout.index("interpret_topology_report.py")
         self.assertLess(finalizer_pos, strict_pos)
         self.assertLess(strict_pos, verifier_pos)
+        self.assertLess(verifier_pos, interpreter_pos)
 
     def test_finalize_requires_both_report_paths(self):
         with tempfile.TemporaryDirectory() as tmpdir:

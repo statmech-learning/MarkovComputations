@@ -137,6 +137,25 @@ def verifier_command(experiments, seeds, output_md, output_json):
     )
 
 
+def default_interpretation_path(path):
+    root, ext = os.path.splitext(path)
+    return f"{root}_interpretation{ext or '.txt'}"
+
+
+def interpretation_command(report_json, output_md, output_json):
+    return python_script(
+        "interpret_topology_report.py",
+        "--report_json",
+        report_json,
+        "--report_kind",
+        "input_mask",
+        "--output_md",
+        output_md,
+        "--output_json",
+        output_json,
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -152,6 +171,9 @@ def main():
     parser.add_argument("--finalize_if_complete", action="store_true")
     parser.add_argument("--output_md", type=str, default=None)
     parser.add_argument("--output_json", type=str, default=None)
+    parser.add_argument("--skip_interpretation", action="store_true")
+    parser.add_argument("--interpret_output_md", type=str, default=None)
+    parser.add_argument("--interpret_output_json", type=str, default=None)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -219,6 +241,17 @@ def main():
             ),
             dry_run=args.dry_run,
         )
+        if not args.skip_interpretation:
+            interpret_output_md = args.interpret_output_md or default_interpretation_path(args.output_md)
+            interpret_output_json = args.interpret_output_json or default_interpretation_path(args.output_json)
+            run_command(
+                interpretation_command(
+                    args.output_json,
+                    interpret_output_md,
+                    interpret_output_json,
+                ),
+                dry_run=args.dry_run,
+            )
 
 
 if __name__ == "__main__":

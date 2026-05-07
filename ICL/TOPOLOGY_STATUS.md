@@ -136,6 +136,9 @@ python3 interpret_topology_report.py \
   --output_json results/input_mask_topology_interpretation.json
 ```
 
+The recovery wrapper runs this interpretation step automatically after a
+successful `--finalize_if_complete` unless `--skip_interpretation` is supplied.
+
 ## Not Yet Complete
 
 The project is not complete until cluster-side retrains and final reports are
