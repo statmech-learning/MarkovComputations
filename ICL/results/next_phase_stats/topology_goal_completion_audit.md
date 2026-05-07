@@ -1,12 +1,12 @@
 # Topology-ICL Goal Completion Audit
 
-Generated: 2026-05-07 after commit `22de6ec` (`Add hard topology pilot evidence`).
+Generated: 2026-05-07. The hard-pilot evidence was added in commit `22de6ec` (`Add hard topology pilot evidence`); this audit is tracked in the subsequent audit commit.
 
 This audit maps the active research objective to concrete repository artifacts. It is deliberately conservative: a requirement is marked complete only when the current branch contains inspectable evidence for it.
 
 ## Current Verification
 
-- Branch: `topology`, synchronized with `origin/topology` at `22de6ec`.
+- Branch: `topology`, synchronized with `origin/topology` after the hard-pilot evidence commit.
 - Hard-pilot artifact paths on branch: `889` files under `ICL/results/expanded_hard_libraries`, `ICL/results/expanded_hard_sweeps`, and `ICL/results/expanded_hard_stats`.
 - Raw-output exclusion check: no `results.pkl`, `model.pt`, `__pycache__`, or `_array_meta` paths under the committed hard-pilot artifact set.
 - Local unit tests: `python3 -m unittest discover -s ICL/tests`, `112` tests passed.
@@ -42,4 +42,3 @@ The strongest remaining gaps are:
 2. Replace the current branch-margin proxy with a more discriminating tree-polytope / branch-coverage capacity probe.
 3. Run mechanism decomposition and causal interventions on the expanded hard pilots.
 4. Add a verifier for the next-phase report schema, since the existing completion verifier targets the older consolidated report schemas.
-
