@@ -991,6 +991,8 @@ def build_markdown(report):
         "",
         "Raw count controls should be weak here because `n_edges` and `input_coupled_parameter_count` were fixed by construction. Physical-backbone and mask-family terms test controlled topology effects; mechanism terms test what trained models actually used.",
         "",
+        "For legacy CSVs generated before `comparison_branch_common_d_rel_*` existed, common branch-rank fields are backfilled from the older loose `comparison_branch_d_rel_*` upper-bound metrics. Regenerate collection artifacts to get exact common-subspace ranks.",
+        "",
         *fit_table(pooled["run_regressions"], "### Run-Level Novel-Class ICL"),
         "",
         *fit_table(pooled["aggregate_target_mean"], "### Mask Mean Across Seeds"),

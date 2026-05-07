@@ -215,6 +215,13 @@ POOLED_AGGREGATE_MODELS = OrderedDict(
         ),
     ]
 )
+POOLED_RETRAIN_MODELS = OrderedDict(
+    [("layout_type", ["essential_layout_is_input_mask"])]
+    + [
+        (f"layout_plus_{name}", ["essential_layout_is_input_mask", *predictors])
+        for name, predictors in POOLED_AGGREGATE_MODELS.items()
+    ]
+)
 
 
 def parse_float(value):
@@ -611,12 +618,14 @@ def summarize_experiment(name, root, target):
     }
 
 
-def rows_with_experiment(experiment, relative_path):
+def rows_with_experiment(experiment, relative_path, extra=None):
     path = os.path.join(experiment["root"], relative_path)
     rows = []
     for row in load_csv(path):
         item = dict(row)
         item["experiment"] = experiment["name"]
+        if extra:
+            item.update(extra)
         rows.append(item)
     return rows
 
@@ -652,6 +661,12 @@ def pooled_report(experiments, target):
                 rows_with_experiment(
                     experiment,
                     os.path.join(layout["retrain_dir"], "topology_seed_aggregates.csv"),
+                    extra={
+                        "essential_layout_kind": layout["kind"],
+                        "essential_layout_is_input_mask": (
+                            1 if layout["kind"] == "input_encoding_mask" else 0
+                        ),
+                    },
                 )
             )
 
@@ -672,12 +687,12 @@ def pooled_report(experiments, target):
         ),
         "retrain_target_mean": regression_models(
             retrain_rows,
-            POOLED_AGGREGATE_MODELS,
+            POOLED_RETRAIN_MODELS,
             "target_mean",
         ),
         "retrain_target_max": regression_models(
             retrain_rows,
-            POOLED_AGGREGATE_MODELS,
+            POOLED_RETRAIN_MODELS,
             "target_max",
         ),
     }
@@ -956,6 +971,8 @@ def build_markdown(report):
         "",
         "These models test whether tree-geometry and post-training mechanism features explain accuracy beyond edge count when `m` varies across regimes.",
         "",
+        "For legacy CSVs generated before `comparison_branch_common_d_rel_*` existed, common branch-rank fields are backfilled from the older loose `comparison_branch_d_rel_*` upper-bound metrics. Regenerate collection artifacts to get exact common-subspace ranks.",
+        "",
         *pooled_regression_table(pooled, "run_level", "### Run-Level Novel-Class ICL"),
         "",
         *pooled_regression_table(pooled, "aggregate_target_mean", "### Topology Mean Across Seeds"),
@@ -1009,6 +1026,8 @@ def build_markdown(report):
         *regression_table(experiments, "target_max", KEY_AGG_MODELS, "essential_retrain"),
         "",
         "### Pooled Retrained Motifs",
+        "",
+        "Pooled retrain models include an `essential_layout_is_input_mask` covariate so physical-edge subgraph retrains and input-encoding mask retrains are not conflated silently.",
         "",
         *pooled_regression_table(pooled, "retrain_target_mean", "#### Retrain Mean Across Seeds"),
         "",

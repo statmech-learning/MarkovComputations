@@ -373,10 +373,13 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
         self.assertIn("input mask", markdown)
         self.assertIn("toy (physical subgraph)", markdown)
         self.assertIn("toy (input mask)", markdown)
+        self.assertIn("essential_layout_is_input_mask", markdown)
 
         pooled_model = payload["pooled"]["run_level"]["input_plus_branch_drel"]
         self.assertIn("comparison_branch_d_rel_min", pooled_model["predictors"])
         self.assertIn("comparison_branch_d_rel_gini", pooled_model["predictors"])
+        pooled_retrain_model = payload["pooled"]["retrain_target_mean"]["layout_plus_input_plus_drel"]
+        self.assertIn("essential_layout_is_input_mask", pooled_retrain_model["predictors"])
 
         correlations = payload["experiments"][0]["mechanism_correlations"]
         self.assertIn("comparison_branch_d_rel_min", correlations)
