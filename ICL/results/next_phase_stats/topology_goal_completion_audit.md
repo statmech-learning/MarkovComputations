@@ -9,9 +9,9 @@ This audit maps the active research objective to concrete repository artifacts. 
 - Branch: `topology`, synchronized with `origin/topology` after the hard-pilot evidence commit.
 - Hard-pilot artifact paths on branch: `889` files under `ICL/results/expanded_hard_libraries`, `ICL/results/expanded_hard_sweeps`, and `ICL/results/expanded_hard_stats`.
 - Raw-output exclusion check: no `results.pkl`, `model.pt`, `__pycache__`, or `_array_meta` paths under the committed hard-pilot artifact set.
-- Local unit tests: `python3 -m unittest discover -s ICL/tests`, `112` tests passed.
+- Local unit tests: `python3 -m unittest discover -s ICL/tests`, `117` tests passed.
 - Next-phase report verifier: `python3 ICL/verify_topology_completion.py --experiment next=ICL/results/next_phase_stats --report_md ICL/results/next_phase_stats/next_phase_evidence_report.md --report_json ICL/results/next_phase_stats/next_phase_evidence_report.json --report_kind next_phase`, passed.
-- Main next-phase report: `ICL/results/next_phase_stats/next_phase_evidence_report.md`.
+- Main next-phase report: `ICL/results/next_phase_stats/next_phase_evidence_report.md`, refreshed with hard-regime rank-weighted capacity metrics.
 
 ## Checklist
 
