@@ -88,6 +88,12 @@ def resolve_path(path: Optional[str], base_dir: str) -> Optional[str]:
     if path in (None, ""):
         return None
     if os.path.isabs(path):
+        if os.path.exists(path):
+            return path
+        if "/topologies/" in path:
+            candidate = os.path.join(base_dir, "topologies", os.path.basename(path))
+            if os.path.exists(candidate):
+                return os.path.abspath(candidate)
         return path
     return os.path.abspath(os.path.join(base_dir, path))
 

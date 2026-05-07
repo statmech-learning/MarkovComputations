@@ -33,6 +33,8 @@ CORE_MODELS = [
     "masked_tree_geometry",
     "branch_margin_capacity",
     "branch_margin_capacity_plus_drel",
+    "branch_rank_weighted_capacity",
+    "branch_rank_weighted_capacity_plus_drel",
 ]
 
 
@@ -133,6 +135,8 @@ def capacity_summary(entry: dict) -> dict:
                 "n": stats.get("n"),
                 "linear_test_accuracy_mean": stats.get("linear_test_accuracy_mean"),
                 "linear_test_accuracy_max": stats.get("linear_test_accuracy_max"),
+                "rank_weighted_linear_test_accuracy_mean": stats.get("rank_weighted_linear_test_accuracy_mean"),
+                "rank_weighted_linear_test_accuracy_max": stats.get("rank_weighted_linear_test_accuracy_max"),
             }
         )
     return {
@@ -322,10 +326,24 @@ def build_markdown(report: dict) -> str:
                 str(item.get("n") or "NA"),
                 fmt(item.get("linear_test_accuracy_mean")),
                 fmt(item.get("linear_test_accuracy_max")),
+                fmt(item.get("rank_weighted_linear_test_accuracy_mean")),
+                fmt(item.get("rank_weighted_linear_test_accuracy_max")),
             ]
             for item in entry["families"]
         ]
-        lines.extend(markdown_table(["family", "n", "linear accuracy mean", "linear accuracy max"], rows))
+        lines.extend(
+            markdown_table(
+                [
+                    "family",
+                    "n",
+                    "linear accuracy mean",
+                    "linear accuracy max",
+                    "rank-weighted linear mean",
+                    "rank-weighted linear max",
+                ],
+                rows,
+            )
+        )
         lines.append("")
 
     lines.extend(["## Matched Essential-Motif Controls", ""])

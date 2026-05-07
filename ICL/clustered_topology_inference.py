@@ -47,6 +47,8 @@ DEFAULT_MODELS = [
     "input_count_plus_branch_drel",
     "tree_geometry",
     "masked_tree_geometry",
+    "branch_rank_weighted_capacity",
+    "branch_rank_weighted_capacity_plus_drel",
 ]
 
 

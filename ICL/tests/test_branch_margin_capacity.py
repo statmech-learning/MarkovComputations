@@ -121,5 +121,19 @@ class BranchMarginCapacityTests(unittest.TestCase):
         self.assertIsNone(summary["toy_margin_mean"])
 
 
+class CollectBranchMarginCapacityPathTests(unittest.TestCase):
+    def test_stale_absolute_topology_path_falls_back_to_library_topologies(self):
+        from collect_branch_margin_capacity import resolve_path  # noqa: E402
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            topologies = os.path.join(tmpdir, "topologies")
+            os.makedirs(topologies)
+            local = os.path.join(topologies, "graph.json")
+            with open(local, "w") as handle:
+                handle.write("{}")
+            stale = "/home/user/repos/topology/ICL/results/library/topologies/graph.json"
+            self.assertEqual(resolve_path(stale, tmpdir), os.path.abspath(local))
+
+
 if __name__ == "__main__":
     unittest.main()

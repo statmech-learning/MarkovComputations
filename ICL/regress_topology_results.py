@@ -95,6 +95,25 @@ PREDICTOR_SETS = {
         "capacity_linear_test_accuracy",
         "capacity_linear_test_margin_p10",
     ],
+    "branch_rank_weighted_capacity": [
+        "input_coupled_parameter_count",
+        "capacity_rank_mass_min",
+        "capacity_rank_mass_gini",
+        "capacity_rank_weight_effective_entries",
+        "capacity_rank_weighted_linear_test_accuracy",
+        "capacity_rank_weighted_linear_test_margin_p10",
+    ],
+    "branch_rank_weighted_capacity_plus_drel": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_rank_mass_min",
+        "capacity_rank_mass_gini",
+        "capacity_rank_weight_effective_entries",
+        "capacity_rank_weighted_linear_test_accuracy",
+        "capacity_rank_weighted_linear_test_margin_p10",
+    ],
 }
 
 

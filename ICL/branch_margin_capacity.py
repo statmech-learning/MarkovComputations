@@ -313,7 +313,8 @@ def fit_ridge_multiclass(
         regularizer = np.eye(gram.shape[0], dtype=float) * ridge
         regularizer[-1, -1] = 0.0
         gram = gram + regularizer
-    rhs = X_aug.T @ Y
+    with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+        rhs = X_aug.T @ Y
     try:
         weights_aug = np.linalg.solve(gram + 1e-12 * np.eye(gram.shape[0], dtype=float), rhs)
     except np.linalg.LinAlgError:
@@ -333,7 +334,11 @@ def fit_ridge_multiclass(
 
 
 def linear_scores(features: np.ndarray, weights: np.ndarray, bias: np.ndarray) -> np.ndarray:
-    return np.asarray(features, dtype=float) @ weights + bias
+    with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+        scores = np.asarray(features, dtype=float) @ weights + bias
+    if not np.all(np.isfinite(scores)):
+        scores = np.nan_to_num(scores, nan=0.0, posinf=0.0, neginf=0.0)
+    return scores
 
 
 def summarize_margin_scores(scores: np.ndarray, labels: Sequence[int], prefix: str) -> dict:

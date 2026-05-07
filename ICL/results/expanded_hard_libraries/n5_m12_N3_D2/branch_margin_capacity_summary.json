@@ -3,38 +3,52 @@
   "families": {
     "bottleneck_bridge": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.892,
-      "linear_test_accuracy_max": 0.892
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877
     },
     "cycle_chords": {
       "n": 4,
-      "linear_test_accuracy_mean": 0.892,
-      "linear_test_accuracy_max": 0.892
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877
     },
     "degree_balanced": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.892,
-      "linear_test_accuracy_max": 0.892
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877
     },
     "hub_spoke": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.892,
-      "linear_test_accuracy_max": 0.892
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877
     },
     "random_sc": {
       "n": 2,
-      "linear_test_accuracy_mean": 0.892,
-      "linear_test_accuracy_max": 0.892
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877
     },
     "redundant_paths": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.892,
-      "linear_test_accuracy_max": 0.892
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877
     },
     "two_module": {
       "n": 2,
-      "linear_test_accuracy_mean": 0.892,
-      "linear_test_accuracy_max": 0.892
+      "linear_test_accuracy_mean": 0.877,
+      "linear_test_accuracy_max": 0.877,
+      "rank_weighted_linear_test_accuracy_mean": 0.877,
+      "rank_weighted_linear_test_accuracy_max": 0.877
     }
   }
 }
