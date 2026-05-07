@@ -312,6 +312,20 @@ python3 compare_essential_retrains.py \
   --output_json "$SLURM_OUTPUT_BASE/essential_input50/retrain_comparison.json"
 ```
 
+For essential input-mask retrains, where the physical graph stays fixed and
+only the learned input-coupling rows are pruned, the final collection can be
+done in one guarded step after all retrain jobs finish:
+
+```bash
+python3 finalize_essential_inputmask_retrains.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --output_md results/input_mask_topology_report.md \
+  --output_json results/input_mask_topology_report.json
+```
+
 To consolidate completed sweeps into one auditable progress artifact:
 
 ```bash
