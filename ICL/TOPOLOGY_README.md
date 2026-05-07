@@ -244,6 +244,7 @@ common context/query support in the relative tree-contrast map, gates
 - oracle branch-comparison accuracy and margins,
 - norm-controlled linear ridge accuracy and margins,
 - common-rank support by branch and coordinate,
+- sampled tropical rooted-tree random-feature separability,
 - the corresponding `d_rel` and branch-rank metrics.
 
 Use it as a branch-specific topology predictor to compare against `d_rel`; do
@@ -257,8 +258,17 @@ python3 collect_branch_margin_capacity.py \
   --output_csv results/expanded_pilot_libraries/n5_m7_N2_D1/branch_margin_capacity.csv \
   --output_json results/expanded_pilot_libraries/n5_m7_N2_D1/branch_margin_capacity_summary.json \
   --N 2 \
-  --D 1
+  --D 1 \
+  --tree_feature_trials 12
 ```
+
+The tropical random-feature fields are closer to the tree-polytope hypothesis
+than the squared-distance support fields: they sample edge projections, compute
+root-wise max or log-sum-exp tree scores, normalize root log weights, and fit a
+linear decoder on those root features. Treat them as a stochastic lower-bound
+probe for branch separability under the actual rooted-tree incidence structure.
+They are not an optimized `max_{K,B}` capacity and should be compared across
+several seeds/trial counts before drawing strong conclusions.
 
 ## Cluster-Aware Statistical Diagnostics
 

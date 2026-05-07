@@ -49,6 +49,8 @@ DEFAULT_MODELS = [
     "masked_tree_geometry",
     "branch_rank_weighted_capacity",
     "branch_rank_weighted_capacity_plus_drel",
+    "tropical_tree_capacity",
+    "tropical_tree_capacity_plus_drel",
 ]
 
 

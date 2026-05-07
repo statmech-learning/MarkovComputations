@@ -3,31 +3,43 @@
   "families": {
     "cycle_chords": {
       "n": 9,
-      "linear_test_accuracy_mean": 0.877,
-      "linear_test_accuracy_max": 0.877,
-      "rank_weighted_linear_test_accuracy_mean": 0.877,
-      "rank_weighted_linear_test_accuracy_max": 0.877
+      "linear_test_accuracy_mean": 0.88,
+      "linear_test_accuracy_max": 0.88,
+      "rank_weighted_linear_test_accuracy_mean": 0.88,
+      "rank_weighted_linear_test_accuracy_max": 0.88,
+      "tropical_linear_test_accuracy_mean": 0.35392361111111115,
+      "tropical_linear_test_accuracy_max": 0.41375,
+      "tropical_root_feature_effective_rank_mean": 2.680518266365594
     },
     "hub_spoke": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.877,
-      "linear_test_accuracy_max": 0.877,
-      "rank_weighted_linear_test_accuracy_mean": 0.877,
-      "rank_weighted_linear_test_accuracy_max": 0.877
+      "linear_test_accuracy_mean": 0.88,
+      "linear_test_accuracy_max": 0.88,
+      "rank_weighted_linear_test_accuracy_mean": 0.88,
+      "rank_weighted_linear_test_accuracy_max": 0.88,
+      "tropical_linear_test_accuracy_mean": 0.35260416666666666,
+      "tropical_linear_test_accuracy_max": 0.415,
+      "tropical_root_feature_effective_rank_mean": 2.429534430177988
     },
     "random_sc": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.877,
-      "linear_test_accuracy_max": 0.877,
-      "rank_weighted_linear_test_accuracy_mean": 0.877,
-      "rank_weighted_linear_test_accuracy_max": 0.877
+      "linear_test_accuracy_mean": 0.88,
+      "linear_test_accuracy_max": 0.88,
+      "rank_weighted_linear_test_accuracy_mean": 0.88,
+      "rank_weighted_linear_test_accuracy_max": 0.88,
+      "tropical_linear_test_accuracy_mean": 0.3485416666666667,
+      "tropical_linear_test_accuracy_max": 0.3925,
+      "tropical_root_feature_effective_rank_mean": 2.661824649745826
     },
     "two_module": {
       "n": 1,
-      "linear_test_accuracy_mean": 0.877,
-      "linear_test_accuracy_max": 0.877,
-      "rank_weighted_linear_test_accuracy_mean": 0.877,
-      "rank_weighted_linear_test_accuracy_max": 0.877
+      "linear_test_accuracy_mean": 0.88,
+      "linear_test_accuracy_max": 0.88,
+      "rank_weighted_linear_test_accuracy_mean": 0.88,
+      "rank_weighted_linear_test_accuracy_max": 0.88,
+      "tropical_linear_test_accuracy_mean": 0.351875,
+      "tropical_linear_test_accuracy_max": 0.40375,
+      "tropical_root_feature_effective_rank_mean": 2.428968603365227
     }
   }
 }

@@ -1,6 +1,6 @@
 # Next-Phase Topology-ICL Evidence Report
 
-Generated: `2026-05-07T21:43:07.722988+00:00`.
+Generated: `2026-05-07T21:59:04.092689+00:00`.
 
 Scope: first-order CRNs with exponential input-dependent rates. These results do not claim a topology theory for autocatalytic or WTA CRNs.
 
@@ -72,16 +72,16 @@ Rows: `60`. Groups: `12`. Families: `12`.
 
 | model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
 | --- | --- | --- | --- | --- | --- | --- |
-| branch_margin_capacity | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.297 | -0.190 |
-| branch_margin_capacity_plus_drel | 12 | 0.203 | 0.070 | [-0.000, 0.171] | 0.937 | 0.203 |
-| branch_rank_weighted_capacity | 12 | 0.203 | 0.068 | [-0.000, 0.174] | 0.923 | 0.203 |
-| branch_rank_weighted_capacity_plus_drel | 12 | 0.203 | 0.069 | [-0.000, 0.167] | 0.913 | 0.203 |
-| input_count_plus_branch_drel | 12 | 0.203 | 0.067 | [0.000, 0.165] | 0.900 | 0.203 |
-| input_count_plus_drel | 12 | 0.203 | 0.072 | [0.000, 0.166] | 0.913 | 0.203 |
-| masked_tree_geometry | 12 | -0.151 | 0.098 | [0.011, 0.205] | 1.000 | -0.151 |
 | raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
-| raw_plus_drel | 12 | 0.203 | 0.067 | [0.000, 0.146] | 0.913 | 0.203 |
-| tree_geometry | 12 | -0.112 | 0.131 | [0.041, 0.268] | 1.000 | -0.112 |
+| raw_plus_drel | 12 | 0.203 | 0.068 | [0.000, 0.189] | 0.883 | 0.203 |
+| input_count_plus_drel | 12 | 0.203 | 0.062 | [0.000, 0.155] | 0.883 | 0.203 |
+| input_count_plus_branch_drel | 12 | 0.203 | 0.067 | [0.000, 0.157] | 0.913 | 0.203 |
+| tree_geometry | 12 | -0.112 | 0.136 | [0.055, 0.267] | 1.000 | -0.112 |
+| masked_tree_geometry | 12 | -0.151 | 0.096 | [0.010, 0.213] | 1.000 | -0.151 |
+| branch_rank_weighted_capacity | 12 | 0.203 | 0.066 | [-0.000, 0.180] | 0.907 | 0.203 |
+| branch_rank_weighted_capacity_plus_drel | 12 | 0.203 | 0.069 | [-0.000, 0.175] | 0.933 | 0.203 |
+| tropical_tree_capacity | 12 | -0.266 | 0.168 | [0.062, 0.294] | 1.000 | -0.266 |
+| tropical_tree_capacity_plus_drel | 12 | -0.017 | 0.178 | [0.064, 0.304] | 1.000 | -0.017 |
 
 ### hard_n5_m8_N3_D2
 
@@ -89,16 +89,16 @@ Rows: `60`. Groups: `12`. Families: `12`.
 
 | model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
 | --- | --- | --- | --- | --- | --- | --- |
-| branch_margin_capacity | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.307 | -0.190 |
-| branch_margin_capacity_plus_drel | 12 | -0.260 | 0.019 | [-0.000, 0.081] | 0.920 | -0.260 |
-| branch_rank_weighted_capacity | 12 | -0.260 | 0.018 | [-0.000, 0.079] | 0.923 | -0.260 |
-| branch_rank_weighted_capacity_plus_drel | 12 | -0.260 | 0.019 | [-0.000, 0.079] | 0.940 | -0.260 |
-| input_count_plus_branch_drel | 12 | -0.260 | 0.020 | [0.000, 0.083] | 0.890 | -0.260 |
-| input_count_plus_drel | 12 | -0.260 | 0.020 | [0.000, 0.080] | 0.923 | -0.260 |
-| masked_tree_geometry | 12 | -0.110 | 0.189 | [0.044, 0.348] | 1.000 | -0.110 |
 | raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
-| raw_plus_drel | 12 | -0.260 | 0.018 | [0.000, 0.076] | 0.900 | -0.260 |
-| tree_geometry | 12 | 0.041 | 0.203 | [0.050, 0.336] | 1.000 | 0.041 |
+| raw_plus_drel | 12 | -0.260 | 0.020 | [0.000, 0.075] | 0.867 | -0.260 |
+| input_count_plus_drel | 12 | -0.260 | 0.019 | [0.000, 0.087] | 0.893 | -0.260 |
+| input_count_plus_branch_drel | 12 | -0.260 | 0.021 | [0.000, 0.076] | 0.907 | -0.260 |
+| tree_geometry | 12 | 0.041 | 0.209 | [0.056, 0.352] | 1.000 | 0.041 |
+| masked_tree_geometry | 12 | -0.110 | 0.179 | [0.041, 0.314] | 1.000 | -0.110 |
+| branch_rank_weighted_capacity | 12 | -0.260 | 0.019 | [-0.000, 0.077] | 0.927 | -0.260 |
+| branch_rank_weighted_capacity_plus_drel | 12 | -0.260 | 0.019 | [0.000, 0.067] | 0.957 | -0.260 |
+| tropical_tree_capacity | 12 | -1.620 | 0.192 | [0.048, 0.344] | 1.000 | -1.620 |
+| tropical_tree_capacity_plus_drel | 12 | -1.506 | 0.213 | [0.065, 0.355] | 1.000 | -1.506 |
 
 ### hard_n5_m12_N3_D2
 
@@ -106,16 +106,16 @@ Rows: `60`. Groups: `12`. Families: `12`.
 
 | model | n | group LOO R2 | boot delta R2 | CI95 | P(delta>0) | heldout R2 |
 | --- | --- | --- | --- | --- | --- | --- |
-| branch_margin_capacity | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.277 | -0.190 |
-| branch_margin_capacity_plus_drel | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.333 | -0.190 |
-| branch_rank_weighted_capacity | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.290 | -0.190 |
-| branch_rank_weighted_capacity_plus_drel | 12 | -0.190 | 0.000 | [-0.000, 0.000] | 0.310 | -0.190 |
-| input_count_plus_branch_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
-| input_count_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
-| masked_tree_geometry | 12 | 0.447 | 0.299 | [0.105, 0.521] | 1.000 | 0.447 |
 | raw_count | 12 | -0.190 | NA | [NA, NA] | NA | -0.190 |
 | raw_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
-| tree_geometry | 12 | 0.324 | 0.347 | [0.122, 0.557] | 1.000 | 0.324 |
+| input_count_plus_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
+| input_count_plus_branch_drel | 12 | -0.190 | 0.000 | [0.000, 0.000] | 0.000 | -0.190 |
+| tree_geometry | 12 | 0.324 | 0.355 | [0.124, 0.592] | 1.000 | 0.324 |
+| masked_tree_geometry | 12 | 0.447 | 0.297 | [0.093, 0.532] | 1.000 | 0.447 |
+| branch_rank_weighted_capacity | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.310 | -0.190 |
+| branch_rank_weighted_capacity_plus_drel | 12 | -0.190 | -0.000 | [-0.000, 0.000] | 0.300 | -0.190 |
+| tropical_tree_capacity | 12 | -0.224 | 0.361 | [0.127, 0.630] | 1.000 | -0.224 |
+| tropical_tree_capacity_plus_drel | 12 | -0.224 | 0.344 | [0.107, 0.591] | 1.000 | -0.224 |
 
 ## Causal Alignment Interventions
 
@@ -161,101 +161,101 @@ Rows: `1200`. Runs: `80`.
 
 Rows: `16`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max |
-| --- | --- | --- | --- | --- | --- |
-| balanced | 2 | 0.975 | 0.975 | NA | NA |
-| coord_block | 1 | 0.561 | 0.561 | NA | NA |
-| edge_block | 9 | 0.975 | 0.975 | NA | NA |
-| entry_random | 4 | 0.975 | 0.975 | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| balanced | 2 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| coord_block | 1 | 0.561 | 0.561 | NA | NA | NA | NA | NA |
+| edge_block | 9 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| entry_random | 4 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
 
 ### cycle
 
 Rows: `16`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max |
-| --- | --- | --- | --- | --- | --- |
-| balanced | 2 | 0.975 | 0.975 | NA | NA |
-| coord_block | 1 | 0.561 | 0.561 | NA | NA |
-| edge_block | 7 | 0.975 | 0.975 | NA | NA |
-| entry_random | 4 | 0.975 | 0.975 | NA | NA |
-| high_participation_edges | 1 | 0.975 | 0.975 | NA | NA |
-| low_participation_edges | 1 | 0.975 | 0.975 | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| balanced | 2 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| coord_block | 1 | 0.561 | 0.561 | NA | NA | NA | NA | NA |
+| edge_block | 7 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| entry_random | 4 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| high_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| low_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
 
 ### hub
 
 Rows: `16`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max |
-| --- | --- | --- | --- | --- | --- |
-| balanced | 3 | 0.975 | 0.975 | NA | NA |
-| coord_block | 1 | 0.561 | 0.561 | NA | NA |
-| edge_block | 7 | 0.975 | 0.975 | NA | NA |
-| entry_random | 3 | 0.975 | 0.975 | NA | NA |
-| high_participation_edges | 1 | 0.975 | 0.975 | NA | NA |
-| low_participation_edges | 1 | 0.975 | 0.975 | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| balanced | 3 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| coord_block | 1 | 0.561 | 0.561 | NA | NA | NA | NA | NA |
+| edge_block | 7 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| entry_random | 3 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| high_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
+| low_participation_edges | 1 | 0.975 | 0.975 | NA | NA | NA | NA | NA |
 
 ### n5_m7
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max |
-| --- | --- | --- | --- | --- | --- |
-| bottleneck_bridge | 1 | 0.866 | 0.866 | NA | NA |
-| cycle_chords | 9 | 0.866 | 0.866 | NA | NA |
-| degree_balanced | 1 | 0.866 | 0.866 | NA | NA |
-| random_sc | 1 | 0.866 | 0.866 | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
+| cycle_chords | 9 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
+| degree_balanced | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
+| random_sc | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
 
 ### n5_m12
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max |
-| --- | --- | --- | --- | --- | --- |
-| bottleneck_bridge | 1 | 0.866 | 0.866 | NA | NA |
-| cycle_chords | 4 | 0.866 | 0.866 | NA | NA |
-| degree_balanced | 1 | 0.866 | 0.866 | NA | NA |
-| hub_spoke | 1 | 0.866 | 0.866 | NA | NA |
-| random_sc | 2 | 0.866 | 0.866 | NA | NA |
-| redundant_paths | 1 | 0.866 | 0.866 | NA | NA |
-| two_module | 2 | 0.866 | 0.866 | NA | NA |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
+| cycle_chords | 4 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
+| degree_balanced | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
+| hub_spoke | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
+| random_sc | 2 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
+| redundant_paths | 1 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
+| two_module | 2 | 0.866 | 0.866 | NA | NA | NA | NA | NA |
 
 ### hard_n4_m6_N3_D2
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max |
-| --- | --- | --- | --- | --- | --- |
-| cycle_chords | 9 | 0.877 | 0.877 | 0.877 | 0.877 |
-| hub_spoke | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| random_sc | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| two_module | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| cycle_chords | 9 | 0.880 | 0.880 | 0.880 | 0.880 | 0.354 | 0.414 | 2.681 |
+| hub_spoke | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.353 | 0.415 | 2.430 |
+| random_sc | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.349 | 0.393 | 2.662 |
+| two_module | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.352 | 0.404 | 2.429 |
 
 ### hard_n5_m8_N3_D2
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max |
-| --- | --- | --- | --- | --- | --- |
-| bottleneck_bridge | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| cycle_chords | 7 | 0.877 | 0.877 | 0.877 | 0.877 |
-| degree_balanced | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| hub_spoke | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| random_sc | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| redundant_paths | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.367 | 0.417 | 2.692 |
+| cycle_chords | 7 | 0.880 | 0.880 | 0.880 | 0.880 | 0.367 | 0.427 | 3.069 |
+| degree_balanced | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.358 | 0.412 | 3.122 |
+| hub_spoke | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.361 | 0.399 | 3.066 |
+| random_sc | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.369 | 0.415 | 2.899 |
+| redundant_paths | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.366 | 0.401 | 2.951 |
 
 ### hard_n5_m12_N3_D2
 
 Rows: `12`.
 
-| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max |
-| --- | --- | --- | --- | --- | --- |
-| bottleneck_bridge | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| cycle_chords | 4 | 0.877 | 0.877 | 0.877 | 0.877 |
-| degree_balanced | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| hub_spoke | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| random_sc | 2 | 0.877 | 0.877 | 0.877 | 0.877 |
-| redundant_paths | 1 | 0.877 | 0.877 | 0.877 | 0.877 |
-| two_module | 2 | 0.877 | 0.877 | 0.877 | 0.877 |
+| family | n | linear accuracy mean | linear accuracy max | rank-weighted linear mean | rank-weighted linear max | tropical accuracy mean | tropical accuracy max | tropical root eff-rank |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bottleneck_bridge | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.381 | 0.430 | 2.834 |
+| cycle_chords | 4 | 0.880 | 0.880 | 0.880 | 0.880 | 0.377 | 0.461 | 3.096 |
+| degree_balanced | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.408 | 0.471 | 3.695 |
+| hub_spoke | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.365 | 0.391 | 3.093 |
+| random_sc | 2 | 0.880 | 0.880 | 0.880 | 0.880 | 0.379 | 0.424 | 3.141 |
+| redundant_paths | 1 | 0.880 | 0.880 | 0.880 | 0.880 | 0.384 | 0.412 | 3.577 |
+| two_module | 2 | 0.880 | 0.880 | 0.880 | 0.880 | 0.377 | 0.454 | 3.034 |
 
 ## Matched Essential-Motif Controls
 

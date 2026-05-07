@@ -35,6 +35,8 @@ CORE_MODELS = [
     "branch_margin_capacity_plus_drel",
     "branch_rank_weighted_capacity",
     "branch_rank_weighted_capacity_plus_drel",
+    "tropical_tree_capacity",
+    "tropical_tree_capacity_plus_drel",
 ]
 
 
@@ -137,6 +139,11 @@ def capacity_summary(entry: dict) -> dict:
                 "linear_test_accuracy_max": stats.get("linear_test_accuracy_max"),
                 "rank_weighted_linear_test_accuracy_mean": stats.get("rank_weighted_linear_test_accuracy_mean"),
                 "rank_weighted_linear_test_accuracy_max": stats.get("rank_weighted_linear_test_accuracy_max"),
+                "tropical_linear_test_accuracy_mean": stats.get("tropical_linear_test_accuracy_mean"),
+                "tropical_linear_test_accuracy_max": stats.get("tropical_linear_test_accuracy_max"),
+                "tropical_root_feature_effective_rank_mean": stats.get(
+                    "tropical_root_feature_effective_rank_mean"
+                ),
             }
         )
     return {
@@ -328,6 +335,9 @@ def build_markdown(report: dict) -> str:
                 fmt(item.get("linear_test_accuracy_max")),
                 fmt(item.get("rank_weighted_linear_test_accuracy_mean")),
                 fmt(item.get("rank_weighted_linear_test_accuracy_max")),
+                fmt(item.get("tropical_linear_test_accuracy_mean")),
+                fmt(item.get("tropical_linear_test_accuracy_max")),
+                fmt(item.get("tropical_root_feature_effective_rank_mean")),
             ]
             for item in entry["families"]
         ]
@@ -340,6 +350,9 @@ def build_markdown(report: dict) -> str:
                     "linear accuracy max",
                     "rank-weighted linear mean",
                     "rank-weighted linear max",
+                    "tropical accuracy mean",
+                    "tropical accuracy max",
+                    "tropical root eff-rank",
                 ],
                 rows,
             )

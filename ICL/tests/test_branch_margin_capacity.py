@@ -18,6 +18,8 @@ from branch_margin_capacity import (  # noqa: E402
     rank_geometry_summary,
     sample_exact_copy_branches,
     summarize_margin_scores,
+    tropical_root_feature_matrix,
+    tropical_tree_feature_capacity,
     weighted_comparison_feature_matrix,
 )
 from topology_metrics import complete_digraph, compute_topology_metrics, topology_matrices, centered_tree_matrix  # noqa: E402
@@ -89,9 +91,49 @@ class BranchMarginCapacityTests(unittest.TestCase):
         self.assertGreater(result["oracle_test_accuracy"], 0.99)
         self.assertIn("linear_test_margin_mean", result)
         self.assertIn("rank_weighted_oracle_test_margin_mean", result)
+        self.assertIn("tropical_linear_test_accuracy_mean", result)
         self.assertIn("rank_mass_gini", result)
         self.assertIn("d_rel", result)
         self.assertIn("Branch-Margin Capacity Probe", markdown_report(result))
+
+    def test_tropical_tree_features_have_root_shape_and_capacity_summary(self):
+        n_nodes = 3
+        n_context = 2
+        z_dim = 1
+        edges = complete_digraph(n_nodes).edges
+        mats = topology_matrices(n_nodes, edges)
+        z, labels = sample_exact_copy_branches(
+            n_samples=40,
+            n_context=n_context,
+            z_dim=z_dim,
+            seed=11,
+        )
+        p = (n_context + 1) * z_dim
+        projections = np.ones((len(edges), p), dtype=float)
+        features = tropical_root_feature_matrix(
+            z,
+            mats["arborescences"],
+            n_edges=len(edges),
+            edge_projections=projections,
+        )
+        self.assertEqual(features.shape, (40, n_nodes))
+        self.assertTrue(np.all(np.isfinite(features)))
+
+        summary = tropical_tree_feature_capacity(
+            mats["arborescences"],
+            n_edges=len(edges),
+            input_dim=p,
+            train_z=z,
+            train_labels=labels,
+            test_z=z,
+            test_labels=labels,
+            n_trials=3,
+            seed=12,
+        )
+        self.assertEqual(summary["tropical_feature_trials"], 3)
+        self.assertGreaterEqual(summary["tropical_linear_test_accuracy_mean"], 0.0)
+        self.assertLessEqual(summary["tropical_linear_test_accuracy_mean"], 1.0)
+        self.assertIn("tropical_root_feature_effective_rank_mean", summary)
 
     def test_rank_weighted_features_preserve_rank_strength(self):
         z, _ = sample_exact_copy_branches(

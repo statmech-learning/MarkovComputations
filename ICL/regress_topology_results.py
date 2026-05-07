@@ -114,6 +114,25 @@ PREDICTOR_SETS = {
         "capacity_rank_weighted_linear_test_accuracy",
         "capacity_rank_weighted_linear_test_margin_p10",
     ],
+    "tropical_tree_capacity": [
+        "input_coupled_parameter_count",
+        "capacity_tropical_linear_test_accuracy_mean",
+        "capacity_tropical_linear_test_accuracy_max",
+        "capacity_tropical_linear_test_margin_p10_mean",
+        "capacity_tropical_root_feature_effective_rank_mean",
+        "capacity_tropical_root_feature_variance_mean",
+    ],
+    "tropical_tree_capacity_plus_drel": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_tropical_linear_test_accuracy_mean",
+        "capacity_tropical_linear_test_accuracy_max",
+        "capacity_tropical_linear_test_margin_p10_mean",
+        "capacity_tropical_root_feature_effective_rank_mean",
+        "capacity_tropical_root_feature_variance_mean",
+    ],
 }
 
 

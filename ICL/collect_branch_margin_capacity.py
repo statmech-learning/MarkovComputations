@@ -65,6 +65,25 @@ FIELDS = [
     "rank_weighted_linear_test_margin_finite_fraction",
     "linear_weight_norm",
     "weighted_linear_weight_norm",
+    "tropical_feature_trials",
+    "tropical_feature_mode",
+    "tropical_projection_radius",
+    "tropical_edge_bias_scale",
+    "tropical_linear_train_accuracy_mean",
+    "tropical_linear_train_accuracy_max",
+    "tropical_linear_train_accuracy_std",
+    "tropical_linear_test_accuracy_mean",
+    "tropical_linear_test_accuracy_max",
+    "tropical_linear_test_accuracy_std",
+    "tropical_linear_test_margin_p10_mean",
+    "tropical_linear_test_margin_p10_max",
+    "tropical_linear_test_margin_p10_std",
+    "tropical_root_feature_effective_rank_mean",
+    "tropical_root_feature_effective_rank_max",
+    "tropical_root_feature_effective_rank_std",
+    "tropical_root_feature_variance_mean",
+    "tropical_root_feature_variance_max",
+    "tropical_root_feature_variance_std",
 ]
 
 
@@ -128,6 +147,10 @@ def capacity_row(row: dict, base_dir: str, args) -> dict:
         ridge=args.ridge,
         l2_radius=args.l2_radius,
         max_trees_per_root=args.max_trees_per_root,
+        tree_feature_trials=args.tree_feature_trials,
+        tree_feature_mode=args.tree_feature_mode,
+        tree_feature_projection_radius=args.tree_feature_projection_radius,
+        tree_feature_bias_scale=args.tree_feature_bias_scale,
     )
     return {
         "topology_id": row.get("topology_id", ""),
@@ -183,8 +206,36 @@ def summary(rows: List[dict]) -> dict:
             "linear_test_accuracy_max": float(np.max(values)) if values else None,
             "rank_weighted_linear_test_accuracy_mean": float(np.mean(weighted_values)) if weighted_values else None,
             "rank_weighted_linear_test_accuracy_max": float(np.max(weighted_values)) if weighted_values else None,
+            "tropical_linear_test_accuracy_mean": family_float_mean(items, "tropical_linear_test_accuracy_mean"),
+            "tropical_linear_test_accuracy_max": family_float_max(items, "tropical_linear_test_accuracy_max"),
+            "tropical_root_feature_effective_rank_mean": family_float_mean(
+                items,
+                "tropical_root_feature_effective_rank_mean",
+            ),
         }
     return out
+
+
+def family_values(items: List[dict], key: str) -> List[float]:
+    values = []
+    for item in items:
+        try:
+            value = float(item[key])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if math.isfinite(value):
+            values.append(value)
+    return values
+
+
+def family_float_mean(items: List[dict], key: str):
+    values = family_values(items, key)
+    return float(np.mean(values)) if values else None
+
+
+def family_float_max(items: List[dict], key: str):
+    values = family_values(items, key)
+    return float(np.max(values)) if values else None
 
 
 def main():
@@ -201,6 +252,10 @@ def main():
     parser.add_argument("--ridge", type=float, default=1e-3)
     parser.add_argument("--l2_radius", type=float, default=1.0)
     parser.add_argument("--max_trees_per_root", type=int, default=None)
+    parser.add_argument("--tree_feature_trials", type=int, default=8)
+    parser.add_argument("--tree_feature_mode", choices=["max", "logsumexp"], default="max")
+    parser.add_argument("--tree_feature_projection_radius", type=float, default=1.0)
+    parser.add_argument("--tree_feature_bias_scale", type=float, default=0.0)
     parser.add_argument("--include_unselected", action="store_true")
     args = parser.parse_args()
 

@@ -30,7 +30,7 @@ import argparse
 import json
 import math
 from pathlib import Path
-from typing import Iterable, Optional, Sequence, Tuple
+from typing import Iterable, Mapping, Optional, Sequence, Tuple
 
 import numpy as np
 
@@ -42,6 +42,7 @@ from topology_metrics import (
     incidence_matrix,
     normalize_edges,
     subspace_intersection_rank,
+    svd_metrics,
     topology_matrices,
 )
 
@@ -341,6 +342,205 @@ def linear_scores(features: np.ndarray, weights: np.ndarray, bias: np.ndarray) -
     return scores
 
 
+def _stable_logsumexp(values: np.ndarray, axis: int) -> np.ndarray:
+    values = np.asarray(values, dtype=float)
+    max_values = np.max(values, axis=axis, keepdims=True)
+    with np.errstate(invalid="ignore"):
+        shifted = np.exp(values - max_values)
+        summed = np.sum(shifted, axis=axis, keepdims=True)
+        out = max_values + np.log(summed)
+    return np.squeeze(out, axis=axis)
+
+
+def tropical_root_feature_matrix(
+    z: np.ndarray,
+    arborescences: Mapping[int, Sequence[Sequence[int]]],
+    n_edges: int,
+    edge_projections: np.ndarray,
+    edge_bias: Optional[np.ndarray] = None,
+    mode: str = "max",
+    normalize_roots: bool = True,
+) -> np.ndarray:
+    """Map samples to root log-weight features using sampled tree projections.
+
+    This is a topology-aware random feature map for the tropical/tree-polytope
+    view: each root feature is a max or log-sum-exp over rooted tree scores
+    ``beta_T + Theta_T^T z`` where ``Theta_T`` is induced by edge projections.
+    """
+
+    z = np.asarray(z, dtype=float)
+    edge_projections = np.asarray(edge_projections, dtype=float)
+    if edge_projections.ndim != 2 or edge_projections.shape[0] != n_edges:
+        raise ValueError(f"edge_projections must have shape ({n_edges}, p)")
+    if z.ndim != 2 or z.shape[1] != edge_projections.shape[1]:
+        raise ValueError("z and edge_projections have incompatible input dimensions")
+    if mode not in {"max", "logsumexp"}:
+        raise ValueError("mode must be 'max' or 'logsumexp'")
+    if edge_bias is None:
+        bias = np.zeros(n_edges, dtype=float)
+    else:
+        bias = np.asarray(edge_bias, dtype=float)
+        if bias.shape != (n_edges,):
+            raise ValueError(f"edge_bias must have shape ({n_edges},)")
+
+    root_features = []
+    for root in sorted(arborescences):
+        trees = list(arborescences[root])
+        if not trees:
+            root_features.append(np.full(z.shape[0], -np.inf, dtype=float))
+            continue
+        M_root = np.ascontiguousarray(incidence_matrix({root: trees}, n_edges), dtype=float)
+        projections = np.ascontiguousarray(edge_projections, dtype=float)
+        with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+            theta = M_root @ projections
+            beta = M_root @ bias
+            tree_scores = z @ theta.T + beta[None, :]
+        if mode == "max":
+            root_features.append(np.max(tree_scores, axis=1))
+        else:
+            root_features.append(_stable_logsumexp(tree_scores, axis=1))
+
+    features = np.column_stack(root_features)
+    if normalize_roots:
+        normalizer = _stable_logsumexp(features, axis=1)
+        features = features - normalizer[:, None]
+    if not np.all(np.isfinite(features)):
+        features = np.nan_to_num(features, nan=0.0, posinf=0.0, neginf=-1e6)
+    return features
+
+
+def _summarize_trial_values(values: Sequence[float], prefix: str) -> dict:
+    finite = np.asarray([value for value in values if value is not None and np.isfinite(value)], dtype=float)
+    if finite.size == 0:
+        return {
+            f"{prefix}_mean": None,
+            f"{prefix}_max": None,
+            f"{prefix}_std": None,
+        }
+    return {
+        f"{prefix}_mean": float(np.mean(finite)),
+        f"{prefix}_max": float(np.max(finite)),
+        f"{prefix}_std": float(np.std(finite)),
+    }
+
+
+def tropical_tree_feature_capacity(
+    arborescences: Mapping[int, Sequence[Sequence[int]]],
+    n_edges: int,
+    input_dim: int,
+    train_z: np.ndarray,
+    train_labels: Sequence[int],
+    test_z: np.ndarray,
+    test_labels: Sequence[int],
+    input_mask: Optional[np.ndarray] = None,
+    n_trials: int = 8,
+    seed: int = 0,
+    projection_radius: float = 1.0,
+    edge_bias_scale: float = 0.0,
+    mode: str = "max",
+    ridge: float = 1e-3,
+    l2_radius: Optional[float] = 1.0,
+) -> dict:
+    """Random tropical rooted-tree feature separability probe.
+
+    Unlike the squared-distance support probe, this uses the actual rooted-tree
+    incidence structure.  For each trial it samples norm-controlled edge
+    projections, computes root-wise max/log-sum-exp tree features, and fits a
+    linear decoder.  It is still a random lower-bound proxy, not an optimized
+    CRN capacity.
+    """
+
+    if n_trials <= 0:
+        return {
+            "tropical_feature_trials": 0,
+            "tropical_feature_mode": mode,
+            "tropical_projection_radius": projection_radius,
+            "tropical_edge_bias_scale": edge_bias_scale,
+            "tropical_linear_test_accuracy_mean": None,
+            "tropical_linear_test_accuracy_max": None,
+            "tropical_linear_test_accuracy_std": None,
+            "tropical_linear_test_margin_p10_mean": None,
+            "tropical_linear_test_margin_p10_max": None,
+            "tropical_linear_test_margin_p10_std": None,
+            "tropical_root_feature_effective_rank_mean": None,
+            "tropical_root_feature_effective_rank_max": None,
+            "tropical_root_feature_effective_rank_std": None,
+        }
+
+    if input_mask is None:
+        mask = np.ones((n_edges, input_dim), dtype=float)
+    else:
+        mask = np.asarray(input_mask, dtype=float)
+        if mask.shape != (n_edges, input_dim):
+            raise ValueError(f"input_mask must have shape ({n_edges}, {input_dim})")
+
+    rng = np.random.default_rng(seed)
+    test_accuracies = []
+    test_margin_p10 = []
+    train_accuracies = []
+    effective_ranks = []
+    variances = []
+    n_classes = int(max(np.max(train_labels), np.max(test_labels))) + 1
+    for _ in range(n_trials):
+        K = rng.normal(loc=0.0, scale=1.0, size=(n_edges, input_dim)) * mask
+        norm = float(np.linalg.norm(K))
+        if norm > 1e-12 and projection_radius > 0:
+            K = K * (projection_radius / norm)
+        if edge_bias_scale:
+            edge_bias = rng.normal(loc=0.0, scale=edge_bias_scale, size=n_edges)
+        else:
+            edge_bias = np.zeros(n_edges, dtype=float)
+
+        train_features = tropical_root_feature_matrix(
+            train_z,
+            arborescences,
+            n_edges=n_edges,
+            edge_projections=K,
+            edge_bias=edge_bias,
+            mode=mode,
+            normalize_roots=True,
+        )
+        test_features = tropical_root_feature_matrix(
+            test_z,
+            arborescences,
+            n_edges=n_edges,
+            edge_projections=K,
+            edge_bias=edge_bias,
+            mode=mode,
+            normalize_roots=True,
+        )
+        weights, bias = fit_ridge_multiclass(
+            train_features,
+            train_labels,
+            n_classes=n_classes,
+            ridge=ridge,
+            l2_radius=l2_radius,
+        )
+        train_scores = linear_scores(train_features, weights, bias)
+        test_scores = linear_scores(test_features, weights, bias)
+        train_summary = summarize_margin_scores(train_scores, train_labels, "train")
+        test_summary = summarize_margin_scores(test_scores, test_labels, "test")
+        train_accuracies.append(train_summary["train_accuracy"])
+        test_accuracies.append(test_summary["test_accuracy"])
+        test_margin_p10.append(test_summary["test_margin_p10"])
+        centered = train_features - train_features.mean(axis=0, keepdims=True)
+        effective_ranks.append(svd_metrics(centered)["effective_rank"])
+        variances.append(float(np.var(train_features)))
+
+    out = {
+        "tropical_feature_trials": int(n_trials),
+        "tropical_feature_mode": mode,
+        "tropical_projection_radius": float(projection_radius),
+        "tropical_edge_bias_scale": float(edge_bias_scale),
+    }
+    out.update(_summarize_trial_values(train_accuracies, "tropical_linear_train_accuracy"))
+    out.update(_summarize_trial_values(test_accuracies, "tropical_linear_test_accuracy"))
+    out.update(_summarize_trial_values(test_margin_p10, "tropical_linear_test_margin_p10"))
+    out.update(_summarize_trial_values(effective_ranks, "tropical_root_feature_effective_rank"))
+    out.update(_summarize_trial_values(variances, "tropical_root_feature_variance"))
+    return out
+
+
 def summarize_margin_scores(scores: np.ndarray, labels: Sequence[int], prefix: str) -> dict:
     margins = multiclass_margins(scores, labels)
     finite = margins[np.isfinite(margins)]
@@ -374,6 +574,10 @@ def branch_margin_capacity(
     ridge: float = 1e-3,
     l2_radius: Optional[float] = 1.0,
     max_trees_per_root: Optional[int] = None,
+    tree_feature_trials: int = 8,
+    tree_feature_mode: str = "max",
+    tree_feature_projection_radius: float = 1.0,
+    tree_feature_bias_scale: float = 0.0,
 ) -> dict:
     """Compute topology-gated branch-margin capacity proxy metrics."""
 
@@ -525,6 +729,25 @@ def branch_margin_capacity(
             "rank_weighted_linear_test",
         )
     )
+    result.update(
+        tropical_tree_feature_capacity(
+            mats["arborescences"],
+            n_edges=len(edge_tuple),
+            input_dim=p,
+            train_z=train_z,
+            train_labels=train_labels,
+            test_z=test_z,
+            test_labels=test_labels,
+            input_mask=input_mask,
+            n_trials=tree_feature_trials,
+            seed=seed + 1009,
+            projection_radius=tree_feature_projection_radius,
+            edge_bias_scale=tree_feature_bias_scale,
+            mode=tree_feature_mode,
+            ridge=ridge,
+            l2_radius=l2_radius,
+        )
+    )
     return result
 
 
@@ -573,6 +796,20 @@ def markdown_report(result: dict) -> str:
     lines.extend(
         [
             "",
+            "## Tropical Tree Random Features",
+            "",
+            "| metric | value |",
+            "| --- | ---: |",
+            f"| trials | {result.get('tropical_feature_trials')} |",
+            f"| mode | {result.get('tropical_feature_mode')} |",
+            f"| test accuracy mean/max | {result.get('tropical_linear_test_accuracy_mean')} / {result.get('tropical_linear_test_accuracy_max')} |",
+            f"| test p10 margin mean/max | {result.get('tropical_linear_test_margin_p10_mean')} / {result.get('tropical_linear_test_margin_p10_max')} |",
+            f"| root feature effective rank mean/max | {result.get('tropical_root_feature_effective_rank_mean')} / {result.get('tropical_root_feature_effective_rank_max')} |",
+        ]
+    )
+    lines.extend(
+        [
+            "",
             "## Interpretation Guardrail",
             "",
             "Use this probe as a branch-specific pre-training predictor to compare against `d_rel`.",
@@ -618,6 +855,10 @@ def parse_args():
     parser.add_argument("--ridge", type=float, default=1e-3)
     parser.add_argument("--l2_radius", type=float, default=1.0)
     parser.add_argument("--max_trees_per_root", type=int, default=None)
+    parser.add_argument("--tree_feature_trials", type=int, default=8)
+    parser.add_argument("--tree_feature_mode", choices=["max", "logsumexp"], default="max")
+    parser.add_argument("--tree_feature_projection_radius", type=float, default=1.0)
+    parser.add_argument("--tree_feature_bias_scale", type=float, default=0.0)
     parser.add_argument("--output_json", type=str, default=None)
     parser.add_argument("--output_md", type=str, default=None)
     return parser.parse_args()
@@ -657,6 +898,10 @@ def main():
         ridge=args.ridge,
         l2_radius=args.l2_radius,
         max_trees_per_root=args.max_trees_per_root,
+        tree_feature_trials=args.tree_feature_trials,
+        tree_feature_mode=args.tree_feature_mode,
+        tree_feature_projection_radius=args.tree_feature_projection_radius,
+        tree_feature_bias_scale=args.tree_feature_bias_scale,
     )
     result["topology_name"] = topology_name
     result["input_mask_name"] = input_mask_name
