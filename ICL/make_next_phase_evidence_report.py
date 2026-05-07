@@ -7,6 +7,7 @@ It summarizes the follow-up artifacts requested after the first critique:
 * optional branch-margin capacity enriched regressions,
 * causal branch/tree-alignment interventions,
 * branch-margin capacity probe summaries,
+* matched essential-motif control retrain summaries,
 * expanded pilot sweep status.
 
 The script is read-only with respect to experiment outputs. It does not submit
@@ -142,6 +143,17 @@ def capacity_summary(entry: dict) -> dict:
     }
 
 
+def matched_motif_summary(entry: dict) -> dict:
+    payload = entry["payload"]
+    return {
+        "label": entry["label"],
+        "path": entry["path"],
+        "n_joined": payload.get("n_joined"),
+        "overall": payload.get("overall", {}),
+        "by_control_kind": payload.get("by_control_kind", {}),
+    }
+
+
 def read_count(root: str, filename: str) -> int:
     total = 0
     for _, _, files in os.walk(root):
@@ -177,6 +189,10 @@ def build_report(args) -> dict:
     clustered = [clustered_summary(entry) for entry in load_labeled_jsons(args.clustered_json)]
     causal = [causal_summary(entry) for entry in load_labeled_jsons(args.causal_json)]
     capacity = [capacity_summary(entry) for entry in load_labeled_jsons(args.branch_capacity_json)]
+    matched_motifs = [
+        matched_motif_summary(entry)
+        for entry in load_labeled_jsons(args.matched_motif_json)
+    ]
     expanded = expanded_status(args.expanded_root)
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -187,6 +203,7 @@ def build_report(args) -> dict:
         "clustered_inference": clustered,
         "causal_interventions": causal,
         "branch_margin_capacity": capacity,
+        "matched_motif_controls": matched_motifs,
         "expanded_pilot_status": expanded,
     }
 
@@ -279,6 +296,50 @@ def build_markdown(report: dict) -> str:
         lines.extend(markdown_table(["family", "n", "linear accuracy mean", "linear accuracy max"], rows))
         lines.append("")
 
+    lines.extend(["## Matched Essential-Motif Controls", ""])
+    if not report["matched_motif_controls"]:
+        lines.append("No matched essential-motif control summaries were supplied.")
+    for entry in report["matched_motif_controls"]:
+        overall = entry.get("overall") or {}
+        lines.extend(
+            [
+                f"### {entry['label']}",
+                "",
+                f"Joined controls: `{entry['n_joined']}`. Source motifs represented: `{overall.get('n_sources', 'NA')}`.",
+                "",
+            ]
+        )
+        rows = []
+        for kind, stats in sorted((entry.get("by_control_kind") or {}).items()):
+            rows.append(
+                [
+                    kind,
+                    str(stats.get("n") or "NA"),
+                    str(stats.get("n_sources") or "NA"),
+                    fmt(stats.get("control_target_mean_mean"), 2),
+                    fmt(stats.get("source_retrain_target_mean_mean"), 2),
+                    fmt(stats.get("control_minus_source_retrain_mean_mean"), 2),
+                    fmt(stats.get("control_win_rate_mean"), 3),
+                    fmt(stats.get("match_score_mean"), 3),
+                ]
+            )
+        lines.extend(
+            markdown_table(
+                [
+                    "control kind",
+                    "controls",
+                    "sources",
+                    "control mean ICL",
+                    "source motif mean ICL",
+                    "control-source delta",
+                    "control win rate",
+                    "match score",
+                ],
+                rows,
+            )
+        )
+        lines.append("")
+
     lines.extend(["## Expanded Pilot Status", ""])
     if not report["expanded_pilot_status"]:
         lines.append("No expanded pilot roots were supplied.")
@@ -313,6 +374,7 @@ def main():
     parser.add_argument("--clustered_json", action="append", default=[])
     parser.add_argument("--causal_json", action="append", default=[])
     parser.add_argument("--branch_capacity_json", action="append", default=[])
+    parser.add_argument("--matched_motif_json", action="append", default=[])
     parser.add_argument("--expanded_root", action="append", default=[])
     parser.add_argument("--output_md", required=True)
     parser.add_argument("--output_json", required=True)

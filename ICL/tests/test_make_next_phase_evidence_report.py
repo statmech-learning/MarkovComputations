@@ -22,6 +22,7 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
             clustered_json = os.path.join(tmpdir, "clustered.json")
             causal_json = os.path.join(tmpdir, "causal.json")
             capacity_json = os.path.join(tmpdir, "capacity.json")
+            matched_json = os.path.join(tmpdir, "matched.json")
             expanded_root = os.path.join(tmpdir, "expanded")
             os.makedirs(os.path.join(expanded_root, "run0"))
             with open(os.path.join(expanded_root, "run0", "results.pkl"), "w") as handle:
@@ -78,6 +79,24 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
                     },
                 },
             )
+            self.write_json(
+                matched_json,
+                {
+                    "n_joined": 4,
+                    "overall": {"n_sources": 2},
+                    "by_control_kind": {
+                        "random_sc": {
+                            "n": 2,
+                            "n_sources": 2,
+                            "control_target_mean_mean": 60.0,
+                            "source_retrain_target_mean_mean": 70.0,
+                            "control_minus_source_retrain_mean_mean": -10.0,
+                            "control_win_rate_mean": 0.0,
+                            "match_score_mean": 0.2,
+                        }
+                    },
+                },
+            )
             output_md = os.path.join(tmpdir, "report.md")
             output_json = os.path.join(tmpdir, "report.json")
 
@@ -91,6 +110,8 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
                     f"random={causal_json}",
                     "--branch_capacity_json",
                     f"random={capacity_json}",
+                    "--matched_motif_json",
+                    f"random={matched_json}",
                     "--expanded_root",
                     f"pilot={expanded_root}",
                     "--output_md",
@@ -110,8 +131,11 @@ class MakeNextPhaseEvidenceReportTests(unittest.TestCase):
         self.assertIn("Next-Phase Topology-ICL Evidence Report", markdown)
         self.assertIn("branch_margin_capacity", markdown)
         self.assertIn("edge_projection_permutation", markdown)
+        self.assertIn("Matched Essential-Motif Controls", markdown)
+        self.assertIn("random_sc", markdown)
         self.assertIn("results.pkl", markdown)
         self.assertEqual(payload["clustered_inference"][0]["n_clusters"], 4)
+        self.assertEqual(payload["matched_motif_controls"][0]["n_joined"], 4)
         self.assertIn("Wrote next-phase evidence report", result.stdout)
 
 
