@@ -66,7 +66,7 @@ python3 interpret_topology_report.py --report_json ... --report_kind research ..
 Observed state:
 
 - Local branch is clean and tracking `origin/topology`.
-- Local unit suite has 69 tests and passes.
+- Local unit suite has 77 tests and passes.
 - Python syntax compilation passes.
 - `git diff --check` passes.
 - Local `ICL/results` contains only older `markov_icl_gmm_*.pt` files, not the
@@ -106,7 +106,7 @@ Observed state:
 | Compute edge sensitivities and ablations | `topology_analysis.py`, `analyze_topology_model.py --ablate_input --ablate_physical` | Implemented; requires trained runs |
 | Extract essential physical subgraphs | `extract_essential_subgraphs.py` | Implemented and tested |
 | Extract essential input masks while preserving physical graph | `extract_essential_input_masks.py` | Implemented and tested |
-| Retrain extracted motifs/masks from scratch | `submit_topology_library_sweep.py`, `finalize_essential_inputmask_retrains.py`, `compare_essential_retrains.py` | Orchestration implemented and tested; cluster retrains incomplete |
+| Retrain extracted motifs/masks from scratch | `submit_topology_library_sweep.py`, `finalize_essential_physical_retrains.py`, `finalize_essential_inputmask_retrains.py`, `compare_essential_retrains.py` | Orchestration implemented and tested; cluster retrains incomplete |
 | Do not conflate input-coupling ablation with physical edge ablation | Separate ablation fields and `extract_essential_input_masks.py` vs `extract_essential_subgraphs.py` | Implemented |
 | Avoid clustering as the primary hypothesis | Reports emphasize regressions, branch metrics, mechanisms, and essential motifs | Implemented in report structure |
 | Keep nonlinear autocatalytic/WTA outside first-order tree claims | Current implementation and docs are scoped to first-order topology | Satisfied by scope |
@@ -185,7 +185,15 @@ python3 audit_topology_artifacts.py \
 ```
 
 For consolidated reports that include physical essential subgraphs, the physical
-layout audit should also pass:
+layout finalizer and audit should also pass:
+
+```bash
+python3 finalize_essential_physical_retrains.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5
+```
 
 ```bash
 python3 audit_topology_artifacts.py \

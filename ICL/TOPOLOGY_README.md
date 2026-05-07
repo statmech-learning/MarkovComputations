@@ -68,6 +68,10 @@ The convention is:
 - `finalize_essential_inputmask_retrains.py`: guarded finalizer for extracted
   essential input-mask retrains; it refuses to collect incomplete retrain sets
   unless `--allow_partial` is supplied.
+- `finalize_essential_physical_retrains.py`: guarded finalizer for extracted
+  physical essential-subgraph retrains; it refreshes the physical retrain
+  aggregate and comparison artifacts but leaves consolidated report generation
+  as an explicit later step.
 - `recover_essential_inputmask_retrains.py`: conservative wrapper for
   interrupted essential input-mask retrains; it audits source artifacts, writes
   status manifests, optionally submits only missing retrain runs, and calls the
@@ -357,11 +361,16 @@ python3 submit_topology_library_sweep.py \
   --array \
   --max-concurrent 24
 
-python3 compare_essential_retrains.py \
-  --base_root "$SLURM_OUTPUT_BASE" \
-  --output_csv "$SLURM_OUTPUT_BASE/essential_input50/retrain_comparison.csv" \
-  --output_json "$SLURM_OUTPUT_BASE/essential_input50/retrain_comparison.json"
+python3 finalize_essential_physical_retrains.py \
+  --experiment physical="$SLURM_OUTPUT_BASE" \
+  --seeds 1,2
 ```
+
+The physical finalizer runs `finalize_topology_sweep.py` on
+`essential_input50_retrain` and then `compare_essential_retrains.py` with the
+physical layout defaults. It does not regenerate the consolidated research
+report; run `make_topology_research_report.py` explicitly after all physical and
+input-mask retrain comparisons you want to include are finalized.
 
 For essential input-mask retrains, where the physical graph stays fixed and
 only the learned input-coupling rows are pruned, the final collection can be
