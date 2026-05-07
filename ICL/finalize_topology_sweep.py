@@ -74,6 +74,8 @@ def submit_mechanisms(args):
         args.input_root,
         "--n_samples",
         str(args.n_samples),
+        "--device",
+        args.device,
         "--python",
         args.job_python,
         "--array",
@@ -87,6 +89,38 @@ def submit_mechanisms(args):
     if args.force_mechanisms:
         parts.append("--force")
     if args.clean_mechanism_meta:
+        parts.append("--clean")
+    if args.skip_torch_check:
+        parts.append("--skip_torch_check")
+    if args.dry_run:
+        parts.append("--dry-run")
+    run_command(parts, dry_run=False)
+
+
+def submit_causal(args):
+    parts = python_script(
+        "submit_causal_interventions.py",
+        "--input_root",
+        args.input_root,
+        "--n_samples",
+        str(args.causal_n_samples),
+        "--n_repeats",
+        str(args.causal_n_repeats),
+        "--seed",
+        str(args.causal_seed),
+        "--device",
+        args.device,
+        "--interventions",
+        args.causal_interventions,
+        "--python",
+        args.job_python,
+        "--array",
+        "--max-concurrent",
+        str(args.max_concurrent),
+    )
+    if args.force_causal:
+        parts.append("--force")
+    if args.clean_causal_meta:
         parts.append("--clean")
     if args.skip_torch_check:
         parts.append("--skip_torch_check")
@@ -127,6 +161,27 @@ def collect_mechanisms(args):
     return True
 
 
+def collect_causal(args):
+    causal_count = count_files(args.input_root, "causal_interventions.json")
+    if causal_count == 0:
+        print(f"No causal_interventions.json files found under {args.input_root}; skipping causal summaries")
+        return False
+    print(f"Found {causal_count} causal_interventions.json files")
+    run_command(
+        python_script(
+            "collect_causal_interventions.py",
+            "--input_root",
+            args.input_root,
+            "--output_csv",
+            path(args.input_root, "causal_interventions.csv"),
+            "--output_json",
+            path(args.input_root, "causal_interventions_summary.json"),
+        ),
+        dry_run=args.dry_run,
+    )
+    return True
+
+
 def aggregate_seeds(args, has_mechanisms):
     parts = python_script(
         "aggregate_topology_seeds.py",
@@ -147,6 +202,7 @@ def main():
     parser.add_argument("--input_root", type=str, required=True)
     parser.add_argument("--n_samples", type=int, default=500)
     parser.add_argument("--max-concurrent", type=int, default=64)
+    parser.add_argument("--device", default="auto")
     parser.add_argument(
         "--job_python",
         default=os.environ.get("TOPOLOGY_PYTHON", "python3"),
@@ -162,10 +218,24 @@ def main():
     )
     parser.add_argument("--submit_mechanisms", action="store_true")
     parser.add_argument("--collect_mechanisms", action="store_true")
+    parser.add_argument("--submit_causal", action="store_true")
+    parser.add_argument("--collect_causal", action="store_true")
+    parser.add_argument("--causal_n_samples", type=int, default=500)
+    parser.add_argument("--causal_n_repeats", type=int, default=5)
+    parser.add_argument("--causal_seed", type=int, default=0)
+    parser.add_argument(
+        "--causal_interventions",
+        default=(
+            "context_block_shuffle,edge_projection_permutation,"
+            "edge_rate_function_permutation,decoder_root_permutation,randomize_K_direction"
+        ),
+    )
     parser.add_argument("--ablate_input", action="store_true")
     parser.add_argument("--ablate_physical", action="store_true")
     parser.add_argument("--force_mechanisms", action="store_true")
+    parser.add_argument("--force_causal", action="store_true")
     parser.add_argument("--clean_mechanism_meta", action="store_true")
+    parser.add_argument("--clean_causal_meta", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -173,7 +243,11 @@ def main():
     collect_topology(args)
     if args.submit_mechanisms:
         submit_mechanisms(args)
+    if args.submit_causal:
+        submit_causal(args)
     has_mechanisms = args.collect_mechanisms and collect_mechanisms(args)
+    if args.collect_causal:
+        collect_causal(args)
     if not has_mechanisms and os.path.exists(path(args.input_root, "mechanism_results.csv")):
         has_mechanisms = True
     aggregate_seeds(args, has_mechanisms=has_mechanisms)
