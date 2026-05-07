@@ -66,7 +66,7 @@ python3 interpret_topology_report.py --report_json ... --report_kind research ..
 Observed state:
 
 - Local branch is clean and tracking `origin/topology`.
-- Local unit suite has 77 tests and passes.
+- Local unit suite has 79 tests and passes.
 - Python syntax compilation passes.
 - `git diff --check` passes.
 - Local `ICL/results` contains only older `markov_icl_gmm_*.pt` files, not the
@@ -106,12 +106,12 @@ Observed state:
 | Compute edge sensitivities and ablations | `topology_analysis.py`, `analyze_topology_model.py --ablate_input --ablate_physical` | Implemented; requires trained runs |
 | Extract essential physical subgraphs | `extract_essential_subgraphs.py` | Implemented and tested |
 | Extract essential input masks while preserving physical graph | `extract_essential_input_masks.py` | Implemented and tested |
-| Retrain extracted motifs/masks from scratch | `submit_topology_library_sweep.py`, `finalize_essential_physical_retrains.py`, `finalize_essential_inputmask_retrains.py`, `compare_essential_retrains.py` | Orchestration implemented and tested; cluster retrains incomplete |
+| Retrain extracted motifs/masks from scratch | `submit_topology_library_sweep.py`, `recover_essential_physical_retrains.py`, `finalize_essential_physical_retrains.py`, `recover_essential_inputmask_retrains.py`, `finalize_essential_inputmask_retrains.py`, `compare_essential_retrains.py` | Orchestration implemented and tested; cluster retrains incomplete |
 | Do not conflate input-coupling ablation with physical edge ablation | Separate ablation fields and `extract_essential_input_masks.py` vs `extract_essential_subgraphs.py` | Implemented |
 | Avoid clustering as the primary hypothesis | Reports emphasize regressions, branch metrics, mechanisms, and essential motifs | Implemented in report structure |
 | Keep nonlinear autocatalytic/WTA outside first-order tree claims | Current implementation and docs are scoped to first-order topology | Satisfied by scope |
 | Provide final consolidated report | `make_topology_research_report.py`, `make_input_mask_report.py` | Implemented; final cluster reports missing |
-| Provide artifact audit and safe recovery | `audit_topology_artifacts.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
+| Provide artifact audit and safe recovery | `audit_topology_artifacts.py`, `recover_essential_physical_retrains.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
 | Audit physical essential-subgraph retrain artifacts | `audit_topology_artifacts.py --essential_kind physical` | Implemented and tested |
 | Verify final report and artifact consistency in one non-mutating command | `verify_topology_completion.py --report_kind input_mask` and `--report_kind research` | Implemented and tested; research mode audits both input-mask and physical-essential layouts |
 | Produce a conservative H0/H1 interpretation from verified report JSON | `interpret_topology_report.py` | Implemented and tested; requires final cluster report JSON |
@@ -193,6 +193,20 @@ python3 finalize_essential_physical_retrains.py \
   --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
   --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
   --seeds 1,2,3,4,5
+```
+
+For interrupted physical arrays, use the recovery wrapper instead:
+
+```bash
+python3 recover_essential_physical_retrains.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --submit_missing \
+  --finalize_if_complete \
+  --max-concurrent 16 \
+  --dry-run
 ```
 
 ```bash

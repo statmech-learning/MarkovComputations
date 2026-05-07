@@ -26,10 +26,10 @@ projection geometry.
 | Novel-class ICL remains the primary collected metric | `collect_topology_results.py` field `test_novel_classes`; report defaults | Implemented |
 | Expressivity vs trainability split | `aggregate_topology_seeds.py` outputs `target_max`, `target_mean`, `target_std` | Implemented and tested |
 | Post-training active tree/root, branch MI, margins, sensitivities, and ablations | `topology_analysis.py`, `analyze_topology_model.py`, `collect_mechanism_results.py`, `summarize_topology_mechanisms.py` | Implemented; execution requires Torch-enabled trained runs |
-| Essential physical subgraph extraction and retraining | `extract_essential_subgraphs.py`, `finalize_essential_physical_retrains.py`, `compare_essential_retrains.py` | Implemented and tested |
+| Essential physical subgraph extraction and retraining | `extract_essential_subgraphs.py`, `finalize_essential_physical_retrains.py`, `recover_essential_physical_retrains.py`, `compare_essential_retrains.py` | Implemented and tested |
 | Essential input-mask extraction and retraining | `extract_essential_input_masks.py`, `finalize_essential_inputmask_retrains.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
 | Consolidated research report | `make_topology_research_report.py` | Implemented; supports both `essential_input50` and `essential_inputmask50` layouts |
-| Artifact audit and interrupted-array recovery | `audit_topology_artifacts.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
+| Artifact audit and interrupted-array recovery | `audit_topology_artifacts.py`, `recover_essential_physical_retrains.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
 
 ## Verification Gates
 
@@ -41,7 +41,7 @@ python3 -m py_compile $(find ICL -name '*.py' -not -path '*/__pycache__/*')
 git diff --check
 ```
 
-As of the latest local run, the unittest suite has 77 tests and passes. Local
+As of the latest local run, the unittest suite has 79 tests and passes. Local
 Python does not have Torch, so training and mechanism smoke tests must run on
 the cluster or another Torch-enabled environment.
 
@@ -128,11 +128,25 @@ refresh `essential_input50_retrain/topology_seed_aggregates.csv` and
 `essential_input50/retrain_comparison.json`:
 
 ```bash
-python3 finalize_essential_physical_retrains.py \
+python3 recover_essential_physical_retrains.py \
   --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
   --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
   --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
-  --seeds 1,2,3,4,5
+  --seeds 1,2,3,4,5 \
+  --submit_missing \
+  --max-concurrent 16
+```
+
+After any missing physical retrain jobs finish, finalize through the same
+guarded path:
+
+```bash
+python3 recover_essential_physical_retrains.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --finalize_if_complete
 ```
 
 Then generate the consolidated research report explicitly:

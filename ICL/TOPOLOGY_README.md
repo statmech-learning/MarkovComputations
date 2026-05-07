@@ -72,6 +72,10 @@ The convention is:
   physical essential-subgraph retrains; it refreshes the physical retrain
   aggregate and comparison artifacts but leaves consolidated report generation
   as an explicit later step.
+- `recover_essential_physical_retrains.py`: conservative wrapper for
+  interrupted physical essential-subgraph retrains; it audits the physical
+  layout, writes status manifests, submits only missing retrain runs when
+  requested, and calls the guarded physical finalizer only after completion.
 - `recover_essential_inputmask_retrains.py`: conservative wrapper for
   interrupted essential input-mask retrains; it audits source artifacts, writes
   status manifests, optionally submits only missing retrain runs, and calls the
@@ -371,6 +375,23 @@ The physical finalizer runs `finalize_topology_sweep.py` on
 physical layout defaults. It does not regenerate the consolidated research
 report; run `make_topology_research_report.py` explicitly after all physical and
 input-mask retrain comparisons you want to include are finalized.
+
+The same physical path can be recovered with a single wrapper. Use `--dry-run`
+first to inspect the audit, status, missing-only submit, guarded finalizer, and
+strict physical audit commands:
+
+```bash
+python3 recover_essential_physical_retrains.py \
+  --experiment physical="$SLURM_OUTPUT_BASE" \
+  --seeds 1,2 \
+  --submit_missing \
+  --finalize_if_complete \
+  --max-concurrent 24 \
+  --dry-run
+```
+
+As with the input-mask recovery wrapper, run once with `--submit_missing`, then
+rerun with `--finalize_if_complete` after the missing jobs finish.
 
 For essential input-mask retrains, where the physical graph stays fixed and
 only the learned input-coupling rows are pruned, the final collection can be
