@@ -311,6 +311,19 @@ def library_paths(root, run_summary):
     n_nodes = n_nodes_values[0] if len(n_nodes_values) == 1 else None
     if n_nodes is not None and n_edges is not None:
         parent = os.path.dirname(os.path.abspath(root.rstrip(os.sep)))
+        root_name = os.path.basename(os.path.abspath(root.rstrip(os.sep)))
+        input_library_name = (
+            root_name.replace("input_mask_fixed", "input_mask_library", 1)
+            if root_name.startswith("input_mask_fixed")
+            else None
+        )
+        if input_library_name:
+            candidates.extend(
+                [
+                    os.path.join(parent, input_library_name, "selected.csv"),
+                    os.path.join(parent, input_library_name, "library.csv"),
+                ]
+            )
         candidates.extend(
             [
                 os.path.join(parent, f"topology_library_n{n_nodes}_m{n_edges}", "selected.csv"),
