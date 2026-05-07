@@ -26,6 +26,10 @@ BRANCH_METRIC_FALLBACKS = {
     "comparison_branch_common_d_rel_mean": "comparison_branch_d_rel_mean",
     "comparison_branch_common_d_rel_max": "comparison_branch_d_rel_max",
     "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+    "comparison_branch_input_overlap_min": "comparison_branch_input_count_min",
+    "comparison_branch_input_overlap_mean": "comparison_branch_input_count_mean",
+    "comparison_branch_input_overlap_max": "comparison_branch_input_count_max",
+    "comparison_branch_input_overlap_gini": "comparison_branch_input_count_gini",
 }
 
 STATIC_COLUMNS = [
@@ -57,6 +61,7 @@ STATIC_COLUMNS = [
     "comparison_branch_common_d_rel_mean",
     "comparison_branch_common_d_rel_max",
     "comparison_branch_common_d_rel_gini",
+    "comparison_branch_common_d_rel_source",
     "comparison_branch_input_count_min",
     "comparison_branch_input_count_mean",
     "comparison_branch_input_count_max",
@@ -65,6 +70,7 @@ STATIC_COLUMNS = [
     "comparison_branch_input_overlap_mean",
     "comparison_branch_input_overlap_max",
     "comparison_branch_input_overlap_gini",
+    "comparison_branch_input_overlap_source",
     "rank_D",
     "effective_rank_D",
     "condition_number_D",
@@ -198,6 +204,16 @@ def load_rows(path):
         for target, fallback in BRANCH_METRIC_FALLBACKS.items():
             if row.get(target) in (None, "") and row.get(fallback) not in (None, ""):
                 row[target] = row[fallback]
+                if target.startswith("comparison_branch_common_d_rel_"):
+                    row["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
+                if target.startswith("comparison_branch_input_overlap_"):
+                    row["comparison_branch_input_overlap_source"] = "legacy_input_count_fallback"
+        if row.get("comparison_branch_common_d_rel_min") not in (None, ""):
+            if row.get("comparison_branch_common_d_rel_source") in (None, ""):
+                row["comparison_branch_common_d_rel_source"] = "artifact"
+        if row.get("comparison_branch_input_overlap_min") not in (None, ""):
+            if row.get("comparison_branch_input_overlap_source") in (None, ""):
+                row["comparison_branch_input_overlap_source"] = "artifact"
     return rows
 
 
@@ -372,6 +388,10 @@ def write_csv(path, rows):
             writer.writerow({key: finite_or_empty(row.get(key)) for key in fieldnames})
 
 
+def format_float(value):
+    return "NA" if value is None else f"{value:.2f}"
+
+
 def print_report(rows, regressions):
     print(f"Topology groups: {len(rows)}")
     if rows:
@@ -380,9 +400,9 @@ def print_report(rows, regressions):
         target_std = [row["target_std"] for row in rows if row.get("target_std") is not None]
         print(
             "Target summary: "
-            f"mean-of-means={mean(target_means):.2f}, "
-            f"max-of-max={max_or_none(target_max):.2f}, "
-            f"mean-seed-std={mean(target_std):.2f}"
+            f"mean-of-means={format_float(mean(target_means))}, "
+            f"max-of-max={format_float(max_or_none(target_max))}, "
+            f"mean-seed-std={format_float(mean(target_std))}"
         )
     for outcome, models in regressions.items():
         print(f"\nOutcome: {outcome}")

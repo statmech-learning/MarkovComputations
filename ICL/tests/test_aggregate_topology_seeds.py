@@ -39,6 +39,8 @@ class AggregateTopologySeedsTests(unittest.TestCase):
             "d_rel",
             "comparison_branch_d_rel_min",
             "comparison_branch_d_rel_gini",
+            "comparison_branch_input_count_min",
+            "comparison_branch_input_count_gini",
             "effective_rank_D_masked",
             "condition_number_D_masked",
             "input_edge_load_gini",
@@ -64,6 +66,8 @@ class AggregateTopologySeedsTests(unittest.TestCase):
                 "d_rel": 180,
                 "comparison_branch_d_rel_min": 30,
                 "comparison_branch_d_rel_gini": 0.1,
+                "comparison_branch_input_count_min": 2,
+                "comparison_branch_input_count_gini": 0.25,
                 "effective_rank_D_masked": 15.0,
                 "condition_number_D_masked": 12.0,
                 "input_edge_load_gini": 0.2,
@@ -79,6 +83,8 @@ class AggregateTopologySeedsTests(unittest.TestCase):
                 "d_rel": 180,
                 "comparison_branch_d_rel_min": 30,
                 "comparison_branch_d_rel_gini": 0.1,
+                "comparison_branch_input_count_min": 2,
+                "comparison_branch_input_count_gini": 0.25,
                 "effective_rank_D_masked": 15.0,
                 "condition_number_D_masked": 12.0,
                 "input_edge_load_gini": 0.2,
@@ -94,6 +100,8 @@ class AggregateTopologySeedsTests(unittest.TestCase):
                 "d_rel": 120,
                 "comparison_branch_d_rel_min": 0,
                 "comparison_branch_d_rel_gini": 0.8,
+                "comparison_branch_input_count_min": 0,
+                "comparison_branch_input_count_gini": 0.9,
                 "effective_rank_D_masked": 8.0,
                 "condition_number_D_masked": 100.0,
                 "input_edge_load_gini": 0.6,
@@ -165,6 +173,8 @@ class AggregateTopologySeedsTests(unittest.TestCase):
         self.assertAlmostEqual(float(topo_a["target_max"]), 100.0)
         self.assertAlmostEqual(float(topo_a["target_std"]), 10.0)
         self.assertEqual(topo_a["n_mechanism_runs"], "2")
+        self.assertEqual(topo_a["comparison_branch_common_d_rel_source"], "legacy_branch_d_rel_fallback")
+        self.assertEqual(topo_a["comparison_branch_input_overlap_source"], "legacy_input_count_fallback")
         self.assertAlmostEqual(float(topo_a["target_logprob_margin_mean_mean"]), 2.0)
         self.assertAlmostEqual(
             float(topo_a["target_logprob_margin_branch_mean_min_mean"]),
@@ -172,6 +182,126 @@ class AggregateTopologySeedsTests(unittest.TestCase):
         )
         self.assertAlmostEqual(float(topo_a["branch_active_tree_mi_mean"]), 1.0)
         self.assertIn("masked_tree_geometry", report["regressions"]["target_mean"])
+
+    def test_preserves_exact_common_branch_source(self):
+        topology_fields = [
+            "label",
+            "seed",
+            "topology_name",
+            "d_rel",
+            "comparison_branch_d_rel_min",
+            "comparison_branch_d_rel_gini",
+            "comparison_branch_common_d_rel_min",
+            "comparison_branch_common_d_rel_gini",
+            "comparison_branch_common_d_rel_source",
+            "comparison_branch_input_overlap_min",
+            "comparison_branch_input_overlap_gini",
+            "comparison_branch_input_overlap_source",
+            "test_novel_classes",
+        ]
+        topology_rows = [
+            {
+                "label": "topo_a_seed1",
+                "seed": 1,
+                "topology_name": "topo_a",
+                "d_rel": 180,
+                "comparison_branch_d_rel_min": 30,
+                "comparison_branch_d_rel_gini": 0.1,
+                "comparison_branch_common_d_rel_min": 24,
+                "comparison_branch_common_d_rel_gini": 0.2,
+                "comparison_branch_common_d_rel_source": "recomputed",
+                "comparison_branch_input_overlap_min": 2,
+                "comparison_branch_input_overlap_gini": 0.25,
+                "comparison_branch_input_overlap_source": "recomputed",
+                "test_novel_classes": 80.0,
+            },
+            {
+                "label": "topo_a_seed2",
+                "seed": 2,
+                "topology_name": "topo_a",
+                "d_rel": 180,
+                "comparison_branch_d_rel_min": 30,
+                "comparison_branch_d_rel_gini": 0.1,
+                "comparison_branch_common_d_rel_min": 24,
+                "comparison_branch_common_d_rel_gini": 0.2,
+                "comparison_branch_common_d_rel_source": "recomputed",
+                "comparison_branch_input_overlap_min": 2,
+                "comparison_branch_input_overlap_gini": 0.25,
+                "comparison_branch_input_overlap_source": "recomputed",
+                "test_novel_classes": 90.0,
+            },
+        ]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            topology_csv = os.path.join(tmpdir, "topology_results.csv")
+            output_csv = os.path.join(tmpdir, "aggregates.csv")
+            output_json = os.path.join(tmpdir, "aggregates.json")
+            self.write_csv(topology_csv, topology_fields, topology_rows)
+            result = self.run_aggregate(
+                [
+                    "--topology_csv",
+                    topology_csv,
+                    "--output_csv",
+                    output_csv,
+                    "--output_json",
+                    output_json,
+                ]
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            with open(output_csv, newline="") as f:
+                rows = {row["group"]: row for row in csv.DictReader(f)}
+
+        topo_a = rows["topo_a"]
+        self.assertEqual(topo_a["comparison_branch_common_d_rel_source"], "recomputed")
+        self.assertEqual(topo_a["comparison_branch_input_overlap_source"], "recomputed")
+        self.assertAlmostEqual(float(topo_a["comparison_branch_common_d_rel_min"]), 24.0)
+
+    def test_marks_exact_branch_metrics_without_source_as_artifact(self):
+        topology_fields = [
+            "label",
+            "seed",
+            "topology_name",
+            "comparison_branch_common_d_rel_min",
+            "comparison_branch_common_d_rel_source",
+            "comparison_branch_input_overlap_min",
+            "comparison_branch_input_overlap_source",
+            "test_novel_classes",
+        ]
+        topology_rows = [
+            {
+                "label": "topo_a_seed1",
+                "seed": 1,
+                "topology_name": "topo_a",
+                "comparison_branch_common_d_rel_min": 24,
+                "comparison_branch_common_d_rel_source": "",
+                "comparison_branch_input_overlap_min": 2,
+                "comparison_branch_input_overlap_source": "",
+                "test_novel_classes": 80.0,
+            }
+        ]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            topology_csv = os.path.join(tmpdir, "topology_results.csv")
+            output_csv = os.path.join(tmpdir, "aggregates.csv")
+            output_json = os.path.join(tmpdir, "aggregates.json")
+            self.write_csv(topology_csv, topology_fields, topology_rows)
+            result = self.run_aggregate(
+                [
+                    "--topology_csv",
+                    topology_csv,
+                    "--output_csv",
+                    output_csv,
+                    "--output_json",
+                    output_json,
+                ]
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            with open(output_csv, newline="") as f:
+                rows = {row["group"]: row for row in csv.DictReader(f)}
+
+        topo_a = rows["topo_a"]
+        self.assertEqual(topo_a["comparison_branch_common_d_rel_source"], "artifact")
+        self.assertEqual(topo_a["comparison_branch_input_overlap_source"], "artifact")
 
 
 if __name__ == "__main__":
