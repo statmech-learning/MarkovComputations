@@ -77,6 +77,11 @@ The convention is:
 - `finalize_topology_sweep.py`: convenience wrapper that collects completed
   training runs, runs regressions, optionally submits/collects mechanism
   analyses, and refreshes topology-level seed aggregates.
+- `run_expanded_hard_followups.py`: guarded one-command wrapper for the current
+  expanded hard pilots. It submits or collects mechanism/causal follow-ups,
+  refreshes the next-phase report, and can run the strict expanded-follow-up
+  verifier. It refuses to finalize source-light roots with no raw `results.pkl`
+  files unless explicitly overridden.
 - `collect_topology_results.py`: collect completed run directories into a flat
   CSV for regressions against raw degree count and topology-derived metrics.
 - `collect_mechanism_results.py`: collect mechanism-analysis JSON files into a
@@ -571,27 +576,30 @@ For the currently tracked expanded hard pilots, run the same follow-up over
 each root after syncing the `topology` branch on Engaging:
 
 ```bash
-for root in \
-  results/expanded_hard_sweeps/n4_m6_N3_D2 \
-  results/expanded_hard_sweeps/n5_m8_N3_D2 \
-  results/expanded_hard_sweeps/n5_m12_N3_D2
-do
-  python3 finalize_topology_sweep.py \
-    --input_root "$root" \
-    --submit_mechanisms \
-    --submit_causal \
-    --ablate_input \
-    --ablate_physical \
-    --device cpu \
-    --job_python "$TOPOLOGY_PYTHON" \
-    --max-concurrent 20
-done
+python3 run_expanded_hard_followups.py --status
+
+python3 run_expanded_hard_followups.py \
+  --submit_followups \
+  --device cpu \
+  --job_python "$TOPOLOGY_PYTHON" \
+  --max-concurrent 20
+
+# After the SLURM arrays finish:
+python3 run_expanded_hard_followups.py \
+  --collect_followups \
+  --refresh_report \
+  --strict_verify \
+  --device cpu \
+  --job_python "$TOPOLOGY_PYTHON"
 ```
 
-After the follow-up jobs are collected, refresh the tracked next-phase report
-from the `ICL/` directory. The refresher updates only labels supplied on the
-command line; by default it ignores all-zero expanded roots so a source-light
-checkout does not erase previously recorded completed-run counts.
+The wrapper refuses to submit or collect follow-ups from a source-light
+checkout with no raw `results.pkl` files, because the lower-level finalizer
+recollects topology results at startup. To refresh only selected report
+sections by hand from the `ICL/` directory, use the underlying report
+refresher. It updates only labels supplied on the command line; by default it
+ignores all-zero expanded roots so a source-light checkout does not erase
+previously recorded completed-run counts.
 
 ```bash
 python3 refresh_next_phase_report.py \
