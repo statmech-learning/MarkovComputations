@@ -39,6 +39,8 @@ The convention is:
   CSV for regressions against raw degree count and topology-derived metrics.
 - `collect_mechanism_results.py`: collect mechanism-analysis JSON files into a
   flat CSV table.
+- `summarize_topology_mechanisms.py`: join topology and mechanism result CSVs,
+  then report overall and within-edge-count correlations.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
 - `tests/test_topology_metrics.py`: exact small-graph matrix-tree checks.
@@ -176,4 +178,9 @@ python3 submit_topology_mechanisms.py \
 python3 collect_mechanism_results.py \
   --input_root "$SLURM_OUTPUT_BASE" \
   --output_csv "$SLURM_OUTPUT_BASE/mechanism_results.csv"
+
+python3 summarize_topology_mechanisms.py \
+  --topology_csv "$SLURM_OUTPUT_BASE/topology_results.csv" \
+  --mechanism_csv "$SLURM_OUTPUT_BASE/mechanism_results.csv" \
+  --output_json "$SLURM_OUTPUT_BASE/mechanism_summary.json"
 ```
