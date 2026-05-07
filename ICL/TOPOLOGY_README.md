@@ -126,6 +126,11 @@ The convention is:
 - `make_next_phase_evidence_report.py`: compact follow-up report builder for
   clustered inference, branch-margin capacity probes, causal interventions,
   and expanded pilot sweep status.
+- `refresh_next_phase_report.py`: targeted report refresher for long-running
+  cluster follow-ups. It updates only labeled sections supplied on the command
+  line, preserves older report sections when source artifacts are not present
+  in the active checkout, and re-renders the Markdown with the canonical
+  next-phase report builder.
 - `finalize_topology_research_report.py`: report-scoped finalizer that rebuilds
   the consolidated research report, runs the strict research verifier, and
   writes the conservative H0/H1 interpretation.
@@ -582,6 +587,31 @@ do
     --max-concurrent 20
 done
 ```
+
+After the follow-up jobs are collected, refresh the tracked next-phase report
+from the `ICL/` directory. The refresher updates only labels supplied on the
+command line; by default it ignores all-zero expanded roots so a source-light
+checkout does not erase previously recorded completed-run counts.
+
+```bash
+python3 refresh_next_phase_report.py \
+  --report_json results/next_phase_stats/next_phase_evidence_report.json \
+  --clustered_json hard_n4_m6_N3_D2=results/expanded_hard_stats/n4_m6_N3_D2_branch_capacity_clustered_inference.json \
+  --clustered_json hard_n5_m8_N3_D2=results/expanded_hard_stats/n5_m8_N3_D2_branch_capacity_clustered_inference.json \
+  --clustered_json hard_n5_m12_N3_D2=results/expanded_hard_stats/n5_m12_N3_D2_branch_capacity_clustered_inference.json \
+  --branch_capacity_json hard_n4_m6_N3_D2=results/expanded_hard_libraries/n4_m6_N3_D2/branch_margin_capacity_summary.json \
+  --branch_capacity_json hard_n5_m8_N3_D2=results/expanded_hard_libraries/n5_m8_N3_D2/branch_margin_capacity_summary.json \
+  --branch_capacity_json hard_n5_m12_N3_D2=results/expanded_hard_libraries/n5_m12_N3_D2/branch_margin_capacity_summary.json \
+  --expanded_root hard_n4_m6_N3_D2=results/expanded_hard_sweeps/n4_m6_N3_D2 \
+  --expanded_root hard_n5_m8_N3_D2=results/expanded_hard_sweeps/n5_m8_N3_D2 \
+  --expanded_root hard_n5_m12_N3_D2=results/expanded_hard_sweeps/n5_m12_N3_D2 \
+  --output_json results/next_phase_stats/next_phase_evidence_report.json \
+  --output_md results/next_phase_stats/next_phase_evidence_report.md
+```
+
+When causal summaries exist, add matching `--causal_json
+label=results/.../causal_interventions_summary.json` arguments before
+re-rendering the report.
 
 To test whether a trained dense topology discovered a sparse retrainable
 motif, extract essential subgraphs and feed the resulting `selected.csv` back

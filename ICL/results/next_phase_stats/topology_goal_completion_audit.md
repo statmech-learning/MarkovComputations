@@ -1,6 +1,6 @@
 # Topology-ICL Goal Completion Audit
 
-Generated: 2026-05-07. The hard-pilot evidence was added in commit `22de6ec` (`Add hard topology pilot evidence`). The branch now also includes follow-up orchestration, capacity-probe, and inference-verification updates: explicit submitted-job Python control, causal finalizer orchestration, hard-pilot follow-up documentation, tropical rooted-tree random-feature capacity fields, derived graph-family holdout, and family-cluster bootstrap diagnostics.
+Generated: 2026-05-07. The hard-pilot evidence was added in commit `22de6ec` (`Add hard topology pilot evidence`). The branch now also includes follow-up orchestration, capacity-probe, and inference-verification updates: explicit submitted-job Python control, causal finalizer orchestration, hard-pilot follow-up documentation, tropical rooted-tree random-feature capacity fields, derived graph-family holdout, family-cluster bootstrap diagnostics, and a targeted next-phase report refresh utility for cluster follow-up artifacts.
 
 This audit maps the active research objective to concrete repository artifacts. It is deliberately conservative: a requirement is marked complete only when the current branch contains inspectable evidence for it.
 
@@ -9,9 +9,9 @@ This audit maps the active research objective to concrete repository artifacts. 
 - Branch: `topology`, synchronized with `origin/topology` through the follow-up orchestration commits.
 - Hard-pilot artifact paths on branch: `889` files under `ICL/results/expanded_hard_libraries`, `ICL/results/expanded_hard_sweeps`, and `ICL/results/expanded_hard_stats`.
 - Raw-output exclusion check: no `results.pkl`, `model.pt`, `__pycache__`, or `_array_meta` paths under the committed hard-pilot artifact set.
-- Local unit tests: `python3 -m unittest discover -s ICL/tests`, `123` tests passed.
+- Local unit tests: `python3 -m unittest discover -s ICL/tests`, `125` tests passed.
 - Next-phase report verifier: `python3 ICL/verify_topology_completion.py --experiment next=ICL/results/next_phase_stats --report_md ICL/results/next_phase_stats/next_phase_evidence_report.md --report_json ICL/results/next_phase_stats/next_phase_evidence_report.json --report_kind next_phase`, passed. The verifier now requires hard-regime reports to expose `derived_graph_family` holdout and family-cluster bootstrap metrics. An optional stricter gate, `--require_expanded_followups`, intentionally fails on the current report until hard-pilot mechanism and causal follow-up counts are nonzero.
-- Main next-phase report: `ICL/results/next_phase_stats/next_phase_evidence_report.md`, refreshed with hard-regime rank-weighted and tropical rooted-tree random-feature capacity metrics. Hard-regime held-out rows now use derived graph-family labels rather than full topology-instance names, and hard-regime uncertainty tables include both topology-cluster and family-cluster bootstrap deltas.
+- Main next-phase report: `ICL/results/next_phase_stats/next_phase_evidence_report.md`, refreshed with hard-regime rank-weighted and tropical rooted-tree random-feature capacity metrics. Hard-regime held-out rows now use derived graph-family labels rather than full topology-instance names, and hard-regime uncertainty tables include both topology-cluster and family-cluster bootstrap deltas. `ICL/refresh_next_phase_report.py` can update only selected labeled sections after new cluster artifacts land, while preserving existing sections if the active checkout lacks raw per-run files.
 
 ## Checklist
 
