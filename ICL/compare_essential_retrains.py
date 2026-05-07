@@ -11,9 +11,13 @@ import numpy as np
 
 DEFAULT_SELECTED = "essential_input50/selected.csv"
 DEFAULT_RETRAIN_AGG = "essential_input50_retrain/topology_seed_aggregates.csv"
+DEFAULT_INPUTMASK_SELECTED = "essential_inputmask50/selected.csv"
+DEFAULT_INPUTMASK_RETRAIN_AGG = "essential_inputmask50_retrain/topology_seed_aggregates.csv"
 BRANCH_METRIC_FALLBACKS = {
     "comparison_branch_common_d_rel_min": "comparison_branch_d_rel_min",
     "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+    "comparison_branch_input_overlap_min": "comparison_branch_input_count_min",
+    "comparison_branch_input_overlap_gini": "comparison_branch_input_count_gini",
 }
 
 
@@ -25,8 +29,12 @@ JOIN_FIELDS = [
     "d_rel",
     "comparison_branch_common_d_rel_min",
     "comparison_branch_common_d_rel_gini",
+    "comparison_branch_common_d_rel_source",
     "comparison_branch_d_rel_min",
     "comparison_branch_d_rel_gini",
+    "comparison_branch_input_overlap_min",
+    "comparison_branch_input_overlap_gini",
+    "comparison_branch_input_overlap_source",
     "effective_rank_D",
     "source_test_novel_classes_max",
     "source_test_novel_classes_mean",
@@ -70,6 +78,16 @@ def load_rows(path):
         for target, fallback in BRANCH_METRIC_FALLBACKS.items():
             if row.get(target) in (None, "") and row.get(fallback) not in (None, ""):
                 row[target] = row[fallback]
+                if target.startswith("comparison_branch_common_d_rel_"):
+                    row["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
+                if target.startswith("comparison_branch_input_overlap_"):
+                    row["comparison_branch_input_overlap_source"] = "legacy_input_count_fallback"
+        if row.get("comparison_branch_common_d_rel_min") not in (None, ""):
+            if row.get("comparison_branch_common_d_rel_source") in (None, ""):
+                row["comparison_branch_common_d_rel_source"] = "artifact"
+        if row.get("comparison_branch_input_overlap_min") not in (None, ""):
+            if row.get("comparison_branch_input_overlap_source") in (None, ""):
+                row["comparison_branch_input_overlap_source"] = "artifact"
     return rows
 
 
@@ -112,11 +130,25 @@ def joined_rows(selected_rows, retrain_rows):
                 "comparison_branch_common_d_rel_gini": parse_float(
                     retrain.get("comparison_branch_common_d_rel_gini")
                 ),
+                "comparison_branch_common_d_rel_source": retrain.get(
+                    "comparison_branch_common_d_rel_source",
+                    "",
+                ),
                 "comparison_branch_d_rel_min": parse_float(
                     retrain.get("comparison_branch_d_rel_min")
                 ),
                 "comparison_branch_d_rel_gini": parse_float(
                     retrain.get("comparison_branch_d_rel_gini")
+                ),
+                "comparison_branch_input_overlap_min": parse_float(
+                    retrain.get("comparison_branch_input_overlap_min")
+                ),
+                "comparison_branch_input_overlap_gini": parse_float(
+                    retrain.get("comparison_branch_input_overlap_gini")
+                ),
+                "comparison_branch_input_overlap_source": retrain.get(
+                    "comparison_branch_input_overlap_source",
+                    "",
                 ),
                 "effective_rank_D": parse_float(retrain.get("effective_rank_D")),
                 "source_test_novel_classes_max": source_max,
@@ -169,6 +201,9 @@ def summary(rows):
         ),
         "comparison_branch_d_rel_min_mean": mean(
             [row["comparison_branch_d_rel_min"] for row in rows]
+        ),
+        "comparison_branch_input_overlap_min_mean": mean(
+            [row["comparison_branch_input_overlap_min"] for row in rows]
         ),
         "effective_rank_D_mean": mean([row["effective_rank_D"] for row in rows]),
         "effective_rank_D_masked_mean": mean([row["effective_rank_D_masked"] for row in rows]),
@@ -231,6 +266,12 @@ def print_summary(report):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base_root", type=str, default=None)
+    parser.add_argument(
+        "--layout",
+        choices=["physical", "inputmask"],
+        default="physical",
+        help="Default selected/retrain paths to use with --base_root.",
+    )
     parser.add_argument("--selected_csv", type=str, default=None)
     parser.add_argument("--retrain_aggregate_csv", type=str, default=None)
     parser.add_argument("--output_csv", type=str, required=True)
@@ -238,8 +279,14 @@ def main():
     args = parser.parse_args()
 
     if args.base_root:
-        selected_csv = args.selected_csv or os.path.join(args.base_root, DEFAULT_SELECTED)
-        retrain_csv = args.retrain_aggregate_csv or os.path.join(args.base_root, DEFAULT_RETRAIN_AGG)
+        if args.layout == "inputmask":
+            default_selected = DEFAULT_INPUTMASK_SELECTED
+            default_retrain = DEFAULT_INPUTMASK_RETRAIN_AGG
+        else:
+            default_selected = DEFAULT_SELECTED
+            default_retrain = DEFAULT_RETRAIN_AGG
+        selected_csv = args.selected_csv or os.path.join(args.base_root, default_selected)
+        retrain_csv = args.retrain_aggregate_csv or os.path.join(args.base_root, default_retrain)
     else:
         if not args.selected_csv or not args.retrain_aggregate_csv:
             raise SystemExit("Use --base_root or provide both input CSV paths")

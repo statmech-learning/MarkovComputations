@@ -58,15 +58,33 @@ def parse_seeds(raw):
 
 def load_topologies(path, selected_only=True, limit=None):
     rows = []
+    missing_topology_id = []
+    missing_edge_json = []
     base_dir = os.path.dirname(os.path.abspath(path))
     with open(path) as f:
-        for row in csv.DictReader(f):
+        for line_idx, row in enumerate(csv.DictReader(f), start=2):
             if selected_only and str(row.get("selected", "1")) not in {"1", "True", "true"}:
+                continue
+            if row.get("topology_id") in (None, ""):
+                missing_topology_id.append(str(line_idx))
+                continue
+            if row.get("edge_json") in (None, ""):
+                missing_edge_json.append(str(line_idx))
                 continue
             row["_library_dir"] = base_dir
             rows.append(row)
             if limit is not None and len(rows) >= limit:
                 break
+    if missing_topology_id:
+        raise SystemExit(
+            f"{path}: selected topology rows missing topology_id at CSV lines "
+            + ", ".join(missing_topology_id[:5])
+        )
+    if missing_edge_json:
+        raise SystemExit(
+            f"{path}: selected topology rows missing edge_json at CSV lines "
+            + ", ".join(missing_edge_json[:5])
+        )
     if not rows:
         raise SystemExit(f"No selected topology rows found in {path}")
     return rows

@@ -113,6 +113,15 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
                 ),
                 b"done",
             )
+            for filename in ["topology_metrics.json", "config.json"]:
+                self.touch(
+                    os.path.join(
+                        retrain_dir,
+                        f"mask{topology_idx}_trainseed{seed}",
+                        filename,
+                    ),
+                    b"{}",
+                )
         self.write_csv(
             os.path.join(retrain_dir, "task_manifest.csv"),
             ["completed", "results_path"],
@@ -264,6 +273,36 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("comparison row count mismatch: 1/2", result.stdout)
         self.assertIn("comparison n_joined mismatch: 1/2", result.stdout)
+
+    def test_strict_retrain_requirement_fails_on_missing_run_sidecars(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = self.make_experiment(
+                tmpdir,
+                selected_count=1,
+                retrain_count=1,
+                finalized=True,
+            )
+            os.remove(
+                os.path.join(
+                    root,
+                    "essential_inputmask50_retrain",
+                    "mask0_trainseed1",
+                    "config.json",
+                )
+            )
+            result = self.run_audit(
+                [
+                    "--experiment",
+                    f"exp={root}",
+                    "--seeds",
+                    "1",
+                    "--require_essential_retrains",
+                    "--strict",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing required run sidecars", result.stdout)
+        self.assertIn("missing_run_files=1", result.stdout)
 
     def test_strict_essential_requirement_fails_on_missing_references(self):
         with tempfile.TemporaryDirectory() as tmpdir:

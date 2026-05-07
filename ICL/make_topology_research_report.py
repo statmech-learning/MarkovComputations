@@ -24,6 +24,10 @@ BRANCH_METRIC_FALLBACKS = {
     "comparison_branch_common_d_rel_mean": "comparison_branch_d_rel_mean",
     "comparison_branch_common_d_rel_max": "comparison_branch_d_rel_max",
     "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+    "comparison_branch_input_overlap_min": "comparison_branch_input_count_min",
+    "comparison_branch_input_overlap_mean": "comparison_branch_input_count_mean",
+    "comparison_branch_input_overlap_max": "comparison_branch_input_count_max",
+    "comparison_branch_input_overlap_gini": "comparison_branch_input_count_gini",
 }
 ESSENTIAL_LAYOUTS = [
     {
@@ -262,9 +266,14 @@ def backfill_branch_metric_payload(payload):
                 payload[target] = payload[fallback]
                 if target.startswith("comparison_branch_common_d_rel_"):
                     payload["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
+                if target.startswith("comparison_branch_input_overlap_"):
+                    payload["comparison_branch_input_overlap_source"] = "legacy_input_count_fallback"
         if payload.get("comparison_branch_common_d_rel_min") not in (None, ""):
             if payload.get("comparison_branch_common_d_rel_source") in (None, ""):
                 payload["comparison_branch_common_d_rel_source"] = "artifact"
+        if payload.get("comparison_branch_input_overlap_min") not in (None, ""):
+            if payload.get("comparison_branch_input_overlap_source") in (None, ""):
+                payload["comparison_branch_input_overlap_source"] = "artifact"
         for value in payload.values():
             backfill_branch_metric_payload(value)
     elif isinstance(payload, list):
@@ -284,9 +293,14 @@ def load_csv(path):
                 row[target] = row[fallback]
                 if target.startswith("comparison_branch_common_d_rel_"):
                     row["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
+                if target.startswith("comparison_branch_input_overlap_"):
+                    row["comparison_branch_input_overlap_source"] = "legacy_input_count_fallback"
         if row.get("comparison_branch_common_d_rel_min") not in (None, ""):
             if row.get("comparison_branch_common_d_rel_source") in (None, ""):
                 row["comparison_branch_common_d_rel_source"] = "artifact"
+        if row.get("comparison_branch_input_overlap_min") not in (None, ""):
+            if row.get("comparison_branch_input_overlap_source") in (None, ""):
+                row["comparison_branch_input_overlap_source"] = "artifact"
     return rows
 
 
@@ -704,6 +718,18 @@ def pooled_report(experiments, target):
             retrain_rows,
             "comparison_branch_common_d_rel_source",
         ),
+        "run_input_overlap_source_counts": source_counts(
+            run_rows,
+            "comparison_branch_input_overlap_source",
+        ),
+        "aggregate_input_overlap_source_counts": source_counts(
+            aggregate_rows,
+            "comparison_branch_input_overlap_source",
+        ),
+        "retrain_input_overlap_source_counts": source_counts(
+            retrain_rows,
+            "comparison_branch_input_overlap_source",
+        ),
         "run_level": regression_models(run_rows, POOLED_RUN_MODELS, target),
         "aggregate_target_mean": regression_models(
             aggregate_rows,
@@ -1002,6 +1028,8 @@ def build_markdown(report):
         "These models test whether tree-geometry and post-training mechanism features explain accuracy beyond edge count when `m` varies across regimes.",
         "",
         f"Common branch-rank source counts: run rows `{pooled.get('run_common_branch_source_counts', {})}`, topology groups `{pooled.get('aggregate_common_branch_source_counts', {})}`, retrained groups `{pooled.get('retrain_common_branch_source_counts', {})}`. Legacy fallback means `comparison_branch_common_d_rel_*` was approximated from the older loose `comparison_branch_d_rel_*` upper-bound metric; regenerate collection artifacts to get exact common-subspace ranks.",
+        "",
+        f"Input-overlap source counts: run rows `{pooled.get('run_input_overlap_source_counts', {})}`, topology groups `{pooled.get('aggregate_input_overlap_source_counts', {})}`, retrained groups `{pooled.get('retrain_input_overlap_source_counts', {})}`. Legacy fallback means `comparison_branch_input_overlap_*` was approximated from the older per-branch input-count metric; regenerate collection artifacts to get exact context/query input-overlap counts.",
         "",
         *pooled_regression_table(pooled, "run_level", "### Run-Level Novel-Class ICL"),
         "",

@@ -45,6 +45,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
             "comparison_branch_common_d_rel_gini",
             "comparison_branch_d_rel_min",
             "comparison_branch_d_rel_gini",
+            "comparison_branch_input_count_min",
+            "comparison_branch_input_count_gini",
             "effective_rank_D_masked",
             "condition_number_D_masked",
             "input_edge_load_gini",
@@ -65,6 +67,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
             "comparison_branch_common_d_rel_gini",
             "comparison_branch_d_rel_min",
             "comparison_branch_d_rel_gini",
+            "comparison_branch_input_count_min",
+            "comparison_branch_input_count_gini",
             "effective_rank_D_masked",
             "condition_number_D_masked",
             "input_edge_load_gini",
@@ -109,6 +113,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
                 "comparison_branch_common_d_rel_gini": 0.0,
                 "comparison_branch_d_rel_min": 40,
                 "comparison_branch_d_rel_gini": 0.0,
+                "comparison_branch_input_count_min": 2,
+                "comparison_branch_input_count_gini": 0.0,
                 "effective_rank_D_masked": 24.0,
                 "condition_number_D_masked": 10.0,
                 "input_edge_load_gini": 0.1,
@@ -128,6 +134,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
                 "comparison_branch_common_d_rel_gini": 0.75,
                 "comparison_branch_d_rel_min": 0,
                 "comparison_branch_d_rel_gini": 0.75,
+                "comparison_branch_input_count_min": 0,
+                "comparison_branch_input_count_gini": 0.75,
                 "effective_rank_D_masked": 12.0,
                 "condition_number_D_masked": 100.0,
                 "input_edge_load_gini": 0.4,
@@ -150,6 +158,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
                 "comparison_branch_common_d_rel_gini": 0.0,
                 "comparison_branch_d_rel_min": 40,
                 "comparison_branch_d_rel_gini": 0.0,
+                "comparison_branch_input_count_min": 2,
+                "comparison_branch_input_count_gini": 0.0,
                 "effective_rank_D_masked": 24.0,
                 "condition_number_D_masked": 10.0,
                 "input_edge_load_gini": 0.1,
@@ -180,6 +190,8 @@ class MakeInputMaskReportTests(unittest.TestCase):
                 "comparison_branch_common_d_rel_gini": 0.75,
                 "comparison_branch_d_rel_min": 0,
                 "comparison_branch_d_rel_gini": 0.75,
+                "comparison_branch_input_count_min": 0,
+                "comparison_branch_input_count_gini": 0.75,
                 "effective_rank_D_masked": 12.0,
                 "condition_number_D_masked": 100.0,
                 "input_edge_load_gini": 0.4,
@@ -302,6 +314,7 @@ class MakeInputMaskReportTests(unittest.TestCase):
         self.assertIn("Wrote", result.stdout)
         self.assertIn("common branch rank", markdown)
         self.assertIn("Common branch-rank source counts", markdown)
+        self.assertIn("Input-overlap source counts", markdown)
         self.assertIn("artifact", markdown)
         self.assertIn("worst branch margin", markdown)
         self.assertIn("tree NMI", markdown)
@@ -309,6 +322,10 @@ class MakeInputMaskReportTests(unittest.TestCase):
         correlations = payload["pooled"]["run_correlations"]
         self.assertEqual(
             payload["pooled"]["run_common_branch_source_counts"]["artifact"],
+            2,
+        )
+        self.assertEqual(
+            payload["pooled"]["run_input_overlap_source_counts"]["legacy_input_count_fallback"],
             2,
         )
         self.assertIn("comparison_branch_common_d_rel_min", correlations)

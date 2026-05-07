@@ -29,6 +29,7 @@ RETRAIN_FILES = [
     "topology_seed_aggregates.csv",
     "topology_seed_aggregates.json",
 ]
+REQUIRED_RETRAIN_RUN_FILES = ["results.pkl", "topology_metrics.json", "config.json"]
 
 
 def parse_experiment(raw):
@@ -273,25 +274,36 @@ def retrain_exact_status(retrain_root, topology_ids, seeds):
             "exact_path_check": False,
             "completed_exact": None,
             "missing_exact": None,
+            "missing_required_run_files": None,
             "unexpected_results": None,
             "missing_examples": [],
+            "missing_required_examples": [],
             "unexpected_examples": [],
         }
-    expected_paths = [
-        os.path.join(retrain_root, f"{topology_id}_trainseed{seed}", "results.pkl")
+    expected_dirs = [
+        os.path.join(retrain_root, f"{topology_id}_trainseed{seed}")
         for topology_id in topology_ids
         for seed in seeds
     ]
+    expected_paths = [os.path.join(path, "results.pkl") for path in expected_dirs]
     existing = set(find_files(retrain_root, "results.pkl"))
     expected_set = set(expected_paths)
     missing = sorted(expected_set - existing)
+    missing_required = sorted(
+        os.path.join(run_dir, filename)
+        for run_dir in expected_dirs
+        for filename in REQUIRED_RETRAIN_RUN_FILES
+        if not os.path.exists(os.path.join(run_dir, filename))
+    )
     unexpected = sorted(existing - expected_set)
     return {
         "exact_path_check": True,
         "completed_exact": len(expected_paths) - len(missing),
         "missing_exact": len(missing),
+        "missing_required_run_files": len(missing_required),
         "unexpected_results": len(unexpected),
         "missing_examples": missing[:5],
+        "missing_required_examples": missing_required[:5],
         "unexpected_examples": unexpected[:5],
     }
 
@@ -435,6 +447,11 @@ def audit_experiment(name, root, args):
                     "essential retrains have unexpected results: "
                     f"{retrain['unexpected_results']} extra results.pkl files"
                 )
+            if retrain["missing_required_run_files"]:
+                failures.append(
+                    "essential retrains missing required run sidecars: "
+                    f"{retrain['missing_required_run_files']} files"
+                )
         elif retrain["completed_results"] != retrain["expected_results"]:
             failures.append(
                 "essential retrains incomplete: "
@@ -516,6 +533,7 @@ def print_experiment(report):
         f"completed={completed} "
         f"expected={retrain['expected_results']} "
         f"missing={missing} "
+        f"missing_run_files={retrain.get('missing_required_run_files')} "
         f"unexpected={retrain['unexpected_results']} "
         f"manifest_rows={retrain['manifest']['rows']} "
         f"array_commands={retrain['array_commands']}"

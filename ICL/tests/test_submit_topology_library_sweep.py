@@ -61,6 +61,15 @@ class SubmitTopologyLibrarySweepTests(unittest.TestCase):
             capture_output=True,
         )
 
+    def run_submitter_unchecked(self, args, cwd):
+        return subprocess.run(
+            [sys.executable, SCRIPT, *args],
+            cwd=cwd,
+            check=False,
+            text=True,
+            capture_output=True,
+        )
+
     def test_status_manifest_reports_completed_and_missing_outputs(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             library_csv = self.make_library(tmpdir)
@@ -135,6 +144,43 @@ class SubmitTopologyLibrarySweepTests(unittest.TestCase):
             self.assertEqual(len(outputs), 1)
             self.assertIn("--seed 2", commands[0])
             self.assertTrue(outputs[0].endswith("g0001_trainseed2"))
+
+    def test_selected_rows_require_topology_id_before_status_or_submit(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            edge_json = os.path.join(tmpdir, "edge.json")
+            with open(edge_json, "w") as f:
+                f.write("{}\n")
+            library_csv = os.path.join(tmpdir, "selected.csv")
+            with open(library_csv, "w", newline="") as f:
+                writer = csv.DictWriter(
+                    f,
+                    fieldnames=["selected", "topology_id", "topology_name", "edge_json"],
+                )
+                writer.writeheader()
+                writer.writerow(
+                    {
+                        "selected": "1",
+                        "topology_id": "",
+                        "topology_name": "bad",
+                        "edge_json": os.path.basename(edge_json),
+                    }
+                )
+
+            result = self.run_submitter_unchecked(
+                [
+                    "--library_csv",
+                    library_csv,
+                    "--output_root",
+                    os.path.join(tmpdir, "runs"),
+                    "--seeds",
+                    "1",
+                    "--status_only",
+                ],
+                cwd=tmpdir,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing topology_id", result.stderr + result.stdout)
 
 
 if __name__ == "__main__":

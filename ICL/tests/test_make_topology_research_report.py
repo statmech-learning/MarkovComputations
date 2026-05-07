@@ -42,6 +42,8 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
             "d_rel",
             "comparison_branch_d_rel_min",
             "comparison_branch_d_rel_gini",
+            "comparison_branch_input_count_min",
+            "comparison_branch_input_count_gini",
             "effective_rank_D",
             "effective_rank_D_masked",
             "condition_number_D",
@@ -62,6 +64,8 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
             "d_rel",
             "comparison_branch_d_rel_min",
             "comparison_branch_d_rel_gini",
+            "comparison_branch_input_count_min",
+            "comparison_branch_input_count_gini",
             "effective_rank_D",
             "effective_rank_D_masked",
             "condition_number_D",
@@ -112,6 +116,8 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
                     "d_rel": 80 + branch_min,
                     "comparison_branch_d_rel_min": branch_min,
                     "comparison_branch_d_rel_gini": 0.5 - idx * 0.05,
+                    "comparison_branch_input_count_min": idx % 3,
+                    "comparison_branch_input_count_gini": 0.5 - idx * 0.04,
                     "effective_rank_D": 7.0 + idx,
                     "effective_rank_D_masked": 6.0 + idx,
                     "condition_number_D": 40.0 - idx,
@@ -134,6 +140,8 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
                     "d_rel": 80 + branch_min,
                     "comparison_branch_d_rel_min": branch_min,
                     "comparison_branch_d_rel_gini": 0.5 - idx * 0.05,
+                    "comparison_branch_input_count_min": idx % 3,
+                    "comparison_branch_input_count_gini": 0.5 - idx * 0.04,
                     "effective_rank_D": 7.0 + idx,
                     "effective_rank_D_masked": 6.0 + idx,
                     "condition_number_D": 40.0 - idx,
@@ -375,7 +383,9 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
         self.assertIn("toy (input mask)", markdown)
         self.assertIn("essential_layout_is_input_mask", markdown)
         self.assertIn("Common branch-rank source counts", markdown)
+        self.assertIn("Input-overlap source counts", markdown)
         self.assertIn("legacy_branch_d_rel_fallback", markdown)
+        self.assertIn("legacy_input_count_fallback", markdown)
 
         pooled_model = payload["pooled"]["run_level"]["input_plus_branch_drel"]
         self.assertIn("comparison_branch_d_rel_min", pooled_model["predictors"])
@@ -384,6 +394,10 @@ class MakeTopologyResearchReportTests(unittest.TestCase):
         self.assertIn("essential_layout_is_input_mask", pooled_retrain_model["predictors"])
         self.assertEqual(
             payload["pooled"]["run_common_branch_source_counts"]["legacy_branch_d_rel_fallback"],
+            6,
+        )
+        self.assertEqual(
+            payload["pooled"]["run_input_overlap_source_counts"]["legacy_input_count_fallback"],
             6,
         )
 

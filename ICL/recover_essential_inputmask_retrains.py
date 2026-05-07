@@ -141,7 +141,7 @@ def main():
     args = parser.parse_args()
 
     experiments = [parse_experiment(raw) for raw in args.experiment]
-    run_command(audit_command(experiments, args.seeds), dry_run=args.dry_run)
+    run_command(audit_command(experiments, args.seeds, strict=True), dry_run=args.dry_run)
 
     submitted_missing = False
     for _, root in experiments:

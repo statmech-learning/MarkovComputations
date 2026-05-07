@@ -25,6 +25,10 @@ BRANCH_METRIC_FALLBACKS = {
     "comparison_branch_common_d_rel_mean": "comparison_branch_d_rel_mean",
     "comparison_branch_common_d_rel_max": "comparison_branch_d_rel_max",
     "comparison_branch_common_d_rel_gini": "comparison_branch_d_rel_gini",
+    "comparison_branch_input_overlap_min": "comparison_branch_input_count_min",
+    "comparison_branch_input_overlap_mean": "comparison_branch_input_count_mean",
+    "comparison_branch_input_overlap_max": "comparison_branch_input_count_max",
+    "comparison_branch_input_overlap_gini": "comparison_branch_input_count_gini",
 }
 
 RUN_MODELS = OrderedDict(
@@ -259,9 +263,14 @@ def load_csv(path):
                 row[target] = row[fallback]
                 if target.startswith("comparison_branch_common_d_rel_"):
                     row["comparison_branch_common_d_rel_source"] = "legacy_branch_d_rel_fallback"
+                if target.startswith("comparison_branch_input_overlap_"):
+                    row["comparison_branch_input_overlap_source"] = "legacy_input_count_fallback"
         if row.get("comparison_branch_common_d_rel_min") not in (None, ""):
             if row.get("comparison_branch_common_d_rel_source") in (None, ""):
                 row["comparison_branch_common_d_rel_source"] = "artifact"
+        if row.get("comparison_branch_input_overlap_min") not in (None, ""):
+            if row.get("comparison_branch_input_overlap_source") in (None, ""):
+                row["comparison_branch_input_overlap_source"] = "artifact"
     return rows
 
 
@@ -291,9 +300,13 @@ def mean(values):
 
 
 def common_branch_source_counts(rows):
+    return source_counts(rows, "comparison_branch_common_d_rel_source")
+
+
+def source_counts(rows, key):
     counts = defaultdict(int)
     for row in rows:
-        source = row.get("comparison_branch_common_d_rel_source") or "unknown"
+        source = row.get(key) or "unknown"
         counts[source] += 1
     return dict(sorted(counts.items()))
 
@@ -965,6 +978,14 @@ def build_report(experiments, target):
         "aggregate_summary": summarize_rows(aggregate_rows, "target_mean"),
         "run_common_branch_source_counts": common_branch_source_counts(run_rows),
         "aggregate_common_branch_source_counts": common_branch_source_counts(aggregate_rows),
+        "run_input_overlap_source_counts": source_counts(
+            run_rows,
+            "comparison_branch_input_overlap_source",
+        ),
+        "aggregate_input_overlap_source_counts": source_counts(
+            aggregate_rows,
+            "comparison_branch_input_overlap_source",
+        ),
         "run_regressions": regression_models(run_rows, RUN_MODELS, target),
         "aggregate_target_mean": regression_models(aggregate_rows, AGGREGATE_MODELS, "target_mean"),
         "aggregate_target_max": regression_models(aggregate_rows, AGGREGATE_MODELS, "target_max"),
@@ -1007,6 +1028,8 @@ def build_markdown(report):
         "Raw count controls should be weak here because `n_edges` and `input_coupled_parameter_count` were fixed by construction. Physical-backbone and mask-family terms test controlled topology effects; mechanism terms test what trained models actually used.",
         "",
         f"Common branch-rank source counts: run rows `{pooled['run_common_branch_source_counts']}`, mask groups `{pooled['aggregate_common_branch_source_counts']}`. Legacy fallback means `comparison_branch_common_d_rel_*` was approximated from the older loose `comparison_branch_d_rel_*` upper-bound metric; regenerate collection artifacts to get exact common-subspace ranks.",
+        "",
+        f"Input-overlap source counts: run rows `{pooled['run_input_overlap_source_counts']}`, mask groups `{pooled['aggregate_input_overlap_source_counts']}`. Legacy fallback means `comparison_branch_input_overlap_*` was approximated from the older per-branch input-count metric; regenerate collection artifacts to get exact context/query input-overlap counts.",
         "",
         *fit_table(pooled["run_regressions"], "### Run-Level Novel-Class ICL"),
         "",

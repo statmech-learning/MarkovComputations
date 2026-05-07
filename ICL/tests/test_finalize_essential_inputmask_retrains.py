@@ -53,6 +53,9 @@ class FinalizeEssentialInputMaskRetrainsTests(unittest.TestCase):
             os.makedirs(os.path.dirname(result_path))
             with open(result_path, "wb") as f:
                 f.write(b"done")
+            for filename in ["topology_metrics.json", "config.json"]:
+                with open(os.path.join(os.path.dirname(result_path), filename), "w") as f:
+                    f.write("{}\n")
         return root
 
     def run_finalizer(self, args):
@@ -200,6 +203,30 @@ class FinalizeEssentialInputMaskRetrainsTests(unittest.TestCase):
             )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("missing topology_id", result.stderr + result.stdout)
+
+    def test_complete_results_without_sidecars_fail(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = self.make_experiment(tmpdir, selected_count=1, completed_count=1)
+            os.remove(
+                os.path.join(
+                    root,
+                    "essential_inputmask50_retrain",
+                    "mask0_trainseed1",
+                    "config.json",
+                )
+            )
+            result = self.run_finalizer(
+                [
+                    "--experiment",
+                    f"exp={root}",
+                    "--seeds",
+                    "1",
+                    "--dry-run",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing required run-file", result.stdout)
+        self.assertIn("Retrain run sidecars are incomplete", result.stderr + result.stdout)
 
 
 if __name__ == "__main__":

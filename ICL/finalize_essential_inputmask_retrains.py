@@ -15,6 +15,7 @@ import sys
 
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+REQUIRED_RUN_FILES = ["results.pkl", "topology_metrics.json", "config.json"]
 
 
 def parse_experiment(raw):
@@ -67,6 +68,22 @@ def count_files(root, filename):
     return total
 
 
+def count_csv_rows(path):
+    if not os.path.exists(path):
+        return None
+    with open(path, newline="") as f:
+        return sum(1 for _ in csv.DictReader(f))
+
+
+def read_json(path):
+    if not os.path.exists(path):
+        return None
+    import json
+
+    with open(path) as f:
+        return json.load(f)
+
+
 def find_files(root, filename):
     paths = []
     for current, _, files in os.walk(root):
@@ -76,17 +93,25 @@ def find_files(root, filename):
 
 
 def exact_retrain_status(root, topology_ids, seeds):
-    expected_paths = [
-        os.path.join(root, f"{topology_id}_trainseed{seed}", "results.pkl")
+    expected_dirs = [
+        os.path.join(root, f"{topology_id}_trainseed{seed}")
         for topology_id in topology_ids
         for seed in seeds
     ]
+    expected_paths = [os.path.join(path, "results.pkl") for path in expected_dirs]
     missing = [path for path in expected_paths if not os.path.exists(path)]
+    missing_required = [
+        os.path.join(run_dir, filename)
+        for run_dir in expected_dirs
+        for filename in REQUIRED_RUN_FILES
+        if not os.path.exists(os.path.join(run_dir, filename))
+    ]
     unexpected = sorted(set(find_files(root, "results.pkl")) - set(expected_paths))
     return {
         "expected_paths": expected_paths,
         "completed": len(expected_paths) - len(missing),
         "missing": missing,
+        "missing_required": missing_required,
         "unexpected": unexpected,
     }
 
@@ -139,6 +164,10 @@ def check_completion(name, root, seeds):
         print("  unexpected result examples:")
         for path in exact["unexpected"][:5]:
             print(f"    {path}")
+    if exact["missing_required"]:
+        print("  missing required run-file examples:")
+        for path in exact["missing_required"][:5]:
+            print(f"    {path}")
     return {
         "name": name,
         "root": root,
@@ -146,6 +175,7 @@ def check_completion(name, root, seeds):
         "expected": expected,
         "completed": completed,
         "unexpected": len(exact["unexpected"]),
+        "missing_required": len(exact["missing_required"]),
         "paths": paths,
     }
 
@@ -176,6 +206,43 @@ def finalize_experiment(status, args):
     )
 
 
+def validate_finalized_outputs(status, args):
+    if args.dry_run:
+        return
+    paths = status["paths"]
+    selected = status["selected"]
+    aggregate_csv = paths["retrain_aggregate_csv"]
+    comparison_csv = paths["comparison_csv"]
+    comparison_json = paths["comparison_json"]
+    failures = []
+
+    aggregate_rows = count_csv_rows(aggregate_csv)
+    if aggregate_rows is None:
+        failures.append(f"missing {aggregate_csv}")
+    elif aggregate_rows != selected:
+        failures.append(f"{aggregate_csv}: row count {aggregate_rows}/{selected}")
+
+    comparison_rows = count_csv_rows(comparison_csv)
+    if comparison_rows is None:
+        failures.append(f"missing {comparison_csv}")
+    elif comparison_rows != selected:
+        failures.append(f"{comparison_csv}: row count {comparison_rows}/{selected}")
+
+    comparison = read_json(comparison_json)
+    if comparison is None:
+        failures.append(f"missing {comparison_json}")
+    else:
+        joined = comparison.get("n_joined")
+        if joined != selected:
+            failures.append(f"{comparison_json}: n_joined {joined}/{selected}")
+
+    if failures:
+        raise SystemExit(
+            "Finalized retrain artifacts are incomplete:\n"
+            + "\n".join(f"  {failure}" for failure in failures)
+        )
+
+
 def refresh_report(experiments, args):
     if not args.output_md and not args.output_json:
         return
@@ -186,6 +253,17 @@ def refresh_report(experiments, args):
         parts.extend(["--experiment", f"{name}={root}"])
     parts.extend(["--output_md", args.output_md, "--output_json", args.output_json])
     run_command(parts, dry_run=args.dry_run)
+    if not args.dry_run:
+        missing = [
+            path
+            for path in (args.output_md, args.output_json)
+            if not os.path.exists(path)
+        ]
+        if missing:
+            raise SystemExit(
+                "Report generation did not create expected output files:\n"
+                + "\n".join(f"  {path}" for path in missing)
+            )
 
 
 def main():
@@ -212,6 +290,11 @@ def main():
         for status in statuses
         if status["completed"] != status["expected"]
     ]
+    missing_required = [
+        status
+        for status in statuses
+        if status["missing_required"]
+    ]
     unexpected = [
         status
         for status in statuses
@@ -224,6 +307,15 @@ def main():
                 f"{status['completed']}/{status['expected']} results.pkl files"
             )
         raise SystemExit("Retrain outputs are incomplete; use --allow_partial only for diagnostics")
+    if missing_required and not args.allow_partial:
+        for status in missing_required:
+            print(
+                f"Incomplete run sidecars: {status['name']} has "
+                f"{status['missing_required']} missing required run files"
+            )
+        raise SystemExit(
+            "Retrain run sidecars are incomplete; use --allow_partial only for diagnostics"
+        )
     if unexpected and not args.allow_extra:
         for status in unexpected:
             print(
@@ -234,6 +326,7 @@ def main():
 
     for status in statuses:
         finalize_experiment(status, args)
+        validate_finalized_outputs(status, args)
     refresh_report(experiments, args)
 
 

@@ -75,8 +75,13 @@ class CompareEssentialRetrainsTests(unittest.TestCase):
                     "topology_name",
                     "n_edges",
                     "d_rel",
+                    "comparison_branch_common_d_rel_min",
+                    "comparison_branch_common_d_rel_gini",
+                    "comparison_branch_common_d_rel_source",
                     "comparison_branch_d_rel_min",
                     "comparison_branch_d_rel_gini",
+                    "comparison_branch_input_count_min",
+                    "comparison_branch_input_count_gini",
                     "effective_rank_D",
                     "effective_rank_D_masked",
                     "input_coupled_parameter_count",
@@ -90,8 +95,13 @@ class CompareEssentialRetrainsTests(unittest.TestCase):
                         "topology_name": "mask_a",
                         "n_edges": 20,
                         "d_rel": 64,
+                        "comparison_branch_common_d_rel_min": 10,
+                        "comparison_branch_common_d_rel_gini": 0.2,
+                        "comparison_branch_common_d_rel_source": "recomputed",
                         "comparison_branch_d_rel_min": 12,
                         "comparison_branch_d_rel_gini": 0.25,
+                        "comparison_branch_input_count_min": 2,
+                        "comparison_branch_input_count_gini": 0.5,
                         "effective_rank_D": 15.0,
                         "effective_rank_D_masked": 10.0,
                         "input_coupled_parameter_count": 48,
@@ -104,8 +114,13 @@ class CompareEssentialRetrainsTests(unittest.TestCase):
                         "topology_name": "not_selected",
                         "n_edges": 20,
                         "d_rel": 20,
+                        "comparison_branch_common_d_rel_min": 0,
+                        "comparison_branch_common_d_rel_gini": 1.0,
+                        "comparison_branch_common_d_rel_source": "recomputed",
                         "comparison_branch_d_rel_min": 0,
                         "comparison_branch_d_rel_gini": 1.0,
+                        "comparison_branch_input_count_min": 0,
+                        "comparison_branch_input_count_gini": 1.0,
                         "effective_rank_D": 5.0,
                         "effective_rank_D_masked": 4.0,
                         "input_coupled_parameter_count": 12,
@@ -140,11 +155,14 @@ class CompareEssentialRetrainsTests(unittest.TestCase):
         self.assertEqual(row["topology_name"], "mask_a")
         self.assertEqual(row["topology_id"], "mask_a_group")
         self.assertEqual(row["retrain_input_coupled_parameter_count"], "48.0")
+        self.assertEqual(row["comparison_branch_common_d_rel_source"], "recomputed")
+        self.assertEqual(row["comparison_branch_input_overlap_source"], "legacy_input_count_fallback")
         self.assertAlmostEqual(float(row["retrain_retention_max"]), 0.8)
         self.assertAlmostEqual(float(row["retrain_retention_mean"]), 0.8)
         self.assertEqual(summary["n_joined"], 1)
         self.assertEqual(summary["retrain_input_coupled_parameter_count_mean"], 48.0)
         self.assertEqual(summary["comparison_branch_d_rel_min_mean"], 12.0)
+        self.assertEqual(summary["comparison_branch_input_overlap_min_mean"], 2.0)
 
     def test_zero_join_fails_with_clear_message(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -194,6 +212,57 @@ class CompareEssentialRetrainsTests(unittest.TestCase):
         self.assertIn("No retrained motifs joined by topology_name", result.stderr + result.stdout)
         self.assertIn("selected_mask", result.stderr + result.stdout)
         self.assertIn("other_mask", result.stderr + result.stdout)
+
+    def test_base_root_can_use_inputmask_layout_defaults(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            selected_csv = os.path.join(tmpdir, "essential_inputmask50", "selected.csv")
+            retrain_csv = os.path.join(
+                tmpdir,
+                "essential_inputmask50_retrain",
+                "topology_seed_aggregates.csv",
+            )
+            output_csv = os.path.join(tmpdir, "comparison.csv")
+            output_json = os.path.join(tmpdir, "comparison.json")
+            self.write_csv(
+                selected_csv,
+                ["topology_name", "source_test_novel_classes_max", "source_test_novel_classes_mean"],
+                [
+                    {
+                        "topology_name": "mask_a",
+                        "source_test_novel_classes_max": 80.0,
+                        "source_test_novel_classes_mean": 75.0,
+                    }
+                ],
+            )
+            self.write_csv(
+                retrain_csv,
+                ["group", "topology_name", "n_edges", "target_max", "target_mean"],
+                [
+                    {
+                        "group": "mask_a_group",
+                        "topology_name": "mask_a",
+                        "n_edges": 20,
+                        "target_max": 70.0,
+                        "target_mean": 60.0,
+                    }
+                ],
+            )
+
+            result = self.run_compare(
+                [
+                    "--base_root",
+                    tmpdir,
+                    "--layout",
+                    "inputmask",
+                    "--output_csv",
+                    output_csv,
+                    "--output_json",
+                    output_json,
+                ]
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Joined motifs: 1", result.stdout)
 
 
 if __name__ == "__main__":

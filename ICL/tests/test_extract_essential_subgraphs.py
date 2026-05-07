@@ -102,6 +102,7 @@ class ExtractEssentialSubgraphsTests(unittest.TestCase):
             self.assertEqual(row["augmented_edges"], "2.0")
             self.assertEqual(row["source_run_count"], "2")
             self.assertEqual(row["source_test_novel_classes_max"], "90.0")
+            self.assertEqual(row["comparison_branch_common_d_rel_source"], "artifact")
 
             with open(row["edge_json"]) as f:
                 edge_payload = json.load(f)
