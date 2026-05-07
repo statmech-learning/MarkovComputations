@@ -154,6 +154,104 @@ def comparison_feature_matrix(
     return features.reshape(z.shape[0], n_context * z_dim)
 
 
+def weighted_comparison_feature_matrix(
+    z: np.ndarray,
+    weights: np.ndarray,
+) -> np.ndarray:
+    """Build rank-weighted squared-distance branch comparison features."""
+
+    z = np.asarray(z, dtype=float)
+    weights = np.asarray(weights, dtype=float)
+    if weights.ndim != 2:
+        raise ValueError("weights must have shape (n_context, z_dim)")
+    if np.any(weights < 0):
+        raise ValueError("weights must be non-negative")
+    n_context, z_dim = weights.shape
+    expected_p = (n_context + 1) * z_dim
+    if z.ndim != 2 or z.shape[1] != expected_p:
+        raise ValueError(f"z must have shape (n_samples, {expected_p})")
+
+    contexts = z[:, : n_context * z_dim].reshape(z.shape[0], n_context, z_dim)
+    query = z[:, n_context * z_dim :].reshape(z.shape[0], 1, z_dim)
+    squared_diff = (contexts - query) ** 2
+    features = -squared_diff * weights[None, :, :]
+    return features.reshape(z.shape[0], n_context * z_dim)
+
+
+def normalized_rank_weights(common_ranks: np.ndarray) -> np.ndarray:
+    """Normalize common-rank support to [0, 1] while preserving zeros."""
+
+    ranks = np.asarray(common_ranks, dtype=float)
+    if ranks.ndim != 2:
+        raise ValueError("common_ranks must have shape (n_context, z_dim)")
+    max_rank = float(np.max(ranks)) if ranks.size else 0.0
+    if max_rank <= 0:
+        return np.zeros_like(ranks, dtype=float)
+    return ranks / max_rank
+
+
+def _gini(values: np.ndarray) -> float:
+    arr = np.asarray(values, dtype=float).reshape(-1)
+    if arr.size == 0:
+        return 0.0
+    min_value = float(np.min(arr))
+    if min_value < 0:
+        arr = arr - min_value
+    total = float(np.sum(arr))
+    if total <= 1e-12:
+        return 0.0
+    arr = np.sort(arr)
+    n = arr.size
+    weighted = float(np.sum((np.arange(n) + 1) * arr))
+    return float((2.0 * weighted / (n * total)) - ((n + 1.0) / n))
+
+
+def rank_geometry_summary(common_ranks: np.ndarray) -> dict:
+    """Summarize rank-weight geometry beyond Boolean support."""
+
+    ranks = np.asarray(common_ranks, dtype=float)
+    if ranks.ndim != 2:
+        raise ValueError("common_ranks must have shape (n_context, z_dim)")
+    if ranks.size == 0:
+        return {
+            "rank_mass_min": 0.0,
+            "rank_mass_mean": 0.0,
+            "rank_mass_max": 0.0,
+            "rank_mass_gini": 0.0,
+            "rank_dim_mass_min": 0.0,
+            "rank_dim_mass_mean": 0.0,
+            "rank_dim_mass_max": 0.0,
+            "rank_dim_mass_gini": 0.0,
+            "rank_nonzero_fraction": 0.0,
+            "rank_weight_entropy": 0.0,
+            "rank_weight_effective_entries": 0.0,
+        }
+    branch_mass = ranks.sum(axis=1)
+    dim_mass = ranks.sum(axis=0)
+    total = float(ranks.sum())
+    if total > 1e-12:
+        probs = ranks.reshape(-1) / total
+        probs = probs[probs > 0]
+        entropy = float(-np.sum(probs * np.log(probs)))
+        effective = float(np.exp(entropy))
+    else:
+        entropy = 0.0
+        effective = 0.0
+    return {
+        "rank_mass_min": float(np.min(branch_mass)) if branch_mass.size else 0.0,
+        "rank_mass_mean": float(np.mean(branch_mass)) if branch_mass.size else 0.0,
+        "rank_mass_max": float(np.max(branch_mass)) if branch_mass.size else 0.0,
+        "rank_mass_gini": _gini(branch_mass),
+        "rank_dim_mass_min": float(np.min(dim_mass)) if dim_mass.size else 0.0,
+        "rank_dim_mass_mean": float(np.mean(dim_mass)) if dim_mass.size else 0.0,
+        "rank_dim_mass_max": float(np.max(dim_mass)) if dim_mass.size else 0.0,
+        "rank_dim_mass_gini": _gini(dim_mass),
+        "rank_nonzero_fraction": float(np.mean(ranks > 0)),
+        "rank_weight_entropy": entropy,
+        "rank_weight_effective_entries": effective,
+    }
+
+
 def oracle_branch_scores(
     features: np.ndarray,
     n_context: int,
@@ -215,7 +313,13 @@ def fit_ridge_multiclass(
         regularizer = np.eye(gram.shape[0], dtype=float) * ridge
         regularizer[-1, -1] = 0.0
         gram = gram + regularizer
-    weights_aug = np.linalg.pinv(gram) @ X_aug.T @ Y
+    rhs = X_aug.T @ Y
+    try:
+        weights_aug = np.linalg.solve(gram + 1e-12 * np.eye(gram.shape[0], dtype=float), rhs)
+    except np.linalg.LinAlgError:
+        weights_aug = np.linalg.lstsq(gram, rhs, rcond=1e-10)[0]
+    if not np.all(np.isfinite(weights_aug)):
+        weights_aug = np.nan_to_num(weights_aug, nan=0.0, posinf=0.0, neginf=0.0)
     weights = weights_aug[:-1, :]
     bias = weights_aug[-1, :]
 
@@ -300,6 +404,9 @@ def branch_margin_capacity(
     )
     train_features = comparison_feature_matrix(train_z, support)
     test_features = comparison_feature_matrix(test_z, support)
+    rank_weights = normalized_rank_weights(common_ranks)
+    train_rank_features = weighted_comparison_feature_matrix(train_z, rank_weights)
+    test_rank_features = weighted_comparison_feature_matrix(test_z, rank_weights)
 
     oracle_train_scores = oracle_branch_scores(train_features, n_context, z_dim, support=support)
     oracle_test_scores = oracle_branch_scores(test_features, n_context, z_dim, support=support)
@@ -312,6 +419,27 @@ def branch_margin_capacity(
     )
     linear_train_scores = linear_scores(train_features, weights, bias)
     linear_test_scores = linear_scores(test_features, weights, bias)
+    weighted_oracle_train_scores = oracle_branch_scores(
+        train_rank_features,
+        n_context,
+        z_dim,
+        support=support,
+    )
+    weighted_oracle_test_scores = oracle_branch_scores(
+        test_rank_features,
+        n_context,
+        z_dim,
+        support=support,
+    )
+    weighted_weights, weighted_bias = fit_ridge_multiclass(
+        train_rank_features,
+        train_labels,
+        n_classes=n_context,
+        ridge=ridge,
+        l2_radius=l2_radius,
+    )
+    weighted_linear_train_scores = linear_scores(train_rank_features, weighted_weights, weighted_bias)
+    weighted_linear_test_scores = linear_scores(test_rank_features, weighted_weights, weighted_bias)
 
     topology = compute_topology_metrics(
         n_nodes=n_nodes,
@@ -338,12 +466,15 @@ def branch_margin_capacity(
         "l2_radius": l2_radius,
         "common_rank_by_branch_dim": common_ranks.tolist(),
         "support_by_branch_dim": support.astype(int).tolist(),
+        "rank_weight_by_branch_dim": rank_weights.tolist(),
         "support_fraction": float(np.mean(support)) if support.size else 0.0,
         "support_min": int(branch_support_counts.min()) if branch_support_counts.size else 0,
         "support_mean": float(branch_support_counts.mean()) if branch_support_counts.size else 0.0,
         "support_max": int(branch_support_counts.max()) if branch_support_counts.size else 0,
         "linear_weight_norm": float(np.linalg.norm(weights)),
+        "weighted_linear_weight_norm": float(np.linalg.norm(weighted_weights)),
     }
+    result.update(rank_geometry_summary(common_ranks))
     for key in [
         "d_rel",
         "rank_D",
@@ -361,6 +492,34 @@ def branch_margin_capacity(
     result.update(summarize_margin_scores(oracle_test_scores, test_labels, "oracle_test"))
     result.update(summarize_margin_scores(linear_train_scores, train_labels, "linear_train"))
     result.update(summarize_margin_scores(linear_test_scores, test_labels, "linear_test"))
+    result.update(
+        summarize_margin_scores(
+            weighted_oracle_train_scores,
+            train_labels,
+            "rank_weighted_oracle_train",
+        )
+    )
+    result.update(
+        summarize_margin_scores(
+            weighted_oracle_test_scores,
+            test_labels,
+            "rank_weighted_oracle_test",
+        )
+    )
+    result.update(
+        summarize_margin_scores(
+            weighted_linear_train_scores,
+            train_labels,
+            "rank_weighted_linear_train",
+        )
+    )
+    result.update(
+        summarize_margin_scores(
+            weighted_linear_test_scores,
+            test_labels,
+            "rank_weighted_linear_test",
+        )
+    )
     return result
 
 
@@ -382,6 +541,8 @@ def markdown_report(result: dict) -> str:
         f"| common branch d_rel min | {result.get('comparison_branch_common_d_rel_min')} |",
         f"| support fraction | {result['support_fraction']:.3f} |",
         f"| support min/mean/max | {result['support_min']} / {result['support_mean']:.2f} / {result['support_max']} |",
+        f"| rank mass min/mean/max | {result['rank_mass_min']:.2f} / {result['rank_mass_mean']:.2f} / {result['rank_mass_max']:.2f} |",
+        f"| rank mass gini | {result['rank_mass_gini']:.3f} |",
         "",
         "## Margins",
         "",
@@ -390,7 +551,9 @@ def markdown_report(result: dict) -> str:
     ]
     for prefix, label in [
         ("oracle_test", "oracle comparison"),
+        ("rank_weighted_oracle_test", "rank-weighted oracle"),
         ("linear_test", "linear ridge"),
+        ("rank_weighted_linear_test", "rank-weighted linear ridge"),
         ("oracle_train", "oracle comparison train"),
         ("linear_train", "linear ridge train"),
     ]:

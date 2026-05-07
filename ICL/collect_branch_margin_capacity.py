@@ -36,15 +36,35 @@ FIELDS = [
     "support_min",
     "support_mean",
     "support_max",
+    "rank_mass_min",
+    "rank_mass_mean",
+    "rank_mass_max",
+    "rank_mass_gini",
+    "rank_dim_mass_min",
+    "rank_dim_mass_mean",
+    "rank_dim_mass_max",
+    "rank_dim_mass_gini",
+    "rank_nonzero_fraction",
+    "rank_weight_entropy",
+    "rank_weight_effective_entries",
     "oracle_test_accuracy",
     "oracle_test_margin_mean",
     "oracle_test_margin_p10",
     "oracle_test_margin_finite_fraction",
+    "rank_weighted_oracle_test_accuracy",
+    "rank_weighted_oracle_test_margin_mean",
+    "rank_weighted_oracle_test_margin_p10",
+    "rank_weighted_oracle_test_margin_finite_fraction",
     "linear_test_accuracy",
     "linear_test_margin_mean",
     "linear_test_margin_p10",
     "linear_test_margin_finite_fraction",
+    "rank_weighted_linear_test_accuracy",
+    "rank_weighted_linear_test_margin_mean",
+    "rank_weighted_linear_test_margin_p10",
+    "rank_weighted_linear_test_margin_finite_fraction",
     "linear_weight_norm",
+    "weighted_linear_weight_norm",
 ]
 
 
@@ -141,15 +161,22 @@ def summary(rows: List[dict]) -> dict:
     out = {"n_rows": len(rows), "families": {}}
     for family, items in sorted(by_family.items()):
         values = []
+        weighted_values = []
         for item in items:
             try:
                 values.append(float(item["linear_test_accuracy"]))
+            except (TypeError, ValueError):
+                pass
+            try:
+                weighted_values.append(float(item["rank_weighted_linear_test_accuracy"]))
             except (TypeError, ValueError):
                 pass
         out["families"][family] = {
             "n": len(items),
             "linear_test_accuracy_mean": float(np.mean(values)) if values else None,
             "linear_test_accuracy_max": float(np.max(values)) if values else None,
+            "rank_weighted_linear_test_accuracy_mean": float(np.mean(weighted_values)) if weighted_values else None,
+            "rank_weighted_linear_test_accuracy_max": float(np.max(weighted_values)) if weighted_values else None,
         }
     return out
 

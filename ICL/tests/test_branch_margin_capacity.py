@@ -13,9 +13,12 @@ from branch_margin_capacity import (  # noqa: E402
     comparison_feature_matrix,
     coordinate_common_rank_matrix,
     markdown_report,
+    normalized_rank_weights,
     oracle_branch_scores,
+    rank_geometry_summary,
     sample_exact_copy_branches,
     summarize_margin_scores,
+    weighted_comparison_feature_matrix,
 )
 from topology_metrics import complete_digraph, compute_topology_metrics, topology_matrices, centered_tree_matrix  # noqa: E402
 
@@ -85,8 +88,29 @@ class BranchMarginCapacityTests(unittest.TestCase):
         self.assertEqual(result["support_min"], 1)
         self.assertGreater(result["oracle_test_accuracy"], 0.99)
         self.assertIn("linear_test_margin_mean", result)
+        self.assertIn("rank_weighted_oracle_test_margin_mean", result)
+        self.assertIn("rank_mass_gini", result)
         self.assertIn("d_rel", result)
         self.assertIn("Branch-Margin Capacity Probe", markdown_report(result))
+
+    def test_rank_weighted_features_preserve_rank_strength(self):
+        z, _ = sample_exact_copy_branches(
+            n_samples=5,
+            n_context=2,
+            z_dim=2,
+            seed=7,
+        )
+        ranks = np.asarray([[2, 0], [1, 4]], dtype=float)
+        weights = normalized_rank_weights(ranks)
+        self.assertEqual(weights.tolist(), [[0.5, 0.0], [0.25, 1.0]])
+        features = weighted_comparison_feature_matrix(z, weights)
+        self.assertEqual(features.shape, (5, 4))
+        self.assertTrue(np.all(features[:, 1] == 0.0))
+
+        summary = rank_geometry_summary(ranks)
+        self.assertEqual(summary["rank_mass_min"], 2.0)
+        self.assertEqual(summary["rank_mass_max"], 5.0)
+        self.assertGreater(summary["rank_weight_effective_entries"], 1.0)
 
     def test_margin_summary_handles_nonfinite_margins(self):
         scores = np.asarray([[0.0, -np.inf], [-np.inf, -np.inf]])
