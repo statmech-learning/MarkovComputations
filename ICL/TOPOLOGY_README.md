@@ -289,6 +289,23 @@ python3 submit_topology_library_sweep.py \
   --array \
   --max-concurrent 24
 
+# Audit or recover an interrupted array without overwriting completed runs.
+python3 submit_topology_library_sweep.py \
+  --library_csv "$SLURM_OUTPUT_BASE/essential_input50/selected.csv" \
+  --output_root "$SLURM_OUTPUT_BASE/essential_input50_retrain" \
+  --seeds 1,2 \
+  --status_only \
+  --manifest_csv "$SLURM_OUTPUT_BASE/essential_input50_retrain/task_manifest.csv"
+
+python3 submit_topology_library_sweep.py \
+  --library_csv "$SLURM_OUTPUT_BASE/essential_input50/selected.csv" \
+  --output_root "$SLURM_OUTPUT_BASE/essential_input50_retrain" \
+  --seeds 1,2 \
+  --missing_only \
+  --clean \
+  --array \
+  --max-concurrent 24
+
 python3 compare_essential_retrains.py \
   --base_root "$SLURM_OUTPUT_BASE" \
   --output_csv "$SLURM_OUTPUT_BASE/essential_input50/retrain_comparison.csv" \

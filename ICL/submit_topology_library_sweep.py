@@ -131,7 +131,56 @@ def command_for(topology_row, train_seed, args):
     return " ".join(parts), output
 
 
-def write_array(topology_rows, train_seeds, args):
+def task_records(topology_rows, train_seeds, args):
+    records = []
+    for topology_index, row in enumerate(topology_rows):
+        for seed in train_seeds:
+            command, output = command_for(row, seed, args)
+            records.append(
+                {
+                    "topology_index": topology_index,
+                    "topology_id": row.get("topology_id", ""),
+                    "topology_name": row.get("topology_name", ""),
+                    "train_seed": seed,
+                    "output": output,
+                    "results_path": os.path.join(output, "results.pkl"),
+                    "completed": os.path.exists(os.path.join(output, "results.pkl")),
+                    "command": command,
+                }
+            )
+    return records
+
+
+def write_manifest(path, records):
+    if not path:
+        return
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    fieldnames = [
+        "topology_index",
+        "topology_id",
+        "topology_name",
+        "train_seed",
+        "completed",
+        "output",
+        "results_path",
+        "command",
+    ]
+    with open(path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(records)
+
+
+def print_status(records):
+    total = len(records)
+    completed = sum(1 for record in records if record["completed"])
+    missing = total - completed
+    print(f"Expected tasks: {total}")
+    print(f"Completed outputs: {completed}")
+    print(f"Missing outputs: {missing}")
+
+
+def write_array(task_rows, args):
     meta_dir = os.path.join(os.path.abspath(args.output_root), "_array_meta")
     if args.clean and os.path.exists(meta_dir):
         shutil.rmtree(meta_dir)
@@ -143,15 +192,13 @@ def write_array(topology_rows, train_seeds, args):
     written_tasks = 0
     skipped_existing = 0
     with open(commands_path, "w") as commands, open(outputs_path, "w") as outputs:
-        for row in topology_rows:
-            for seed in train_seeds:
-                command, output = command_for(row, seed, args)
-                if args.missing_only and not args.force and os.path.exists(os.path.join(output, "results.pkl")):
-                    skipped_existing += 1
-                    continue
-                commands.write(command + "\n")
-                outputs.write(output + "\n")
-                written_tasks += 1
+        for row in task_rows:
+            if args.missing_only and not args.force and row["completed"]:
+                skipped_existing += 1
+                continue
+            commands.write(row["command"] + "\n")
+            outputs.write(row["output"] + "\n")
+            written_tasks += 1
 
     n_tasks = written_tasks
     if n_tasks == 0:
@@ -212,6 +259,17 @@ def main():
     parser.add_argument("--max-concurrent", type=int, default=24)
     parser.add_argument("--array", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--status_only",
+        action="store_true",
+        help="Print expected/completed/missing task counts without writing or submitting an array.",
+    )
+    parser.add_argument(
+        "--manifest_csv",
+        type=str,
+        default=None,
+        help="Optional CSV manifest of expected task outputs and completion status.",
+    )
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--clean", action="store_true")
     parser.add_argument(
@@ -232,7 +290,15 @@ def main():
         limit=args.limit_topologies,
     )
     train_seeds = parse_seeds(args.seeds)
-    meta_dir, script_path, n_tasks, skipped_existing = write_array(rows, train_seeds, args)
+    tasks = task_records(rows, train_seeds, args)
+    print_status(tasks)
+    if args.manifest_csv:
+        write_manifest(args.manifest_csv, tasks)
+        print(f"Wrote manifest: {os.path.abspath(args.manifest_csv)}")
+    if args.status_only:
+        return
+
+    meta_dir, script_path, n_tasks, skipped_existing = write_array(tasks, args)
     print(f"Library: {os.path.abspath(args.library_csv)}")
     print(f"Output root: {os.path.abspath(args.output_root)}")
     print(f"Wrote array metadata: {meta_dir}")
