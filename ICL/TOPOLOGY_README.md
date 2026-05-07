@@ -24,6 +24,11 @@ The convention is:
   `results.pkl`, `topology.json`, `topology_metrics.json`, and `config.json`.
 - `submit_topology_phase1.py`: SLURM array generator for matched graph-family
   sweeps.
+- `make_topology_library.py`: generate strongly connected fixed-`m` topology
+  candidates, compute pre-training matrix-tree metrics, and select a
+  structurally diverse subset for training.
+- `submit_topology_library_sweep.py`: SLURM array generator for training the
+  selected topology library through `run_topology_icl.py --edge_json`.
 - `topology_analysis.py`: post-training active-tree and edge-sensitivity
   utilities.
 - `analyze_topology_model.py`: load a trained run and write
@@ -116,6 +121,25 @@ python3 submit_topology_phase1.py --phase phase1 --array --max-concurrent 40
 
 Use `pilot` before `phase1`: it uses the same output format and matched
 topology controls, but shorter runs suitable for checking signal and runtime.
+
+For the stricter fixed-edge-count test, first build a topology library and
+select structurally diverse graphs before training:
+
+```bash
+python3 make_topology_library.py \
+  --output_root results/topology_library_n6_m20 \
+  --n_nodes 6 \
+  --n_edges 20 \
+  --candidate_seeds 1:80 \
+  --select_topologies 16
+
+python3 submit_topology_library_sweep.py \
+  --library_csv results/topology_library_n6_m20/selected.csv \
+  --output_root results/topology_fixed_m20 \
+  --seeds 1,2 \
+  --array \
+  --max-concurrent 24
+```
 
 Each run stores pre-training structural predictors next to training/test
 results, so regression analysis can compare novel-class ICL accuracy against
