@@ -81,7 +81,8 @@ The convention is:
 - `audit_topology_artifacts.py`: read-only audit of source runs, mechanism
   outputs, extracted essential masks, retrain outputs, manifests, and comparison
   files. Use this before recovering interrupted cluster arrays or running
-  guarded finalizers.
+  guarded finalizers. It supports input masks by default and physical essential
+  subgraphs with `--essential_kind physical`.
 - `verify_topology_completion.py`: final non-mutating completion gate that runs
   the strict artifact audit and validates either focused input-mask reports
   (`--report_kind input_mask`) or consolidated topology research reports

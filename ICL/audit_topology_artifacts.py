@@ -326,15 +326,43 @@ def manifest_status(path):
     }
 
 
-def essential_inputmask_status(root, directory):
+def empty_reference_status():
+    return {
+        "present": 0,
+        "missing": 0,
+        "missing_examples": [],
+        "invalid": 0,
+        "invalid_examples": [],
+    }
+
+
+def empty_edge_mask_pair_status():
+    return {
+        "invalid": 0,
+        "invalid_examples": [],
+    }
+
+
+def essential_status(root, directory, essential_kind):
     essential_root = os.path.join(root, directory)
     library_csv = os.path.join(essential_root, "library.csv")
     selected_csv = os.path.join(essential_root, "selected.csv")
     summary_json = os.path.join(essential_root, "summary.json")
     selected_rows = selected_rows_only(read_csv_rows(selected_csv))
     topology_ids, missing_topology_id = selected_topology_ids(selected_rows)
+    if essential_kind == "inputmask":
+        input_mask_json = referenced_file_status(
+            selected_rows,
+            "input_mask_json",
+            validate_input_mask_json,
+        )
+        edge_mask_pair = edge_mask_pair_status(selected_rows)
+    else:
+        input_mask_json = empty_reference_status()
+        edge_mask_pair = empty_edge_mask_pair_status()
     return {
         "root": essential_root,
+        "kind": essential_kind,
         "library_csv": exists(library_csv),
         "selected_csv": exists(selected_csv),
         "summary_json": exists(summary_json),
@@ -345,12 +373,8 @@ def essential_inputmask_status(root, directory):
         "missing_topology_id_examples": missing_topology_id[:5],
         "summary": read_json(summary_json),
         "edge_json": referenced_file_status(selected_rows, "edge_json", validate_edge_json),
-        "input_mask_json": referenced_file_status(
-            selected_rows,
-            "input_mask_json",
-            validate_input_mask_json,
-        ),
-        "edge_mask_pair": edge_mask_pair_status(selected_rows),
+        "input_mask_json": input_mask_json,
+        "edge_mask_pair": edge_mask_pair,
     }
 
 
@@ -394,7 +418,7 @@ def audit_experiment(name, root, args):
             os.path.join(root, args.retrain_directory),
         ],
     )
-    essential = essential_inputmask_status(root, args.essential_directory)
+    essential = essential_status(root, args.essential_directory, args.essential_kind)
     retrain = retrain_status(
         root,
         args.retrain_directory,
@@ -413,6 +437,7 @@ def audit_experiment(name, root, args):
         elif source["mechanism_metrics_json"] < source["results_pkl"]:
             failures.append("source mechanism_metrics.json count is lower than results.pkl count")
     if args.require_essential_inputmask:
+        label = "essential input masks" if args.essential_kind == "inputmask" else "essential subgraphs"
         if not essential["library_csv"]:
             failures.append(f"missing {args.essential_directory}/library.csv")
         if not essential["selected_csv"]:
@@ -420,18 +445,18 @@ def audit_experiment(name, root, args):
         if not essential["summary_json"]:
             failures.append(f"missing {args.essential_directory}/summary.json")
         if not essential["selected_rows"]:
-            failures.append("no selected essential input masks")
+            failures.append(f"no selected {label}")
         if essential["missing_topology_id"]:
-            failures.append("selected essential masks missing topology_id")
+            failures.append(f"selected {label} missing topology_id")
         if essential["edge_json"]["missing"]:
-            failures.append("selected essential masks reference missing edge_json files")
-        if essential["input_mask_json"]["missing"]:
-            failures.append("selected essential masks reference missing input_mask_json files")
+            failures.append(f"selected {label} reference missing edge_json files")
+        if args.essential_kind == "inputmask" and essential["input_mask_json"]["missing"]:
+            failures.append("selected essential input masks reference missing input_mask_json files")
         if essential["edge_json"]["invalid"]:
-            failures.append("selected essential masks reference invalid edge_json files")
-        if essential["input_mask_json"]["invalid"]:
-            failures.append("selected essential masks reference invalid input_mask_json files")
-        if essential["edge_mask_pair"]["invalid"]:
+            failures.append(f"selected {label} reference invalid edge_json files")
+        if args.essential_kind == "inputmask" and essential["input_mask_json"]["invalid"]:
+            failures.append("selected essential input masks reference invalid input_mask_json files")
+        if args.essential_kind == "inputmask" and essential["edge_mask_pair"]["invalid"]:
             failures.append("selected essential masks have edge/input-mask mismatches")
     if args.require_essential_retrains:
         if retrain["expected_results"] is None:
@@ -509,6 +534,7 @@ def print_experiment(report):
     )
     print(
         "  essential_inputmask: "
+        f"kind={essential['kind']} "
         f"library={essential['library_rows']} "
         f"selected={essential['selected_rows']} "
         f"missing_topology_id={essential['missing_topology_id']} "
@@ -562,11 +588,18 @@ def main():
     parser.add_argument("--seeds", type=str, default="1,2,3,4,5")
     parser.add_argument("--essential_directory", type=str, default="essential_inputmask50")
     parser.add_argument("--retrain_directory", type=str, default="essential_inputmask50_retrain")
+    parser.add_argument(
+        "--essential_kind",
+        choices=["inputmask", "physical"],
+        default="inputmask",
+        help="Whether selected essential rows require input_mask_json validation.",
+    )
     parser.add_argument("--output_json", type=str, default=None)
     parser.add_argument("--strict", action="store_true")
     parser.add_argument("--require_source_results", action="store_true")
     parser.add_argument("--require_mechanisms", action="store_true")
     parser.add_argument("--require_essential_inputmask", action="store_true")
+    parser.add_argument("--require_essential", dest="require_essential_inputmask", action="store_true")
     parser.add_argument("--require_essential_retrains", action="store_true")
     args = parser.parse_args()
     args.seeds = parse_seeds(args.seeds)

@@ -64,7 +64,7 @@ python3 verify_topology_completion.py ... --report_kind research --report_md ...
 Observed state:
 
 - Local branch is clean and tracking `origin/topology`.
-- Local unit suite has 66 tests and passes.
+- Local unit suite has 67 tests and passes.
 - Python syntax compilation passes.
 - `git diff --check` passes.
 - Local `ICL/results` contains only older `markov_icl_gmm_*.pt` files, not the
@@ -110,7 +110,8 @@ Observed state:
 | Keep nonlinear autocatalytic/WTA outside first-order tree claims | Current implementation and docs are scoped to first-order topology | Satisfied by scope |
 | Provide final consolidated report | `make_topology_research_report.py`, `make_input_mask_report.py` | Implemented; final cluster reports missing |
 | Provide artifact audit and safe recovery | `audit_topology_artifacts.py`, `recover_essential_inputmask_retrains.py` | Implemented and tested |
-| Verify final report and artifact consistency in one non-mutating command | `verify_topology_completion.py --report_kind input_mask` and `--report_kind research` | Implemented and tested; cannot pass until cluster reports exist |
+| Audit physical essential-subgraph retrain artifacts | `audit_topology_artifacts.py --essential_kind physical` | Implemented and tested |
+| Verify final report and artifact consistency in one non-mutating command | `verify_topology_completion.py --report_kind input_mask` and `--report_kind research` | Implemented and tested; research mode audits both input-mask and physical-essential layouts |
 | Avoid interfering with other agents on Engaging | Current blocker documents that only `icl:13.2` should be used | Satisfied locally; cluster work paused |
 
 ## Verification Coverage
@@ -176,6 +177,25 @@ python3 audit_topology_artifacts.py \
   --require_source_results \
   --require_mechanisms \
   --require_essential_inputmask \
+  --require_essential_retrains \
+  --strict
+```
+
+For consolidated reports that include physical essential subgraphs, the physical
+layout audit should also pass:
+
+```bash
+python3 audit_topology_artifacts.py \
+  --experiment random=results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --experiment cycle=results/input_mask_fixed_m20_cycle_chords_seed3_c200 \
+  --experiment hub=results/input_mask_fixed_m20_hub_spoke_seed63_c200 \
+  --seeds 1,2,3,4,5 \
+  --essential_directory essential_input50 \
+  --retrain_directory essential_input50_retrain \
+  --essential_kind physical \
+  --require_source_results \
+  --require_mechanisms \
+  --require_essential \
   --require_essential_retrains \
   --strict
 ```

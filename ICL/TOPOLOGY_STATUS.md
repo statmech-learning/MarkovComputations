@@ -41,7 +41,7 @@ python3 -m py_compile $(find ICL -name '*.py' -not -path '*/__pycache__/*')
 git diff --check
 ```
 
-As of the latest local run, the unittest suite has 66 tests and passes. Local
+As of the latest local run, the unittest suite has 67 tests and passes. Local
 Python does not have Torch, so training and mechanism smoke tests must run on
 the cluster or another Torch-enabled environment.
 
@@ -123,7 +123,8 @@ The strict audit/finalizer should stop before report overwrite if retrains are
 incomplete. The completion verifier should pass before interpreting or sharing
 the scientific result. If you also generate a consolidated
 `make_topology_research_report.py` report, rerun the same verifier with
-`--report_kind research` and the consolidated report paths.
+`--report_kind research` and the consolidated report paths; that mode audits
+both input-mask and physical-essential retrain layouts.
 
 ## Not Yet Complete
 

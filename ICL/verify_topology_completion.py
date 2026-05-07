@@ -213,20 +213,31 @@ def verify_report(
     return failures
 
 
-def strict_audit_command(experiments, seeds):
+def strict_audit_command(experiments, seeds, essential_kind="inputmask"):
     parts = [
         sys.executable,
         "audit_topology_artifacts.py",
     ]
     for name, root in experiments:
         parts.extend(["--experiment", f"{name}={root}"])
+    if essential_kind == "physical":
+        parts.extend(
+            [
+                "--essential_directory",
+                "essential_input50",
+                "--retrain_directory",
+                "essential_input50_retrain",
+                "--essential_kind",
+                "physical",
+            ]
+        )
     parts.extend(
         [
             "--seeds",
             seeds,
             "--require_source_results",
             "--require_mechanisms",
-            "--require_essential_inputmask",
+            "--require_essential",
             "--require_essential_retrains",
             "--strict",
         ]
@@ -234,8 +245,8 @@ def strict_audit_command(experiments, seeds):
     return parts
 
 
-def run_strict_audit(experiments, seeds):
-    parts = strict_audit_command(experiments, seeds)
+def run_strict_audit(experiments, seeds, essential_kind="inputmask"):
+    parts = strict_audit_command(experiments, seeds, essential_kind=essential_kind)
     print(" ".join(parts))
     return subprocess.run(parts, cwd=THIS_DIR, text=True, capture_output=True, check=False)
 
@@ -269,13 +280,17 @@ def main():
     experiments = [parse_experiment(raw) for raw in args.experiment]
     failures = []
     if not args.skip_audit:
-        result = run_strict_audit(experiments, args.seeds)
-        if result.stdout:
-            print(result.stdout, end="")
-        if result.stderr:
-            print(result.stderr, end="", file=sys.stderr)
-        if result.returncode != 0:
-            failures.append("strict topology artifact audit failed")
+        audit_kinds = ["inputmask"]
+        if args.report_kind == "research":
+            audit_kinds.append("physical")
+        for kind in audit_kinds:
+            result = run_strict_audit(experiments, args.seeds, essential_kind=kind)
+            if result.stdout:
+                print(result.stdout, end="")
+            if result.stderr:
+                print(result.stderr, end="", file=sys.stderr)
+            if result.returncode != 0:
+                failures.append(f"strict topology artifact audit failed for {kind}")
 
     failures.extend(
         verify_report(

@@ -361,6 +361,74 @@ class AuditTopologyArtifactsTests(unittest.TestCase):
         self.assertIn("edge/input-mask mismatches", result.stdout)
         self.assertIn("edge_mask_pair_invalid=1", result.stdout)
 
+    def test_strict_physical_essential_requirement_does_not_require_input_masks(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = self.make_experiment(tmpdir, selected_count=0)
+            essential_dir = os.path.join(root, "essential_input50")
+            ref_dir = os.path.join(essential_dir, "refs")
+            edge_json = os.path.join(ref_dir, "edge0.json")
+            os.makedirs(ref_dir)
+            with open(edge_json, "w") as f:
+                json.dump({"n_nodes": 3, "edges": [[0, 1], [1, 2], [2, 0]]}, f)
+            row = {
+                "selected": "1",
+                "topology_id": "ess0",
+                "topology_name": "ess0",
+                "edge_json": edge_json,
+            }
+            self.write_csv(
+                os.path.join(essential_dir, "library.csv"),
+                ["selected", "topology_id", "topology_name", "edge_json"],
+                [row],
+            )
+            self.write_csv(
+                os.path.join(essential_dir, "selected.csv"),
+                ["selected", "topology_id", "topology_name", "edge_json"],
+                [row],
+            )
+            with open(os.path.join(essential_dir, "summary.json"), "w") as f:
+                json.dump({"n_selected_subgraphs": 1}, f)
+
+            retrain_dir = os.path.join(root, "essential_input50_retrain")
+            run_dir = os.path.join(retrain_dir, "ess0_trainseed1")
+            for filename in ["results.pkl", "topology_metrics.json", "config.json"]:
+                self.touch(os.path.join(run_dir, filename), b"{}")
+            for name in [
+                "topology_results.csv",
+                "topology_regression.json",
+                "topology_seed_aggregates.csv",
+                "topology_seed_aggregates.json",
+            ]:
+                self.touch(os.path.join(retrain_dir, name), b"{}")
+            self.write_csv(
+                os.path.join(essential_dir, "retrain_comparison.csv"),
+                ["topology_name"],
+                [{"topology_name": "ess0"}],
+            )
+            with open(os.path.join(essential_dir, "retrain_comparison.json"), "w") as f:
+                json.dump({"n_joined": 1}, f)
+
+            result = self.run_audit(
+                [
+                    "--experiment",
+                    f"exp={root}",
+                    "--seeds",
+                    "1",
+                    "--essential_directory",
+                    "essential_input50",
+                    "--retrain_directory",
+                    "essential_input50_retrain",
+                    "--essential_kind",
+                    "physical",
+                    "--require_essential",
+                    "--require_essential_retrains",
+                    "--strict",
+                ]
+            )
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn("kind=physical", result.stdout)
+        self.assertIn("status: ok", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
