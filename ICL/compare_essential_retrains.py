@@ -19,6 +19,8 @@ JOIN_FIELDS = [
     "source_labels",
     "n_edges",
     "d_rel",
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_gini",
     "effective_rank_D",
     "source_test_novel_classes_max",
     "source_test_novel_classes_mean",
@@ -93,6 +95,12 @@ def joined_rows(selected_rows, retrain_rows):
                 "source_labels": source.get("source_labels"),
                 "n_edges": parse_float(retrain.get("n_edges")),
                 "d_rel": parse_float(retrain.get("d_rel")),
+                "comparison_branch_d_rel_min": parse_float(
+                    retrain.get("comparison_branch_d_rel_min")
+                ),
+                "comparison_branch_d_rel_gini": parse_float(
+                    retrain.get("comparison_branch_d_rel_gini")
+                ),
                 "effective_rank_D": parse_float(retrain.get("effective_rank_D")),
                 "source_test_novel_classes_max": source_max,
                 "source_test_novel_classes_mean": source_mean,
@@ -134,6 +142,9 @@ def summary(rows):
         "n_edges_min": min_or_none([row["n_edges"] for row in rows]),
         "n_edges_max": max_or_none([row["n_edges"] for row in rows]),
         "d_rel_mean": mean([row["d_rel"] for row in rows]),
+        "comparison_branch_d_rel_min_mean": mean(
+            [row["comparison_branch_d_rel_min"] for row in rows]
+        ),
         "effective_rank_D_mean": mean([row["effective_rank_D"] for row in rows]),
         "effective_rank_D_masked_mean": mean([row["effective_rank_D_masked"] for row in rows]),
         "retrain_input_coupled_parameter_count_mean": mean(
@@ -175,6 +186,11 @@ def print_summary(report):
         f"min={report['n_edges_min']:.0f}, "
         f"max={report['n_edges_max']:.0f}"
     )
+    if report.get("comparison_branch_d_rel_min_mean") is not None:
+        print(
+            "Weakest branch d_rel: "
+            f"mean={report['comparison_branch_d_rel_min_mean']:.2f}"
+        )
     if report.get("retrain_input_coupled_parameter_count_mean") is not None:
         print(
             "Retrain input couplings: "

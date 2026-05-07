@@ -47,6 +47,10 @@ CSV_FIELDS = [
     "p",
     "edge_json",
     "d_rel",
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_mean",
+    "comparison_branch_d_rel_max",
+    "comparison_branch_d_rel_gini",
     "rank_D",
     "effective_rank_D",
     "condition_number_D",
@@ -251,7 +255,13 @@ def write_outputs(groups, args):
         source_test_values = group["source_test_novel_classes"]
         source_target_values = group["source_target_accuracy"]
         source_names = sorted(set(name for name in group["source_topology_names"] if name))
-        metrics = compute_topology_metrics(group["n_nodes"], group["edges"], p=p)
+        metrics = compute_topology_metrics(
+            group["n_nodes"],
+            group["edges"],
+            p=p,
+            n_context=args.N,
+            z_dim=args.D,
+        )
         topology_id = f"ess{idx:04d}_{args.importance_source}_m{len(group['edges'])}"
         topology_name = f"essential_{args.importance_source}_n{group['n_nodes']}_m{len(group['edges'])}_{idx:04d}"
         edge_json = os.path.abspath(os.path.join(topology_dir, f"{topology_id}.json"))
@@ -295,6 +305,10 @@ def write_outputs(groups, args):
                 "p": metrics["p"],
                 "edge_json": edge_json,
                 "d_rel": metrics["d_rel"],
+                "comparison_branch_d_rel_min": metrics.get("comparison_branch_d_rel_min"),
+                "comparison_branch_d_rel_mean": metrics.get("comparison_branch_d_rel_mean"),
+                "comparison_branch_d_rel_max": metrics.get("comparison_branch_d_rel_max"),
+                "comparison_branch_d_rel_gini": metrics.get("comparison_branch_d_rel_gini"),
                 "rank_D": metrics["rank_D"],
                 "effective_rank_D": metrics["effective_rank_D"],
                 "condition_number_D": metrics["condition_number_D"],

@@ -16,6 +16,8 @@ TOPOLOGY_COLUMNS = [
     "n_edges",
     "input_coupled_parameter_count",
     "d_rel",
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_gini",
     "effective_rank_D",
     "effective_rank_D_masked",
     "condition_number_D",

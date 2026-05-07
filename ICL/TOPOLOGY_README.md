@@ -17,7 +17,8 @@ The convention is:
 
 - `topology_metrics.py`: graph families, strong-connectivity checks, rooted
   arborescence enumeration, tree-incidence matrices, relative tree rank,
-  effective rank, tree-count balance, and edge participation metrics.
+  effective rank, branch-wise comparison capacity, tree-count balance, and
+  edge participation metrics.
 - `models/topology_markov_icl.py`: first-order ICL model on an explicit directed
   reaction graph.
 - `run_topology_icl.py`: train one topology-controlled run and save
@@ -193,8 +194,13 @@ python3 submit_topology_library_sweep.py \
 
 Each run stores pre-training structural predictors next to training/test
 results, so regression analysis can compare novel-class ICL accuracy against
-raw degree count, input-coupled degree count, `d_rel`, masked effective rank,
-root imbalance, and bottleneck metrics.
+raw degree count, input-coupled degree count, global `d_rel`, weakest-branch
+comparison `d_rel`, masked effective rank, root imbalance, and bottleneck
+metrics. `comparison_branch_d_rel_min` is a conservative input-mask diagnostic:
+for each context position and feature dimension it takes the smaller
+coordinate-wise relative rank between the context coordinate and matching query
+coordinate, then sums over dimensions. This exposes masks with high total
+capacity but poor paired support for one query-context comparison branch.
 
 To separate input-encoding topology from physical reaction topology, choose one
 fixed physical graph and generate explicit masks with the same number of

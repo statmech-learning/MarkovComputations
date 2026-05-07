@@ -36,6 +36,10 @@ CSV_FIELDS = [
     "p",
     "edge_json",
     "d_rel",
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_mean",
+    "comparison_branch_d_rel_max",
+    "comparison_branch_d_rel_gini",
     "rank_D",
     "effective_rank_D",
     "condition_number_D",
@@ -108,6 +112,10 @@ def metric_row(idx, family, seed, spec, metrics, edge_json):
         "p": metrics["p"],
         "edge_json": edge_json,
         "d_rel": metrics["d_rel"],
+        "comparison_branch_d_rel_min": metrics.get("comparison_branch_d_rel_min"),
+        "comparison_branch_d_rel_mean": metrics.get("comparison_branch_d_rel_mean"),
+        "comparison_branch_d_rel_max": metrics.get("comparison_branch_d_rel_max"),
+        "comparison_branch_d_rel_gini": metrics.get("comparison_branch_d_rel_gini"),
         "rank_D": metrics["rank_D"],
         "effective_rank_D": metrics["effective_rank_D"],
         "condition_number_D": condition_number,
@@ -190,7 +198,13 @@ def build_rows(args):
                 continue
             seen_edges.add(edge_key)
 
-            metrics = compute_topology_metrics(spec.n_nodes, spec.edges, p=p)
+            metrics = compute_topology_metrics(
+                spec.n_nodes,
+                spec.edges,
+                p=p,
+                n_context=args.N,
+                z_dim=args.D,
+            )
             if not metrics["strongly_connected"]:
                 continue
 

@@ -21,6 +21,8 @@ from topology_metrics import compute_topology_metrics, normalize_edges
 
 DEFAULT_FEATURES = [
     "d_rel",
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_gini",
     "effective_rank_D_masked",
     "condition_number_D_masked_log",
     "input_coupled_edge_count",
@@ -53,6 +55,14 @@ CSV_FIELDS = [
     "input_coord_load_gini",
     "d_rel",
     "d_rel_minus_n_req",
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_mean",
+    "comparison_branch_d_rel_max",
+    "comparison_branch_d_rel_gini",
+    "comparison_branch_input_count_min",
+    "comparison_branch_input_count_mean",
+    "comparison_branch_input_count_max",
+    "comparison_branch_input_count_gini",
     "rank_D",
     "effective_rank_D",
     "effective_rank_D_masked",
@@ -249,6 +259,14 @@ def metric_row(idx, mask_name, family, seed, metrics, summary, edge_json, input_
         "input_coord_load_gini": summary["input_coord_load_gini"],
         "d_rel": metrics["d_rel"],
         "d_rel_minus_n_req": metrics["d_rel_minus_n_req"],
+        "comparison_branch_d_rel_min": metrics.get("comparison_branch_d_rel_min", ""),
+        "comparison_branch_d_rel_mean": metrics.get("comparison_branch_d_rel_mean", ""),
+        "comparison_branch_d_rel_max": metrics.get("comparison_branch_d_rel_max", ""),
+        "comparison_branch_d_rel_gini": metrics.get("comparison_branch_d_rel_gini", ""),
+        "comparison_branch_input_count_min": metrics.get("comparison_branch_input_count_min", ""),
+        "comparison_branch_input_count_mean": metrics.get("comparison_branch_input_count_mean", ""),
+        "comparison_branch_input_count_max": metrics.get("comparison_branch_input_count_max", ""),
+        "comparison_branch_input_count_gini": metrics.get("comparison_branch_input_count_gini", ""),
         "rank_D": metrics["rank_D"],
         "effective_rank_D": metrics["effective_rank_D"],
         "effective_rank_D_masked": metrics["effective_rank_D_masked"],
@@ -334,7 +352,7 @@ def build_rows(args):
     mask_dir = os.path.join(args.output_root, "masks")
     os.makedirs(mask_dir, exist_ok=True)
     physical_name = edge_payload.get("name", os.path.splitext(os.path.basename(args.edge_json))[0])
-    base_metrics = compute_topology_metrics(n_nodes, edges, p=p)
+    base_metrics = compute_topology_metrics(n_nodes, edges, p=p, n_context=args.N, z_dim=args.D)
     edge_participation = np.asarray(base_metrics["edge_participation"], dtype=float)
 
     rows = []
@@ -354,7 +372,14 @@ def build_rows(args):
                 mask_name = f"{physical_name}__mask{idx:04d}_{family}_c{count}_seed{seed}"
                 input_mask_json = os.path.abspath(os.path.join(mask_dir, f"{mask_name}.json"))
                 summary = input_mask_summary(mask)
-                metrics = compute_topology_metrics(n_nodes, edges, p=p, input_mask=mask)
+                metrics = compute_topology_metrics(
+                    n_nodes,
+                    edges,
+                    p=p,
+                    input_mask=mask,
+                    n_context=args.N,
+                    z_dim=args.D,
+                )
                 metrics["physical_topology_name"] = physical_name
                 metrics["d_rel_minus_n_req"] = int(metrics["d_rel"] - n_req)
 

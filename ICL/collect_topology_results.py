@@ -6,6 +6,8 @@ import json
 import os
 import pickle
 
+from topology_metrics import compute_topology_metrics
+
 
 FIELDS = [
     "run_dir",
@@ -32,6 +34,14 @@ FIELDS = [
     "n_req",
     "d_rel",
     "d_rel_minus_n_req",
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_mean",
+    "comparison_branch_d_rel_max",
+    "comparison_branch_d_rel_gini",
+    "comparison_branch_input_count_min",
+    "comparison_branch_input_count_mean",
+    "comparison_branch_input_count_max",
+    "comparison_branch_input_count_gini",
     "rank_D",
     "effective_rank_D",
     "condition_number_D",
@@ -54,6 +64,19 @@ FIELDS = [
     "execution_time",
 ]
 
+BRANCH_METRIC_FIELDS = [
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_mean",
+    "comparison_branch_d_rel_max",
+    "comparison_branch_d_rel_gini",
+    "comparison_branch_input_count_min",
+    "comparison_branch_input_count_mean",
+    "comparison_branch_input_count_max",
+    "comparison_branch_input_count_gini",
+]
+
+_BRANCH_METRIC_CACHE = {}
+
 
 def finite_or_empty(value):
     if value is None:
@@ -68,6 +91,56 @@ def finite_or_empty(value):
 def final_non_none(values):
     cleaned = [value for value in values if value is not None]
     return cleaned[-1] if cleaned else None
+
+
+def _freeze_nested(value):
+    if isinstance(value, list):
+        return tuple(_freeze_nested(item) for item in value)
+    if isinstance(value, tuple):
+        return tuple(_freeze_nested(item) for item in value)
+    return value
+
+
+def backfill_branch_metrics(metrics, topology_payload, config):
+    """Backfill branch-comparison structural metrics for older run artifacts."""
+
+    if all(metrics.get(field) not in (None, "") for field in BRANCH_METRIC_FIELDS):
+        return metrics
+    try:
+        n_context = int(config["N"])
+        z_dim = int(config["D"])
+        p = int(metrics.get("p") or ((n_context + 1) * z_dim))
+        n_nodes = int(topology_payload.get("n_nodes") or metrics["n_nodes"])
+        edges = topology_payload.get("edges") or metrics["edges"]
+        input_mask = topology_payload.get("input_mask")
+    except (KeyError, TypeError, ValueError):
+        return metrics
+
+    cache_key = (
+        n_nodes,
+        tuple(tuple(edge) for edge in edges),
+        _freeze_nested(input_mask),
+        p,
+        n_context,
+        z_dim,
+    )
+    if cache_key not in _BRANCH_METRIC_CACHE:
+        try:
+            _BRANCH_METRIC_CACHE[cache_key] = compute_topology_metrics(
+                n_nodes,
+                edges,
+                p=p,
+                input_mask=input_mask,
+                n_context=n_context,
+                z_dim=z_dim,
+            )
+        except (ValueError, TypeError):
+            _BRANCH_METRIC_CACHE[cache_key] = {}
+    backfilled = _BRANCH_METRIC_CACHE[cache_key]
+    for field in BRANCH_METRIC_FIELDS:
+        if metrics.get(field) in (None, "") and field in backfilled:
+            metrics[field] = backfilled[field]
+    return metrics
 
 
 def load_run(run_dir):
@@ -89,6 +162,7 @@ def load_run(run_dir):
         with open(topology_path) as f:
             topology_payload = json.load(f)
     input_mask_metadata = topology_payload.get("input_mask_metadata", {})
+    metrics = backfill_branch_metrics(metrics, topology_payload, config)
 
     history = payload.get("history", {})
     icl_values = [value for value in history.get("icl_acc", []) if value is not None]
@@ -124,6 +198,14 @@ def load_run(run_dir):
         "n_req": metrics.get("n_req"),
         "d_rel": metrics.get("d_rel"),
         "d_rel_minus_n_req": metrics.get("d_rel_minus_n_req"),
+        "comparison_branch_d_rel_min": metrics.get("comparison_branch_d_rel_min"),
+        "comparison_branch_d_rel_mean": metrics.get("comparison_branch_d_rel_mean"),
+        "comparison_branch_d_rel_max": metrics.get("comparison_branch_d_rel_max"),
+        "comparison_branch_d_rel_gini": metrics.get("comparison_branch_d_rel_gini"),
+        "comparison_branch_input_count_min": metrics.get("comparison_branch_input_count_min"),
+        "comparison_branch_input_count_mean": metrics.get("comparison_branch_input_count_mean"),
+        "comparison_branch_input_count_max": metrics.get("comparison_branch_input_count_max"),
+        "comparison_branch_input_count_gini": metrics.get("comparison_branch_input_count_gini"),
         "rank_D": metrics.get("rank_D"),
         "effective_rank_D": metrics.get("effective_rank_D"),
         "condition_number_D": metrics.get("condition_number_D"),

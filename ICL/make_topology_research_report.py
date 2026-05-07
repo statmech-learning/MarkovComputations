@@ -25,6 +25,7 @@ KEY_RUN_MODELS = [
     "raw_plus_drel",
     "input_count",
     "input_count_plus_drel",
+    "input_count_plus_branch_drel",
     "tree_geometry",
     "masked_tree_geometry",
     "trainability_geometry",
@@ -40,6 +41,8 @@ KEY_AGG_MODELS = [
 ]
 KEY_CORRELATIONS = [
     "d_rel",
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_gini",
     "effective_rank_D",
     "effective_rank_D_masked",
     "condition_number_D",
@@ -65,6 +68,15 @@ POOLED_RUN_MODELS = OrderedDict(
         ("input_count", ["input_coupled_parameter_count"]),
         ("input_plus_drel", ["input_coupled_parameter_count", "d_rel"]),
         (
+            "input_plus_branch_drel",
+            [
+                "input_coupled_parameter_count",
+                "d_rel",
+                "comparison_branch_d_rel_min",
+                "comparison_branch_d_rel_gini",
+            ],
+        ),
+        (
             "edge_plus_tree_geometry",
             [
                 "n_edges",
@@ -81,6 +93,8 @@ POOLED_RUN_MODELS = OrderedDict(
             [
                 "input_coupled_parameter_count",
                 "d_rel",
+                "comparison_branch_d_rel_min",
+                "comparison_branch_d_rel_gini",
                 "effective_rank_D_masked",
                 "condition_number_D_masked",
                 "input_edge_load_gini",
@@ -115,6 +129,15 @@ POOLED_AGGREGATE_MODELS = OrderedDict(
         ("input_count", ["input_coupled_parameter_count"]),
         ("input_plus_drel", ["input_coupled_parameter_count", "d_rel"]),
         (
+            "input_plus_branch_drel",
+            [
+                "input_coupled_parameter_count",
+                "d_rel",
+                "comparison_branch_d_rel_min",
+                "comparison_branch_d_rel_gini",
+            ],
+        ),
+        (
             "edge_plus_tree_geometry",
             [
                 "n_edges",
@@ -131,6 +154,8 @@ POOLED_AGGREGATE_MODELS = OrderedDict(
             [
                 "input_coupled_parameter_count",
                 "d_rel",
+                "comparison_branch_d_rel_min",
+                "comparison_branch_d_rel_gini",
                 "effective_rank_D_masked",
                 "condition_number_D_masked",
                 "input_edge_load_gini",
@@ -673,6 +698,8 @@ def library_table(experiments):
 def correlation_table(experiments):
     rows = [
         ("d_rel", "relative tree dimension"),
+        ("comparison_branch_d_rel_min", "weakest comparison-branch paired rank"),
+        ("comparison_branch_d_rel_gini", "comparison-branch rank imbalance"),
         ("effective_rank_D", "tree spectrum effective rank"),
         ("effective_rank_D_masked", "masked relative tree effective rank"),
         ("edge_participation_gini", "bottleneck/participation heterogeneity"),

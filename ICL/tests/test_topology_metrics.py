@@ -9,6 +9,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from topology_metrics import (  # noqa: E402
     complete_digraph,
+    comparison_branch_rank_metrics,
     compute_topology_metrics,
     directed_cycle,
     enumerate_arborescences,
@@ -54,6 +55,44 @@ class TopologyMetricsTests(unittest.TestCase):
         stats = masked_relative_svd_metrics(mats["D"], input_mask=None, p=p)
         one_coord = masked_relative_svd_metrics(mats["D"], input_mask=None, p=1)
         self.assertEqual(stats["rank"], p * one_coord["rank"])
+
+    def test_comparison_branch_rank_metrics_detects_neglected_branch(self):
+        n_nodes = 3
+        edges = complete_digraph(n_nodes).edges
+        n_context = 2
+        z_dim = 2
+        p = (n_context + 1) * z_dim
+        full = compute_topology_metrics(
+            n_nodes,
+            edges,
+            p=p,
+            n_context=n_context,
+            z_dim=z_dim,
+        )
+        self.assertEqual(
+            full["comparison_branch_d_rel_values"],
+            [full["rank_D"] * z_dim, full["rank_D"] * z_dim],
+        )
+
+        mask = np.zeros((len(edges), p), dtype=int)
+        mask[:, 0:z_dim] = 1
+        mask[:, n_context * z_dim : (n_context + 1) * z_dim] = 1
+        masked = compute_topology_metrics(
+            n_nodes,
+            edges,
+            p=p,
+            input_mask=mask,
+            n_context=n_context,
+            z_dim=z_dim,
+        )
+        self.assertEqual(masked["comparison_branch_d_rel_values"], [full["rank_D"] * z_dim, 0])
+        self.assertEqual(masked["comparison_branch_d_rel_min"], 0)
+        self.assertGreater(masked["comparison_branch_d_rel_gini"], 0.0)
+
+    def test_comparison_branch_rank_metrics_validates_context_shape(self):
+        mats = topology_matrices(3, complete_digraph(3).edges)
+        with self.assertRaises(ValueError):
+            comparison_branch_rank_metrics(mats["D"], None, p=5, n_context=2, z_dim=2)
 
     def test_topology_matrices_shapes(self):
         mats = topology_matrices(3, complete_digraph(3).edges)

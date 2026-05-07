@@ -482,6 +482,80 @@ def masked_relative_svd_metrics(
     }
 
 
+def comparison_branch_rank_metrics(
+    D_matrix: np.ndarray,
+    input_mask: Optional[np.ndarray],
+    p: int,
+    n_context: int,
+    z_dim: int,
+) -> dict:
+    """Balanced rank support for each context-query comparison branch.
+
+    Global ``d_rel`` can be high even if a mask underserves one context item.
+    This proxy computes a coordinate-wise relative rank for every input
+    coordinate, then for each branch sums ``min(rank(context_i_dim),
+    rank(query_dim))`` across feature dimensions. The minimum enforces paired
+    context/query support for the comparison direction rather than rewarding
+    query-only or context-only capacity.
+    """
+
+    if n_context <= 0 or z_dim <= 0:
+        raise ValueError("n_context and z_dim must be positive")
+    expected_p = (n_context + 1) * z_dim
+    if expected_p != p:
+        raise ValueError(f"(n_context + 1) * z_dim = {expected_p}, expected p={p}")
+
+    if input_mask is None:
+        coord_ranks = np.full(p, svd_metrics(D_matrix)["rank"], dtype=float)
+        coord_counts = np.full(p, D_matrix.shape[1], dtype=float)
+    else:
+        mask = np.asarray(input_mask, dtype=float)
+        if mask.ndim != 2:
+            raise ValueError("input_mask must have shape (n_edges, p)")
+        if mask.shape[1] != p or mask.shape[0] != D_matrix.shape[1]:
+            raise ValueError(
+                f"input_mask shape {mask.shape} incompatible with D {D_matrix.shape} and p={p}"
+            )
+        coord_ranks = np.asarray(
+            [
+                svd_metrics(D_matrix * mask[:, alpha][None, :])["rank"]
+                for alpha in range(p)
+            ],
+            dtype=float,
+        )
+        coord_counts = mask.sum(axis=0)
+
+    query_offset = n_context * z_dim
+    branch_ranks = []
+    branch_counts = []
+    for branch in range(n_context):
+        context_offset = branch * z_dim
+        rank_total = 0.0
+        count_total = 0.0
+        for dim in range(z_dim):
+            context_idx = context_offset + dim
+            query_idx = query_offset + dim
+            rank_total += min(coord_ranks[context_idx], coord_ranks[query_idx])
+            count_total += min(coord_counts[context_idx], coord_counts[query_idx])
+        branch_ranks.append(rank_total)
+        branch_counts.append(count_total)
+
+    branch_ranks = np.asarray(branch_ranks, dtype=float)
+    branch_counts = np.asarray(branch_counts, dtype=float)
+    return {
+        "comparison_branch_d_rel_values": [int(value) for value in branch_ranks],
+        "comparison_branch_d_rel_min": int(branch_ranks.min()) if branch_ranks.size else 0,
+        "comparison_branch_d_rel_mean": float(branch_ranks.mean()) if branch_ranks.size else 0.0,
+        "comparison_branch_d_rel_max": int(branch_ranks.max()) if branch_ranks.size else 0,
+        "comparison_branch_d_rel_gini": gini(branch_ranks),
+        "comparison_branch_input_count_values": [int(value) for value in branch_counts],
+        "comparison_branch_input_count_min": int(branch_counts.min()) if branch_counts.size else 0,
+        "comparison_branch_input_count_mean": float(branch_counts.mean()) if branch_counts.size else 0.0,
+        "comparison_branch_input_count_max": int(branch_counts.max()) if branch_counts.size else 0,
+        "comparison_branch_input_count_gini": gini(branch_counts),
+    }
+
+
 def graph_degree_stats(n_nodes: int, edges: Sequence[Edge]) -> dict:
     indeg = np.zeros(n_nodes, dtype=int)
     outdeg = np.zeros(n_nodes, dtype=int)
@@ -520,6 +594,8 @@ def compute_topology_metrics(
     edges: Iterable[Sequence[int]],
     p: int,
     input_mask: Optional[np.ndarray] = None,
+    n_context: Optional[int] = None,
+    z_dim: Optional[int] = None,
     max_trees_per_root: Optional[int] = None,
 ) -> dict:
     """Compute pre-training topology predictors for a first-order CRN."""
@@ -571,6 +647,18 @@ def compute_topology_metrics(
         "bottleneck_edge_fraction_095": float(np.mean(participation >= 0.95)) if participation.size else 0.0,
         "mean_shortest_path": mean_shortest_path(n_nodes, edge_tuple),
     }
+    if n_context is not None or z_dim is not None:
+        if n_context is None or z_dim is None:
+            raise ValueError("Provide both n_context and z_dim for branch comparison metrics")
+        metrics.update(
+            comparison_branch_rank_metrics(
+                D_centered,
+                input_mask,
+                p=p,
+                n_context=n_context,
+                z_dim=z_dim,
+            )
+        )
     metrics.update(graph_degree_stats(n_nodes, edge_tuple))
     return metrics
 

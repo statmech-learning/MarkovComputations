@@ -37,6 +37,12 @@ PREDICTOR_SETS = {
         "input_coupled_parameter_count",
         "d_rel",
     ],
+    "input_count_plus_branch_drel": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini",
+    ],
     "tree_geometry": [
         "raw_physical_parameter_count",
         "d_rel",
@@ -57,6 +63,8 @@ PREDICTOR_SETS = {
     "masked_tree_geometry": [
         "input_coupled_parameter_count",
         "d_rel",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini",
         "effective_rank_D_masked",
         "condition_number_D_masked",
         "input_edge_load_gini",

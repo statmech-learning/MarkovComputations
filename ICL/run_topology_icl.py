@@ -218,6 +218,8 @@ def main():
         edges=edges,
         p=p,
         input_mask=input_mask,
+        n_context=args.N,
+        z_dim=args.D,
     )
     topology_metrics["topology_name"] = run_topology_name
     topology_metrics["physical_topology_name"] = topology_name

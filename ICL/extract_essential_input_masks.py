@@ -56,6 +56,14 @@ CSV_FIELDS = [
     "input_coord_load_gini",
     "d_rel",
     "d_rel_minus_n_req",
+    "comparison_branch_d_rel_min",
+    "comparison_branch_d_rel_mean",
+    "comparison_branch_d_rel_max",
+    "comparison_branch_d_rel_gini",
+    "comparison_branch_input_count_min",
+    "comparison_branch_input_count_mean",
+    "comparison_branch_input_count_max",
+    "comparison_branch_input_count_gini",
     "rank_D",
     "effective_rank_D",
     "effective_rank_D_masked",
@@ -247,7 +255,14 @@ def write_outputs(groups, args):
     rows = []
     for idx, group in enumerate(groups):
         mask = validate_input_mask(group["mask"], len(group["edges"]), p)
-        metrics = compute_topology_metrics(group["n_nodes"], group["edges"], p=p, input_mask=mask)
+        metrics = compute_topology_metrics(
+            group["n_nodes"],
+            group["edges"],
+            p=p,
+            input_mask=mask,
+            n_context=args.N,
+            z_dim=args.D,
+        )
         summary = input_mask_summary(mask)
         source_names = sorted(set(name for name in group["source_topology_names"] if name))
         source_test_values = group["source_test_novel_classes"]
@@ -316,6 +331,14 @@ def write_outputs(groups, args):
             "input_mask_json": input_mask_json,
             "d_rel": metrics["d_rel"],
             "d_rel_minus_n_req": int(metrics["d_rel"] - n_req),
+            "comparison_branch_d_rel_min": metrics.get("comparison_branch_d_rel_min"),
+            "comparison_branch_d_rel_mean": metrics.get("comparison_branch_d_rel_mean"),
+            "comparison_branch_d_rel_max": metrics.get("comparison_branch_d_rel_max"),
+            "comparison_branch_d_rel_gini": metrics.get("comparison_branch_d_rel_gini"),
+            "comparison_branch_input_count_min": metrics.get("comparison_branch_input_count_min"),
+            "comparison_branch_input_count_mean": metrics.get("comparison_branch_input_count_mean"),
+            "comparison_branch_input_count_max": metrics.get("comparison_branch_input_count_max"),
+            "comparison_branch_input_count_gini": metrics.get("comparison_branch_input_count_gini"),
             "rank_D": metrics["rank_D"],
             "effective_rank_D": metrics["effective_rank_D"],
             "effective_rank_D_masked": metrics["effective_rank_D_masked"],
