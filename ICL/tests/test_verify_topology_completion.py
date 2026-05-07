@@ -112,6 +112,86 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             json.dump(payload, f)
         return report_md, report_json
 
+    def write_next_phase_report(self, tmpdir, *, include_hard=True, include_causal=True):
+        report_md = os.path.join(tmpdir, "next_phase.md")
+        report_json = os.path.join(tmpdir, "next_phase.json")
+        with open(report_md, "w") as f:
+            f.write(
+                "\n".join(
+                    [
+                        "# Next-Phase Topology-ICL Evidence Report",
+                        "## Clustered And Group-Aware Inference",
+                        "## Causal Alignment Interventions",
+                        "## Branch-Margin Capacity Probes",
+                        "## Matched Essential-Motif Controls",
+                        "## Expanded Pilot Status",
+                        "## Interpretation Guardrails",
+                    ]
+                )
+            )
+        labels = ["pooled_original", "pooled_branch_capacity"]
+        if include_hard:
+            labels.extend(["hard_n4_m6_N3_D2", "hard_n5_m8_N3_D2", "hard_n5_m12_N3_D2"])
+        clustered = [
+            {
+                "label": label,
+                "n_run_rows": 60,
+                "n_clusters": 12,
+                "models": {
+                    "raw_count": {"group_loo_r2": -0.1},
+                    "tree_geometry": {"group_loo_r2": 0.1},
+                },
+            }
+            for label in labels
+        ]
+        capacity = [
+            {
+                "label": label,
+                "n_rows": 12,
+                "families": [{"family": "random_sc", "n": 1, "linear_test_accuracy_mean": 0.8}],
+            }
+            for label in labels
+            if label.startswith("hard_")
+        ]
+        causal = []
+        if include_causal:
+            causal = [
+                {
+                    "label": "random",
+                    "n_runs": 80,
+                    "interventions": [{"intervention": "scramble", "n": 10, "target_accuracy_delta_mean": -50.0}],
+                }
+            ]
+        matched = [
+            {
+                "label": "random",
+                "n_joined": 32,
+                "by_control_kind": {"random_sc": {"n": 16}},
+            }
+        ]
+        expanded = [
+            {
+                "label": label,
+                "results_pkl_count": 60,
+                "mechanism_count": 0,
+                "causal_count": 0,
+            }
+            for label in labels
+            if label.startswith("hard_")
+        ]
+        payload = {
+            "generated_at": "2026-05-07T00:00:00+00:00",
+            "scope": "first-order CRNs with exponential input-dependent rates",
+            "clustered_inference": clustered,
+            "branch_margin_capacity": capacity,
+            "causal_interventions": causal,
+            "matched_motif_controls": matched,
+            "expanded_pilot_status": expanded,
+        }
+        with open(report_json, "w") as f:
+            json.dump(payload, f)
+        return report_md, report_json
+
     def run_verifier(self, args):
         return subprocess.run(
             [sys.executable, SCRIPT, *args],
@@ -220,6 +300,59 @@ class VerifyTopologyCompletionTests(unittest.TestCase):
             )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("retrain aggregate groups 1/2", result.stdout)
+
+    def test_next_phase_report_kind_checks_current_schema(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            report_md, report_json = self.write_next_phase_report(tmpdir)
+            result = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    report_md,
+                    "--report_json",
+                    report_json,
+                    "--report_kind",
+                    "next_phase",
+                ]
+            )
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+
+    def test_next_phase_report_kind_fails_when_hard_regimes_missing(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            report_md, report_json = self.write_next_phase_report(tmpdir, include_hard=False)
+            result = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    report_md,
+                    "--report_json",
+                    report_json,
+                    "--report_kind",
+                    "next_phase",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing hard_n4_m6_N3_D2", result.stdout)
+
+    def test_next_phase_report_kind_fails_without_causal_entries(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            report_md, report_json = self.write_next_phase_report(tmpdir, include_causal=False)
+            result = self.run_verifier(
+                [
+                    "--experiment",
+                    f"exp={tmpdir}",
+                    "--report_md",
+                    report_md,
+                    "--report_json",
+                    report_json,
+                    "--report_kind",
+                    "next_phase",
+                ]
+            )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("no causal intervention entries", result.stdout)
 
     def test_research_report_kind_requires_both_essential_layouts(self):
         with tempfile.TemporaryDirectory() as tmpdir:

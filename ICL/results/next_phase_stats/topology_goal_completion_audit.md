@@ -10,13 +10,14 @@ This audit maps the active research objective to concrete repository artifacts. 
 - Hard-pilot artifact paths on branch: `889` files under `ICL/results/expanded_hard_libraries`, `ICL/results/expanded_hard_sweeps`, and `ICL/results/expanded_hard_stats`.
 - Raw-output exclusion check: no `results.pkl`, `model.pt`, `__pycache__`, or `_array_meta` paths under the committed hard-pilot artifact set.
 - Local unit tests: `python3 -m unittest discover -s ICL/tests`, `112` tests passed.
+- Next-phase report verifier: `python3 ICL/verify_topology_completion.py --experiment next=ICL/results/next_phase_stats --report_md ICL/results/next_phase_stats/next_phase_evidence_report.md --report_json ICL/results/next_phase_stats/next_phase_evidence_report.json --report_kind next_phase`, passed.
 - Main next-phase report: `ICL/results/next_phase_stats/next_phase_evidence_report.md`.
 
 ## Checklist
 
 | Requirement | Current artifact/evidence | Status | Notes |
 | --- | --- | --- | --- |
-| Audit implementation details before strengthening claims | `ICL/verify_topology_completion.py`, `ICL/audit_topology_artifacts.py`, tests under `ICL/tests/test_audit_topology_artifacts.py` and `ICL/tests/test_verify_topology_completion.py` | Partial | The audit tooling exists and is tested for older report schemas. The current next-phase report is not covered by this verifier schema. |
+| Audit implementation details before strengthening claims | `ICL/verify_topology_completion.py`, `ICL/audit_topology_artifacts.py`, tests under `ICL/tests/test_audit_topology_artifacts.py` and `ICL/tests/test_verify_topology_completion.py` | Complete for current report artifacts | The verifier now includes a `next_phase` report kind and passes on `next_phase_evidence_report.md/json`. |
 | Upgrade inference to group-aware / clustered analysis | `ICL/clustered_topology_inference.py`; `ICL/results/next_phase_stats/next_phase_evidence_report.md`; `ICL/results/expanded_hard_stats/*clustered_inference.json` | Complete for tested regimes | Report includes group LOO R2 and cluster-bootstrap delta R2 for original, pilot, and hard regimes. |
 | Expand matched topology sweeps beyond the original fixed-count regime | `ICL/results/expanded_hard_sweeps/n4_m6_N3_D2`, `n5_m8_N3_D2`, `n5_m12_N3_D2`; earlier `n5_m7_N2_D1`, `n5_m12_N2_D1` summaries in the report | Partial | Adds harder `N_c=3,D=2` pilots and sparse/intermediate/dense regimes, but does not yet cover the full planned grid `N_n in {4,5,6,7,8}`, `N_c in {2,3}`, `D in {1,2}`. |
 | Replace raw `d_rel` with branch-margin / tree-polytope capacity probes | `ICL/branch_margin_capacity.py`; `ICL/collect_branch_margin_capacity.py`; `ICL/results/*branch_margin_capacity*`; hard summaries in `ICL/results/expanded_hard_libraries/*/branch_margin_capacity_summary.json` | Partial | Probe is implemented and reported, but hard-regime results are flat (`0.892` linear accuracy), so it is not yet a discriminating capacity theory. |
@@ -41,4 +42,4 @@ The strongest remaining gaps are:
 1. Extend matched sweeps across the full planned parameter grid, not just selected pilot regimes.
 2. Replace the current branch-margin proxy with a more discriminating tree-polytope / branch-coverage capacity probe.
 3. Run mechanism decomposition and causal interventions on the expanded hard pilots.
-4. Add a verifier for the next-phase report schema, since the existing completion verifier targets the older consolidated report schemas.
+4. Extend the verifier further if future reports add new evidence sections beyond the current next-phase schema.

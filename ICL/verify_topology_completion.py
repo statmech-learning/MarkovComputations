@@ -180,6 +180,102 @@ def verify_research_report(report, markdown, experiments, target, allow_unknown_
     return failures
 
 
+def positive_number(value):
+    try:
+        return float(value) > 0
+    except (TypeError, ValueError):
+        return False
+
+
+def labels_for(items):
+    return {
+        item.get("label")
+        for item in items
+        if isinstance(item, dict) and item.get("label")
+    }
+
+
+def verify_next_phase_report(report, markdown):
+    failures = []
+    for section in [
+        "Next-Phase Topology-ICL Evidence Report",
+        "Clustered And Group-Aware Inference",
+        "Causal Alignment Interventions",
+        "Branch-Margin Capacity Probes",
+        "Matched Essential-Motif Controls",
+        "Expanded Pilot Status",
+        "Interpretation Guardrails",
+    ]:
+        require(section in markdown, f"next-phase Markdown missing section/text: {section}", failures)
+
+    scope = str(report.get("scope", ""))
+    require("first-order crns" in scope.lower(), "next-phase report scope does not limit to first-order CRNs", failures)
+    require(report.get("generated_at"), "next-phase report missing generated_at", failures)
+
+    clustered = report.get("clustered_inference")
+    require(isinstance(clustered, list) and clustered, "next-phase report has no clustered inference entries", failures)
+    clustered_labels = labels_for(clustered or [])
+    for label in [
+        "pooled_original",
+        "pooled_branch_capacity",
+        "hard_n4_m6_N3_D2",
+        "hard_n5_m8_N3_D2",
+        "hard_n5_m12_N3_D2",
+    ]:
+        require(label in clustered_labels, f"next-phase clustered inference missing {label}", failures)
+    for item in clustered or []:
+        label = item.get("label", "clustered")
+        require(positive_number(item.get("n_run_rows")), f"{label}: no run rows", failures)
+        require(positive_number(item.get("n_clusters")), f"{label}: no topology/mask clusters", failures)
+        models = item.get("models")
+        require(isinstance(models, dict) and "raw_count" in models, f"{label}: missing raw_count model", failures)
+        if isinstance(models, dict):
+            require(
+                any(name in models for name in ("tree_geometry", "masked_tree_geometry")),
+                f"{label}: missing topology geometry model",
+                failures,
+            )
+
+    capacity = report.get("branch_margin_capacity")
+    require(isinstance(capacity, list) and capacity, "next-phase report has no branch-margin capacity entries", failures)
+    capacity_labels = labels_for(capacity or [])
+    for label in ["hard_n4_m6_N3_D2", "hard_n5_m8_N3_D2", "hard_n5_m12_N3_D2"]:
+        require(label in capacity_labels, f"next-phase branch capacity missing {label}", failures)
+    for item in capacity or []:
+        label = item.get("label", "capacity")
+        require(positive_number(item.get("n_rows")), f"{label}: no branch capacity rows", failures)
+        require(isinstance(item.get("families"), list) and item.get("families"), f"{label}: no capacity family summary", failures)
+
+    causal = report.get("causal_interventions")
+    require(isinstance(causal, list) and causal, "next-phase report has no causal intervention entries", failures)
+    for item in causal or []:
+        label = item.get("label", "causal")
+        require(positive_number(item.get("n_runs")), f"{label}: no causal runs", failures)
+        require(
+            isinstance(item.get("interventions"), list) and item.get("interventions"),
+            f"{label}: no causal intervention summary",
+            failures,
+        )
+
+    matched = report.get("matched_motif_controls")
+    require(isinstance(matched, list) and matched, "next-phase report has no matched motif controls", failures)
+    for item in matched or []:
+        label = item.get("label", "matched motif")
+        require(positive_number(item.get("n_joined")), f"{label}: no joined matched motif controls", failures)
+        require(isinstance(item.get("by_control_kind"), dict) and item.get("by_control_kind"), f"{label}: no control-kind summary", failures)
+
+    expanded = report.get("expanded_pilot_status")
+    require(isinstance(expanded, list) and expanded, "next-phase report has no expanded pilot status", failures)
+    expanded_labels = labels_for(expanded or [])
+    for label in ["hard_n4_m6_N3_D2", "hard_n5_m8_N3_D2", "hard_n5_m12_N3_D2"]:
+        require(label in expanded_labels, f"next-phase expanded pilot status missing {label}", failures)
+    for item in expanded or []:
+        label = item.get("label", "expanded")
+        require(positive_number(item.get("results_pkl_count")), f"{label}: no completed training runs in expanded status", failures)
+
+    return failures
+
+
 def verify_report(
     report_md,
     report_json,
@@ -219,6 +315,8 @@ def verify_report(
                 allow_unknown_provenance=allow_unknown_provenance,
             )
         )
+    elif report_kind == "next_phase":
+        failures.extend(verify_next_phase_report(report, markdown))
     else:
         failures.append(f"unknown report kind: {report_kind}")
     return failures
@@ -275,7 +373,7 @@ def main():
     parser.add_argument("--report_json", type=str, required=True)
     parser.add_argument(
         "--report_kind",
-        choices=["input_mask", "research"],
+        choices=["input_mask", "research", "next_phase"],
         default="input_mask",
         help="Expected report schema to verify.",
     )
@@ -290,7 +388,7 @@ def main():
 
     experiments = [parse_experiment(raw) for raw in args.experiment]
     failures = []
-    if not args.skip_audit:
+    if not args.skip_audit and args.report_kind != "next_phase":
         audit_kinds = ["inputmask"]
         if args.report_kind == "research":
             audit_kinds.append("physical")
