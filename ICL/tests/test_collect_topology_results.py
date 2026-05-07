@@ -23,6 +23,24 @@ class CollectTopologyResultsTests(unittest.TestCase):
             capture_output=True,
         )
 
+    def write_minimal_run(self, run_dir, label):
+        os.makedirs(run_dir)
+        with open(os.path.join(run_dir, "topology.json"), "w") as f:
+            json.dump({"name": label, "n_nodes": 2, "edges": [[0, 1], [1, 0]]}, f)
+        with open(os.path.join(run_dir, "topology_metrics.json"), "w") as f:
+            json.dump({"topology_name": label, "n_nodes": 2, "n_edges": 2, "p": 3}, f)
+        with open(os.path.join(run_dir, "config.json"), "w") as f:
+            json.dump({"N": 2, "D": 1, "seed": 7}, f)
+        with open(os.path.join(run_dir, "results.pkl"), "wb") as f:
+            pickle.dump(
+                {
+                    "history": {},
+                    "results": {"novel_classes": 50.0},
+                    "execution_time": 1.0,
+                },
+                f,
+            )
+
     def test_backfills_branch_comparison_metrics_from_saved_topology(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             run_dir = os.path.join(tmpdir, "run_a")
@@ -102,6 +120,53 @@ class CollectTopologyResultsTests(unittest.TestCase):
         self.assertIn("missing config.json", result.stdout)
         self.assertIn("Wrote 0 rows", result.stdout)
         self.assertEqual(rows, [])
+
+    def test_skips_nested_analysis_runs_by_default(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            source_run = os.path.join(tmpdir, "source_trainseed1")
+            retrain_run = os.path.join(
+                tmpdir,
+                "essential_inputmask50_retrain",
+                "mask0001_trainseed1",
+            )
+            self.write_minimal_run(source_run, "source")
+            self.write_minimal_run(retrain_run, "retrain")
+            output_csv = os.path.join(tmpdir, "topology_results.csv")
+
+            result = self.run_collector(
+                [
+                    "--input_root",
+                    tmpdir,
+                    "--output_csv",
+                    output_csv,
+                ]
+            )
+            with open(output_csv, newline="") as f:
+                rows = list(csv.DictReader(f))
+
+        self.assertIn("Wrote 1 rows", result.stdout)
+        self.assertEqual([row["label"] for row in rows], ["source_trainseed1"])
+
+    def test_collects_retrain_runs_when_retrain_root_is_input_root(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            retrain_root = os.path.join(tmpdir, "essential_inputmask50_retrain")
+            retrain_run = os.path.join(retrain_root, "mask0001_trainseed1")
+            self.write_minimal_run(retrain_run, "retrain")
+            output_csv = os.path.join(tmpdir, "topology_results.csv")
+
+            result = self.run_collector(
+                [
+                    "--input_root",
+                    retrain_root,
+                    "--output_csv",
+                    output_csv,
+                ]
+            )
+            with open(output_csv, newline="") as f:
+                rows = list(csv.DictReader(f))
+
+        self.assertIn("Wrote 1 rows", result.stdout)
+        self.assertEqual([row["label"] for row in rows], ["mask0001_trainseed1"])
 
 
 if __name__ == "__main__":

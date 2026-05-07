@@ -95,6 +95,14 @@ BRANCH_METRIC_FIELDS = [
 
 _BRANCH_METRIC_CACHE = {}
 
+DEFAULT_EXCLUDED_DIR_NAMES = {
+    "_array_meta",
+    "essential_input50",
+    "essential_input50_retrain",
+    "essential_inputmask50",
+    "essential_inputmask50_retrain",
+}
+
 
 def finite_or_empty(value):
     if value is None:
@@ -294,8 +302,12 @@ def load_run(run_dir):
     return {field: finite_or_empty(row.get(field)) for field in FIELDS}
 
 
-def iter_run_dirs(root):
-    for current, _, files in os.walk(root):
+def iter_run_dirs(root, excluded_dir_names=None):
+    excluded = set(DEFAULT_EXCLUDED_DIR_NAMES)
+    if excluded_dir_names is not None:
+        excluded = set(excluded_dir_names)
+    for current, dirs, files in os.walk(root):
+        dirs[:] = [name for name in dirs if name not in excluded]
         if "results.pkl" in files and "topology_metrics.json" in files:
             yield current
 
@@ -304,10 +316,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input_root", type=str, required=True)
     parser.add_argument("--output_csv", type=str, required=True)
+    parser.add_argument(
+        "--include_analysis_dirs",
+        action="store_true",
+        help="Include nested essential/pruning/retrain analysis directories when scanning.",
+    )
     args = parser.parse_args()
 
     rows = []
-    for run_dir in sorted(iter_run_dirs(args.input_root)):
+    excluded = set() if args.include_analysis_dirs else None
+    for run_dir in sorted(iter_run_dirs(args.input_root, excluded_dir_names=excluded)):
         row = load_run(run_dir)
         if row is not None:
             rows.append(row)
