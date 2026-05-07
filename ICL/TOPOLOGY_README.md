@@ -18,7 +18,9 @@ The convention is:
 - `topology_metrics.py`: graph families, strong-connectivity checks, rooted
   arborescence enumeration, tree-incidence matrices, relative tree rank,
   effective rank, branch-wise comparison capacity, tree-count balance, and
-  edge participation metrics.
+  edge participation metrics. Supported controlled families include
+  `cycle_chords`, `random_sc`, `hub_spoke`, `two_module`,
+  `degree_balanced`, `bottleneck_bridge`, and `redundant_paths`.
 - `models/topology_markov_icl.py`: first-order ICL model on an explicit directed
   reaction graph.
 - `run_topology_icl.py`: train one topology-controlled run and save
@@ -28,6 +30,9 @@ The convention is:
 - `make_topology_library.py`: generate strongly connected fixed-`m` topology
   candidates, compute pre-training matrix-tree metrics, and select a
   structurally diverse subset for training.
+- `make_topology_sweep_plan.py`: write a multi-regime fixed-count sweep plan
+  across `N_n`, `m`, `N_c`, and `D`, including library-generation and dry-run
+  submission commands for the expanded graph families.
 - `input_mask_utils.py`: validate edge-order-aligned binary input masks and
   summarize input-encoding support.
 - `make_input_mask_library.py`: hold the physical graph fixed, generate
@@ -38,8 +43,28 @@ The convention is:
   optional `input_mask_json` rows for explicit input-encoding topology.
 - `topology_analysis.py`: post-training active-tree, tree-projection
   alignment, branch-wise margin, and edge-sensitivity utilities.
+- `branch_margin_capacity.py`: pre-training sampled branch-margin capacity
+  probe. It gates exact-copy comparison features by common context/query
+  relative tree-contrast support, then reports oracle and norm-controlled
+  linear margins. This is a conservative proxy for the proposed
+  tree-polytope/branch-margin theory, not a solution to the full nonconvex
+  `max_{K,B}` CRN capacity problem.
+- `TOPOLOGY_THEORY_AUDIT.md`: first mandatory implementation audit for the
+  next theory phase. It checks tree orientation, trainable bias treatment,
+  strong-connectivity handling, pre-training selection leakage, novel-class
+  metric use, motif-matching limitations, and the current statistical/capacity
+  caveats.
 - `analyze_topology_model.py`: load a trained run and write
   `mechanism_metrics.json`.
+- `causal_topology_interventions.py`: load a trained run and evaluate causal
+  alignment-scrambling interventions on a fixed novel-class batch, including
+  context-coordinate shuffles, edge projection/rate-function permutations,
+  decoder row permutations, and random direction controls that preserve
+  effective row norms.
+- `collect_causal_interventions.py`: collect `causal_interventions.json` files
+  into a flat CSV and summary JSON for mechanism-intervention reports.
+- `submit_causal_interventions.py`: SLURM array generator for running causal
+  intervention reports over completed trained topology runs.
 - `submit_topology_mechanisms.py`: SLURM array generator for post-training
   active-tree, edge-sensitivity, and ablation analysis over completed runs.
 - `finalize_topology_sweep.py`: convenience wrapper that collects completed
@@ -65,6 +90,10 @@ The convention is:
 - `compare_essential_retrains.py`: join extracted physical motif or input-mask
   source metadata with from-scratch retrain aggregates and report performance
   retention.
+- `make_matched_motif_controls.py`: generate matched random or degree-rewired
+  physical controls for extracted essential subgraphs, scored against each
+  source motif on coarse tree-geometry features, and write a `selected.csv`
+  that can be retrained through the standard library sweep submitter.
 - `finalize_essential_inputmask_retrains.py`: guarded finalizer for extracted
   essential input-mask retrains; it refuses to collect incomplete retrain sets
   unless `--allow_partial` is supplied.
@@ -104,6 +133,10 @@ The convention is:
   predictors, mechanism predictors, and essential-retrain retention.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
+- `clustered_topology_inference.py`: dependency-light statistical upgrade for
+  nested seed data. It reports group-level regressions, clustered bootstrap
+  deltas over topology/mask groups, leave-one-family/backbone-out prediction,
+  and random-intercept-style residual decomposition.
 - `tests/`: dependency-light unit coverage for matrix-tree metrics, input-mask
   validation, topology/input-mask library generation, collection, regression,
   seed aggregation, mechanism summaries, essential subgraph/mask extraction,
@@ -172,9 +205,141 @@ python3 analyze_topology_model.py \
   --ablate_physical
 ```
 
+## Branch-Margin Capacity Probe
+
+The current global rank proxy `d_rel` is intentionally coarse: it measures how
+many relative tree directions are available, not whether those directions can
+separate query/context comparison branches. `branch_margin_capacity.py` is the
+first lightweight pre-training probe for that gap.
+
+Example:
+
+```bash
+python3 branch_margin_capacity.py \
+  --edge_json results/input_mask_library_n6_m20_c200/topologies/random_sc_n6_m20_seed3.json \
+  --input_mask_json results/input_mask_library_n6_m20_c200/masks/mask0001.json \
+  --n_context 4 \
+  --z_dim 4 \
+  --train_samples 2000 \
+  --test_samples 2000 \
+  --output_json results/branch_margin_probe.json \
+  --output_md results/branch_margin_probe.md
+```
+
+The probe samples exact-copy branches, computes per-branch/per-coordinate
+common context/query support in the relative tree-contrast map, gates
+`-(z_i-z_q)^2` comparison features by that support, and reports:
+
+- oracle branch-comparison accuracy and margins,
+- norm-controlled linear ridge accuracy and margins,
+- common-rank support by branch and coordinate,
+- the corresponding `d_rel` and branch-rank metrics.
+
+Use it as a branch-specific topology predictor to compare against `d_rel`; do
+not interpret it as proof that a trained CRN will realize the optimum.
+
+## Cluster-Aware Statistical Diagnostics
+
+Seed-level rows are nested inside topology/mask groups, so run-level OLS should
+not be treated as if every seed were an independent topology. Use
+`clustered_topology_inference.py` on collected run CSVs:
+
+```bash
+python3 clustered_topology_inference.py \
+  --run_csv results/input_mask_fixed_m20_random_sc_seed3_c200/topology_results.csv \
+  --cluster_col topology_name \
+  --family_col physical_topology_name \
+  --n_bootstrap 1000 \
+  --output_json results/clustered_topology_inference.json
+```
+
+The JSON includes:
+
+- topology/mask group-level regressions for mean, best, and seed-variance
+  targets,
+- clustered bootstrap `R2` deltas versus the raw-count baseline,
+- leave-one-physical-family-out prediction summaries,
+- residual decomposition into between-group and within-group components.
+
+## Matched Essential-Motif Controls
+
+Extracted physical motifs are selected from trained models, so a strong motif
+result requires controls matched on coarse tree geometry. Generate a retrainable
+control library with:
+
+```bash
+python3 make_matched_motif_controls.py \
+  --source_csv results/input_mask_fixed_m20_random_sc_seed3_c200/essential_input50/selected.csv \
+  --output_root results/input_mask_fixed_m20_random_sc_seed3_c200/essential_input50_matched_controls \
+  --N 4 \
+  --D 4 \
+  --control_kinds random_sc,degree_rewire \
+  --controls_per_source 4 \
+  --candidates_per_source 256
+```
+
+Then train `selected.csv` with `submit_topology_library_sweep.py` using the
+same seeds and optimizer as the extracted motifs. Compare extracted motifs
+against these controls before making causal claims about motif superiority.
+
+## Causal Tree/Branch Alignment Interventions
+
+Associations between active trees and ICL branches are not enough by
+themselves. For trained high-ICL runs, directly scramble the learned alignment
+while preserving simpler statistics:
+
+```bash
+python3 causal_topology_interventions.py \
+  --run_dir results/input_mask_fixed_m20_random_sc_seed3_c200/<run_label> \
+  --n_samples 500 \
+  --n_repeats 5 \
+  --interventions context_block_shuffle,edge_projection_permutation,edge_rate_function_permutation,decoder_root_permutation,randomize_K_direction
+```
+
+The script writes `causal_interventions.json` with baseline accuracy/mechanism
+summaries and intervention deltas on the same sampled novel-class batch. A
+large negative `target_accuracy_delta` under branch/tree-alignment scrambles is
+stronger mechanism evidence than correlation alone.
+
+Run the intervention pass over completed training runs with:
+
+```bash
+python3 submit_causal_interventions.py \
+  --input_root results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --n_samples 500 \
+  --n_repeats 5 \
+  --array \
+  --dry-run
+```
+
+Collect completed intervention reports with:
+
+```bash
+python3 collect_causal_interventions.py \
+  --input_root results/input_mask_fixed_m20_random_sc_seed3_c200 \
+  --output_csv results/input_mask_fixed_m20_random_sc_seed3_c200/causal_interventions.csv \
+  --output_json results/input_mask_fixed_m20_random_sc_seed3_c200/causal_interventions_summary.json
+```
+
 ## Engaging SLURM Usage
 
 Use a separate cluster worktree named `topology`, then from its `ICL` directory:
+
+For broader fixed-count sweeps, first generate a regime plan:
+
+```bash
+python3 make_topology_sweep_plan.py \
+  --output_csv results/expanded_topology_sweep_plan.csv \
+  --commands_sh results/expanded_topology_sweep_plan.sh \
+  --n_nodes 4:8 \
+  --edge_regimes sparse,intermediate,dense \
+  --n_context 2,3 \
+  --z_dims 1,2
+```
+
+Inspect the CSV before running the generated commands. The submission commands
+are written with `--dry-run` by default so the cluster agent can review array
+sizes and output roots before removing that flag.
 
 ```bash
 export SLURM_OUTPUT_BASE=/pool/<group>/<user>/topology_phase1

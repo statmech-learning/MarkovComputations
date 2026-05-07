@@ -688,7 +688,15 @@ Core theory and metrics:
 ```text
 ICL/topology_metrics.py
 ICL/topology_analysis.py
+ICL/branch_margin_capacity.py
 ```
+
+`branch_margin_capacity.py` is the first implementation of the proposed
+branch-margin proxy. It samples exact-copy branches, gates squared
+query/context comparison features by common relative tree-contrast support, and
+reports oracle plus norm-controlled linear margins. It is intentionally a
+pre-training proxy, not a solution to the full nonconvex `max_{K,B}` capacity
+problem.
 
 Model and training:
 
@@ -701,9 +709,20 @@ Library generation:
 
 ```text
 ICL/make_topology_library.py
+ICL/make_topology_sweep_plan.py
 ICL/make_input_mask_library.py
 ICL/input_mask_utils.py
 ```
+
+The physical graph library now supports the original `cycle_chords`,
+`random_sc`, `hub_spoke`, and `two_module` families plus next-phase
+`degree_balanced`, `bottleneck_bridge`, and `redundant_paths` families for
+broader fixed-count sweeps.
+
+`make_topology_sweep_plan.py` generates the next expanded fixed-count regime
+matrix across `N_n`, edge regime, `N_c`, and `D`, with library-generation
+commands and dry-run training-array commands that should be inspected before
+cluster submission.
 
 Cluster orchestration:
 
@@ -717,19 +736,44 @@ Post-training analysis:
 
 ```text
 ICL/analyze_topology_model.py
+ICL/causal_topology_interventions.py
+ICL/submit_causal_interventions.py
+ICL/collect_causal_interventions.py
 ICL/collect_mechanism_results.py
 ICL/summarize_topology_mechanisms.py
 ```
+
+`causal_topology_interventions.py` is the first causal mechanism probe. It
+loads a trained run, evaluates a fixed novel-class batch, then measures
+accuracy and mechanism deltas after context-block coordinate shuffles, edge
+projection/rate-function permutations, decoder root permutations, and random
+`K`-direction controls that preserve effective row norms. This is the intended
+test for whether branch/tree alignment is functional rather than merely
+correlated with ICL.
+
+`submit_causal_interventions.py` runs that probe across completed trained runs
+through a dry-run-safe SLURM array path.
+
+`collect_causal_interventions.py` flattens completed intervention reports into
+CSV and summary JSON so accuracy drops can be compared across topology/mask
+groups and intervention types.
 
 Essential motifs:
 
 ```text
 ICL/extract_essential_subgraphs.py
 ICL/extract_essential_input_masks.py
+ICL/make_matched_motif_controls.py
 ICL/compare_essential_retrains.py
 ICL/recover_essential_physical_retrains.py
 ICL/recover_essential_inputmask_retrains.py
 ```
+
+`make_matched_motif_controls.py` is the first matched-control baseline for the
+essential physical motif claim. It samples random and directed degree-rewired
+strongly connected controls with the same `N_n` and `m`, scores them against
+the extracted motif on coarse tree-geometry features, and writes a retrainable
+`selected.csv` for the standard library sweep path.
 
 Reports and verification:
 
@@ -738,9 +782,23 @@ ICL/make_input_mask_report.py
 ICL/make_topology_research_report.py
 ICL/finalize_topology_research_report.py
 ICL/interpret_topology_report.py
+ICL/clustered_topology_inference.py
+ICL/TOPOLOGY_THEORY_AUDIT.md
 ICL/audit_topology_artifacts.py
 ICL/verify_topology_completion.py
 ```
+
+`TOPOLOGY_THEORY_AUDIT.md` is the first mandatory next-phase audit. It records
+that tree orientation, strong-connectivity handling, structural mask selection,
+and novel-class metric plumbing are sound, while trainable base-rate biases,
+nested seed dependence, and unmatched motif controls remain explicit caveats.
+
+`clustered_topology_inference.py` is the first implementation of the
+hierarchical-statistics upgrade requested by the critique. It does not add a
+heavy mixed-effects dependency, but it avoids treating seed rows as independent
+topologies by reporting group-level regressions, cluster-bootstrap deltas,
+leave-one-backbone-out prediction, and residual decomposition by topology/mask
+group.
 
 Tests:
 
@@ -757,16 +815,17 @@ docs/topology-icl/
 
 ## 15. Bottom Line
 
-The project now supports a positive but nuanced conclusion:
+The project now supports a positive but scoped conclusion:
 
 ```text
-First-order CRN topology matters for ICL beyond raw trainable degree count in
-the verified fixed-count regimes. The clearest pre-training signal is relative
+In the tested first-order fixed-count regimes, topology-associated structural
+and functional variables explain residual variation in novel-class ICL that raw
+trainable count does not explain. The clearest pre-training signal is relative
 spanning-tree geometry, and the clearest trained-model mechanism signal is
 branch-specific active tree/projection organization. Essential physical motifs
-retain substantially more ICL when retrained from scratch than sparse
-input-encoding masks, suggesting that physical reaction topology is an active
-computational constraint rather than just a container for parameters.
+retain more ICL than sparse input-encoding masks under the current extraction
+and retraining protocol, but this motif result still needs matched controls
+before it can be treated as a causal topology claim.
 ```
 
 The strongest open theoretical task is to replace coarse rank/spectrum proxies

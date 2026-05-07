@@ -195,6 +195,105 @@ def two_module_bridge(n_nodes: int, n_edges: int, seed: int = 0) -> TopologySpec
     return TopologySpec(n_nodes=n_nodes, edges=edges, name="two_module")
 
 
+def degree_balanced_strong(n_nodes: int, n_edges: int, seed: int = 0) -> TopologySpec:
+    """Strong graph with greedily balanced in/out degree."""
+
+    min_edges = n_nodes
+    max_edges = n_nodes * (n_nodes - 1)
+    if not min_edges <= n_edges <= max_edges:
+        raise ValueError(f"n_edges must be in [{min_edges}, {max_edges}], got {n_edges}")
+
+    rng = random.Random(seed)
+    edges = list(directed_cycle(n_nodes).edges)
+    candidates = [edge for edge in complete_digraph(n_nodes).edges if edge not in edges]
+    while len(edges) < n_edges:
+        scored = []
+        for edge in candidates:
+            trial = edges + [edge]
+            outdeg = np.zeros(n_nodes, dtype=float)
+            indeg = np.zeros(n_nodes, dtype=float)
+            for source, target in trial:
+                outdeg[source] += 1.0
+                indeg[target] += 1.0
+            score = float(outdeg.var() + indeg.var())
+            scored.append((score, rng.random(), edge))
+        _, _, chosen = min(scored)
+        edges.append(chosen)
+        candidates.remove(chosen)
+    return TopologySpec(
+        n_nodes=n_nodes,
+        edges=normalize_edges(n_nodes, edges),
+        name="degree_balanced",
+    )
+
+
+def bottleneck_bridge(n_nodes: int, n_edges: int, seed: int = 0) -> TopologySpec:
+    """Two cyclic modules connected by one bidirectional bridge, then padded."""
+
+    if n_nodes < 4:
+        raise ValueError("bottleneck_bridge requires at least 4 nodes")
+    min_edges = n_nodes + 2
+    max_edges = n_nodes * (n_nodes - 1)
+    if not min_edges <= n_edges <= max_edges:
+        raise ValueError(f"bottleneck_bridge needs n_edges in [{min_edges}, {max_edges}]")
+
+    split = n_nodes // 2
+    left = list(range(split))
+    right = list(range(split, n_nodes))
+    base = []
+    for group in (left, right):
+        for idx, source in enumerate(group):
+            base.append((source, group[(idx + 1) % len(group)]))
+    base.extend([(left[-1], right[0]), (right[0], left[-1])])
+    base = list(normalize_edges(n_nodes, base))
+
+    within = []
+    cross = []
+    base_set = set(base)
+    left_set = set(left)
+    right_set = set(right)
+    for edge in complete_digraph(n_nodes).edges:
+        if edge in base_set:
+            continue
+        source, target = edge
+        if (source in left_set and target in left_set) or (source in right_set and target in right_set):
+            within.append(edge)
+        else:
+            cross.append(edge)
+    rng = random.Random(seed)
+    rng.shuffle(within)
+    rng.shuffle(cross)
+    # Fill within modules first to preserve a cross-module bottleneck as long
+    # as possible at the requested edge count.
+    candidates = within + cross
+    edges = normalize_edges(n_nodes, base + candidates[: n_edges - len(base)])
+    return TopologySpec(n_nodes=n_nodes, edges=edges, name="bottleneck_bridge")
+
+
+def redundant_paths_strong(n_nodes: int, n_edges: int, seed: int = 0) -> TopologySpec:
+    """Strong graph that adds short redundant routes before random padding."""
+
+    min_edges = n_nodes
+    max_edges = n_nodes * (n_nodes - 1)
+    if not min_edges <= n_edges <= max_edges:
+        raise ValueError(f"n_edges must be in [{min_edges}, {max_edges}], got {n_edges}")
+
+    base = list(directed_cycle(n_nodes).edges)
+    templates = []
+    for offset in (n_nodes - 1, 2, n_nodes - 2, 3):
+        if offset % n_nodes == 0:
+            continue
+        for node in range(n_nodes):
+            edge = (node, (node + offset) % n_nodes)
+            if edge[0] != edge[1] and edge not in base and edge not in templates:
+                templates.append(edge)
+    candidates = [edge for edge in complete_digraph(n_nodes).edges if edge not in base and edge not in templates]
+    rng = random.Random(seed)
+    rng.shuffle(candidates)
+    edges = normalize_edges(n_nodes, base + templates + candidates)
+    return TopologySpec(n_nodes=n_nodes, edges=edges[:n_edges], name="redundant_paths")
+
+
 def graph_from_family(
     family: str,
     n_nodes: int,
@@ -228,6 +327,12 @@ def graph_from_family(
         return hub_spoke_strong(n_nodes, n_edges, seed=seed)
     if family == "two_module":
         return two_module_bridge(n_nodes, n_edges, seed=seed)
+    if family == "degree_balanced":
+        return degree_balanced_strong(n_nodes, n_edges, seed=seed)
+    if family == "bottleneck_bridge":
+        return bottleneck_bridge(n_nodes, n_edges, seed=seed)
+    if family == "redundant_paths":
+        return redundant_paths_strong(n_nodes, n_edges, seed=seed)
     raise ValueError(f"Unknown topology family: {family}")
 
 

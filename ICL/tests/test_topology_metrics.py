@@ -13,6 +13,7 @@ from topology_metrics import (  # noqa: E402
     compute_topology_metrics,
     directed_cycle,
     enumerate_arborescences,
+    graph_from_family,
     incidence_matrix,
     masked_relative_svd_metrics,
     tree_numerators_by_determinant,
@@ -136,6 +137,15 @@ class TopologyMetricsTests(unittest.TestCase):
         enum = tree_numerators_by_enumeration(n_nodes, edges, rates)
         det = tree_numerators_by_determinant(n_nodes, edges, rates)
         np.testing.assert_allclose(enum, det, rtol=1e-10, atol=1e-10)
+
+    def test_expanded_graph_families_are_strongly_connected(self):
+        families = ["degree_balanced", "bottleneck_bridge", "redundant_paths"]
+        for family in families:
+            spec = graph_from_family(family, 6, 12, seed=4)
+            self.assertEqual(len(spec.edges), 12, family)
+            metrics = compute_topology_metrics(spec.n_nodes, spec.edges, p=3, n_context=2, z_dim=1)
+            self.assertTrue(metrics["strongly_connected"], family)
+            self.assertGreater(metrics["n_trees_total_enum"], 0, family)
 
     def test_capped_tree_enumeration_is_flagged(self):
         metrics = compute_topology_metrics(

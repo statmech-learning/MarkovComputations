@@ -254,7 +254,10 @@ def main():
     parser.add_argument(
         "--families",
         type=str,
-        default="cycle_chords,random_sc,hub_spoke,two_module",
+        default=(
+            "cycle_chords,random_sc,hub_spoke,two_module,"
+            "degree_balanced,bottleneck_bridge,redundant_paths"
+        ),
     )
     parser.add_argument("--candidate_seeds", type=str, default="1:80")
     parser.add_argument("--select_topologies", type=int, default=16)
