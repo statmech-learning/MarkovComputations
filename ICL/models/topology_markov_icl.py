@@ -161,7 +161,10 @@ class TopologyMatrixTreeMarkovICL(BaseICLModel):
         W_modified[:, -1, :] = 1.0
         b = torch.zeros(batch_size, n, device=device, dtype=W_batch.dtype)
         b[:, -1] = 1.0
-        p_batch = torch.linalg.solve(W_modified, b)
+        try:
+            p_batch = torch.linalg.solve(W_modified, b)
+        except RuntimeError:
+            p_batch = torch.linalg.lstsq(W_modified, b.unsqueeze(-1)).solution.squeeze(-1)
         p_batch = torch.clamp(p_batch, min=0.0)
         return p_batch / p_batch.sum(dim=1, keepdim=True).clamp(min=1e-12)
 
