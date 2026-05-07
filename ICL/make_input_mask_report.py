@@ -484,6 +484,24 @@ def summarize_experiment(name, root, target):
         "aggregate_summary": summarize_rows(aggregate_rows, "target_mean"),
         "run_correlations": correlation_report(run_rows, target, CORRELATION_COLUMNS),
         "aggregate_regressions": regression_models(aggregate_rows, AGGREGATE_MODELS, "target_mean"),
+        "essential_inputmask50": summarize_essential_inputmask(root),
+    }
+
+
+def summarize_essential_inputmask(root):
+    comparison_json = os.path.join(root, "essential_inputmask50", "retrain_comparison.json")
+    comparison_csv = os.path.join(root, "essential_inputmask50", "retrain_comparison.csv")
+    retrain_aggregate_csv = os.path.join(root, "essential_inputmask50_retrain", "topology_seed_aggregates.csv")
+    comparison = load_json(comparison_json)
+    comparison_rows = load_csv(comparison_csv)
+    retrain_rows = load_csv(retrain_aggregate_csv)
+    if not comparison and not retrain_rows:
+        return {}
+    return {
+        "comparison_path": comparison_json if os.path.exists(comparison_json) else None,
+        "comparison": comparison or {},
+        "top_retrained_masks": comparison_rows[:5],
+        "retrain_aggregate": summarize_rows(retrain_rows, "target_mean"),
     }
 
 
@@ -643,6 +661,69 @@ def mask_table(rows, title):
     return lines
 
 
+def essential_inputmask_table(experiments):
+    lines = [
+        "| source experiment | joined masks | source mean ICL | retrain mean ICL | retrain best ICL | retention mean/max | retrain input couplings |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for experiment in experiments:
+        comparison = experiment.get("essential_inputmask50", {}).get("comparison", {})
+        if not comparison:
+            continue
+        retention = (
+            f"{fmt(comparison.get('retention_mean_mean'))}/"
+            f"{fmt(comparison.get('retention_max_mean'))}"
+        )
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    experiment["name"],
+                    str(comparison.get("n_joined", "NA")),
+                    fmt_acc(comparison.get("source_mean_mean")),
+                    fmt_acc(comparison.get("retrain_mean_mean")),
+                    fmt_acc(comparison.get("retrain_max_best")),
+                    retention,
+                    fmt(comparison.get("retrain_input_coupled_parameter_count_mean"), 1),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| none | 0 | NA | NA | NA | NA | NA |")
+    return lines
+
+
+def top_retrained_inputmask_table(experiments):
+    lines = [
+        "| source experiment | mask | source ICL | retrain mean | retrain max | retention mean/max | input couplings | d_rel |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for experiment in experiments:
+        masks = experiment.get("essential_inputmask50", {}).get("top_retrained_masks", [])[:3]
+        for mask in masks:
+            retention = f"{fmt(mask.get('retrain_retention_mean'))}/{fmt(mask.get('retrain_retention_max'))}"
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        experiment["name"],
+                        mask.get("topology_name", "NA"),
+                        fmt_acc(mask.get("source_test_novel_classes_mean")),
+                        fmt_acc(mask.get("retrain_target_mean")),
+                        fmt_acc(mask.get("retrain_target_max")),
+                        retention,
+                        fmt(mask.get("retrain_input_coupled_parameter_count"), 0),
+                        fmt(mask.get("d_rel"), 0),
+                    ]
+                )
+                + " |"
+            )
+    if len(lines) == 2:
+        lines.append("| none | NA | NA | NA | NA | NA | NA | NA |")
+    return lines
+
+
 def correlation_table(experiments):
     lines = [
         "| metric | " + " | ".join(experiment["name"] for experiment in experiments) + " |",
@@ -728,6 +809,16 @@ def build_markdown(report):
         *mask_table(pooled["best_masks"], "## Best Mask Groups"),
         "",
         *mask_table(pooled["worst_masks"], "## Weakest Mask Groups"),
+        "",
+        "## Essential Input-Mask Retraining",
+        "",
+        "Input-ablation 50%-coverage essential masks keep the physical graph fixed and prune only input-coupling rows, then retrain those masks from scratch.",
+        "",
+        *essential_inputmask_table(experiments),
+        "",
+        "### Top Retrained Essential Input Masks",
+        "",
+        *top_retrained_inputmask_table(experiments),
         "",
         "## Current Interpretation",
         "",

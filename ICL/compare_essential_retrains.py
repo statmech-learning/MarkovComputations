@@ -24,11 +24,14 @@ JOIN_FIELDS = [
     "source_test_novel_classes_mean",
     "source_target_accuracy_max",
     "source_target_accuracy_mean",
+    "source_input_coupled_parameter_count_mean",
+    "retrain_input_coupled_parameter_count",
     "retrain_target_max",
     "retrain_target_mean",
     "retrain_target_std",
     "retrain_retention_max",
     "retrain_retention_mean",
+    "effective_rank_D_masked",
 ]
 
 
@@ -95,6 +98,12 @@ def joined_rows(selected_rows, retrain_rows):
                 "source_test_novel_classes_mean": source_mean,
                 "source_target_accuracy_max": parse_float(source.get("source_target_accuracy_max")),
                 "source_target_accuracy_mean": parse_float(source.get("source_target_accuracy_mean")),
+                "source_input_coupled_parameter_count_mean": parse_float(
+                    source.get("source_input_coupled_parameter_count_mean")
+                ),
+                "retrain_input_coupled_parameter_count": parse_float(
+                    retrain.get("input_coupled_parameter_count")
+                ),
                 "retrain_target_max": retrain_max,
                 "retrain_target_mean": retrain_mean,
                 "retrain_target_std": parse_float(retrain.get("target_std")),
@@ -104,6 +113,7 @@ def joined_rows(selected_rows, retrain_rows):
                 "retrain_retention_mean": (
                     retrain_mean / source_mean if retrain_mean is not None and source_mean else None
                 ),
+                "effective_rank_D_masked": parse_float(retrain.get("effective_rank_D_masked")),
             }
         )
     return rows
@@ -125,6 +135,10 @@ def summary(rows):
         "n_edges_max": max_or_none([row["n_edges"] for row in rows]),
         "d_rel_mean": mean([row["d_rel"] for row in rows]),
         "effective_rank_D_mean": mean([row["effective_rank_D"] for row in rows]),
+        "effective_rank_D_masked_mean": mean([row["effective_rank_D_masked"] for row in rows]),
+        "retrain_input_coupled_parameter_count_mean": mean(
+            [row["retrain_input_coupled_parameter_count"] for row in rows]
+        ),
     }
 
 
@@ -161,6 +175,11 @@ def print_summary(report):
         f"min={report['n_edges_min']:.0f}, "
         f"max={report['n_edges_max']:.0f}"
     )
+    if report.get("retrain_input_coupled_parameter_count_mean") is not None:
+        print(
+            "Retrain input couplings: "
+            f"mean={report['retrain_input_coupled_parameter_count_mean']:.2f}"
+        )
 
 
 def main():
