@@ -62,8 +62,9 @@ The convention is:
 - `extract_essential_input_masks.py`: convert trained-model edge importance or
   ablation scores into sparse input-encoding masks while keeping the physical
   reaction graph fixed.
-- `compare_essential_retrains.py`: join extracted motif source metadata with
-  from-scratch retrain aggregates and report performance retention.
+- `compare_essential_retrains.py`: join extracted physical motif or input-mask
+  source metadata with from-scratch retrain aggregates and report performance
+  retention.
 - `finalize_essential_inputmask_retrains.py`: guarded finalizer for extracted
   essential input-mask retrains; it refuses to collect incomplete retrain sets
   unless `--allow_partial` is supplied.
@@ -71,15 +72,18 @@ The convention is:
   input-mask sweeps, including masked tree geometry, mechanism predictors,
   extracted essential masks, and retrain retention.
 - `make_topology_research_report.py`: consolidate fixed-edge sweeps,
-  mechanism summaries, seed aggregates, and essential motif retrain comparisons
-  into one Markdown/JSON progress report.
+  mechanism summaries, seed aggregates, physical essential-subgraph retrains,
+  and essential input-mask retrains into one Markdown/JSON progress report.
 - `audit_topology_artifacts.py`: read-only audit of source runs, mechanism
   outputs, extracted essential masks, retrain outputs, manifests, and comparison
   files. Use this before recovering interrupted cluster arrays or running
   guarded finalizers.
 - `regress_topology_results.py`: dependency-light OLS diagnostics for testing
   whether tree-geometry predictors improve on raw parameter count.
-- `tests/test_topology_metrics.py`: exact small-graph matrix-tree checks.
+- `tests/`: dependency-light unit coverage for matrix-tree metrics, input-mask
+  validation, topology/input-mask library generation, collection, regression,
+  seed aggregation, mechanism summaries, essential subgraph/mask extraction,
+  retrain comparison, reporting, artifact audit, and SLURM dry-run wrappers.
 
 ## Local Structural Checks
 
@@ -89,6 +93,14 @@ These do not require Torch:
 python3 -m unittest discover -s ICL/tests
 python3 ICL/submit_topology_phase1.py --phase smoke --dry-run
 ```
+
+The unittest suite is intentionally synthetic and pure Python. It checks the
+analysis/control plane used after cluster training: selected topology and input
+mask CSVs are retrainable, comparison-branch capacity metrics survive
+collection and reporting, mechanism summaries expose branch margins and
+active-tree diagnostics, interrupted retrain arrays can be audited/requeued
+without overwriting completed runs, and final reports recognize both
+`essential_input50` physical subgraphs and `essential_inputmask50` input masks.
 
 ## Single Smoke Training Run
 
@@ -403,3 +415,9 @@ python3 make_topology_research_report.py \
 When multiple experiments are supplied, the report also includes pooled
 cross-regime regressions that compare edge-count predictors with tree-geometry,
 mechanism, and projection-alignment predictors.
+
+If an experiment root contains `essential_input50/retrain_comparison.json` or
+`essential_inputmask50/retrain_comparison.json`, the same consolidated report
+will include the retrain-retention tables for those physical subgraphs or
+input masks. This lets the final report cover both expressive minimal physical
+motifs and sparse input-encoding motifs without changing the reporting command.
