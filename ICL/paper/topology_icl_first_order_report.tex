@@ -168,7 +168,7 @@ A first count of relative projection capacity is
 \]
 With an input mask $\Omega_{e\alpha}$, the capacity must be input-aware:
 \[
-\boxed{\;\drel(G,\Omega)=\sum_{\alpha=1}^{p}\operatorname{rank}\ig(D_G\operatorname{diag}(\Omega_{\cdot\alpha})\big).\;}
+\boxed{\;\drel(G,\Omega)=\sum_{\alpha=1}^{p}\operatorname{rank}\big(D_G\operatorname{diag}(\Omega_{\cdot\alpha})\big).\;}
 \]
 
 \vspace{0.5em}
@@ -190,12 +190,14 @@ so the theory becomes a rooted-tree-polytope normal-fan coverage problem.
 \vspace{0.5em}
 \noindent The hierarchy that emerged is therefore
 \[
+\begin{aligned}
 \text{raw count}
-<\text{relative tree rank}
-<\text{masked tree geometry}
-<\text{branch-margin/tree-polytope geometry}
+&<\text{relative tree rank}
+<\text{masked tree geometry}\\
+&<\text{branch-margin/tree-polytope geometry}
 <\text{trained organization}
 <\text{causal dependence}.
+\end{aligned}
 \]
 
 \vspace{1em}
@@ -220,7 +222,7 @@ so the theory becomes a rooted-tree-polytope normal-fan coverage problem.
 \texttt{topology\_icl\_complete\_explanation.md} & full narrative explanation\\
 \texttt{next\_phase\_evidence\_report.md/json} & fixed-count, motif, causal summaries\\
 \texttt{mechanism\_isolation\_evidence.csv} & controlled mechanism contrasts\\
-\texttt{stat\_preserving\_causal\_stratified/summary.json} & stratified causal scrambles\\
+\texttt{stat\_preserving\_causal\_stratified} & stratified causal scrambles\\
 \texttt{degree\_rewire\_normal\_fan\_...} & exact-degree normal-fan pilot
 \end{tabular}
 \end{center}
@@ -306,11 +308,11 @@ The real capacity object is therefore $\gstar(G,\Omega)$, not only $\gstar(G)$.
 \vspace{0.5em}
 \noindent Pre-training topology asks what the graph could use. Post-training diagnostics ask what the trained model did use. The strongest diagnostic class was projection/root/tree organization around comparison branches. Projection-alignment summaries gave
 \[
-R^2_{\rm LOO}=0.740\quad \text{at run level},
-\qquad
-R^2_{\rm LOO}=0.809\quad \text{at topology-mean level},
-\qquad
-R^2_{\rm LOO}=0.599\quad \text{for topology-best seed}.
+\begin{aligned}
+R^2_{\rm LOO}&=0.740 &&\text{at run level},\\
+R^2_{\rm LOO}&=0.809 &&\text{at topology-mean level},\\
+R^2_{\rm LOO}&=0.599 &&\text{for topology-best seed}.
+\end{aligned}
 \]
 
 \begin{figure}[h]
