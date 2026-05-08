@@ -1,0 +1,218 @@
+{
+  "bias_variants": {
+    "gamma_no_bias": "All analytic audits above use b_e=0.",
+    "gamma_with_bias": "Not used for repair claims; no-bias analytic gates are decisive."
+  },
+  "diagnosis": "The previous failure was localized to branch data and random-probe definition: Toy B was encoded as a single active branch/class rather than the max branch pair M1>,M2>.  Delta-separated analytic datasets and hard-coded K reproduce the original small-system results.",
+  "gamma_repaired": true,
+  "gate": {
+    "optimizer_preserves_or_recovers_warm_start": true,
+    "reports_separate_accuracy_ordering_and_margin": true,
+    "three_species_tree_sum_orientation_matches_paper": true,
+    "toy_A_no_bias_fails_as_expected": true,
+    "toy_B_no_bias_passes_hard_coded_K": true,
+    "toy_C_no_bias_passes_hard_coded_K": true
+  },
+  "optimizer": {
+    "toy_B_LBFGS_from_warm_start": {
+      "available": true,
+      "final_metrics": {
+        "branch_ordering_correctness": 1.0,
+        "by_branch": [
+          {
+            "branch": "M1>",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 0,
+            "lcvar_margin": 4.897533034520739,
+            "mean_margin": 10.609771464600307,
+            "n": 256,
+            "p10_margin": 5.685204880119013
+          },
+          {
+            "branch": "M2>",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 1,
+            "lcvar_margin": 4.972343480645118,
+            "mean_margin": 10.622348085050753,
+            "n": 256,
+            "p10_margin": 5.4510378639393835
+          }
+        ],
+        "classification_accuracy": 1.0,
+        "failure_rate": 0.0,
+        "lcvar_margin": 4.928870609497098,
+        "mean_margin": 10.61605977482553,
+        "p10_margin": 5.513572081091755
+      },
+      "final_objective": 0.0038946946326529545,
+      "initial_metrics": {
+        "branch_ordering_correctness": 1.0,
+        "by_branch": [
+          {
+            "branch": "M1>",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 0,
+            "lcvar_margin": 3.4666845691267656,
+            "mean_margin": 7.5211444956962765,
+            "n": 256,
+            "p10_margin": 4.08145273126091
+          },
+          {
+            "branch": "M2>",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 1,
+            "lcvar_margin": 3.5662086448262196,
+            "mean_margin": 7.614654991065023,
+            "n": 256,
+            "p10_margin": 3.912845640854246
+          }
+        ],
+        "classification_accuracy": 1.0,
+        "failure_rate": 0.0,
+        "lcvar_margin": 3.5134622019796726,
+        "mean_margin": 7.56789974338065,
+        "p10_margin": 3.9479165906947835
+      },
+      "initial_objective": 0.007032749027263911,
+      "k_change_norm": 8.480531722600674,
+      "message": "CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL",
+      "success": true
+    },
+    "toy_C_LBFGS_from_warm_start": {
+      "available": true,
+      "final_metrics": {
+        "branch_ordering_correctness": 1.0,
+        "by_branch": [
+          {
+            "branch": "M1<",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 0,
+            "lcvar_margin": 3.620269423379405,
+            "mean_margin": 7.843481672337733,
+            "n": 256,
+            "p10_margin": 3.959777178289687
+          },
+          {
+            "branch": "M1>",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 0,
+            "lcvar_margin": 3.545433820326392,
+            "mean_margin": 7.699798807850373,
+            "n": 256,
+            "p10_margin": 4.0587161367504665
+          },
+          {
+            "branch": "M2<",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 1,
+            "lcvar_margin": 2.72249396336066,
+            "mean_margin": 6.829702845680387,
+            "n": 256,
+            "p10_margin": 3.300933914761475
+          },
+          {
+            "branch": "M2>",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 1,
+            "lcvar_margin": 2.681556835258896,
+            "mean_margin": 6.935603186169153,
+            "n": 256,
+            "p10_margin": 3.126133348223753
+          }
+        ],
+        "classification_accuracy": 1.0,
+        "failure_rate": 0.0,
+        "lcvar_margin": 3.0348160439259013,
+        "mean_margin": 7.3271466280094115,
+        "p10_margin": 3.625156740103211
+      },
+      "final_objective": 0.024818149116460242,
+      "initial_metrics": {
+        "branch_ordering_correctness": 1.0,
+        "by_branch": [
+          {
+            "branch": "M1<",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 0,
+            "lcvar_margin": 2.359155793415496,
+            "mean_margin": 4.942927133796062,
+            "n": 256,
+            "p10_margin": 2.5678711918755996
+          },
+          {
+            "branch": "M1>",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 0,
+            "lcvar_margin": 2.444531447722637,
+            "mean_margin": 5.077652042290042,
+            "n": 256,
+            "p10_margin": 2.776110461035961
+          },
+          {
+            "branch": "M2<",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 1,
+            "lcvar_margin": 1.2517383767691415,
+            "mean_margin": 3.8858190308148846,
+            "n": 256,
+            "p10_margin": 1.6353585560366568
+          },
+          {
+            "branch": "M2>",
+            "branch_ordering_correctness": 1.0,
+            "classification_accuracy": 1.0,
+            "failure_rate": 0.0,
+            "label": 1,
+            "lcvar_margin": 1.2106423264537622,
+            "mean_margin": 3.92905602893732,
+            "n": 256,
+            "p10_margin": 1.4563121944769442
+          }
+        ],
+        "classification_accuracy": 1.0,
+        "failure_rate": 0.0,
+        "lcvar_margin": 1.5155605987010414,
+        "mean_margin": 4.458863558959577,
+        "p10_margin": 2.091268914385794
+      },
+      "initial_objective": 0.05730582743613405,
+      "k_change_norm": 33.4647805683557,
+      "message": "CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL",
+      "success": true
+    }
+  },
+  "schema": "gamma_toy_repair_final_report.v1",
+  "three_species_summary": {
+    "toy_C_accuracy": 1.0,
+    "toy_C_lcvar_margin": 1.5155605987010414,
+    "toy_C_ordering": 1.0
+  },
+  "two_species_summary": {
+    "toy_A_accuracy": 0.5,
+    "toy_A_lcvar_margin": -11.038554770464462,
+    "toy_B_accuracy": 1.0,
+    "toy_B_lcvar_margin": 3.5134622019796726
+  }
+}

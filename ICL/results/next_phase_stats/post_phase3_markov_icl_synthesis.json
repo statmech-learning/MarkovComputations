@@ -1,0 +1,96 @@
+{
+  "schema": "post_phase3_markov_icl_synthesis.v1",
+  "source_artifacts": [
+    "ICL/results/next_phase_stats/branch_dataset_audit.md",
+    "ICL/results/next_phase_stats/two_species_analytic_gamma_audit.md",
+    "ICL/results/next_phase_stats/three_species_tree_sum_orientation_audit.md",
+    "ICL/results/next_phase_stats/three_species_analytic_gamma_audit.md",
+    "ICL/results/next_phase_stats/gamma_toy_repair_final_report.md",
+    "ICL/results/next_phase_stats/tree_multiplicity_causal_mask_library.md",
+    "ICL/results/next_phase_stats/input_multiplicity_causal_control_report.md"
+  ],
+  "required_questions": {
+    "was_gamma_icl_repaired_on_analytic_toys": true,
+    "gamma_failure_localization": "Earlier failure localized mainly to Toy B branch-data/probe definition: the one-branch max task must contain M1> and M2>, not one active branch. Tree orientation now matches the paper list, and analytic warm starts pass.",
+    "does_tree_multiplicity_causally_predict_under_matched_controls": "Supportive existing-data evidence, not final prospective proof. Tree-difference features improve grouped LOO beyond controls and edge-level features; matched high-low contrast is positive but uncertain.",
+    "does_causal_result_support_phase2": "Directionally yes, with remaining exact-matching caveats.",
+    "next_exact_control_metric": "Normalized same-root tree-difference comparison overlap, with normalized tree-level overlap and coordinate/load Gini as stratifiers; edge-level multiplicity only as baseline.",
+    "claim_status_summary": "Tree-space multiplicity and repaired analytic gamma are supported; edge-level multiplicity as sufficient is weakened; prospective exact-control and thermodynamic claims remain open."
+  },
+  "gamma_repair": {
+    "gamma_repaired": true,
+    "toy_A_two_species_both_branches_no_bias": {
+      "expected": "fail",
+      "observed_accuracy": 0.5,
+      "observed_lcvar_margin": -11.039
+    },
+    "toy_B_two_species_max_branch_no_bias": {
+      "expected": "pass",
+      "observed_accuracy": 1.0,
+      "observed_lcvar_margin": 3.513
+    },
+    "toy_C_three_species_both_branches_no_bias": {
+      "expected": "pass",
+      "observed_accuracy": 1.0,
+      "observed_lcvar_margin": 1.516,
+      "observed_ordering": 1.0
+    },
+    "tree_sum_orientation_matches_paper": true,
+    "optimizer_warm_starts_pass": true
+  },
+  "input_multiplicity_causal_control": {
+    "status": "completed_existing_trained_fixed_m20_control",
+    "n_mask_groups": 48,
+    "n_seed_runs": 240,
+    "controls": {
+      "input_coupled_parameter_count": [
+        200
+      ],
+      "edge_M_mean": [
+        10.0
+      ],
+      "physical_graph_control": true,
+      "d_rel_counts": {
+        "190.0": 3,
+        "200.0": 45
+      }
+    },
+    "mean_novel_icl_grouped_loo_r2": {
+      "controls_only": 0.376,
+      "edge_level_plus_controls": 0.226,
+      "tree_level_plus_controls": 0.388,
+      "tree_difference_plus_controls": 0.452,
+      "tree_difference_plus_controls_strict_d_rel_200": 0.293,
+      "controls_only_strict_d_rel_200": 0.187
+    },
+    "matched_high_low_tree_difference_contrast": {
+      "n_pairs": 24,
+      "mean_novel_icl_high_minus_low": 2.195,
+      "mean_novel_icl_bootstrap_ci95": [
+        -0.882,
+        5.122
+      ],
+      "best_seed_high_minus_low": 1.492,
+      "seed_std_high_minus_low": -0.161
+    },
+    "unavailable_requested_outcomes": [
+      "branch failures",
+      "trained branch margin"
+    ]
+  },
+  "claim_status": {
+    "expressivity": "Supported for the scoped first-order analytic toy cases and tree-sum formulation.",
+    "trainability": "Analytic warm starts optimize successfully; no large-family trainability law claimed.",
+    "mechanism": "Supported mechanism candidate is branch/projection/tree alignment with tree-difference input co-participation.",
+    "causal_evidence": "Supportive existing-data control; prospective exact-control training still required.",
+    "thermodynamic_physics": "Not tested; no thermodynamic claim supported."
+  },
+  "non_negotiable_checks": {
+    "no_broad_new_sweep_launched": true,
+    "edge_level_multiplicity_not_treated_as_sufficient": true,
+    "seeds_not_treated_as_independent_topologies": true,
+    "physical_G_separate_from_input_mask_Omega": true,
+    "thermodynamic_claims_not_made": true,
+    "novel_class_icl_primary_outcome": true
+  }
+}

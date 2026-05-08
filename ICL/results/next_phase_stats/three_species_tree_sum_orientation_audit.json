@@ -1,0 +1,129 @@
+{
+  "actual_tree_edge_sets_by_root": {
+    "A": [
+      [
+        "K1",
+        "K2"
+      ],
+      [
+        "K1",
+        "K3"
+      ],
+      [
+        "K3",
+        "K4"
+      ]
+    ],
+    "B": [
+      [
+        "K1",
+        "K5"
+      ],
+      [
+        "K4",
+        "K5"
+      ],
+      [
+        "K4",
+        "K6"
+      ]
+    ],
+    "C": [
+      [
+        "K2",
+        "K5"
+      ],
+      [
+        "K2",
+        "K6"
+      ],
+      [
+        "K3",
+        "K6"
+      ]
+    ]
+  },
+  "edge_labeling": [
+    {
+      "edge_label": "K1",
+      "source": 2,
+      "target": 0
+    },
+    {
+      "edge_label": "K2",
+      "source": 1,
+      "target": 2
+    },
+    {
+      "edge_label": "K3",
+      "source": 1,
+      "target": 0
+    },
+    {
+      "edge_label": "K4",
+      "source": 2,
+      "target": 1
+    },
+    {
+      "edge_label": "K5",
+      "source": 0,
+      "target": 1
+    },
+    {
+      "edge_label": "K6",
+      "source": 0,
+      "target": 2
+    }
+  ],
+  "expected_tree_edge_sets_by_root": {
+    "A": [
+      [
+        "K1",
+        "K2"
+      ],
+      [
+        "K3",
+        "K4"
+      ],
+      [
+        "K1",
+        "K3"
+      ]
+    ],
+    "B": [
+      [
+        "K1",
+        "K5"
+      ],
+      [
+        "K4",
+        "K6"
+      ],
+      [
+        "K4",
+        "K5"
+      ]
+    ],
+    "C": [
+      [
+        "K3",
+        "K6"
+      ],
+      [
+        "K2",
+        "K5"
+      ],
+      [
+        "K2",
+        "K6"
+      ]
+    ]
+  },
+  "passed": true,
+  "root_pass": {
+    "A": true,
+    "B": true,
+    "C": true
+  },
+  "schema": "three_species_tree_sum_orientation_audit.v1"
+}

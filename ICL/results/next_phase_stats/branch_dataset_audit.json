@@ -1,0 +1,133 @@
+{
+  "datasets": [
+    {
+      "branches": [
+        {
+          "branch": "M1<",
+          "kind": "min",
+          "label": 0,
+          "mean_delta_separation": 0.6133111854718523,
+          "min_delta_separation": 0.25502129703967225,
+          "n": 256
+        },
+        {
+          "branch": "M1>",
+          "kind": "max",
+          "label": 0,
+          "mean_delta_separation": 0.6240279207746758,
+          "min_delta_separation": 0.25012367263036883,
+          "n": 256
+        },
+        {
+          "branch": "M2<",
+          "kind": "min",
+          "label": 1,
+          "mean_delta_separation": 0.6244292074709883,
+          "min_delta_separation": 0.257725300143697,
+          "n": 256
+        },
+        {
+          "branch": "M2>",
+          "kind": "max",
+          "label": 1,
+          "mean_delta_separation": 0.6555117747720764,
+          "min_delta_separation": 0.2518442095978203,
+          "n": 256
+        }
+      ],
+      "dataset": "toy_A_two_species_both_branches",
+      "delta": 0.25,
+      "input_range": 1.0,
+      "n_samples": 1024
+    },
+    {
+      "branches": [
+        {
+          "branch": "M1>",
+          "kind": "max",
+          "label": 0,
+          "mean_delta_separation": 0.6240279207746758,
+          "min_delta_separation": 0.25012367263036883,
+          "n": 256
+        },
+        {
+          "branch": "M2>",
+          "kind": "max",
+          "label": 1,
+          "mean_delta_separation": 0.6133111854718524,
+          "min_delta_separation": 0.25502129703967225,
+          "n": 256
+        }
+      ],
+      "dataset": "toy_B_two_species_one_branch_max",
+      "delta": 0.25,
+      "input_range": 1.0,
+      "n_samples": 512
+    },
+    {
+      "branches": [
+        {
+          "branch": "M1<",
+          "kind": "min",
+          "label": 0,
+          "mean_delta_separation": 0.6133111854718523,
+          "min_delta_separation": 0.25502129703967225,
+          "n": 256
+        },
+        {
+          "branch": "M1>",
+          "kind": "max",
+          "label": 0,
+          "mean_delta_separation": 0.6240279207746758,
+          "min_delta_separation": 0.25012367263036883,
+          "n": 256
+        },
+        {
+          "branch": "M2<",
+          "kind": "min",
+          "label": 1,
+          "mean_delta_separation": 0.6244292074709883,
+          "min_delta_separation": 0.257725300143697,
+          "n": 256
+        },
+        {
+          "branch": "M2>",
+          "kind": "max",
+          "label": 1,
+          "mean_delta_separation": 0.6555117747720764,
+          "min_delta_separation": 0.2518442095978203,
+          "n": 256
+        }
+      ],
+      "dataset": "toy_C_three_species_both_branches",
+      "delta": 0.25,
+      "input_range": 1.0,
+      "n_samples": 1024
+    }
+  ],
+  "old_gamma_toy_validation_toy_B_active_branches": [
+    [
+      0
+    ],
+    [
+      0
+    ],
+    [
+      0
+    ],
+    [
+      0
+    ],
+    [
+      0
+    ],
+    [
+      0
+    ]
+  ],
+  "old_toy_B_issue": "The previous Toy B used active_branches=[0], which encodes one class/one branch. The paper's one-branch condition is z_q=max(z_1,z_2), containing M1> and M2>.",
+  "schema": "branch_dataset_audit.v1",
+  "toy_A_contains_four_sign_branches": true,
+  "toy_B_contains_M1_gt_and_M2_gt": true,
+  "toy_C_uses_same_branch_set_as_toy_A": true
+}
