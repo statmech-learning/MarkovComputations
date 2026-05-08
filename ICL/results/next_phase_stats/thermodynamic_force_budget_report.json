@@ -1,0 +1,15 @@
+{
+  "status": "no_valid_Fmax_sweep_available",
+  "reason": "Existing models use arbitrary directed exponential rates. They may break detailed balance, but they were not parameterized as reversible-edge thermodynamic Markov processes with antisymmetric force budget F_max.",
+  "n_local_hard_topology_groups_with_topology_json": 36,
+  "reversible_edge_fraction_mean": 0.511574074074074,
+  "reversible_edge_fraction_min": 0.0,
+  "reversible_edge_fraction_max": 1.0,
+  "required_next_implementation": [
+    "construct bidirected physical support",
+    "parameterize W_ij = exp(E_j - B_ij + F_ij/2 + input_drive)",
+    "enforce B_ij = B_ji and F_ij = -F_ji",
+    "sweep max absolute antisymmetric force F_max",
+    "report novel-class ICL and lower-tail branch margins by F_max"
+  ]
+}

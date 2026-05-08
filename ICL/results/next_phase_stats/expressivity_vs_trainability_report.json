@@ -1,0 +1,121 @@
+{
+  "n_hard_groups": 36,
+  "correlations": {
+    "best_seed_novel_icl": [
+      {
+        "predictor": "comparison_branch_common_d_rel_min",
+        "n_groups": 36,
+        "pearson_r": 0.8596554713826213
+      },
+      {
+        "predictor": "effective_rank_D_masked",
+        "n_groups": 36,
+        "pearson_r": 0.895403545985149
+      },
+      {
+        "predictor": "condition_number_D_masked_log10",
+        "n_groups": 36,
+        "pearson_r": 0.4316491169392549
+      },
+      {
+        "predictor": "capacity_linear_test_margin_p10",
+        "n_groups": 36,
+        "pearson_r": null
+      },
+      {
+        "predictor": "mechanism_branch_active_tree_nmi_mean",
+        "n_groups": 36,
+        "pearson_r": 0.79235425988356
+      },
+      {
+        "predictor": "mechanism_target_logprob_margin_branch_mean_min",
+        "n_groups": 36,
+        "pearson_r": 0.8752807238912873
+      },
+      {
+        "predictor": "mechanism_tree_entropy_mean",
+        "n_groups": 36,
+        "pearson_r": 0.8818328509158034
+      }
+    ],
+    "mean_novel_icl": [
+      {
+        "predictor": "comparison_branch_common_d_rel_min",
+        "n_groups": 36,
+        "pearson_r": 0.8493077883921056
+      },
+      {
+        "predictor": "effective_rank_D_masked",
+        "n_groups": 36,
+        "pearson_r": 0.8967066966043752
+      },
+      {
+        "predictor": "condition_number_D_masked_log10",
+        "n_groups": 36,
+        "pearson_r": 0.42873717673467854
+      },
+      {
+        "predictor": "capacity_linear_test_margin_p10",
+        "n_groups": 36,
+        "pearson_r": null
+      },
+      {
+        "predictor": "mechanism_branch_active_tree_nmi_mean",
+        "n_groups": 36,
+        "pearson_r": 0.8490672621351685
+      },
+      {
+        "predictor": "mechanism_target_logprob_margin_branch_mean_min",
+        "n_groups": 36,
+        "pearson_r": 0.9422697004489121
+      },
+      {
+        "predictor": "mechanism_tree_entropy_mean",
+        "n_groups": 36,
+        "pearson_r": 0.8834303209581219
+      }
+    ],
+    "seed_std_novel_icl": [
+      {
+        "predictor": "comparison_branch_common_d_rel_min",
+        "n_groups": 36,
+        "pearson_r": 0.3524229897360989
+      },
+      {
+        "predictor": "effective_rank_D_masked",
+        "n_groups": 36,
+        "pearson_r": 0.34527444159725484
+      },
+      {
+        "predictor": "condition_number_D_masked_log10",
+        "n_groups": 36,
+        "pearson_r": 0.13189122962344116
+      },
+      {
+        "predictor": "capacity_linear_test_margin_p10",
+        "n_groups": 36,
+        "pearson_r": null
+      },
+      {
+        "predictor": "mechanism_branch_active_tree_nmi_mean",
+        "n_groups": 36,
+        "pearson_r": 0.10185260835442041
+      },
+      {
+        "predictor": "mechanism_target_logprob_margin_branch_mean_min",
+        "n_groups": 36,
+        "pearson_r": 0.17757814692513763
+      },
+      {
+        "predictor": "mechanism_tree_entropy_mean",
+        "n_groups": 36,
+        "pearson_r": 0.3040044169327838
+      }
+    ]
+  },
+  "interpretation": {
+    "best_seed_novel_icl": "expressivity-envelope proxy",
+    "mean_novel_icl": "trainability/reliability proxy",
+    "seed_std_novel_icl": "optimization instability proxy"
+  }
+}

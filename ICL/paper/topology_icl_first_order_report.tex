@@ -41,7 +41,8 @@ A concise account of the theory, experiments, audit, and current evidence
 \begin{minipage}[t]{0.40\textwidth}
 \raggedleft
 Topology worktree: \texttt{topology}\\
-Evidence source commit: \texttt{ba0e1a69}\\
+Evidence source commit: \texttt{3c9c685}\\
+Markov extension: local artifacts\\
 May 8, 2026
 \end{minipage}
 
@@ -436,7 +437,201 @@ A good capacity theory should target low-percentile or worst-branch separation u
 \vspace{1em}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\noindent\textbf{[12] What has been achieved}
+\noindent\textbf{[12] The Markov-ICL extension}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.5em}
+\noindent The next question was not ``run a bigger sweep.'' It was:
+\[
+\boxed{\text{Can the first-order topology story be sharpened using Markov-process expressivity theory?}}
+\]
+The requested ingredients were input multiplicity, monotonicity limits, coefficient constraints, non-equilibrium driving, branch sharpness, structural compatibility, and a clean separation between expressivity and trainability.
+
+\vspace{0.5em}
+\noindent The exact representation from Section 2 is already the bridge. For first-order CRNs,
+\[
+\tau_r(z)=\sum_{T\in\T_r(G)}\exp(\beta_T+\Theta_T^\top z),
+\qquad
+\Theta_T=\sum_{e\in T}K_e.
+\]
+Thus the Markov-expressivity objects must be defined on tree-sum features, not isolated edges.
+
+\vspace{0.5em}
+\noindent The input-encoding multiplicity is
+\[
+M_\alpha=\sum_e\Omega_{e\alpha}.
+\]
+For ICL, the important refinements are branch-specific:
+\[
+M_{i,d},\qquad M_{q,d},\qquad
+\sum_e \Omega_{e,i,d}\Omega_{e,q,d},\qquad
+|M_{i,d}-M_{q,d}|.
+\]
+Low or imbalanced comparison-coordinate multiplicity is the monotonicity-risk diagnostic:
+\[
+\mathrm{monoRisk}_\alpha=\mathbf 1[M_\alpha\leq 1].
+\]
+After training, an effective participation diagnostic is
+\[
+M^{\rm eff}_\alpha=
+\frac{\left(\sum_e |K_{e\alpha}|\right)^2}{\sum_e K_{e\alpha}^2}.
+\]
+
+\vspace{0.5em}
+\noindent Branch sharpness is distinct from branch coverage. For branch direction $u_b$,
+\[
+R_{r,b}=
+\max_{T\in\T_r(G)}\Theta_T^\top u_b
+-
+\min_{T\in\T_r(G)}\Theta_T^\top u_b.
+\]
+This measures whether a rooted tree polytope can create a sharp margin along a comparison direction. A graph can cover every branch and still have weak lower-tail margins.
+
+\vspace{0.5em}
+\noindent Coefficient controllability is the other missing piece. Tree-polynomial coefficients are constrained by overlapping spanning trees; they are not freely adjustable. Therefore rank, even masked rank, can overestimate useful capacity. Effective rank, condition number, tree entropy, normal-fan coverage, extremal-tree accessibility, and branch-specific concentration are all relevant.
+
+\vspace{0.5em}
+\noindent The theory note produced in this phase is \texttt{ICL/markov\_icl\_expressivity\_theory.md}. Its shortest message is:
+\begin{center}
+\fbox{\begin{minipage}{0.86\textwidth}
+First-order Markov-ICL expressivity is tree-sum expressivity under an input mask. Input multiplicity and branch sharpness are useful structural variables, but not standalone laws.
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent\textbf{[13] Existing-data Markov reanalysis}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.5em}
+\noindent The reanalysis script \texttt{ICL/markov\_expressivity\_reanalysis.py} consumes committed CSV/JSON artifacts only. It does not launch new broad training. It groups seeds by topology/mask before inference.
+
+\vspace{0.5em}
+\noindent Coverage:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+dataset & rows & topology/mask groups\\
+\midrule
+fixed m20 & 240 & 48\\
+hard $n4\_m6$ & 60 & 12\\
+hard $n5\_m8$ & 60 & 12\\
+hard $n5\_m12$ & 60 & 12\\
+exact-degree pilot & 4 & 4\\
+exact-degree library & 32 & 32\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\noindent In the fixed m20 data, grouped LOO $R^2$ for mean novel-class ICL was $0.095$ for aggregate multiplicity variables, $0.046$ for comparison-multiplicity variables, $0.158$ for tree-geometry variables, and $0.145$ for the old capacity proxy. In the hard $n5\_m12$ data, tree geometry reached $0.437$ while aggregate multiplicity and the old capacity proxy were $-0.190$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\textwidth]{fig_markov_reanalysis.pdf}
+\caption{Existing-data Markov reanalysis. The richer Markov variables are useful diagnostics, but the evidence still does not support a universal scalar expressivity law.}
+\end{figure}
+
+\vspace{0.5em}
+\noindent The input-multiplicity control is especially clarifying. In the fixed-count mask data, all mask families have mean aggregate multiplicity $M_{\rm mean}=10$. Yet the coordinate-block family has zero minimum comparison overlap, high coordinate-load Gini, and much lower mean ICL: $63.4$ points versus roughly $74$--$77$ points for the other families.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\textwidth]{fig_input_multiplicity_controls.pdf}
+\caption{Input multiplicity control from existing data. Average multiplicity alone is not the law; branch comparison overlap and load imbalance are the direct failure risks.}
+\end{figure}
+
+\vspace{0.5em}
+\noindent The exact-degree normal-fan pilot was also reinterpreted through this lens. It has only four trained groups, but those groups share the intended fixed-degree and fixed-$\drel$ controls. Descriptive correlations with mean ICL were $r=0.869$ for normal-fan active tree count, $r=0.691$ for branch-tree NMI, $r=0.810$ for log tree count, and $r=0.759$ for effective rank. These are design signals, not statistical proof.
+
+\clearpage
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent\textbf{[14] Improved lower-tail capacity}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.5em}
+\noindent The improved probe is \texttt{ICL/branch\_margin\_capacity\_v2.py}. It targets the lower tail directly:
+\[
+\gamma^\ast_{\rm ICL}(G,\Omega;\mathcal C)=
+\max_\theta
+\min_{b\in\mathcal B}
+\operatorname{LCVaR}_\alpha
+\left[
+m_\theta(z)\mid z\in b
+\right],
+\]
+where
+\[
+m_\theta(z)=q_{y(z)}(z)-\max_{\ell\neq y(z)}q_\ell(z).
+\]
+The implemented variants are exact log-sum-exp tree features, tropical max-over-tree features, and hard-root structural compatibility. The constraints include row-norm bounds for $K_e$, decoder Frobenius norm bounds, edge-bias bounds, and the input mask $\Omega$.
+
+\vspace{0.5em}
+\noindent A small smoke run on a $5$-node, $12$-edge cycle-chords graph produced finite branch-wise reports for all three variants. The objectives were still negative: $-3.001$ for exact, $-2.800$ for tropical, and $-2.270$ for hard-root. This validates the reporting path and reinforces that average accuracy is not the right target; the worst branch can still fail.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.96\textwidth]{fig_capacity_v2.pdf}
+\caption{Lower-tail capacity V2 smoke result. The new probe reports the correct object: worst-branch lower-tail margin and branch failures. This smoke run is not an optimized capacity theorem.}
+\end{figure}
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent\textbf{[15] Expressivity, trainability, and thermodynamics}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.5em}
+\noindent The reanalysis keeps three outcomes separate:
+\[
+\begin{aligned}
+\text{best seed}&\approx\text{expressivity envelope},\\
+\text{mean seed}&\approx\text{trainability/reliability},\\
+\text{seed variance}&\approx\text{optimization instability}.
+\end{aligned}
+\]
+Across the 36 hard-regime groups, masked effective rank correlated $0.895$ with best seed and $0.897$ with mean seed, but only $0.345$ with seed standard deviation. Trained margin and tree entropy were also strongly correlated with best/mean seed, but they are post-training mechanism descriptors rather than pre-training capacity metrics.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.82\textwidth]{fig_expressivity_trainability.pdf}
+\caption{Expressivity and trainability should not be collapsed into one outcome. Best seed, mean seed, and seed standard deviation respond differently to structural and trained-mechanism variables.}
+\end{figure}
+
+\vspace{0.5em}
+\noindent The thermodynamic question is deliberately unresolved. Existing arbitrary directed exponential-rate models may be non-equilibrium, but they were not parameterized as reversible-edge thermodynamic Markov processes. Therefore the report \texttt{thermodynamic\_force\_budget\_report.md/json} does not claim entropy production or a force-budget law. It only audits eligibility: among 36 local hard topology groups with topology JSON, the mean reversible-edge fraction is $0.512$, with range $0$ to $1$.
+
+\vspace{0.5em}
+\noindent A valid thermodynamic experiment needs a reversible support and a parameterization such as
+\[
+W_{ij}=\exp(E_j-B_{ij}+F_{ij}/2+\text{input drive}),
+\qquad
+B_{ij}=B_{ji},
+\qquad
+F_{ij}=-F_{ji},
+\qquad
+|F_{ij}|\leq F_{\max}.
+\]
+Only then should we sweep $F_{\max}$ and ask whether ICL branch margins increase with allowed non-equilibrium driving.
+
+\clearpage
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent\textbf{[16] What has now been achieved}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \vspace{0.5em}
@@ -464,7 +659,32 @@ Structural evidence & Fixed-count regimes show residual ICL variation explained 
 Input topology & Fixed physical graph/count/$\drel$ masks can still differ sharply, so the object is $\gstar(G,\Omega)$.\\
 Mechanism & Successful trained models organize projection/root/tree features around comparison branches.\\
 Causality & Statistic-preserving scrambles that break alignment sharply reduce ICL.\\
+Markov expressivity & Input multiplicity, monotonicity risk, branch sharpness, coefficient controllability, and lower-tail capacity were formalized for first-order Markov-ICL.\\
+Trainability & Best seed, mean seed, and seed variance are now treated as different targets rather than one accuracy summary.\\
+Thermodynamics & The current arbitrary directed models were correctly not used for force-budget claims; a reversible-edge $F_{\max}$ sweep is the needed next experiment.\\
 Limits & $\drel$ is not a capacity law; current $\gamma$ probes are not final; motifs are not unique; nonlinear CRNs are out of scope.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\noindent The concrete Markov-extension artifacts added for this phase are:
+\begin{center}
+\scriptsize
+\begin{tabular}{p{0.36\textwidth}p{0.54\textwidth}}
+\toprule
+artifact & purpose\\
+\midrule
+\path{ICL/markov_icl_expressivity_theory.md} & theory note formalizing tree-sum Markov-ICL expressivity\\
+\path{ICL/markov_expressivity_reanalysis.py} & existing-data reanalysis and report generator\\
+\path{ICL/branch_margin_capacity_v2.py} & exact, tropical, and hard-root lower-tail branch-capacity probe\\
+\path{existing_data_markov_expressivity_reanalysis.md/json} & grouped Markov-expressivity model checks\\
+\path{input_multiplicity_control_report.md/json} & fixed-count input-mask multiplicity control\\
+\path{exact_degree_multiplicity_normal_fan_report.md/json} & exact-degree pilot reanalysis\\
+\path{expressivity_vs_trainability_report.md/json} & best-seed, mean-seed, and seed-variance separation\\
+\path{thermodynamic_force_budget_report.md/json} & reversible-support audit and valid $F_{\max}$ requirements\\
+\path{markov_icl_final_synthesis.md} & claim separation: expressivity, trainability, mechanism, thermodynamics\\
+\path{markov_icl_goal_completion_audit.md} & verification and evidence-boundary audit\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -482,7 +702,7 @@ In the tested first-order fixed-count regimes, topology-associated structural an
 \vspace{1em}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\noindent\textbf{[13] What should come next}
+\noindent\textbf{[17] What should come next}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \vspace{0.5em}

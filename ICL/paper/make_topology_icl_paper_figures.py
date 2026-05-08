@@ -248,6 +248,176 @@ def fig_motif_controls():
     save(fig, "fig_motif_controls")
 
 
+def fig_markov_reanalysis():
+    path = ROOT / "ICL/results/next_phase_stats/existing_data_markov_expressivity_reanalysis.json"
+    payload = json.load(open(path))
+    datasets = ["fixed_m20", "hard_n4_m6", "hard_n5_m8", "hard_n5_m12"]
+    labels = ["fixed\nm20", "hard\nn4 m6", "hard\nn5 m8", "hard\nn5 m12"]
+    models = ["multiplicity", "comparison_multiplicity", "tree_geometry", "capacity_proxy"]
+    model_labels = ["input\nmultiplicity", "comparison\nmultiplicity", "tree\ngeometry", "capacity\nproxy"]
+    colors = [GRAY, ORANGE, BLUE, TEAL]
+
+    values = {model: [] for model in models}
+    for dataset in datasets:
+        rows = payload["analyses"][dataset]["models"]
+        for model in models:
+            match = [
+                row for row in rows
+                if row["outcome"] == "mean_novel_icl" and row["model"] == model
+            ][0]
+            values[model].append(float(match["loo_r2"]))
+
+    fig, ax = plt.subplots(figsize=(7.2, 3.2))
+    x = list(range(len(datasets)))
+    width = 0.18
+    offsets = [-1.5 * width, -0.5 * width, 0.5 * width, 1.5 * width]
+    for model, label, color, offset in zip(models, model_labels, colors, offsets):
+        bars = ax.bar([i + offset for i in x], values[model], width=width, color=color, label=label)
+        for bar, val in zip(bars, values[model]):
+            if val >= 0.08:
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    val + (0.025 if val >= 0 else -0.035),
+                    f"{val:.2f}",
+                    ha="center",
+                    va="bottom" if val >= 0 else "top",
+                    fontsize=7.3,
+                )
+    ax.axhline(0, color=INK, lw=0.8)
+    ax.set_xticks(x, labels)
+    ax.set_ylabel(r"grouped LOO $R^2$")
+    ax.set_title("Markov-expressivity reanalysis: useful variables, no final scalar law", fontsize=10)
+    ax.set_ylim(-0.25, 0.52)
+    ax.legend(frameon=False, fontsize=7.8, ncol=4, loc="upper left")
+    ax.grid(axis="y", color=LIGHT, lw=0.8)
+    save(fig, "fig_markov_reanalysis")
+
+
+def fig_input_multiplicity_controls():
+    path = ROOT / "ICL/results/next_phase_stats/input_multiplicity_control_report.json"
+    payload = json.load(open(path))
+    rows = payload["family_summary"]
+    rows = sorted(rows, key=lambda row: float(row["mean_group_mean_icl"]))
+    label_map = {
+        "balanced": "balanced",
+        "coord_block": "coord\nblock",
+        "edge_block": "edge\nblock",
+        "entry_random": "entry\nrandom",
+        "high_participation_edges": "high\npart. edges",
+        "low_participation_edges": "low\npart. edges",
+    }
+    labels = [label_map.get(row["input_mask_family"], row["input_mask_family"].replace("_", "\n")) for row in rows]
+    mean_icl = [float(row["mean_group_mean_icl"]) for row in rows]
+    best_icl = [float(row["mean_group_best_icl"]) for row in rows]
+    overlap = [float(row["mean_branch_input_overlap_min"]) for row in rows]
+    gini = [float(row["mean_M_gini"]) for row in rows]
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.2))
+    y = list(range(len(rows)))
+    bars = axes[0].barh([i - 0.18 for i in y], mean_icl, height=0.34, color=BLUE, label="mean seed")
+    axes[0].barh([i + 0.18 for i in y], best_icl, height=0.34, color=TEAL, label="best seed")
+    axes[0].set_yticks(y, labels)
+    axes[0].set_xlabel("novel-class ICL")
+    axes[0].set_title("Mask family changes ICL at fixed count", fontsize=10)
+    axes[0].set_xlim(55, 90)
+    axes[0].legend(frameon=False, fontsize=8, loc="lower right")
+    axes[0].grid(axis="x", color=LIGHT, lw=0.8)
+    for bar in bars:
+        axes[0].text(bar.get_width() + 0.4, bar.get_y() + bar.get_height() / 2, f"{bar.get_width():.1f}", va="center", fontsize=7.5)
+
+    ax2 = axes[1]
+    sc = ax2.scatter(overlap, mean_icl, c=gini, cmap="magma_r", s=72, edgecolor=INK, linewidth=0.45)
+    for xval, yval, label in zip(overlap, mean_icl, labels):
+        display = label.replace("\n", " ")
+        if xval > 30:
+            dy = 0.35 if display.startswith("low") else (-0.35 if display.startswith("edge") else 0.0)
+            ax2.text(xval - 0.7, yval + dy, display, fontsize=6.9, va="center", ha="right")
+        else:
+            ax2.text(xval + 0.6, yval, display, fontsize=6.9, va="center", ha="left")
+    ax2.set_xlabel("mean minimum comparison overlap")
+    ax2.set_ylabel("mean novel-class ICL")
+    ax2.set_title("Branch overlap is the direct risk variable", fontsize=10)
+    ax2.grid(color=LIGHT, lw=0.8)
+    cb = fig.colorbar(sc, ax=ax2, fraction=0.046, pad=0.03)
+    cb.set_label("M Gini", fontsize=8.5)
+    save(fig, "fig_input_multiplicity_controls")
+
+
+def fig_expressivity_trainability():
+    path = ROOT / "ICL/results/next_phase_stats/expressivity_vs_trainability_report.json"
+    payload = json.load(open(path))
+    outcomes = ["best_seed_novel_icl", "mean_novel_icl", "seed_std_novel_icl"]
+    outcome_labels = ["best seed\nexpressivity", "mean seed\nreliability", "seed std.\ninstability"]
+    predictor_labels = {
+        "comparison_branch_common_d_rel_min": "branch common rank",
+        "effective_rank_D_masked": "masked eff. rank",
+        "condition_number_D_masked_log10": "conditioning",
+        "capacity_linear_test_margin_p10": "old capacity p10",
+        "mechanism_branch_active_tree_nmi_mean": "branch-tree NMI",
+        "mechanism_target_logprob_margin_branch_mean_min": "trained margin",
+        "mechanism_tree_entropy_mean": "tree entropy",
+    }
+    predictors = [row["predictor"] for row in payload["correlations"][outcomes[0]]]
+    matrix = []
+    for predictor in predictors:
+        row_values = []
+        for outcome in outcomes:
+            match = [row for row in payload["correlations"][outcome] if row["predictor"] == predictor][0]
+            value = match.get("pearson_r")
+            row_values.append(float(value) if value is not None else math.nan)
+        matrix.append(row_values)
+
+    arr = [[0.0 if math.isnan(value) else value for value in row] for row in matrix]
+    fig, ax = plt.subplots(figsize=(5.3, 3.4))
+    im = ax.imshow(arr, vmin=-1, vmax=1, cmap="coolwarm", aspect="auto")
+    ax.set_xticks(range(len(outcomes)), outcome_labels)
+    ax.set_yticks(range(len(predictors)), [predictor_labels[p] for p in predictors])
+    ax.set_title("Best seed, mean seed, and seed variance are different targets", fontsize=10)
+    for i, row in enumerate(matrix):
+        for j, value in enumerate(row):
+            text = "" if math.isnan(value) else f"{value:.2f}"
+            ax.text(j, i, text, ha="center", va="center", fontsize=8, color="white" if abs(arr[i][j]) > 0.55 else INK)
+    cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.03)
+    cb.set_label("Pearson r", fontsize=8.5)
+    save(fig, "fig_expressivity_trainability")
+
+
+def fig_capacity_v2():
+    path = ROOT / "ICL/results/next_phase_stats/branch_margin_capacity_v2_smoke.json"
+    payload = json.load(open(path))
+    results = payload["results"]
+    variants = [row["variant"] for row in results]
+    objective = [float(row["best"]["objective"]) for row in results]
+    failure = [float(row["best"]["branch_failure_rate_max"]) for row in results]
+    accuracy = [float(row["best"]["accuracy"]) for row in results]
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.3, 3.0))
+    fig.subplots_adjust(wspace=0.42)
+    x = list(range(len(variants)))
+    colors = [BLUE, TEAL, ORANGE]
+    bars = axes[0].bar(x, objective, color=colors, width=0.58)
+    axes[0].axhline(0, color=INK, lw=0.8)
+    axes[0].set_xticks(x, variants)
+    axes[0].set_ylabel(r"worst-branch LCVaR margin")
+    axes[0].set_title(r"Lower-tail capacity objective", fontsize=10)
+    axes[0].grid(axis="y", color=LIGHT, lw=0.8)
+    for bar, val in zip(bars, objective):
+        axes[0].text(bar.get_x() + bar.get_width() / 2, val - 0.12, f"{val:.2f}", ha="center", va="top", fontsize=8, color="white")
+
+    w = 0.34
+    axes[1].bar([i - w / 2 for i in x], accuracy, width=w, color=TEAL, label="accuracy")
+    axes[1].bar([i + w / 2 for i in x], failure, width=w, color=RED, label="worst branch failure")
+    axes[1].set_xticks(x, variants)
+    axes[1].set_ylim(0, 1.08)
+    axes[1].set_title("Smoke-run branch failures", fontsize=10)
+    axes[1].legend(frameon=False, fontsize=8, loc="lower center", bbox_to_anchor=(0.5, -0.28), ncol=2)
+    axes[1].grid(axis="y", color=LIGHT, lw=0.8)
+    for i, (acc, fail) in enumerate(zip(accuracy, failure)):
+        axes[1].text(i - w / 2, acc + 0.03, f"{acc:.2f}", ha="center", fontsize=7.5)
+        axes[1].text(i + w / 2, fail + 0.03, f"{fail:.2f}", ha="center", fontsize=7.5)
+    save(fig, "fig_capacity_v2")
+
+
 def main():
     fig_tree_basis()
     fig_predictors()
@@ -256,6 +426,10 @@ def main():
     fig_causal_scrambles()
     fig_degree_rewire()
     fig_motif_controls()
+    fig_markov_reanalysis()
+    fig_input_multiplicity_controls()
+    fig_expressivity_trainability()
+    fig_capacity_v2()
     print(f"wrote figures to {OUT}")
 
 

@@ -1,0 +1,1071 @@
+{
+  "topology_name": "cycle_chords",
+  "n_nodes": 5,
+  "edges": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      1,
+      0
+    ]
+  ],
+  "results": [
+    {
+      "variant": "exact",
+      "n_nodes": 5,
+      "n_edges": 12,
+      "n_context": 3,
+      "z_dim": 2,
+      "p": 8,
+      "n_samples": 180,
+      "trials_per_assignment": 8,
+      "total_trials": 8,
+      "alpha": 0.1,
+      "projection_radius": 1.0,
+      "decoder_radius": 1.0,
+      "edge_bias_radius": 0.0,
+      "max_trees_per_root": null,
+      "n_trees_total": 78,
+      "input_mask_density": 1.0,
+      "input_multiplicity_min": 12.0,
+      "input_multiplicity_mean": 12.0,
+      "input_multiplicity_max": 12.0,
+      "best": {
+        "objective": -3.001038381964283,
+        "branch_margin_lcvar_min": -3.001038381964283,
+        "branch_margin_lcvar_mean": -1.788071403268843,
+        "branch_failure_rate_max": 1.0,
+        "branch_accuracy_min": 0.0,
+        "accuracy": 0.39444444444444443,
+        "margin_mean": -0.3880366313559864,
+        "margin_p10": -1.9761995074078451,
+        "by_branch": [
+          {
+            "branch": 0,
+            "n": 53,
+            "margin_mean": -1.2994355731591325,
+            "margin_min": -3.5182643365189388,
+            "margin_lcvar": -3.001038381964283,
+            "failure_rate": 0.8679245283018868,
+            "accuracy": 0.1320754716981132
+          },
+          {
+            "branch": 1,
+            "n": 57,
+            "margin_mean": -1.3244701943276516,
+            "margin_min": -2.1387759993957998,
+            "margin_lcvar": -2.06872783527709,
+            "failure_rate": 1.0,
+            "accuracy": 0.0
+          },
+          {
+            "branch": 2,
+            "n": 70,
+            "margin_mean": 1.0645470401433228,
+            "margin_min": -0.6552602783946162,
+            "margin_lcvar": -0.29444799256515614,
+            "failure_rate": 0.08571428571428572,
+            "accuracy": 0.9142857142857143
+          }
+        ],
+        "tree_drive_range_min": 1.3615021846504827,
+        "tree_drive_range_mean": 1.977531990654103,
+        "tree_drive_range_max": 2.510917090504349,
+        "tree_drive_ranges": [
+          {
+            "root": 0,
+            "branch": 0,
+            "tree_drive_range": 2.25760113957245
+          },
+          {
+            "root": 0,
+            "branch": 1,
+            "tree_drive_range": 1.7023027737752656
+          },
+          {
+            "root": 0,
+            "branch": 2,
+            "tree_drive_range": 1.3615021846504827
+          },
+          {
+            "root": 1,
+            "branch": 0,
+            "tree_drive_range": 1.7583682265991432
+          },
+          {
+            "root": 1,
+            "branch": 1,
+            "tree_drive_range": 1.5421731580871423
+          },
+          {
+            "root": 1,
+            "branch": 2,
+            "tree_drive_range": 1.477139976946412
+          },
+          {
+            "root": 2,
+            "branch": 0,
+            "tree_drive_range": 2.428504263760707
+          },
+          {
+            "root": 2,
+            "branch": 1,
+            "tree_drive_range": 2.510917090504349
+          },
+          {
+            "root": 2,
+            "branch": 2,
+            "tree_drive_range": 2.4097320803128817
+          },
+          {
+            "root": 3,
+            "branch": 0,
+            "tree_drive_range": 1.9085208408440195
+          },
+          {
+            "root": 3,
+            "branch": 1,
+            "tree_drive_range": 2.309561867794161
+          },
+          {
+            "root": 3,
+            "branch": 2,
+            "tree_drive_range": 2.1182024645788755
+          },
+          {
+            "root": 4,
+            "branch": 0,
+            "tree_drive_range": 1.6659511513487166
+          },
+          {
+            "root": 4,
+            "branch": 1,
+            "tree_drive_range": 2.118644518396588
+          },
+          {
+            "root": 4,
+            "branch": 2,
+            "tree_drive_range": 2.0938581226403454
+          }
+        ]
+      },
+      "best_root_assignment": null,
+      "trial_objective_mean": -6.199637499905622,
+      "trial_objective_max": -3.001038381964283,
+      "trial_rows": [
+        {
+          "objective": -5.162937157235432,
+          "accuracy": 0.3055555555555556,
+          "branch_failure_rate_max": 1.0,
+          "root_assignment": null
+        },
+        {
+          "objective": -3.001038381964283,
+          "accuracy": 0.39444444444444443,
+          "branch_failure_rate_max": 1.0,
+          "root_assignment": null
+        },
+        {
+          "objective": -3.2686556907406676,
+          "accuracy": 0.32222222222222224,
+          "branch_failure_rate_max": 0.9857142857142858,
+          "root_assignment": null
+        },
+        {
+          "objective": -9.207591131265687,
+          "accuracy": 0.3111111111111111,
+          "branch_failure_rate_max": 1.0,
+          "root_assignment": null
+        },
+        {
+          "objective": -7.636985503964446,
+          "accuracy": 0.35555555555555557,
+          "branch_failure_rate_max": 0.9649122807017544,
+          "root_assignment": null
+        },
+        {
+          "objective": -8.422743430913002,
+          "accuracy": 0.32222222222222224,
+          "branch_failure_rate_max": 1.0,
+          "root_assignment": null
+        },
+        {
+          "objective": -8.995019609669951,
+          "accuracy": 0.3111111111111111,
+          "branch_failure_rate_max": 1.0,
+          "root_assignment": null
+        },
+        {
+          "objective": -3.9021290934915007,
+          "accuracy": 0.36666666666666664,
+          "branch_failure_rate_max": 1.0,
+          "root_assignment": null
+        }
+      ]
+    },
+    {
+      "variant": "tropical",
+      "n_nodes": 5,
+      "n_edges": 12,
+      "n_context": 3,
+      "z_dim": 2,
+      "p": 8,
+      "n_samples": 180,
+      "trials_per_assignment": 8,
+      "total_trials": 8,
+      "alpha": 0.1,
+      "projection_radius": 1.0,
+      "decoder_radius": 1.0,
+      "edge_bias_radius": 0.0,
+      "max_trees_per_root": null,
+      "n_trees_total": 78,
+      "input_mask_density": 1.0,
+      "input_multiplicity_min": 12.0,
+      "input_multiplicity_mean": 12.0,
+      "input_multiplicity_max": 12.0,
+      "best": {
+        "objective": -2.7995541980551635,
+        "branch_margin_lcvar_min": -2.7995541980551635,
+        "branch_margin_lcvar_mean": -1.8343987366551397,
+        "branch_failure_rate_max": 0.8947368421052632,
+        "branch_accuracy_min": 0.10526315789473684,
+        "accuracy": 0.4,
+        "margin_mean": -0.30737592513974754,
+        "margin_p10": -1.5943803048029253,
+        "by_branch": [
+          {
+            "branch": 0,
+            "n": 53,
+            "margin_mean": -0.9070016177651183,
+            "margin_min": -3.5697802361860855,
+            "margin_lcvar": -2.7995541980551635,
+            "failure_rate": 0.7924528301886793,
+            "accuracy": 0.20754716981132076
+          },
+          {
+            "branch": 1,
+            "n": 57,
+            "margin_mean": -0.8035583978554189,
+            "margin_min": -1.8444346032389989,
+            "margin_lcvar": -1.6690256430037502,
+            "failure_rate": 0.8947368421052632,
+            "accuracy": 0.10526315789473684
+          },
+          {
+            "branch": 2,
+            "n": 70,
+            "margin_mean": 0.5506606842022228,
+            "margin_min": -1.5397570195452008,
+            "margin_lcvar": -1.0346163689065062,
+            "failure_rate": 0.21428571428571427,
+            "accuracy": 0.7857142857142857
+          }
+        ],
+        "tree_drive_range_min": 1.3615021846504827,
+        "tree_drive_range_mean": 1.977531990654103,
+        "tree_drive_range_max": 2.510917090504349,
+        "tree_drive_ranges": [
+          {
+            "root": 0,
+            "branch": 0,
+            "tree_drive_range": 2.25760113957245
+          },
+          {
+            "root": 0,
+            "branch": 1,
+            "tree_drive_range": 1.7023027737752656
+          },
+          {
+            "root": 0,
+            "branch": 2,
+            "tree_drive_range": 1.3615021846504827
+          },
+          {
+            "root": 1,
+            "branch": 0,
+            "tree_drive_range": 1.7583682265991432
+          },
+          {
+            "root": 1,
+            "branch": 1,
+            "tree_drive_range": 1.5421731580871423
+          },
+          {
+            "root": 1,
+            "branch": 2,
+            "tree_drive_range": 1.477139976946412
+          },
+          {
+            "root": 2,
+            "branch": 0,
+            "tree_drive_range": 2.428504263760707
+          },
+          {
+            "root": 2,
+            "branch": 1,
+            "tree_drive_range": 2.510917090504349
+          },
+          {
+            "root": 2,
+            "branch": 2,
+            "tree_drive_range": 2.4097320803128817
+          },
+          {
+            "root": 3,
+            "branch": 0,
+            "tree_drive_range": 1.9085208408440195
+          },
+          {
+            "root": 3,
+            "branch": 1,
+            "tree_drive_range": 2.309561867794161
+          },
+          {
+            "root": 3,
+            "branch": 2,
+            "tree_drive_range": 2.1182024645788755
+          },
+          {
+            "root": 4,
+            "branch": 0,
+            "tree_drive_range": 1.6659511513487166
+          },
+          {
+            "root": 4,
+            "branch": 1,
+            "tree_drive_range": 2.118644518396588
+          },
+          {
+            "root": 4,
+            "branch": 2,
+            "tree_drive_range": 2.0938581226403454
+          }
+        ]
+      },
+      "best_root_assignment": null,
+      "trial_objective_mean": -5.168250721871846,
+      "trial_objective_max": -2.7995541980551635,
+      "trial_rows": [
+        {
+          "objective": -4.450188684449969,
+          "accuracy": 0.3388888888888889,
+          "branch_failure_rate_max": 0.9622641509433962,
+          "root_assignment": null
+        },
+        {
+          "objective": -2.7995541980551635,
+          "accuracy": 0.4,
+          "branch_failure_rate_max": 0.8947368421052632,
+          "root_assignment": null
+        },
+        {
+          "objective": -2.8468683342750825,
+          "accuracy": 0.3611111111111111,
+          "branch_failure_rate_max": 0.9285714285714286,
+          "root_assignment": null
+        },
+        {
+          "objective": -7.613330599382912,
+          "accuracy": 0.25,
+          "branch_failure_rate_max": 1.0,
+          "root_assignment": null
+        },
+        {
+          "objective": -6.209578199032559,
+          "accuracy": 0.35555555555555557,
+          "branch_failure_rate_max": 0.8070175438596491,
+          "root_assignment": null
+        },
+        {
+          "objective": -6.874128307836016,
+          "accuracy": 0.3611111111111111,
+          "branch_failure_rate_max": 0.9056603773584906,
+          "root_assignment": null
+        },
+        {
+          "objective": -7.488192701480432,
+          "accuracy": 0.2722222222222222,
+          "branch_failure_rate_max": 1.0,
+          "root_assignment": null
+        },
+        {
+          "objective": -3.0641647504626364,
+          "accuracy": 0.35555555555555557,
+          "branch_failure_rate_max": 0.9649122807017544,
+          "root_assignment": null
+        }
+      ]
+    },
+    {
+      "variant": "hard_root",
+      "n_nodes": 5,
+      "n_edges": 12,
+      "n_context": 3,
+      "z_dim": 2,
+      "p": 8,
+      "n_samples": 180,
+      "trials_per_assignment": 8,
+      "total_trials": 48,
+      "alpha": 0.1,
+      "projection_radius": 1.0,
+      "decoder_radius": 1.0,
+      "edge_bias_radius": 0.0,
+      "max_trees_per_root": null,
+      "n_trees_total": 78,
+      "input_mask_density": 1.0,
+      "input_multiplicity_min": 12.0,
+      "input_multiplicity_mean": 12.0,
+      "input_multiplicity_max": 12.0,
+      "best": {
+        "objective": -2.2698596589799664,
+        "branch_margin_lcvar_min": -2.2698596589799664,
+        "branch_margin_lcvar_mean": -2.1344072410866612,
+        "branch_failure_rate_max": 0.7358490566037735,
+        "branch_accuracy_min": 0.2641509433962264,
+        "accuracy": 0.36666666666666664,
+        "margin_mean": -0.22528953455209302,
+        "margin_p10": -1.6552317749029557,
+        "by_branch": [
+          {
+            "branch": 0,
+            "n": 53,
+            "margin_mean": -0.27188341843135955,
+            "margin_min": -3.051667218242284,
+            "margin_lcvar": -2.138118164776876,
+            "failure_rate": 0.7358490566037735,
+            "accuracy": 0.2641509433962264
+          },
+          {
+            "branch": 1,
+            "n": 57,
+            "margin_mean": -0.1688824450266791,
+            "margin_min": -2.752932990635467,
+            "margin_lcvar": -1.9952438995031405,
+            "failure_rate": 0.5964912280701754,
+            "accuracy": 0.40350877192982454
+          },
+          {
+            "branch": 2,
+            "n": 70,
+            "margin_mean": -0.23594279537134252,
+            "margin_min": -3.5521040027711166,
+            "margin_lcvar": -2.2698596589799664,
+            "failure_rate": 0.5857142857142857,
+            "accuracy": 0.4142857142857143
+          }
+        ],
+        "tree_drive_range_min": 1.2018365421234518,
+        "tree_drive_range_mean": 2.0405983281301605,
+        "tree_drive_range_max": 2.903503569144653,
+        "tree_drive_ranges": [
+          {
+            "root": 0,
+            "branch": 0,
+            "tree_drive_range": 2.1463597831747063
+          },
+          {
+            "root": 0,
+            "branch": 1,
+            "tree_drive_range": 2.903503569144653
+          },
+          {
+            "root": 0,
+            "branch": 2,
+            "tree_drive_range": 2.106666109817162
+          },
+          {
+            "root": 1,
+            "branch": 0,
+            "tree_drive_range": 2.0807543412149663
+          },
+          {
+            "root": 1,
+            "branch": 1,
+            "tree_drive_range": 1.9496070072658886
+          },
+          {
+            "root": 1,
+            "branch": 2,
+            "tree_drive_range": 1.3030325240562253
+          },
+          {
+            "root": 2,
+            "branch": 0,
+            "tree_drive_range": 2.231654653818655
+          },
+          {
+            "root": 2,
+            "branch": 1,
+            "tree_drive_range": 2.701816387390817
+          },
+          {
+            "root": 2,
+            "branch": 2,
+            "tree_drive_range": 2.216176434558475
+          },
+          {
+            "root": 3,
+            "branch": 0,
+            "tree_drive_range": 2.1762982705355065
+          },
+          {
+            "root": 3,
+            "branch": 1,
+            "tree_drive_range": 2.183718728344451
+          },
+          {
+            "root": 3,
+            "branch": 2,
+            "tree_drive_range": 2.130419412461889
+          },
+          {
+            "root": 4,
+            "branch": 0,
+            "tree_drive_range": 1.790656562019347
+          },
+          {
+            "root": 4,
+            "branch": 1,
+            "tree_drive_range": 1.4864745960262131
+          },
+          {
+            "root": 4,
+            "branch": 2,
+            "tree_drive_range": 1.2018365421234518
+          }
+        ]
+      },
+      "best_root_assignment": [
+        0,
+        2,
+        3
+      ],
+      "trial_objective_mean": -3.375959462549373,
+      "trial_objective_max": -2.2698596589799664,
+      "trial_rows": [
+        {
+          "objective": -3.3218357416644717,
+          "accuracy": 0.36666666666666664,
+          "branch_failure_rate_max": 0.8947368421052632,
+          "root_assignment": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "objective": -2.6139437291309378,
+          "accuracy": 0.35,
+          "branch_failure_rate_max": 0.7894736842105263,
+          "root_assignment": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "objective": -3.2042855726086223,
+          "accuracy": 0.3277777777777778,
+          "branch_failure_rate_max": 0.9298245614035088,
+          "root_assignment": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "objective": -3.123362751191943,
+          "accuracy": 0.42777777777777776,
+          "branch_failure_rate_max": 0.7192982456140351,
+          "root_assignment": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "objective": -2.949226602612176,
+          "accuracy": 0.4111111111111111,
+          "branch_failure_rate_max": 0.8070175438596491,
+          "root_assignment": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "objective": -2.456597948470408,
+          "accuracy": 0.39444444444444443,
+          "branch_failure_rate_max": 0.9298245614035088,
+          "root_assignment": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "objective": -3.6795456420264,
+          "accuracy": 0.3333333333333333,
+          "branch_failure_rate_max": 0.8245614035087719,
+          "root_assignment": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "objective": -3.0041774348047063,
+          "accuracy": 0.3388888888888889,
+          "branch_failure_rate_max": 0.9122807017543859,
+          "root_assignment": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "objective": -2.4926290976076593,
+          "accuracy": 0.35,
+          "branch_failure_rate_max": 0.7,
+          "root_assignment": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "objective": -4.072944757034217,
+          "accuracy": 0.32222222222222224,
+          "branch_failure_rate_max": 0.8428571428571429,
+          "root_assignment": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "objective": -3.8499974765067577,
+          "accuracy": 0.3333333333333333,
+          "branch_failure_rate_max": 0.8285714285714286,
+          "root_assignment": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "objective": -2.7328623972446837,
+          "accuracy": 0.3888888888888889,
+          "branch_failure_rate_max": 0.6666666666666666,
+          "root_assignment": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "objective": -3.561956372391534,
+          "accuracy": 0.3277777777777778,
+          "branch_failure_rate_max": 0.7571428571428571,
+          "root_assignment": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "objective": -4.499534946098444,
+          "accuracy": 0.35555555555555557,
+          "branch_failure_rate_max": 0.7192982456140351,
+          "root_assignment": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "objective": -3.0280135384704785,
+          "accuracy": 0.29444444444444445,
+          "branch_failure_rate_max": 0.8714285714285714,
+          "root_assignment": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "objective": -3.5446879265861098,
+          "accuracy": 0.40555555555555556,
+          "branch_failure_rate_max": 0.7428571428571429,
+          "root_assignment": [
+            0,
+            1,
+            3
+          ]
+        },
+        {
+          "objective": -3.5876534336029793,
+          "accuracy": 0.3,
+          "branch_failure_rate_max": 0.9142857142857143,
+          "root_assignment": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "objective": -3.410018770205761,
+          "accuracy": 0.3111111111111111,
+          "branch_failure_rate_max": 0.6981132075471698,
+          "root_assignment": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "objective": -2.32537476488696,
+          "accuracy": 0.29444444444444445,
+          "branch_failure_rate_max": 0.8571428571428571,
+          "root_assignment": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "objective": -3.4217421681419213,
+          "accuracy": 0.3111111111111111,
+          "branch_failure_rate_max": 0.7192982456140351,
+          "root_assignment": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "objective": -4.8830608402713835,
+          "accuracy": 0.3388888888888889,
+          "branch_failure_rate_max": 0.8142857142857143,
+          "root_assignment": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "objective": -3.7067739037838554,
+          "accuracy": 0.28888888888888886,
+          "branch_failure_rate_max": 0.8571428571428571,
+          "root_assignment": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "objective": -2.7477916075489826,
+          "accuracy": 0.35555555555555557,
+          "branch_failure_rate_max": 0.7285714285714285,
+          "root_assignment": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "objective": -3.086368280345561,
+          "accuracy": 0.3611111111111111,
+          "branch_failure_rate_max": 0.7857142857142857,
+          "root_assignment": [
+            0,
+            1,
+            4
+          ]
+        },
+        {
+          "objective": -2.840427337786027,
+          "accuracy": 0.3388888888888889,
+          "branch_failure_rate_max": 0.8285714285714286,
+          "root_assignment": [
+            0,
+            2,
+            1
+          ]
+        },
+        {
+          "objective": -3.551714435995994,
+          "accuracy": 0.3388888888888889,
+          "branch_failure_rate_max": 0.8142857142857143,
+          "root_assignment": [
+            0,
+            2,
+            1
+          ]
+        },
+        {
+          "objective": -2.99926925277763,
+          "accuracy": 0.3111111111111111,
+          "branch_failure_rate_max": 0.8714285714285714,
+          "root_assignment": [
+            0,
+            2,
+            1
+          ]
+        },
+        {
+          "objective": -3.6671203082012918,
+          "accuracy": 0.40555555555555556,
+          "branch_failure_rate_max": 0.7428571428571429,
+          "root_assignment": [
+            0,
+            2,
+            1
+          ]
+        },
+        {
+          "objective": -4.9242458424886255,
+          "accuracy": 0.32222222222222224,
+          "branch_failure_rate_max": 0.7017543859649122,
+          "root_assignment": [
+            0,
+            2,
+            1
+          ]
+        },
+        {
+          "objective": -3.5485439503426415,
+          "accuracy": 0.3055555555555556,
+          "branch_failure_rate_max": 0.7571428571428571,
+          "root_assignment": [
+            0,
+            2,
+            1
+          ]
+        },
+        {
+          "objective": -2.9813833617005137,
+          "accuracy": 0.4,
+          "branch_failure_rate_max": 0.6428571428571429,
+          "root_assignment": [
+            0,
+            2,
+            1
+          ]
+        },
+        {
+          "objective": -3.1045188321192563,
+          "accuracy": 0.32222222222222224,
+          "branch_failure_rate_max": 0.7428571428571429,
+          "root_assignment": [
+            0,
+            2,
+            1
+          ]
+        },
+        {
+          "objective": -3.3672301433301257,
+          "accuracy": 0.3388888888888889,
+          "branch_failure_rate_max": 0.7571428571428571,
+          "root_assignment": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "objective": -3.7810744773168827,
+          "accuracy": 0.25555555555555554,
+          "branch_failure_rate_max": 0.8285714285714286,
+          "root_assignment": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "objective": -4.3968042953267545,
+          "accuracy": 0.3388888888888889,
+          "branch_failure_rate_max": 0.8596491228070176,
+          "root_assignment": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "objective": -2.9214719308393566,
+          "accuracy": 0.37222222222222223,
+          "branch_failure_rate_max": 0.7735849056603774,
+          "root_assignment": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "objective": -2.2698596589799664,
+          "accuracy": 0.36666666666666664,
+          "branch_failure_rate_max": 0.7358490566037735,
+          "root_assignment": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "objective": -3.3710831485840855,
+          "accuracy": 0.3388888888888889,
+          "branch_failure_rate_max": 0.6666666666666666,
+          "root_assignment": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "objective": -3.2683984403278017,
+          "accuracy": 0.31666666666666665,
+          "branch_failure_rate_max": 0.7358490566037735,
+          "root_assignment": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "objective": -2.838697400285419,
+          "accuracy": 0.3055555555555556,
+          "branch_failure_rate_max": 0.8428571428571429,
+          "root_assignment": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "objective": -3.163933073489333,
+          "accuracy": 0.3333333333333333,
+          "branch_failure_rate_max": 0.9142857142857143,
+          "root_assignment": [
+            0,
+            2,
+            4
+          ]
+        },
+        {
+          "objective": -3.581600104641161,
+          "accuracy": 0.37222222222222223,
+          "branch_failure_rate_max": 0.6842105263157895,
+          "root_assignment": [
+            0,
+            2,
+            4
+          ]
+        },
+        {
+          "objective": -3.043872625806283,
+          "accuracy": 0.38333333333333336,
+          "branch_failure_rate_max": 0.9285714285714286,
+          "root_assignment": [
+            0,
+            2,
+            4
+          ]
+        },
+        {
+          "objective": -3.269900002179908,
+          "accuracy": 0.32222222222222224,
+          "branch_failure_rate_max": 0.6842105263157895,
+          "root_assignment": [
+            0,
+            2,
+            4
+          ]
+        },
+        {
+          "objective": -3.88529557136344,
+          "accuracy": 0.39444444444444443,
+          "branch_failure_rate_max": 0.7428571428571429,
+          "root_assignment": [
+            0,
+            2,
+            4
+          ]
+        },
+        {
+          "objective": -3.5114932695076564,
+          "accuracy": 0.3055555555555556,
+          "branch_failure_rate_max": 0.7192982456140351,
+          "root_assignment": [
+            0,
+            2,
+            4
+          ]
+        },
+        {
+          "objective": -5.563427798366011,
+          "accuracy": 0.23333333333333334,
+          "branch_failure_rate_max": 0.8714285714285714,
+          "root_assignment": [
+            0,
+            2,
+            4
+          ]
+        },
+        {
+          "objective": -2.8903032373767776,
+          "accuracy": 0.3055555555555556,
+          "branch_failure_rate_max": 0.9285714285714286,
+          "root_assignment": [
+            0,
+            2,
+            4
+          ]
+        }
+      ]
+    }
+  ]
+}
