@@ -31,8 +31,11 @@ The branch-tree NMI contrast is modest, but active-tree count changes substantia
 - Training topologies: `degrewire0027_baseg0354_degree_balanced_seed9_seed34, degrewire0003_baseg0354_degree_balanced_seed9_seed3, degrewire0002_baseg0354_degree_balanced_seed9_seed2, degrewire0024_baseg0354_degree_balanced_seed9_seed31`
 - Seeds: `1,2,3,4,5`
 - Expected runs: `20`
-- Slurm job: `13538460`
+- Slurm job: `13538620`
 - Completed `results.pkl` files at report generation: `0`
-- Current `squeue` line: `13538460_[0-19%8] mit_norma topo_lib aadarwal PD       0:00      1 (Priority)`
+- Current `squeue` line: `13538620_[0-19%8] pending; commands hardened to use /home/aadarwal/orcd/scratch/venvs/markov_icl/bin/python`
 
 This sweep is intentionally small: it isolates the exact-degree/normal-fan mechanism rather than adding another broad graph-family sweep.
+
+
+Update: the first submission (`13538460`) failed because the job environment lacked `tqdm`; `tqdm` was installed into the project venv, the command manifest was hardened to use the absolute venv Python path, and the array was resubmitted as `13538620`.
