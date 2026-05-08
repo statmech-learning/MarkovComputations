@@ -1,0 +1,210 @@
+{
+  "n_nodes": 5,
+  "n_edges": 8,
+  "p": 8,
+  "strongly_connected": true,
+  "edges": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      0,
+      4
+    ],
+    [
+      4,
+      0
+    ]
+  ],
+  "tree_counts_enum": [
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "tree_counts_det": [
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "tree_counts_match_det": true,
+  "tree_enumeration_truncated": false,
+  "max_trees_per_root": null,
+  "n_trees_total_enum": 5,
+  "rank_M": 5,
+  "rank_D": 4,
+  "rank_D_anchor": 4,
+  "d_rel": 32,
+  "effective_rank_D": 3.5386336544967523,
+  "condition_number_D": 2.23606797749979,
+  "effective_rank_D_masked": 28.309069235974015,
+  "condition_number_D_masked": 2.23606797749979,
+  "singular_values_D_masked": [
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730947,
+    0.6324555320336759,
+    1.394645109787757e-16,
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730947,
+    0.6324555320336759,
+    1.394645109787757e-16,
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730947,
+    0.6324555320336759,
+    1.394645109787757e-16,
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730947,
+    0.6324555320336759,
+    1.394645109787757e-16,
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730947,
+    0.6324555320336759,
+    1.394645109787757e-16,
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730947,
+    0.6324555320336759,
+    1.394645109787757e-16,
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730947,
+    0.6324555320336759,
+    1.394645109787757e-16,
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730947,
+    0.6324555320336759,
+    1.394645109787757e-16
+  ],
+  "singular_values_D": [
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730947,
+    0.6324555320336759,
+    1.394645109787757e-16
+  ],
+  "singular_values_D_anchor": [
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730951,
+    1.4142135623730951
+  ],
+  "root_tree_count_cv": 0.0,
+  "root_tree_count_gini": 0.0,
+  "edge_participation": [
+    0.2,
+    0.8,
+    0.2,
+    0.8,
+    0.2,
+    0.8,
+    0.2,
+    0.8
+  ],
+  "edge_participation_mean": 0.5,
+  "edge_participation_var": 0.09000000000000001,
+  "edge_participation_gini": 0.30000000000000004,
+  "bottleneck_edge_fraction_095": 0.0,
+  "mean_shortest_path": 1.6,
+  "comparison_branch_d_rel_values": [
+    8,
+    8,
+    8
+  ],
+  "comparison_branch_d_rel_min": 8,
+  "comparison_branch_d_rel_mean": 8.0,
+  "comparison_branch_d_rel_max": 8,
+  "comparison_branch_d_rel_gini": 0.0,
+  "comparison_branch_common_d_rel_values": [
+    8,
+    8,
+    8
+  ],
+  "comparison_branch_common_d_rel_min": 8,
+  "comparison_branch_common_d_rel_mean": 8.0,
+  "comparison_branch_common_d_rel_max": 8,
+  "comparison_branch_common_d_rel_gini": 0.0,
+  "comparison_branch_input_count_values": [
+    16,
+    16,
+    16
+  ],
+  "comparison_branch_input_count_min": 16,
+  "comparison_branch_input_count_mean": 16.0,
+  "comparison_branch_input_count_max": 16,
+  "comparison_branch_input_count_gini": 0.0,
+  "comparison_branch_input_overlap_values": [
+    16,
+    16,
+    16
+  ],
+  "comparison_branch_input_overlap_min": 16,
+  "comparison_branch_input_overlap_mean": 16.0,
+  "comparison_branch_input_overlap_max": 16,
+  "comparison_branch_input_overlap_gini": 0.0,
+  "in_degree": [
+    4,
+    1,
+    1,
+    1,
+    1
+  ],
+  "out_degree": [
+    4,
+    1,
+    1,
+    1,
+    1
+  ],
+  "in_degree_cv": 0.7500000000000001,
+  "out_degree_cv": 0.7500000000000001,
+  "topology_name": "hub_spoke_n5_m8_seed1",
+  "physical_topology_name": "hub_spoke_n5_m8_seed1",
+  "input_mask_name": "full",
+  "input_mask_family": "",
+  "input_mask_seed": 4,
+  "input_coupled_parameter_count": 64,
+  "input_coupled_edge_count": 8,
+  "input_coupled_coord_count": 8,
+  "input_parameter_density": 1.0,
+  "input_edge_density": 1.0,
+  "input_coord_density": 1.0,
+  "input_edge_load_gini": 0.0,
+  "input_coord_load_gini": 0.0,
+  "input_edge_load_min": 8,
+  "input_edge_load_max": 8,
+  "input_coord_load_min": 8,
+  "input_coord_load_max": 8,
+  "raw_physical_parameter_count": 64,
+  "n_req": 48,
+  "d_rel_minus_n_req": -16
+}

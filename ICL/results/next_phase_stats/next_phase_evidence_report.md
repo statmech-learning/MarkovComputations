@@ -1,6 +1,6 @@
 # Next-Phase Topology-ICL Evidence Report
 
-Generated: `2026-05-07T22:49:05.103909+00:00`.
+Generated: `2026-05-08T01:55:42.327941+00:00`.
 
 Scope: first-order CRNs with exponential input-dependent rates. These results do not claim a topology theory for autocatalytic or WTA CRNs.
 
@@ -167,6 +167,42 @@ Rows: `1200`. Runs: `80`.
 | edge_rate_function_permutation | 240 | -43.94 | -76.50 | -13.50 |
 | randomize_K_direction | 240 | -44.44 | -71.50 | -18.00 |
 
+### hard_n4_m6_N3_D2
+
+Rows: `1500`. Runs: `60`.
+
+| intervention | n | mean delta | min | max |
+| --- | --- | --- | --- | --- |
+| context_block_shuffle | 300 | -48.61 | -76.80 | 1.00 |
+| decoder_root_permutation | 300 | -36.80 | -73.00 | 2.40 |
+| edge_projection_permutation | 300 | -27.89 | -60.80 | 2.80 |
+| edge_rate_function_permutation | 300 | -34.53 | -69.40 | 4.40 |
+| randomize_K_direction | 300 | -36.24 | -53.60 | -21.00 |
+
+### hard_n5_m8_N3_D2
+
+Rows: `1500`. Runs: `60`.
+
+| intervention | n | mean delta | min | max |
+| --- | --- | --- | --- | --- |
+| context_block_shuffle | 300 | -58.04 | -84.80 | -1.20 |
+| decoder_root_permutation | 300 | -33.35 | -70.40 | 0.20 |
+| edge_projection_permutation | 300 | -35.18 | -67.20 | -10.00 |
+| edge_rate_function_permutation | 300 | -40.03 | -63.40 | -13.60 |
+| randomize_K_direction | 300 | -40.37 | -58.40 | -23.40 |
+
+### hard_n5_m12_N3_D2
+
+Rows: `1500`. Runs: `60`.
+
+| intervention | n | mean delta | min | max |
+| --- | --- | --- | --- | --- |
+| context_block_shuffle | 300 | -73.10 | -97.00 | -5.00 |
+| decoder_root_permutation | 300 | -44.14 | -88.80 | -4.80 |
+| edge_projection_permutation | 300 | -50.81 | -75.00 | -16.00 |
+| edge_rate_function_permutation | 300 | -52.42 | -74.60 | -23.00 |
+| randomize_K_direction | 300 | -52.50 | -70.80 | -29.20 |
+
 ## Branch-Margin Capacity Probes
 
 ### random
@@ -310,9 +346,9 @@ Matched controls are mixed or comparable to the extracted motifs here; interpret
 | --- | --- | --- | --- | --- |
 | n5_m7 | `results/expanded_pilot_sweeps/n5_m7_N2_D1` | 60 | 0 | 0 |
 | n5_m12 | `results/expanded_pilot_sweeps/n5_m12_N2_D1` | 60 | 0 | 0 |
-| hard_n4_m6_N3_D2 | `results/expanded_hard_sweeps/n4_m6_N3_D2` | 60 | 0 | 0 |
-| hard_n5_m8_N3_D2 | `results/expanded_hard_sweeps/n5_m8_N3_D2` | 60 | 0 | 0 |
-| hard_n5_m12_N3_D2 | `results/expanded_hard_sweeps/n5_m12_N3_D2` | 60 | 0 | 0 |
+| hard_n4_m6_N3_D2 | `results/expanded_hard_sweeps/n4_m6_N3_D2` | 60 | 60 | 60 |
+| hard_n5_m8_N3_D2 | `results/expanded_hard_sweeps/n5_m8_N3_D2` | 60 | 60 | 60 |
+| hard_n5_m12_N3_D2 | `results/expanded_hard_sweeps/n5_m12_N3_D2` | 60 | 60 | 60 |
 
 ## Interpretation Guardrails
 

@@ -100,9 +100,19 @@
         "leave_one_out_r2": -0.1101963764324354
       },
       "mechanism": {
-        "n": 0,
-        "r2": null,
-        "rmse": null,
+        "n": 12,
+        "r2": 0.9235708302620612,
+        "rmse": 0.940685539544901,
+        "coefficients": [
+          75.39,
+          -1.103874499578069,
+          3.1010071896492826,
+          -0.02486978960047858,
+          -227.0520369682978,
+          226.43837103227887,
+          -0.3525357254284341,
+          0.9002625451899885
+        ],
         "predictors": [
           "target_logprob_margin_mean_mean",
           "target_logprob_margin_branch_mean_min_mean",
@@ -112,19 +122,26 @@
           "branch_active_tree_purity_mean_mean",
           "input_ablation_max_loss_mean"
         ],
-        "leave_one_out_r2": null
+        "leave_one_out_r2": 0.11292246628786085
       },
       "projection_alignment": {
-        "n": 0,
-        "r2": null,
-        "rmse": null,
+        "n": 12,
+        "r2": 0.5594833534879972,
+        "rmse": 2.2583750090831507,
+        "coefficients": [
+          75.39000000000001,
+          7.049606245321115,
+          -7.311620786702581,
+          -7.444007779316873,
+          5.745314998837424
+        ],
         "predictors": [
           "active_tree_matched_comparison_energy_mean_mean",
           "active_tree_matched_comparison_gap_mean_mean",
           "posterior_matched_comparison_energy_mean_mean",
           "posterior_matched_comparison_gap_mean_mean"
         ],
-        "leave_one_out_r2": null
+        "leave_one_out_r2": -0.33735562503856276
       }
     },
     "target_max": {
@@ -226,9 +243,19 @@
         "leave_one_out_r2": -1.2690652078860007
       },
       "mechanism": {
-        "n": 0,
-        "r2": null,
-        "rmse": null,
+        "n": 12,
+        "r2": 0.8779521096597942,
+        "rmse": 1.3582920435763355,
+        "coefficients": [
+          82.49999999999999,
+          -0.3414982914537177,
+          0.22427073575180004,
+          1.352506298862884,
+          -1091.8035111205795,
+          1090.8077317391758,
+          -3.386030171483213,
+          1.0135918460470463
+        ],
         "predictors": [
           "target_logprob_margin_mean_mean",
           "target_logprob_margin_branch_mean_min_mean",
@@ -238,19 +265,26 @@
           "branch_active_tree_purity_mean_mean",
           "input_ablation_max_loss_mean"
         ],
-        "leave_one_out_r2": null
+        "leave_one_out_r2": -0.6574537663023909
       },
       "projection_alignment": {
-        "n": 0,
-        "r2": null,
-        "rmse": null,
+        "n": 12,
+        "r2": 0.38877239545485887,
+        "rmse": 3.03969142436762,
+        "coefficients": [
+          82.5,
+          7.6913365811908045,
+          -8.49332001098498,
+          -8.220756701205776,
+          8.359208957756607
+        ],
         "predictors": [
           "active_tree_matched_comparison_energy_mean_mean",
           "active_tree_matched_comparison_gap_mean_mean",
           "posterior_matched_comparison_energy_mean_mean",
           "posterior_matched_comparison_gap_mean_mean"
         ],
-        "leave_one_out_r2": null
+        "leave_one_out_r2": -0.7293180622034887
       }
     },
     "target_std": {
@@ -318,7 +352,7 @@
           "bottleneck_edge_fraction_095",
           "mean_shortest_path"
         ],
-        "leave_one_out_r2": -9.047759089900541
+        "leave_one_out_r2": -9.047759089900543
       },
       "masked_tree_geometry": {
         "n": 12,
@@ -349,12 +383,22 @@
           "input_edge_load_gini",
           "input_coord_load_gini"
         ],
-        "leave_one_out_r2": -1.1383778005725516
+        "leave_one_out_r2": -1.1383778005725511
       },
       "mechanism": {
-        "n": 0,
-        "r2": null,
-        "rmse": null,
+        "n": 12,
+        "r2": 0.49064282684228444,
+        "rmse": 1.1999016720486693,
+        "coefficients": [
+          5.5334170104856435,
+          2.573143126422565,
+          -1.7580015854409792,
+          -0.3251042430883869,
+          -414.1332279477759,
+          412.92439311217004,
+          -0.15467505624259864,
+          1.141262996893759
+        ],
         "predictors": [
           "target_logprob_margin_mean_mean",
           "target_logprob_margin_branch_mean_min_mean",
@@ -364,19 +408,26 @@
           "branch_active_tree_purity_mean_mean",
           "input_ablation_max_loss_mean"
         ],
-        "leave_one_out_r2": null
+        "leave_one_out_r2": -4.061089256085784
       },
       "projection_alignment": {
-        "n": 0,
-        "r2": null,
-        "rmse": null,
+        "n": 12,
+        "r2": 0.43378810265568546,
+        "rmse": 1.265097333963743,
+        "coefficients": [
+          5.533417010485645,
+          -1.1827517771196472,
+          1.0886278492499002,
+          -0.22939434736124606,
+          0.7778137762011859
+        ],
         "predictors": [
           "active_tree_matched_comparison_energy_mean_mean",
           "active_tree_matched_comparison_gap_mean_mean",
           "posterior_matched_comparison_energy_mean_mean",
           "posterior_matched_comparison_gap_mean_mean"
         ],
-        "leave_one_out_r2": null
+        "leave_one_out_r2": -0.49327963268561437
       }
     }
   }

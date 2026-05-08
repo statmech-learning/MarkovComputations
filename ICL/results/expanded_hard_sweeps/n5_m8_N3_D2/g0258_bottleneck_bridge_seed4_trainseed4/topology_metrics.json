@@ -1,0 +1,220 @@
+{
+  "n_nodes": 5,
+  "n_edges": 8,
+  "p": 8,
+  "strongly_connected": true,
+  "edges": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      4,
+      3
+    ]
+  ],
+  "tree_counts_enum": [
+    1,
+    1,
+    1,
+    2,
+    1
+  ],
+  "tree_counts_det": [
+    1,
+    1,
+    1,
+    2,
+    1
+  ],
+  "tree_counts_match_det": true,
+  "tree_enumeration_truncated": false,
+  "max_trees_per_root": null,
+  "n_trees_total_enum": 6,
+  "rank_M": 6,
+  "rank_D": 5,
+  "rank_D_anchor": 5,
+  "d_rel": 40,
+  "effective_rank_D": 3.2308669854711405,
+  "condition_number_D": 3.5875737836342476,
+  "effective_rank_D_masked": 25.84693588376914,
+  "condition_number_D_masked": 3.5875737836342476,
+  "singular_values_D_masked": [
+    2.3895007840696394,
+    1.2074107683199826,
+    1.0,
+    0.8497982029054558,
+    0.66604923778015,
+    2.702515084515229e-16,
+    2.3895007840696394,
+    1.2074107683199826,
+    1.0,
+    0.8497982029054558,
+    0.66604923778015,
+    2.702515084515229e-16,
+    2.3895007840696394,
+    1.2074107683199826,
+    1.0,
+    0.8497982029054558,
+    0.66604923778015,
+    2.702515084515229e-16,
+    2.3895007840696394,
+    1.2074107683199826,
+    1.0,
+    0.8497982029054558,
+    0.66604923778015,
+    2.702515084515229e-16,
+    2.3895007840696394,
+    1.2074107683199826,
+    1.0,
+    0.8497982029054558,
+    0.66604923778015,
+    2.702515084515229e-16,
+    2.3895007840696394,
+    1.2074107683199826,
+    1.0,
+    0.8497982029054558,
+    0.66604923778015,
+    2.702515084515229e-16,
+    2.3895007840696394,
+    1.2074107683199826,
+    1.0,
+    0.8497982029054558,
+    0.66604923778015,
+    2.702515084515229e-16,
+    2.3895007840696394,
+    1.2074107683199826,
+    1.0,
+    0.8497982029054558,
+    0.66604923778015,
+    2.702515084515229e-16
+  ],
+  "singular_values_D": [
+    2.3895007840696394,
+    1.2074107683199826,
+    1.0,
+    0.8497982029054558,
+    0.66604923778015,
+    2.702515084515229e-16
+  ],
+  "singular_values_D_anchor": [
+    4.661362789423676,
+    1.414213562373095,
+    0.9999999999999999,
+    0.9087908680085071,
+    0.6676796414454058
+  ],
+  "root_tree_count_cv": 0.33333333333333337,
+  "root_tree_count_gini": 0.1333333333333333,
+  "edge_participation": [
+    0.8333333333333334,
+    0.16666666666666666,
+    0.5,
+    0.6666666666666666,
+    0.6666666666666666,
+    0.6666666666666666,
+    0.3333333333333333,
+    0.16666666666666666
+  ],
+  "edge_participation_mean": 0.5,
+  "edge_participation_var": 0.055555555555555566,
+  "edge_participation_gini": 0.26041666666666674,
+  "bottleneck_edge_fraction_095": 0.0,
+  "mean_shortest_path": 2.0,
+  "comparison_branch_d_rel_values": [
+    10,
+    10,
+    10
+  ],
+  "comparison_branch_d_rel_min": 10,
+  "comparison_branch_d_rel_mean": 10.0,
+  "comparison_branch_d_rel_max": 10,
+  "comparison_branch_d_rel_gini": 0.0,
+  "comparison_branch_common_d_rel_values": [
+    10,
+    10,
+    10
+  ],
+  "comparison_branch_common_d_rel_min": 10,
+  "comparison_branch_common_d_rel_mean": 10.0,
+  "comparison_branch_common_d_rel_max": 10,
+  "comparison_branch_common_d_rel_gini": 0.0,
+  "comparison_branch_input_count_values": [
+    16,
+    16,
+    16
+  ],
+  "comparison_branch_input_count_min": 16,
+  "comparison_branch_input_count_mean": 16.0,
+  "comparison_branch_input_count_max": 16,
+  "comparison_branch_input_count_gini": 0.0,
+  "comparison_branch_input_overlap_values": [
+    16,
+    16,
+    16
+  ],
+  "comparison_branch_input_overlap_min": 16,
+  "comparison_branch_input_overlap_mean": 16.0,
+  "comparison_branch_input_overlap_max": 16,
+  "comparison_branch_input_overlap_gini": 0.0,
+  "in_degree": [
+    1,
+    2,
+    2,
+    2,
+    1
+  ],
+  "out_degree": [
+    1,
+    2,
+    2,
+    1,
+    2
+  ],
+  "in_degree_cv": 0.30618621784789724,
+  "out_degree_cv": 0.30618621784789724,
+  "topology_name": "bottleneck_bridge_n5_m8_seed4",
+  "physical_topology_name": "bottleneck_bridge_n5_m8_seed4",
+  "input_mask_name": "full",
+  "input_mask_family": "",
+  "input_mask_seed": 4,
+  "input_coupled_parameter_count": 64,
+  "input_coupled_edge_count": 8,
+  "input_coupled_coord_count": 8,
+  "input_parameter_density": 1.0,
+  "input_edge_density": 1.0,
+  "input_coord_density": 1.0,
+  "input_edge_load_gini": 0.0,
+  "input_coord_load_gini": 0.0,
+  "input_edge_load_min": 8,
+  "input_edge_load_max": 8,
+  "input_coord_load_min": 8,
+  "input_coord_load_max": 8,
+  "raw_physical_parameter_count": 64,
+  "n_req": 48,
+  "d_rel_minus_n_req": -8
+}

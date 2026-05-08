@@ -1,0 +1,25 @@
+{
+  "n_rows": 16,
+  "families": {
+    "balanced": {
+      "n": 2,
+      "linear_test_accuracy_mean": 0.975,
+      "linear_test_accuracy_max": 0.975
+    },
+    "coord_block": {
+      "n": 1,
+      "linear_test_accuracy_mean": 0.561,
+      "linear_test_accuracy_max": 0.561
+    },
+    "edge_block": {
+      "n": 9,
+      "linear_test_accuracy_mean": 0.9750000000000001,
+      "linear_test_accuracy_max": 0.975
+    },
+    "entry_random": {
+      "n": 4,
+      "linear_test_accuracy_mean": 0.975,
+      "linear_test_accuracy_max": 0.975
+    }
+  }
+}

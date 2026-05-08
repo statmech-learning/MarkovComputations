@@ -603,6 +603,135 @@
       "n_rows": 1200,
       "n_runs": 80,
       "path": "results/next_phase_stats/hub_fixed_m20_causal_interventions_summary.json"
+    },
+    {
+      "interventions": [
+        {
+          "intervention": "context_block_shuffle",
+          "n": 300,
+          "target_accuracy_delta_max": 0.9999990463256836,
+          "target_accuracy_delta_mean": -48.60866672576716,
+          "target_accuracy_delta_min": -76.79999712854624
+        },
+        {
+          "intervention": "decoder_root_permutation",
+          "n": 300,
+          "target_accuracy_delta_max": 2.399998903274536,
+          "target_accuracy_delta_mean": -36.79733330011368,
+          "target_accuracy_delta_min": -72.99999818205833
+        },
+        {
+          "intervention": "edge_projection_permutation",
+          "n": 300,
+          "target_accuracy_delta_max": 2.799999713897705,
+          "target_accuracy_delta_mean": -27.894666582345963,
+          "target_accuracy_delta_min": -60.80000102519989
+        },
+        {
+          "intervention": "edge_rate_function_permutation",
+          "n": 300,
+          "target_accuracy_delta_max": 4.400002956390381,
+          "target_accuracy_delta_mean": -34.534666708981,
+          "target_accuracy_delta_min": -69.39999833703041
+        },
+        {
+          "intervention": "randomize_K_direction",
+          "n": 300,
+          "target_accuracy_delta_max": -20.999997854232788,
+          "target_accuracy_delta_mean": -36.24266669650873,
+          "target_accuracy_delta_min": -53.60000133514404
+        }
+      ],
+      "label": "hard_n4_m6_N3_D2",
+      "n_rows": 1500,
+      "n_runs": 60,
+      "path": "results/expanded_hard_sweeps/n4_m6_N3_D2/causal_interventions_summary.json"
+    },
+    {
+      "interventions": [
+        {
+          "intervention": "context_block_shuffle",
+          "n": 300,
+          "target_accuracy_delta_max": -1.1999964714050293,
+          "target_accuracy_delta_mean": -58.04266635576884,
+          "target_accuracy_delta_min": -84.79999788105488
+        },
+        {
+          "intervention": "decoder_root_permutation",
+          "n": 300,
+          "target_accuracy_delta_max": 0.20000338554382324,
+          "target_accuracy_delta_mean": -33.34599965065718,
+          "target_accuracy_delta_min": -70.39999961853027
+        },
+        {
+          "intervention": "edge_projection_permutation",
+          "n": 300,
+          "target_accuracy_delta_max": -10.000002384185791,
+          "target_accuracy_delta_mean": -35.17933307091395,
+          "target_accuracy_delta_min": -67.19999760389328
+        },
+        {
+          "intervention": "edge_rate_function_permutation",
+          "n": 300,
+          "target_accuracy_delta_max": -13.599997758865356,
+          "target_accuracy_delta_mean": -40.02866637210051,
+          "target_accuracy_delta_min": -63.39999735355377
+        },
+        {
+          "intervention": "randomize_K_direction",
+          "n": 300,
+          "target_accuracy_delta_max": -23.399999737739563,
+          "target_accuracy_delta_mean": -40.365333000818886,
+          "target_accuracy_delta_min": -58.400002121925354
+        }
+      ],
+      "label": "hard_n5_m8_N3_D2",
+      "n_rows": 1500,
+      "n_runs": 60,
+      "path": "results/expanded_hard_sweeps/n5_m8_N3_D2/causal_interventions_summary.json"
+    },
+    {
+      "interventions": [
+        {
+          "intervention": "context_block_shuffle",
+          "n": 300,
+          "target_accuracy_delta_max": -5.0000011920928955,
+          "target_accuracy_delta_mean": -73.09933351973693,
+          "target_accuracy_delta_min": -96.99999764561653
+        },
+        {
+          "intervention": "decoder_root_permutation",
+          "n": 300,
+          "target_accuracy_delta_max": -4.80000376701355,
+          "target_accuracy_delta_mean": -44.14466701696316,
+          "target_accuracy_delta_min": -88.79999667406082
+        },
+        {
+          "intervention": "edge_projection_permutation",
+          "n": 300,
+          "target_accuracy_delta_max": -15.999996662139893,
+          "target_accuracy_delta_mean": -50.8140002588431,
+          "target_accuracy_delta_min": -74.99999701976776
+        },
+        {
+          "intervention": "edge_rate_function_permutation",
+          "n": 300,
+          "target_accuracy_delta_max": -22.999998927116394,
+          "target_accuracy_delta_mean": -52.415333484609924,
+          "target_accuracy_delta_min": -74.59999918937683
+        },
+        {
+          "intervention": "randomize_K_direction",
+          "n": 300,
+          "target_accuracy_delta_max": -29.199999570846558,
+          "target_accuracy_delta_mean": -52.502666960159935,
+          "target_accuracy_delta_min": -70.7999974489212
+        }
+      ],
+      "label": "hard_n5_m12_N3_D2",
+      "n_rows": 1500,
+      "n_runs": 60,
+      "path": "results/expanded_hard_sweeps/n5_m12_N3_D2/causal_interventions_summary.json"
     }
   ],
   "clustered_inference": [
@@ -1616,28 +1745,28 @@
       "root": "results/expanded_pilot_sweeps/n5_m12_N2_D1"
     },
     {
-      "causal_count": 0,
+      "causal_count": 60,
       "label": "hard_n4_m6_N3_D2",
-      "mechanism_count": 0,
+      "mechanism_count": 60,
       "results_pkl_count": 60,
       "root": "results/expanded_hard_sweeps/n4_m6_N3_D2"
     },
     {
-      "causal_count": 0,
+      "causal_count": 60,
       "label": "hard_n5_m8_N3_D2",
-      "mechanism_count": 0,
+      "mechanism_count": 60,
       "results_pkl_count": 60,
       "root": "results/expanded_hard_sweeps/n5_m8_N3_D2"
     },
     {
-      "causal_count": 0,
+      "causal_count": 60,
       "label": "hard_n5_m12_N3_D2",
-      "mechanism_count": 0,
+      "mechanism_count": 60,
       "results_pkl_count": 60,
       "root": "results/expanded_hard_sweeps/n5_m12_N3_D2"
     }
   ],
-  "generated_at": "2026-05-07T22:49:05.103909+00:00",
+  "generated_at": "2026-05-08T01:55:42.327941+00:00",
   "matched_motif_controls": [
     {
       "by_control_kind": {

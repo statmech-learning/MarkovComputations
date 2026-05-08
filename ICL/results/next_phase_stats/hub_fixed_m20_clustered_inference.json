@@ -1,0 +1,709 @@
+{
+  "cluster_bootstrap_run_level": {
+    "input_count": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -1.9984014443252816e-18,
+      "candidate": "input_count",
+      "candidate_r2_mean": -1.9984014443252816e-18,
+      "delta_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_mean": 0.0,
+      "delta_median": 0.0,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 0.0
+    },
+    "input_count_plus_branch_drel": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -3.885780586188048e-18,
+      "candidate": "input_count_plus_branch_drel",
+      "candidate_r2_mean": 0.1954369076809582,
+      "delta_ci95": [
+        0.06742242578928608,
+        0.3483414797759778
+      ],
+      "delta_mean": 0.1954369076809582,
+      "delta_median": 0.19265844321928838,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 1.0
+    },
+    "input_count_plus_drel": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -1.1102230246251566e-18,
+      "candidate": "input_count_plus_drel",
+      "candidate_r2_mean": 0.07988217259592412,
+      "delta_ci95": [
+        0.0,
+        0.22808841266642757
+      ],
+      "delta_mean": 0.07988217259592412,
+      "delta_median": 0.08420180049544951,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 0.64
+    },
+    "masked_tree_geometry": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -8.326672684688674e-18,
+      "candidate": "masked_tree_geometry",
+      "candidate_r2_mean": 0.219761455982567,
+      "delta_ci95": [
+        0.07613533408590817,
+        0.3593883185815377
+      ],
+      "delta_mean": 0.219761455982567,
+      "delta_median": 0.21690820332371147,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 1.0
+    },
+    "raw_plus_drel": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -6.106226635438361e-18,
+      "candidate": "raw_plus_drel",
+      "candidate_r2_mean": 0.08158817482203351,
+      "delta_ci95": [
+        0.0,
+        0.23026546575706983
+      ],
+      "delta_mean": 0.08158817482203351,
+      "delta_median": 0.08422266813738705,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 0.662
+    },
+    "tree_geometry": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -3.996802888650563e-18,
+      "candidate": "tree_geometry",
+      "candidate_r2_mean": 0.07817775551023341,
+      "delta_ci95": [
+        -2.220446049250313e-16,
+        0.22953650450480262
+      ],
+      "delta_mean": 0.07817775551023343,
+      "delta_median": 0.08175175974316401,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 0.707
+    }
+  },
+  "cluster_col": "topology_name",
+  "family_col": "physical_topology_name",
+  "group_level": {
+    "target_max": {
+      "input_count": {
+        "coefficients": [
+          81.42500000000005,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777755,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 5.999531231688023
+      },
+      "input_count_plus_branch_drel": {
+        "coefficients": [
+          81.42500000000005,
+          3.552713678800501e-14,
+          57.72511870831199,
+          2.8124144504497814,
+          3.8678547649759216,
+          18.46205577938391,
+          70.16853901505739
+        ],
+        "leave_one_out_r2": -36.41862590068576,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini"
+        ],
+        "r2": 0.6105561590549282,
+        "rmse": 3.7440336072766853
+      },
+      "input_count_plus_drel": {
+        "coefficients": [
+          81.42500000000004,
+          0.0,
+          3.0015620933107487
+        ],
+        "leave_one_out_r2": -8.3203501539179,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.2502995259675991,
+        "rmse": 5.194708846509109
+      },
+      "masked_tree_geometry": {
+        "coefficients": [
+          81.42500000000005,
+          9.237055564881302e-14,
+          9.883135466169223,
+          114.22430140454445,
+          31.085425308797774,
+          -36.407419531020395,
+          -40.304954946066175,
+          -1.0816985730915016,
+          -1.5735126663668126,
+          -81.81059646886168,
+          19.403214558375815
+        ],
+        "leave_one_out_r2": -3.2753412751344824,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini",
+          "effective_rank_D_masked",
+          "condition_number_D_masked",
+          "input_edge_load_gini",
+          "input_coord_load_gini"
+        ],
+        "r2": 0.8750366121915426,
+        "rmse": 2.1208439457084163
+      },
+      "raw_count": {
+        "coefficients": [
+          81.42500000000005,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777755,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 5.999531231688023
+      },
+      "raw_plus_drel": {
+        "coefficients": [
+          81.42500000000004,
+          0.0,
+          3.0015620933107487
+        ],
+        "leave_one_out_r2": -8.3203501539179,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.2502995259675991,
+        "rmse": 5.194708846509109
+      },
+      "tree_geometry": {
+        "coefficients": [
+          81.42500000000004,
+          0.0,
+          3.0015620933107487,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "leave_one_out_r2": -8.3203501539179,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel",
+          "effective_rank_D",
+          "root_tree_count_gini",
+          "edge_participation_gini",
+          "bottleneck_edge_fraction_095"
+        ],
+        "r2": 0.2502995259675991,
+        "rmse": 5.194708846509109
+      }
+    },
+    "target_mean": {
+      "input_count": {
+        "coefficients": [
+          69.87250000000003,
+          0.0
+        ],
+        "leave_one_out_r2": -0.137777777777778,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count"
+        ],
+        "r2": 1.1102230246251565e-16,
+        "rmse": 5.336519816322243
+      },
+      "input_count_plus_branch_drel": {
+        "coefficients": [
+          69.87250000000003,
+          1.7763568394002505e-14,
+          43.778082615029376,
+          1.959711798770245,
+          -0.7183204793973996,
+          12.250028960723828,
+          54.134581542713946
+        ],
+        "leave_one_out_r2": -23.305849871359385,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini"
+        ],
+        "r2": 0.658625248360895,
+        "rmse": 3.117983589152526
+      },
+      "input_count_plus_drel": {
+        "coefficients": [
+          69.87250000000002,
+          0.0,
+          3.1067781408827213
+        ],
+        "leave_one_out_r2": -7.100987195385828,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.338925486989319,
+        "rmse": 4.338936889761514
+      },
+      "masked_tree_geometry": {
+        "coefficients": [
+          69.87250000000003,
+          7.105427357601002e-15,
+          20.3156543004805,
+          72.15463808389616,
+          17.03565603309429,
+          -31.781145455951705,
+          -10.638032653818367,
+          0.07293855766533164,
+          -2.1965940204438033,
+          -51.56277255451352,
+          4.589069648607114
+        ],
+        "leave_one_out_r2": 0.27547387757445196,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini",
+          "effective_rank_D_masked",
+          "condition_number_D_masked",
+          "input_edge_load_gini",
+          "input_coord_load_gini"
+        ],
+        "r2": 0.8664620754972434,
+        "rmse": 1.9501159635887042
+      },
+      "raw_count": {
+        "coefficients": [
+          69.87250000000003,
+          0.0
+        ],
+        "leave_one_out_r2": -0.137777777777778,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count"
+        ],
+        "r2": 1.1102230246251565e-16,
+        "rmse": 5.336519816322243
+      },
+      "raw_plus_drel": {
+        "coefficients": [
+          69.87250000000002,
+          0.0,
+          3.1067781408827213
+        ],
+        "leave_one_out_r2": -7.100987195385828,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.338925486989319,
+        "rmse": 4.338936889761514
+      },
+      "tree_geometry": {
+        "coefficients": [
+          69.87250000000002,
+          0.0,
+          3.1067781408827213,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "leave_one_out_r2": -7.100987195385828,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel",
+          "effective_rank_D",
+          "root_tree_count_gini",
+          "edge_participation_gini",
+          "bottleneck_edge_fraction_095"
+        ],
+        "r2": 0.338925486989319,
+        "rmse": 4.338936889761514
+      }
+    },
+    "target_std": {
+      "input_count": {
+        "coefficients": [
+          8.655180036233173,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777822,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 2.4559435132736263
+      },
+      "input_count_plus_branch_drel": {
+        "coefficients": [
+          8.655180036233173,
+          6.217248937900877e-15,
+          10.719050623372071,
+          1.5265659809723267,
+          3.9912202127430843,
+          3.047350077845828,
+          10.872329945605975
+        ],
+        "leave_one_out_r2": -11.784347899217183,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini"
+        ],
+        "r2": 0.10521339709408983,
+        "rmse": 2.3231545913358214
+      },
+      "input_count_plus_drel": {
+        "coefficients": [
+          8.65518003623317,
+          0.0,
+          -0.2076234756875554
+        ],
+        "leave_one_out_r2": -1.0669293646912466,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.00714687467268138,
+        "rmse": 2.4471516162130658
+      },
+      "masked_tree_geometry": {
+        "coefficients": [
+          8.655180036233173,
+          1.3500311979441904e-13,
+          -14.777123362758335,
+          30.624806224498016,
+          11.995140989461738,
+          6.855575226407546,
+          -34.991476623766104,
+          -2.3263950514433067,
+          -1.2049121731209125,
+          -21.83182413009555,
+          25.60762730294402
+        ],
+        "leave_one_out_r2": -46.2017096585877,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini",
+          "effective_rank_D_masked",
+          "condition_number_D_masked",
+          "input_edge_load_gini",
+          "input_coord_load_gini"
+        ],
+        "r2": 0.5398105714184466,
+        "rmse": 1.6660448664731362
+      },
+      "raw_count": {
+        "coefficients": [
+          8.655180036233173,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777822,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 2.4559435132736263
+      },
+      "raw_plus_drel": {
+        "coefficients": [
+          8.65518003623317,
+          0.0,
+          -0.2076234756875554
+        ],
+        "leave_one_out_r2": -1.0669293646912466,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.00714687467268138,
+        "rmse": 2.4471516162130658
+      },
+      "tree_geometry": {
+        "coefficients": [
+          8.65518003623317,
+          0.0,
+          -0.2076234756875554,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "leave_one_out_r2": -1.0669293646912466,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel",
+          "effective_rank_D",
+          "root_tree_count_gini",
+          "edge_participation_gini",
+          "bottleneck_edge_fraction_095"
+        ],
+        "r2": 0.00714687467268138,
+        "rmse": 2.4471516162130658
+      }
+    }
+  },
+  "leave_family_out_group_target_mean": {
+    "input_count": {
+      "families": [
+        {
+          "family": "hub_spoke_n6_m20_seed63",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count"
+      ]
+    },
+    "input_count_plus_branch_drel": {
+      "families": [
+        {
+          "family": "hub_spoke_n6_m20_seed63",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini"
+      ]
+    },
+    "input_count_plus_drel": {
+      "families": [
+        {
+          "family": "hub_spoke_n6_m20_seed63",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel"
+      ]
+    },
+    "masked_tree_geometry": {
+      "families": [
+        {
+          "family": "hub_spoke_n6_m20_seed63",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini",
+        "effective_rank_D_masked",
+        "condition_number_D_masked",
+        "input_edge_load_gini",
+        "input_coord_load_gini"
+      ]
+    },
+    "raw_count": {
+      "families": [
+        {
+          "family": "hub_spoke_n6_m20_seed63",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "raw_physical_parameter_count"
+      ]
+    },
+    "raw_plus_drel": {
+      "families": [
+        {
+          "family": "hub_spoke_n6_m20_seed63",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel"
+      ]
+    },
+    "tree_geometry": {
+      "families": [
+        {
+          "family": "hub_spoke_n6_m20_seed63",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel",
+        "effective_rank_D",
+        "root_tree_count_gini",
+        "edge_participation_gini",
+        "bottleneck_edge_fraction_095"
+      ]
+    }
+  },
+  "n_aggregate_rows": 16,
+  "n_clusters": 16,
+  "n_families": 1,
+  "n_run_rows": 80,
+  "residual_decomposition_run_level": {
+    "input_count": {
+      "model": "input_count",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 5.3365198163222445,
+      "residual_std_total": 10.460508771087571,
+      "residual_var_within_cluster_mean": 80.94379999999998
+    },
+    "input_count_plus_branch_drel": {
+      "model": "input_count_plus_branch_drel",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 3.1179835891525283,
+      "residual_std_total": 9.521849697523296,
+      "residual_var_within_cluster_mean": 80.9438
+    },
+    "input_count_plus_drel": {
+      "model": "input_count_plus_drel",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 4.3389368897615155,
+      "residual_std_total": 9.988502056531466,
+      "residual_var_within_cluster_mean": 80.9438
+    },
+    "masked_tree_geometry": {
+      "model": "masked_tree_geometry",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 1.9501159635887086,
+      "residual_std_total": 9.205799925668792,
+      "residual_var_within_cluster_mean": 80.9438
+    },
+    "raw_count": {
+      "model": "raw_count",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 5.3365198163222445,
+      "residual_std_total": 10.460508771087571,
+      "residual_var_within_cluster_mean": 80.94379999999998
+    },
+    "raw_plus_drel": {
+      "model": "raw_plus_drel",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 4.3389368897615155,
+      "residual_std_total": 9.988502056531466,
+      "residual_var_within_cluster_mean": 80.9438
+    },
+    "tree_geometry": {
+      "model": "tree_geometry",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 4.3389368897615155,
+      "residual_std_total": 9.988502056531466,
+      "residual_var_within_cluster_mean": 80.9438
+    }
+  },
+  "target": "test_novel_classes"
+}

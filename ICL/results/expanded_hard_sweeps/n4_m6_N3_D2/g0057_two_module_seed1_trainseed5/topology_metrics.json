@@ -1,0 +1,186 @@
+{
+  "n_nodes": 4,
+  "n_edges": 6,
+  "p": 8,
+  "strongly_connected": true,
+  "edges": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      1
+    ]
+  ],
+  "tree_counts_enum": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "tree_counts_det": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "tree_counts_match_det": true,
+  "tree_enumeration_truncated": false,
+  "max_trees_per_root": null,
+  "n_trees_total_enum": 4,
+  "rank_M": 4,
+  "rank_D": 3,
+  "rank_D_anchor": 3,
+  "d_rel": 24,
+  "effective_rank_D": 2.3015869150792385,
+  "condition_number_D": 2.414213562373094,
+  "effective_rank_D_masked": 18.412695320633908,
+  "condition_number_D_masked": 2.414213562373094,
+  "singular_values_D_masked": [
+    1.8477590650225735,
+    1.0000000000000004,
+    0.7653668647301799,
+    4.055470996444733e-17,
+    1.8477590650225735,
+    1.0000000000000004,
+    0.7653668647301799,
+    4.055470996444733e-17,
+    1.8477590650225735,
+    1.0000000000000004,
+    0.7653668647301799,
+    4.055470996444733e-17,
+    1.8477590650225735,
+    1.0000000000000004,
+    0.7653668647301799,
+    4.055470996444733e-17,
+    1.8477590650225735,
+    1.0000000000000004,
+    0.7653668647301799,
+    4.055470996444733e-17,
+    1.8477590650225735,
+    1.0000000000000004,
+    0.7653668647301799,
+    4.055470996444733e-17,
+    1.8477590650225735,
+    1.0000000000000004,
+    0.7653668647301799,
+    4.055470996444733e-17,
+    1.8477590650225735,
+    1.0000000000000004,
+    0.7653668647301799,
+    4.055470996444733e-17
+  ],
+  "singular_values_D": [
+    1.8477590650225735,
+    1.0000000000000004,
+    0.7653668647301799,
+    4.055470996444733e-17
+  ],
+  "singular_values_D_anchor": [
+    3.1777090299529642,
+    1.1341112221539744,
+    0.7848293169472
+  ],
+  "root_tree_count_cv": 0.0,
+  "root_tree_count_gini": 0.0,
+  "edge_participation": [
+    0.75,
+    0.25,
+    0.25,
+    0.75,
+    0.5,
+    0.5
+  ],
+  "edge_participation_mean": 0.5,
+  "edge_participation_var": 0.041666666666666664,
+  "edge_participation_gini": 0.2222222222222221,
+  "bottleneck_edge_fraction_095": 0.0,
+  "mean_shortest_path": 1.6666666666666667,
+  "comparison_branch_d_rel_values": [
+    6,
+    6,
+    6
+  ],
+  "comparison_branch_d_rel_min": 6,
+  "comparison_branch_d_rel_mean": 6.0,
+  "comparison_branch_d_rel_max": 6,
+  "comparison_branch_d_rel_gini": 0.0,
+  "comparison_branch_common_d_rel_values": [
+    6,
+    6,
+    6
+  ],
+  "comparison_branch_common_d_rel_min": 6,
+  "comparison_branch_common_d_rel_mean": 6.0,
+  "comparison_branch_common_d_rel_max": 6,
+  "comparison_branch_common_d_rel_gini": 0.0,
+  "comparison_branch_input_count_values": [
+    12,
+    12,
+    12
+  ],
+  "comparison_branch_input_count_min": 12,
+  "comparison_branch_input_count_mean": 12.0,
+  "comparison_branch_input_count_max": 12,
+  "comparison_branch_input_count_gini": 0.0,
+  "comparison_branch_input_overlap_values": [
+    12,
+    12,
+    12
+  ],
+  "comparison_branch_input_overlap_min": 12,
+  "comparison_branch_input_overlap_mean": 12.0,
+  "comparison_branch_input_overlap_max": 12,
+  "comparison_branch_input_overlap_gini": 0.0,
+  "in_degree": [
+    1,
+    2,
+    2,
+    1
+  ],
+  "out_degree": [
+    1,
+    2,
+    2,
+    1
+  ],
+  "in_degree_cv": 0.3333333333333333,
+  "out_degree_cv": 0.3333333333333333,
+  "topology_name": "two_module_n4_m6_seed1",
+  "physical_topology_name": "two_module_n4_m6_seed1",
+  "input_mask_name": "full",
+  "input_mask_family": "",
+  "input_mask_seed": 5,
+  "input_coupled_parameter_count": 48,
+  "input_coupled_edge_count": 6,
+  "input_coupled_coord_count": 8,
+  "input_parameter_density": 1.0,
+  "input_edge_density": 1.0,
+  "input_coord_density": 1.0,
+  "input_edge_load_gini": 0.0,
+  "input_coord_load_gini": 0.0,
+  "input_edge_load_min": 8,
+  "input_edge_load_max": 8,
+  "input_coord_load_min": 6,
+  "input_coord_load_max": 6,
+  "raw_physical_parameter_count": 48,
+  "n_req": 48,
+  "d_rel_minus_n_req": -24
+}

@@ -1,0 +1,709 @@
+{
+  "cluster_bootstrap_run_level": {
+    "input_count": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -6.8833827526759705e-18,
+      "candidate": "input_count",
+      "candidate_r2_mean": -6.8833827526759705e-18,
+      "delta_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_mean": 0.0,
+      "delta_median": 0.0,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 0.0
+    },
+    "input_count_plus_branch_drel": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -7.88258347483861e-18,
+      "candidate": "input_count_plus_branch_drel",
+      "candidate_r2_mean": 0.21549325879873704,
+      "delta_ci95": [
+        0.026024899923568382,
+        0.43248209247694497
+      ],
+      "delta_mean": 0.2154932587987371,
+      "delta_median": 0.21392623785385034,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 1.0
+    },
+    "input_count_plus_drel": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -1.0658141036401503e-17,
+      "candidate": "input_count_plus_drel",
+      "candidate_r2_mean": 0.10150562436292715,
+      "delta_ci95": [
+        0.0,
+        0.28174526353953344
+      ],
+      "delta_mean": 0.10150562436292716,
+      "delta_median": 0.10819604513697278,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 0.647
+    },
+    "masked_tree_geometry": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -1.0103029524088924e-17,
+      "candidate": "masked_tree_geometry",
+      "candidate_r2_mean": 0.27687887273726897,
+      "delta_ci95": [
+        0.06906663321264267,
+        0.49351935380376916
+      ],
+      "delta_mean": 0.27687887273726897,
+      "delta_median": 0.26966155897513844,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 1.0
+    },
+    "raw_plus_drel": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -8.992806499463768e-18,
+      "candidate": "raw_plus_drel",
+      "candidate_r2_mean": 0.10163956726426059,
+      "delta_ci95": [
+        0.0,
+        0.2724407786322046
+      ],
+      "delta_mean": 0.10163956726426061,
+      "delta_median": 0.10825304932164276,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 0.653
+    },
+    "tree_geometry": {
+      "baseline": "raw_count",
+      "baseline_r2_mean": -3.4416913763379853e-18,
+      "candidate": "tree_geometry",
+      "candidate_r2_mean": 0.09593678501574797,
+      "delta_ci95": [
+        -2.220446049250313e-16,
+        0.27932332697134904
+      ],
+      "delta_mean": 0.09593678501574797,
+      "delta_median": 0.10449064480041004,
+      "n_bootstrap_effective": 1000,
+      "prob_delta_positive": 0.7
+    }
+  },
+  "cluster_col": "topology_name",
+  "family_col": "physical_topology_name",
+  "group_level": {
+    "target_max": {
+      "input_count": {
+        "coefficients": [
+          86.05000000000003,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777733,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 5.958816996686507
+      },
+      "input_count_plus_branch_drel": {
+        "coefficients": [
+          86.05000000000004,
+          3.552713678800501e-15,
+          -2.030867668279552,
+          -6.09410267686681,
+          -15.45859850045697,
+          4.757431936240333,
+          10.013041144055157
+        ],
+        "leave_one_out_r2": -16.353223903088946,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini"
+        ],
+        "r2": 0.5727343517662662,
+        "rmse": 3.8950141212400378
+      },
+      "input_count_plus_drel": {
+        "coefficients": [
+          86.05000000000001,
+          0.0,
+          3.421135289149887
+        ],
+        "leave_one_out_r2": -9.098296278308556,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.32962519655471856,
+        "rmse": 4.87886598845811
+      },
+      "masked_tree_geometry": {
+        "coefficients": [
+          86.05000000000004,
+          8.022027486731531e-12,
+          330.99802911999325,
+          292.146520152471,
+          -104.86251248292677,
+          -225.21693121601666,
+          566.6062688745153,
+          -0.0922082176173439,
+          2.5230617197295615,
+          -253.54613303545952,
+          -297.7614840571537
+        ],
+        "leave_one_out_r2": -2517.771965423743,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini",
+          "effective_rank_D_masked",
+          "condition_number_D_masked",
+          "input_edge_load_gini",
+          "input_coord_load_gini"
+        ],
+        "r2": 0.7000399879700898,
+        "rmse": 3.2635609580873526
+      },
+      "raw_count": {
+        "coefficients": [
+          86.05000000000003,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777733,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 5.958816996686507
+      },
+      "raw_plus_drel": {
+        "coefficients": [
+          86.05000000000001,
+          0.0,
+          3.421135289149887
+        ],
+        "leave_one_out_r2": -9.098296278308556,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.32962519655471856,
+        "rmse": 4.87886598845811
+      },
+      "tree_geometry": {
+        "coefficients": [
+          86.05000000000001,
+          0.0,
+          3.421135289149887,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "leave_one_out_r2": -9.098296278308556,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel",
+          "effective_rank_D",
+          "root_tree_count_gini",
+          "edge_participation_gini",
+          "bottleneck_edge_fraction_095"
+        ],
+        "r2": 0.32962519655471856,
+        "rmse": 4.87886598845811
+      }
+    },
+    "target_mean": {
+      "input_count": {
+        "coefficients": [
+          76.75750000000004,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777778,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 5.933455464566999
+      },
+      "input_count_plus_branch_drel": {
+        "coefficients": [
+          76.75750000000004,
+          2.4424906541753444e-14,
+          15.91046429455968,
+          -3.3514045488702515,
+          -7.015122528738201,
+          18.83259555745099,
+          35.65093916406378
+        ],
+        "leave_one_out_r2": -2.639595623203002,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini"
+        ],
+        "r2": 0.4271784891864896,
+        "rmse": 4.490734154613799
+      },
+      "input_count_plus_drel": {
+        "coefficients": [
+          76.75750000000002,
+          0.0,
+          3.2423325579999753
+        ],
+        "leave_one_out_r2": -7.122198434517548,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.2986068324615866,
+        "rmse": 4.96922260855089
+      },
+      "masked_tree_geometry": {
+        "coefficients": [
+          76.75750000000004,
+          2.0108359422010835e-12,
+          85.21323184383859,
+          81.58220931758794,
+          -24.784070413150797,
+          -18.024839164153363,
+          165.02223291890365,
+          1.8611503427539473,
+          4.191857243691274,
+          -68.96153989334167,
+          -56.4086666349325
+        ],
+        "leave_one_out_r2": -113.48966141883061,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini",
+          "effective_rank_D_masked",
+          "condition_number_D_masked",
+          "input_edge_load_gini",
+          "input_coord_load_gini"
+        ],
+        "r2": 0.7139309456248997,
+        "rmse": 3.173533792713219
+      },
+      "raw_count": {
+        "coefficients": [
+          76.75750000000004,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777778,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 5.933455464566999
+      },
+      "raw_plus_drel": {
+        "coefficients": [
+          76.75750000000002,
+          0.0,
+          3.2423325579999753
+        ],
+        "leave_one_out_r2": -7.122198434517548,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.2986068324615866,
+        "rmse": 4.96922260855089
+      },
+      "tree_geometry": {
+        "coefficients": [
+          76.75750000000002,
+          0.0,
+          3.2423325579999753,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "leave_one_out_r2": -7.122198434517548,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel",
+          "effective_rank_D",
+          "root_tree_count_gini",
+          "edge_participation_gini",
+          "bottleneck_edge_fraction_095"
+        ],
+        "r2": 0.2986068324615866,
+        "rmse": 4.96922260855089
+      }
+    },
+    "target_std": {
+      "input_count": {
+        "coefficients": [
+          7.079074495015215,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777755,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 2.8886855651013907
+      },
+      "input_count_plus_branch_drel": {
+        "coefficients": [
+          7.079074495015215,
+          -1.1546319456101628e-14,
+          -10.268546677984434,
+          -0.7995424405363173,
+          -4.278126260118135,
+          -8.05838133462145,
+          -13.910422705923644
+        ],
+        "leave_one_out_r2": -18.154080753600468,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini"
+        ],
+        "r2": 0.28969534494838134,
+        "rmse": 2.434571881079768
+      },
+      "input_count_plus_drel": {
+        "coefficients": [
+          7.079074495015214,
+          0.0,
+          -0.7146305980809404
+        ],
+        "leave_one_out_r2": -0.8039287440227034,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.061201585345122655,
+        "rmse": 2.7988939605336283
+      },
+      "masked_tree_geometry": {
+        "coefficients": [
+          7.079074495015215,
+          -3.4909852786313422e-12,
+          -153.4699477797988,
+          -136.93862755800822,
+          28.896705462912802,
+          81.66585785869654,
+          -250.0515705979246,
+          -0.8613165953818364,
+          0.22659935725435312,
+          114.22160525387034,
+          116.55211222485694
+        ],
+        "leave_one_out_r2": -2710.511714479604,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "input_coupled_parameter_count",
+          "d_rel",
+          "comparison_branch_common_d_rel_min",
+          "comparison_branch_common_d_rel_gini",
+          "comparison_branch_d_rel_min",
+          "comparison_branch_d_rel_gini",
+          "effective_rank_D_masked",
+          "condition_number_D_masked",
+          "input_edge_load_gini",
+          "input_coord_load_gini"
+        ],
+        "r2": 0.5700170424082546,
+        "rmse": 1.894200262903041
+      },
+      "raw_count": {
+        "coefficients": [
+          7.079074495015215,
+          0.0
+        ],
+        "leave_one_out_r2": -0.13777777777777755,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count"
+        ],
+        "r2": 0.0,
+        "rmse": 2.8886855651013907
+      },
+      "raw_plus_drel": {
+        "coefficients": [
+          7.079074495015214,
+          0.0,
+          -0.7146305980809404
+        ],
+        "leave_one_out_r2": -0.8039287440227034,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel"
+        ],
+        "r2": 0.061201585345122655,
+        "rmse": 2.7988939605336283
+      },
+      "tree_geometry": {
+        "coefficients": [
+          7.079074495015214,
+          0.0,
+          -0.7146305980809404,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "leave_one_out_r2": -0.8039287440227032,
+        "n": 16,
+        "n_groups_or_rows": 16,
+        "predictors": [
+          "raw_physical_parameter_count",
+          "d_rel",
+          "effective_rank_D",
+          "root_tree_count_gini",
+          "edge_participation_gini",
+          "bottleneck_edge_fraction_095"
+        ],
+        "r2": 0.061201585345122655,
+        "rmse": 2.7988939605336283
+      }
+    }
+  },
+  "leave_family_out_group_target_mean": {
+    "input_count": {
+      "families": [
+        {
+          "family": "random_sc_n6_m20_seed3",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count"
+      ]
+    },
+    "input_count_plus_branch_drel": {
+      "families": [
+        {
+          "family": "random_sc_n6_m20_seed3",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini"
+      ]
+    },
+    "input_count_plus_drel": {
+      "families": [
+        {
+          "family": "random_sc_n6_m20_seed3",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel"
+      ]
+    },
+    "masked_tree_geometry": {
+      "families": [
+        {
+          "family": "random_sc_n6_m20_seed3",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "comparison_branch_d_rel_min",
+        "comparison_branch_d_rel_gini",
+        "effective_rank_D_masked",
+        "condition_number_D_masked",
+        "input_edge_load_gini",
+        "input_coord_load_gini"
+      ]
+    },
+    "raw_count": {
+      "families": [
+        {
+          "family": "random_sc_n6_m20_seed3",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "raw_physical_parameter_count"
+      ]
+    },
+    "raw_plus_drel": {
+      "families": [
+        {
+          "family": "random_sc_n6_m20_seed3",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel"
+      ]
+    },
+    "tree_geometry": {
+      "families": [
+        {
+          "family": "random_sc_n6_m20_seed3",
+          "n": 0,
+          "r2": null,
+          "rmse": null
+        }
+      ],
+      "pooled_r2": null,
+      "pooled_rmse": null,
+      "predictors": [
+        "raw_physical_parameter_count",
+        "d_rel",
+        "effective_rank_D",
+        "root_tree_count_gini",
+        "edge_participation_gini",
+        "bottleneck_edge_fraction_095"
+      ]
+    }
+  },
+  "n_aggregate_rows": 16,
+  "n_clusters": 16,
+  "n_families": 1,
+  "n_run_rows": 80,
+  "residual_decomposition_run_level": {
+    "input_count": {
+      "model": "input_count",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 5.933455464567,
+      "residual_std_total": 9.678000503719764,
+      "residual_var_within_cluster_mean": 58.4578
+    },
+    "input_count_plus_branch_drel": {
+      "model": "input_count_plus_branch_drel",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 4.490734154613799,
+      "residual_std_total": 8.86704535047695,
+      "residual_var_within_cluster_mean": 58.4578
+    },
+    "input_count_plus_drel": {
+      "model": "input_count_plus_drel",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 4.969222608550892,
+      "residual_std_total": 9.118715552825043,
+      "residual_var_within_cluster_mean": 58.4578
+    },
+    "masked_tree_geometry": {
+      "model": "masked_tree_geometry",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 3.173533792713215,
+      "residual_std_total": 8.278231497940409,
+      "residual_var_within_cluster_mean": 58.4578
+    },
+    "raw_count": {
+      "model": "raw_count",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 5.933455464567,
+      "residual_std_total": 9.678000503719764,
+      "residual_var_within_cluster_mean": 58.4578
+    },
+    "raw_plus_drel": {
+      "model": "raw_plus_drel",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 4.969222608550892,
+      "residual_std_total": 9.118715552825043,
+      "residual_var_within_cluster_mean": 58.4578
+    },
+    "tree_geometry": {
+      "model": "tree_geometry",
+      "n": 80,
+      "n_clusters": 16,
+      "residual_std_between_cluster_means": 4.969222608550892,
+      "residual_std_total": 9.118715552825043,
+      "residual_var_within_cluster_mean": 58.4578
+    }
+  },
+  "target": "test_novel_classes"
+}

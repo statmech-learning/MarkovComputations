@@ -1,0 +1,36 @@
+{
+  "n_rows": 15,
+  "n_runs": 1,
+  "interventions": {
+    "context_block_shuffle": {
+      "n": 3,
+      "target_accuracy_delta_mean": -52.50000208616257,
+      "target_accuracy_delta_min": -68.5000017285347,
+      "target_accuracy_delta_max": -44.5000022649765
+    },
+    "decoder_root_permutation": {
+      "n": 3,
+      "target_accuracy_delta_mean": -56.16666773955027,
+      "target_accuracy_delta_min": -67.5000011920929,
+      "target_accuracy_delta_max": -48.00000190734863
+    },
+    "edge_projection_permutation": {
+      "n": 3,
+      "target_accuracy_delta_mean": -63.66666704416275,
+      "target_accuracy_delta_min": -69.00000125169754,
+      "target_accuracy_delta_max": -59.49999988079071
+    },
+    "edge_rate_function_permutation": {
+      "n": 3,
+      "target_accuracy_delta_mean": -66.66666766007741,
+      "target_accuracy_delta_min": -68.00000071525574,
+      "target_accuracy_delta_max": -65.00000059604645
+    },
+    "randomize_K_direction": {
+      "n": 3,
+      "target_accuracy_delta_mean": -63.50000103314718,
+      "target_accuracy_delta_min": -66.50000214576721,
+      "target_accuracy_delta_max": -59.49999988079071
+    }
+  }
+}

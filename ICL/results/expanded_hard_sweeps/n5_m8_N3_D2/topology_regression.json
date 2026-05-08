@@ -107,7 +107,7 @@
         "edge_participation_gini",
         "bottleneck_edge_fraction_095"
       ],
-      "leave_one_out_r2": 0.045889869778053094,
+      "leave_one_out_r2": 0.045889869778053205,
       "n_topology_families": 12
     },
     "trainability_geometry": {
@@ -165,7 +165,7 @@
         "input_edge_load_gini",
         "input_coord_load_gini"
       ],
-      "leave_one_out_r2": 0.03697647196617371,
+      "leave_one_out_r2": 0.036976471966173596,
       "n_topology_families": 12
     },
     "branch_margin_capacity": {
@@ -197,6 +197,144 @@
         "capacity_support_min",
         "capacity_linear_test_accuracy",
         "capacity_linear_test_margin_p10"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "branch_rank_weighted_capacity": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "capacity_rank_mass_min",
+        "capacity_rank_mass_gini",
+        "capacity_rank_weight_effective_entries",
+        "capacity_rank_weighted_linear_test_accuracy",
+        "capacity_rank_weighted_linear_test_margin_p10"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "branch_rank_weighted_capacity_plus_drel": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_rank_mass_min",
+        "capacity_rank_mass_gini",
+        "capacity_rank_weight_effective_entries",
+        "capacity_rank_weighted_linear_test_accuracy",
+        "capacity_rank_weighted_linear_test_margin_p10"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "tropical_tree_capacity": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "capacity_tropical_linear_test_accuracy_mean",
+        "capacity_tropical_linear_test_accuracy_max",
+        "capacity_tropical_linear_test_margin_p10_mean",
+        "capacity_tropical_root_feature_effective_rank_mean",
+        "capacity_tropical_root_feature_variance_mean"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "tropical_tree_capacity_plus_drel": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_tropical_linear_test_accuracy_mean",
+        "capacity_tropical_linear_test_accuracy_max",
+        "capacity_tropical_linear_test_margin_p10_mean",
+        "capacity_tropical_root_feature_effective_rank_mean",
+        "capacity_tropical_root_feature_variance_mean"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "rooted_tree_polytope_capacity": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "capacity_rooted_polytope_supported_branch_dim_fraction",
+        "capacity_rooted_polytope_branch_root_support_min",
+        "capacity_rooted_polytope_branch_root_support_gini",
+        "capacity_rooted_polytope_branch_best_rank_min",
+        "capacity_rooted_polytope_root_rank_mass_gini"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "rooted_tree_polytope_capacity_plus_drel": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_rooted_polytope_supported_branch_dim_fraction",
+        "capacity_rooted_polytope_branch_root_support_min",
+        "capacity_rooted_polytope_branch_root_support_gini",
+        "capacity_rooted_polytope_branch_best_rank_min",
+        "capacity_rooted_polytope_root_rank_mass_gini"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "normal_fan_capacity": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_tree_nmi_max",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "leave_one_out_r2": null,
+      "n_topology_families": 0
+    },
+    "normal_fan_capacity_plus_drel": {
+      "n": 0,
+      "r2": null,
+      "coefficients": [],
+      "rmse": null,
+      "predictors": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_tree_nmi_max",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
       ],
       "leave_one_out_r2": null,
       "n_topology_families": 0

@@ -1,0 +1,207 @@
+{
+  "n_nodes": 4,
+  "n_edges": 6,
+  "p": 8,
+  "strongly_connected": true,
+  "edges": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      2,
+      0
+    ]
+  ],
+  "tree_counts_enum": [
+    3,
+    4,
+    2,
+    1
+  ],
+  "tree_counts_det": [
+    3,
+    4,
+    2,
+    1
+  ],
+  "tree_counts_match_det": true,
+  "tree_enumeration_truncated": false,
+  "max_trees_per_root": null,
+  "n_trees_total_enum": 10,
+  "rank_M": 6,
+  "rank_D": 5,
+  "rank_D_anchor": 5,
+  "d_rel": 40,
+  "effective_rank_D": 4.131306600692141,
+  "condition_number_D": 3.0070647981487375,
+  "effective_rank_D_masked": 33.05045280553712,
+  "condition_number_D_masked": 3.0070647981487375,
+  "singular_values_D_masked": [
+    2.196921989101107,
+    2.0822253060258955,
+    1.7320508075688774,
+    1.2264234211659735,
+    0.7305868468327038,
+    2.5069667759200585e-16,
+    2.196921989101107,
+    2.0822253060258955,
+    1.7320508075688774,
+    1.2264234211659735,
+    0.7305868468327038,
+    2.5069667759200585e-16,
+    2.196921989101107,
+    2.0822253060258955,
+    1.7320508075688774,
+    1.2264234211659735,
+    0.7305868468327038,
+    2.5069667759200585e-16,
+    2.196921989101107,
+    2.0822253060258955,
+    1.7320508075688774,
+    1.2264234211659735,
+    0.7305868468327038,
+    2.5069667759200585e-16,
+    2.196921989101107,
+    2.0822253060258955,
+    1.7320508075688774,
+    1.2264234211659735,
+    0.7305868468327038,
+    2.5069667759200585e-16,
+    2.196921989101107,
+    2.0822253060258955,
+    1.7320508075688774,
+    1.2264234211659735,
+    0.7305868468327038,
+    2.5069667759200585e-16,
+    2.196921989101107,
+    2.0822253060258955,
+    1.7320508075688774,
+    1.2264234211659735,
+    0.7305868468327038,
+    2.5069667759200585e-16,
+    2.196921989101107,
+    2.0822253060258955,
+    1.7320508075688774,
+    1.2264234211659735,
+    0.7305868468327038,
+    2.5069667759200585e-16
+  ],
+  "singular_values_D": [
+    2.196921989101107,
+    2.0822253060258955,
+    1.7320508075688774,
+    1.2264234211659735,
+    0.7305868468327038,
+    2.5069667759200585e-16
+  ],
+  "singular_values_D_anchor": [
+    4.454827676217894,
+    2.0846171514818623,
+    1.8477590650225733,
+    1.3449467301535483,
+    0.7653668647301792,
+    1.223518327089628e-16
+  ],
+  "root_tree_count_cv": 0.447213595499958,
+  "root_tree_count_gini": 0.25,
+  "edge_participation": [
+    0.7,
+    0.6,
+    0.4,
+    0.5,
+    0.4,
+    0.4
+  ],
+  "edge_participation_mean": 0.49999999999999994,
+  "edge_participation_var": 0.013333333333333327,
+  "edge_participation_gini": 0.12222222222222201,
+  "bottleneck_edge_fraction_095": 0.0,
+  "mean_shortest_path": 1.5833333333333333,
+  "comparison_branch_d_rel_values": [
+    10,
+    10,
+    10
+  ],
+  "comparison_branch_d_rel_min": 10,
+  "comparison_branch_d_rel_mean": 10.0,
+  "comparison_branch_d_rel_max": 10,
+  "comparison_branch_d_rel_gini": 0.0,
+  "comparison_branch_common_d_rel_values": [
+    10,
+    10,
+    10
+  ],
+  "comparison_branch_common_d_rel_min": 10,
+  "comparison_branch_common_d_rel_mean": 10.0,
+  "comparison_branch_common_d_rel_max": 10,
+  "comparison_branch_common_d_rel_gini": 0.0,
+  "comparison_branch_input_count_values": [
+    12,
+    12,
+    12
+  ],
+  "comparison_branch_input_count_min": 12,
+  "comparison_branch_input_count_mean": 12.0,
+  "comparison_branch_input_count_max": 12,
+  "comparison_branch_input_count_gini": 0.0,
+  "comparison_branch_input_overlap_values": [
+    12,
+    12,
+    12
+  ],
+  "comparison_branch_input_overlap_min": 12,
+  "comparison_branch_input_overlap_mean": 12.0,
+  "comparison_branch_input_overlap_max": 12,
+  "comparison_branch_input_overlap_gini": 0.0,
+  "in_degree": [
+    2,
+    2,
+    1,
+    1
+  ],
+  "out_degree": [
+    1,
+    1,
+    2,
+    2
+  ],
+  "in_degree_cv": 0.3333333333333333,
+  "out_degree_cv": 0.3333333333333333,
+  "topology_name": "cycle_chords_n4_m6_seed96",
+  "physical_topology_name": "cycle_chords_n4_m6_seed96",
+  "input_mask_name": "full",
+  "input_mask_family": "",
+  "input_mask_seed": 2,
+  "input_coupled_parameter_count": 48,
+  "input_coupled_edge_count": 6,
+  "input_coupled_coord_count": 8,
+  "input_parameter_density": 1.0,
+  "input_edge_density": 1.0,
+  "input_coord_density": 1.0,
+  "input_edge_load_gini": 0.0,
+  "input_coord_load_gini": 0.0,
+  "input_edge_load_min": 8,
+  "input_edge_load_max": 8,
+  "input_coord_load_min": 6,
+  "input_coord_load_max": 6,
+  "raw_physical_parameter_count": 48,
+  "n_req": 48,
+  "d_rel_minus_n_req": -8
+}
