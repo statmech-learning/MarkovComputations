@@ -1,414 +1,656 @@
-# Markov-ICL Theory Validation and Exact-Control Experiments
+# Long-Running Agent Task: Repair `gamma*_ICL` and Test Tree-Level Multiplicity Causally
 
-## Objective
+## Executive Status
 
-Continue the first-order Markov-ICL expressivity project.
+This task continues the first-order Markov-ICL / topology-ICL project after the latest reports.
 
-The updated report establishes that first-order CRNs with exponential input-dependent rates compute through rooted tree-sum projections
+The current state is:
 
-\[
-\Theta_T = \sum_{e \in T} K_e,
-\]
+1. **Phase 1 passed.** The predictor-name collision is resolved. The fixed-m20 `tree_geometry` value `0.409` and the Markov-reanalysis `tree_geometry` value `0.158` are different regressions and must be named differently:
+   - `tree_geometry_structural_full`
+   - `tree_geometry_markov_reanalysis_subset`
 
-and that in tested fixed-count regimes, topology-associated structural and functional variables explain residual novel-class ICL variation beyond raw trainable count.
+2. **Phase 2 passed and produced a real scientific signal.** Edge-level input multiplicity is much weaker than tree-level and tree-difference multiplicity. In the fixed-m20 mask dataset, grouped LOO `R^2` for mean novel-class ICL is:
+   - edge-level multiplicity: `-0.002`
+   - tree-level multiplicity: `0.403`
+   - tree-difference multiplicity: `0.435`
 
-The current open problem is not whether topology matters in some broad sense. The open problem is:
+   For best-seed ICL in the same dataset:
+   - edge-level multiplicity: `0.109`
+   - tree-level multiplicity: `0.245`
+   - tree-difference multiplicity: `0.419`
 
-\[
-\boxed{
-\text{Which branch-aware Markov expressivity functional of }(G,\Omega)\text{ predicts ICL before training?}
-}
-\]
+   This strongly supports the updated statement:
 
-The next phase should repair predictor definitions, lift input multiplicity into the tree-sum basis, validate lower-tail \(\gamma^*_{\rm ICL}\) on analytic toy cases, run a clean input-multiplicity causal control, scale the exact-degree / exact-\(d_{\rm rel}\) / exact-multiplicity normal-fan experiment, and only then attempt a thermodynamic \(F_{\max}\) sweep.
+   > For first-order CRN-ICL, useful input multiplicity lives in rooted-tree and tree-difference space, not merely edge space.
+
+3. **Phase 3 failed, and that failure is informative.** The current lower-tail `gamma*_ICL` probe failed the analytic toy gate. Do **not** use the current `gamma*_ICL` implementation for large topology selection. The failure should be treated as a probe/definition/debugging failure, not as a failure of the first-order tree-sum theory.
+
+The next phase has two parallel tracks:
+
+- **Track A:** repair and validate `gamma*_ICL` using analytic two- and three-species cases from the original CRN-ICL paper.
+- **Track B:** run a clean input-multiplicity causal control using the successful tree-level and tree-difference multiplicity metrics from Phase 2.
+
+Do **not** launch broad new topology sweeps. Do **not** use the current `gamma*_ICL` probe as a topology selector until Track A passes.
 
 ## Scope
 
-Stay within first-order CRNs / Markov jump processes unless explicitly deriving a separate nonlinear theory.
+Stay within **first-order CRNs / Markov jump processes with exponential input-dependent rates** unless explicitly deriving a separate nonlinear theory.
 
-Do not apply the first-order matrix-tree topology theory to autocatalytic or WTA CRNs.
+Do not apply first-order matrix-tree/tree-sum claims to autocatalytic or winner-take-all CRNs. The original CRN-ICL paper shows that WTA systems can use threshold/default mechanisms, so the first-order tree-sum theory does not directly apply there.
 
-Use novel-class ICL accuracy as the primary metric.
+Use **novel-class ICL accuracy** as the primary metric. Training and ordinary validation accuracy are secondary diagnostics.
 
-Keep physical topology \(G\) separate from input-encoding topology \(\Omega\).
+Keep these objects separate:
 
-Use grouped inference because seeds are nested inside topology/mask groups.
+- physical reaction topology `G`;
+- input-encoding topology / mask `Omega`;
+- trained functional topology;
+- post-training mechanism diagnostics.
 
-## Phase 1: Reconcile Predictor Naming and Regression Definitions
+Use grouped or hierarchical inference because training seeds are nested inside topology/mask groups. Do not treat run-level seed rows as independent topology samples.
 
-Before any new training, resolve the apparent naming mismatch:
+## Core Theory To Preserve
 
-- fixed \(m20\) "tree geometry" appears as \(R^2_{\rm LOO}=0.409\) in the structural section;
-- fixed \(m20\) "tree geometry variables" appear as \(R^2_{\rm LOO}=0.158\) in the Markov reanalysis.
+For a strongly connected directed first-order graph `G=(V,E)`, with edge rates
 
-Produce:
+```math
+k_e(z)=\exp(b_e+K_e^\top z),
+```
 
-- `predictor_name_reconciliation.md`
-- `predictor_name_reconciliation.json`
+the matrix-tree theorem gives
 
-For every predictor family, list:
-
-- exact feature columns;
-- target variable;
-- unit of analysis: run-level, group-mean, group-best, or seed-std;
-- grouping / LOO scheme;
-- number of rows and groups;
-- regularization or feature standardization;
-- source script;
-- source artifact;
-- reason for any numerical discrepancy.
-
-If two predictor families are different, rename them. For example:
-
-- `tree_geometry_structural_full`
-- `tree_geometry_markov_reanalysis_subset`
-- `masked_tree_geometry_structural`
-- `masked_tree_geometry_markov_reanalysis`
-
-No new scientific claim should be made until this is clarified.
-
-## Phase 2: Upgrade Edge-Level Multiplicity to Tree-Level Multiplicity
-
-Implement tree-level and tree-difference-level input multiplicity metrics.
-
-The edge-level metric is:
-
-\[
-M_\alpha = \sum_e \Omega_{e\alpha}.
-\]
-
-But the first-order CRN computes through rooted tree sums, so define:
-
-\[
-A_{T,\alpha}=\sum_{e\in T}\Omega_{e\alpha},
-\]
-
-and, for relative tree contrasts,
-
-\[
-A_{T,T',\alpha}^{\rm diff}
+```math
+\bar C_r(z)
 =
-\sum_e |s_T(e)-s_{T'}(e)|\Omega_{e\alpha}.
-\]
+\frac{\tau_r(z)}{\sum_s \tau_s(z)},
+\qquad
+\tau_r(z)=\sum_{T\in\mathcal T_r(G)}\prod_{e\in T}k_e(z).
+```
 
-For each comparison pair \((i,q,d)\), compute root-conditioned tree overlap:
+Substituting the exponential encoding:
 
-\[
-\bar O_{r,i,q,d}^{\rm tree}
+```math
+\tau_r(z)
 =
-\frac{1}{|\mathcal T_r|}
-\sum_{T\in\mathcal T_r}
-\mathbf 1[A_{T,i,d}>0]
-\mathbf 1[A_{T,q,d}>0].
-\]
+\sum_{T\in\mathcal T_r(G)}
+\exp(\beta_T+\Theta_T^\top z),
+\qquad
+\beta_T=\sum_{e\in T}b_e,
+\qquad
+\Theta_T=\sum_{e\in T}K_e.
+```
 
-Also compute tree-difference overlap:
+Therefore the computational basis is not the isolated edge-vector set `{K_e}`. It is the rooted tree-sum set:
 
-\[
-\bar O_{r,i,q,d}^{\rm diff}
-=
-\frac{1}{|\mathcal P_r|}
-\sum_{(T,T')\in\mathcal P_r}
-\mathbf 1[A_{T,T',i,d}^{\rm diff}>0]
-\mathbf 1[A_{T,T',q,d}^{\rm diff}>0],
-\]
+```math
+\{\Theta_T:T\in\mathcal T_r(G), r\in V\}.
+```
 
-where \(\mathcal P_r\) should include same-root tree differences, and optionally cross-root tree pairs relevant to decoder competition.
+Because concentrations are normalized, relative tree-score geometry and tree-difference geometry are often more relevant than raw tree vectors.
 
-Report both unweighted and normalized versions. Raw counts must be accompanied by normalized metrics because raw overlap scales with the number of trees.
+The current project has already established the scoped result:
 
-Also implement learned/post-training versions using either \(|K_{e\alpha}|\) or tree posterior weights:
+> In tested first-order fixed-count regimes, topology-associated structural and functional variables explain residual novel-class ICL variation beyond raw trainable count. The strongest mechanism evidence is that trained models depend on branch/projection/tree alignment.
 
-\[
-P(T\mid r,z).
-\]
+The new Phase 2 result sharpens the input-mask story:
 
-Deliverables:
+> Input multiplicity should be measured in rooted-tree and tree-difference space, because the steady state computes with tree-sum projections.
 
-- `tree_level_multiplicity_metrics.py`
-- `tree_level_multiplicity_reanalysis.md`
-- `tree_level_multiplicity_reanalysis.json`
+## Required Source Reports
 
-Required comparison:
+Read these before making changes:
 
-\[
-\text{edge-level multiplicity}
-\quad\text{vs.}\quad
-\text{tree-level multiplicity}
-\quad\text{vs.}\quad
-\text{tree-difference multiplicity}.
-\]
+1. `predictor_name_reconciliation.md`
+2. `tree_level_multiplicity_reanalysis.md`
+3. `gamma_toy_validation_report.md`
+4. the prior topology-ICL first-order report / synthesis
+5. the original CRN-ICL paper, especially Figure 3 and Appendix B.2-B.3
+6. the Markov expressivity paper, especially input multiplicity, monotonicity, coefficient constraints, and sharpness sections
 
-Evaluate against:
+# Track A: Repair and Validate `gamma*_ICL`
 
-- mean novel-class ICL;
-- best-seed ICL;
-- seed standard deviation;
-- branch failures;
-- trained branch margin.
+## A0. Principle
 
-## Phase 3: Validate \(\gamma^*_{\rm ICL}\) on Analytic Toy Cases
+The current `gamma*_ICL` probe failed the analytic toy gate. It should remain **gated off** for large topology selection.
 
-Do not use \(\gamma^*_{\rm ICL}\) for large sweeps until it passes toy validation.
+The failure does not invalidate tree-polytope / branch-margin theory. It means the implementation, branch dataset, optimizer, or capacity definition does not yet reproduce known small-system results.
 
-Use the original paper's analytic cases.
+The original CRN-ICL paper gives the decisive sanity checks:
 
-### Toy A: Two Species, Both Branches
+- `N_n=2, N_c=2, D=1`, both branches: should fail.
+- `N_n=2, N_c=2, D=1`, one branch condition `z_q=max(z_1,z_2)`, corresponding to `M1>` and `M2>`: should pass without edge biases.
+- `N_n=3, N_c=2, D=1`, complete directed three-species graph: should pass without edge biases.
 
-\[
-N_n=2,\qquad N_c=2,\qquad D=1.
-\]
+The latest report shows:
 
-This should fail for both branches because two vectors cannot cover all four branch directions.
+- Toy A fails as expected.
+- Toy B only passes when edge biases are allowed; no-bias fails.
+- Toy C fails even with biases.
 
-Expected result:
+This is not acceptable, because the original analytic examples use `b_e=0` and show that the one-branch two-species case and both-branch three-species case are solvable.
 
-\[
-\gamma^*_{\rm ICL}\le 0
-\]
+## A1. Audit Branch Dataset Definitions
 
-or at least one branch has persistent negative lower-tail margin.
+First check whether the toy datasets are defined correctly.
 
-### Toy B: Two Species, One Branch
+The one-branch condition from the paper is not "one class" and not a single active branch. It is:
 
-Same system, but restrict to one branch.
+```math
+z_q=\max(z_1,z_2),
+```
 
-Expected result:
+which contains two comparison branches:
 
-\[
-\gamma^*_{\rm ICL}>0
-\]
+```text
+M1> : z_1=z_q>z_2
+M2> : z_2=z_q>z_1
+```
 
-under reasonable norm budget.
+If the current report says Toy B has `active branches: [0]`, audit this carefully. That may indicate the one-branch task is being encoded incorrectly.
 
-### Toy C: Three Species, Both Branches
+Deliverable:
 
-\[
-N_n=3,\qquad N_c=2,\qquad D=1.
-\]
+```text
+branch_dataset_audit.md
+branch_dataset_audit.json
+```
 
-Use the complete directed three-species graph.
+The audit must report:
 
-Expected result:
+- how each branch is generated;
+- what labels are assigned;
+- how many samples per branch;
+- whether samples are delta-separated from ambiguous intersections;
+- whether Toy B contains both `M1>` and `M2>`;
+- whether Toy A contains `M1>`, `M1<`, `M2>`, `M2<`;
+- whether Toy C uses the same branch set as Toy A.
 
-\[
-\gamma^*_{\rm ICL}>0
-\]
+## A2. Use Delta-Separated Analytic Branch Samples
 
-or clear improvement over the two-species both-branch case.
+Raw lower-tail margin can be destroyed by samples near branch intersections, especially near
 
-Run exact, tropical, and hard-root variants.
+```math
+z_1=z_2=z_q.
+```
 
-Run with and without learned biases \(b_e\), because the original paper's analytic small-network setup sets \(b_e=0\). Label these separately:
+Construct an analytic branch dataset with explicit margin separation. For `N_c=2,D=1`, use samples of the form:
 
-- `gamma_no_bias`
-- `gamma_with_bias`
+```text
+M1> : z = (c, c-u, c)
+M1< : z = (c, c+u, c)
+M2> : z = (c-u, c, c)
+M2< : z = (c+u, c, c)
+```
 
-Deliverables:
+where `u >= delta > 0` and `c` can be sampled or set to zero. This avoids ambiguous near-intersection points.
 
-- `gamma_toy_validation_report.md`
-- `gamma_toy_validation_report.json`
+Report results as a function of `delta` and input range.
 
-Do not proceed to large \(\gamma^*\)-based topology selection unless this phase passes.
+## A3. Reproduce The Original Paper's Two-Species Analytic Construction
 
-## Phase 4: Input-Multiplicity Causal Control
+For the two-species network, with no edge biases:
 
-Run a targeted causal control, not a broad sweep.
+```math
+K_1 = a(1,-2,1),
+\qquad
+K_2 = b(-2,1,1),
+```
 
-Hold fixed:
+with `a,b>0` for the `z_q=max(z_1,z_2)` one-branch condition.
 
-\[
-G,\qquad \text{input count},\qquad d_{\rm rel},\qquad M_{\rm mean},
-\]
+Evaluate this hard-coded construction directly. Do not optimize yet.
 
-and preferably physical graph \(G\) exactly.
+Expected:
 
-Vary:
+- Toy B one-branch, no bias: high accuracy and positive lower-tail margin on delta-separated data.
+- Toy A both-branches, no bias: failure on at least one sign branch.
 
-\[
-\min_{i,d}\bar O_{i,q,d}^{\rm tree},
-\]
+Deliverable:
 
-\[
-\min_{i,d}\bar O_{i,q,d}^{\rm diff},
-\]
+```text
+two_species_analytic_gamma_audit.md
+two_species_analytic_gamma_audit.json
+```
 
-coordinate-load Gini, edge-load Gini, and comparison-coordinate imbalance:
+## A4. Reproduce The Original Paper's Three-Species Tree Sums
 
-\[
-|M_{i,d}-M_{q,d}|.
-\]
+For the labeled three-species graph in the paper, the spanning-tree vectors must match:
 
-Construct masks that are matched on aggregate count but differ in comparison overlap:
+```text
+A1 = K1 + K2
+A2 = K3 + K4
+A3 = K1 + K3
 
-- high comparison overlap, balanced coordinate load;
-- high comparison overlap, imbalanced coordinate load;
-- low comparison overlap, balanced aggregate multiplicity;
-- low comparison overlap, high coordinate-load imbalance.
+B1 = K5 + K1
+B2 = K4 + K6
+B3 = K4 + K5
 
-Train enough seeds for grouped inference.
+C1 = K6 + K3
+C2 = K5 + K2
+C3 = K6 + K2
+```
 
-Primary question:
+Build a unit test or diagnostic that enumerates the rooted trees and verifies this exact list for the paper's edge labeling.
 
-\[
-\boxed{
-\text{Does comparison-coordinate tree/difference overlap causally predict novel-class ICL at fixed count and }d_{\rm rel}?
-}
-\]
+If the code produces a different list, the problem is likely tree orientation, edge labeling, or generator convention.
 
-Deliverables:
+Deliverable:
 
-- `input_multiplicity_causal_control_report.md`
-- `input_multiplicity_causal_control_report.json`
+```text
+three_species_tree_sum_orientation_audit.md
+three_species_tree_sum_orientation_audit.json
+```
 
-## Phase 5: Scale Exact-Degree / Exact-\(d_{\rm rel}\) / Exact-Multiplicity Normal-Fan Experiment
+## A5. Evaluate The Analytic Three-Species Construction Directly
 
-Scale the pilot design.
+Use the construction from the original paper's Appendix B.3:
 
-Fix:
-
-\[
-N_n,\qquad m,\qquad N_c,\qquad D,
-\]
-
-exact in-degree sequence, exact out-degree sequence, input count, \(d_{\rm rel}\), and multiplicity distribution.
-
-Then deliberately vary:
-
-- active-tree count;
-- branch-tree NMI;
-- tree-polytope support geometry;
-- branch sharpness
-
-\[
-R_{r,b}
-=
-\max_{T\in\mathcal T_r}\Theta_T^\top u_b
--
-\min_{T\in\mathcal T_r}\Theta_T^\top u_b;
-\]
-
-- structural analogues of \(R_{r,b}\) before training;
-- lower-tail \(\gamma^*_{\rm ICL}\);
-- tree-level and tree-difference multiplicity.
-
-Train enough topology/mask groups for grouped inference. The goal is not a loose sweep. The goal is to test:
-
-\[
-\boxed{
-\text{After controlling count, degree sequence, }d_{\rm rel},\text{ and multiplicity, does tree-polytope branch geometry still matter?}
-}
-\]
-
-Use grouped LOO, clustered bootstrap, and held-out-family or held-out-base-graph checks where possible.
-
-Deliverables:
-
-- `exact_degree_exact_drel_exact_multiplicity_normal_fan_report.md`
-- `exact_degree_exact_drel_exact_multiplicity_normal_fan_report.json`
-
-## Phase 6: Thermodynamic \(F_{\max}\) Experiment Only After the Above
-
-Do not use arbitrary directed exponential-rate models for thermodynamic force-budget claims.
-
-First build a thermodynamic Markov model with reversible support:
-
-\[
-W_{ij}
-=
-\exp(E_j-B_{ij}+F_{ij}/2+\text{input drive}),
-\]
+```math
+K_2=0,
+\qquad
+K_3=0,
+\qquad
+K_1=v,
+\qquad
+K_4=-\hat M_{2>}+v,
+\qquad
+K_5=\hat M_{2>}-v,
+\qquad
+K_6=-v,
+```
 
 with
 
-\[
+```math
+v=\hat M_{1>}+\hat M_{2>}.
+```
+
+This creates the hexagonal tree-projection geometry that covers the four comparison branches.
+
+Evaluate the hard-coded construction directly before optimizing.
+
+Expected:
+
+- Toy C three-species both-branches, no bias: high accuracy and positive lower-tail margin on delta-separated data.
+
+Deliverable:
+
+```text
+three_species_analytic_gamma_audit.md
+three_species_analytic_gamma_audit.json
+```
+
+## A6. Separate Ordering, Accuracy, and Margin
+
+For every gamma toy report, output all of these separately:
+
+1. classification accuracy;
+2. branch ordering correctness;
+3. mean margin;
+4. p10 margin;
+5. lower-tail CVaR / LCVaR margin;
+6. branch-wise failure rates.
+
+A model can have correct ordering but arbitrarily small raw margin near a branch boundary. Do not let a lower-tail margin failure hide correct branch ordering if the dataset includes near-ambiguous samples.
+
+## A7. Add Analytic Warm Starts and Gradient Optimization
+
+Random trials are not enough. Add:
+
+- hard-coded analytic evaluation;
+- analytic warm starts;
+- projected gradient descent or Adam/L-BFGS optimization from the warm starts;
+- no-bias and with-bias variants, clearly separated.
+
+Bias variants must be named separately:
+
+```text
+gamma_no_bias
+gamma_with_bias
+```
+
+Do not use a biased gamma result to claim capacity for the original no-bias first-order setting.
+
+## A8. Gate Condition For Gamma Repair
+
+`gamma*_ICL` is repaired only if all of the following pass:
+
+1. Toy A no-bias both-branches fails as expected.
+2. Toy B no-bias one-branch passes on delta-separated data using hard-coded analytic `K`.
+3. Toy C no-bias three-species both-branches passes on delta-separated data using hard-coded analytic `K`.
+4. The three-species tree-sum enumeration exactly matches the paper's `A_i,B_i,C_i` list.
+5. The optimizer either preserves analytic warm-start solutions or can recover equivalent solutions.
+6. The report separates accuracy, ordering, and lower-tail margin.
+
+Final gamma repair deliverable:
+
+```text
+gamma_toy_repair_final_report.md
+gamma_toy_repair_final_report.json
+```
+
+Until this gate passes, do not use `gamma*_ICL` for topology selection or large exact-control sweeps.
+
+# Track B: Input-Multiplicity Causal Control
+
+## B0. Principle
+
+Phase 2 already provides a strong structural signal. This track can proceed even while Track A repairs `gamma*_ICL`.
+
+The causal question is:
+
+```text
+At fixed physical graph G, input count, d_rel, and aggregate multiplicity, does tree-level or tree-difference comparison overlap causally affect novel-class ICL?
+```
+
+Do not use the failed `gamma*_ICL` as a selector. Use Phase 2 tree-level and tree-difference multiplicity metrics.
+
+## B1. Metrics To Use
+
+For input mask `Omega`, edge-level multiplicity is:
+
+```math
+M_\alpha=\sum_e \Omega_{e\alpha}.
+```
+
+Tree-level participation:
+
+```math
+A_{T,\alpha}=\sum_{e\in T}\Omega_{e\alpha}.
+```
+
+Same-root tree-difference participation:
+
+```math
+A^{\mathrm{diff}}_{T,T',\alpha}
+=
+\sum_e |s_T(e)-s_{T'}(e)|\Omega_{e\alpha}.
+```
+
+For each comparison pair `(i,q,d)`, use normalized root-conditioned overlap metrics, for example:
+
+```math
+\bar O^{\mathrm{tree}}_{r,i,q,d}
+=
+\frac{1}{|\mathcal T_r|}
+\sum_{T\in\mathcal T_r}
+\mathbf 1[A_{T,i,d}>0]\mathbf 1[A_{T,q,d}>0].
+```
+
+and same-root tree-difference overlap:
+
+```math
+\bar O^{\mathrm{diff}}_{r,i,q,d}
+=
+\frac{1}{|\mathcal P_r|}
+\sum_{(T,T')\in\mathcal P_r}
+\mathbf 1[A^{\mathrm{diff}}_{T,T',i,d}>0]
+\mathbf 1[A^{\mathrm{diff}}_{T,T',q,d}>0].
+```
+
+Use normalized scores. Raw counts must not be used alone because raw overlap scales with the number of trees or tree pairs.
+
+Recommended low-dimensional summaries:
+
+```text
+min_tree_overlap_comparison
+mean_tree_overlap_comparison
+gini_tree_overlap_comparison
+min_tree_diff_overlap_comparison
+mean_tree_diff_overlap_comparison
+gini_tree_diff_overlap_comparison
+coord_load_gini
+edge_load_gini
+comparison_coord_imbalance
+```
+
+Avoid overfitting by throwing every feature into one large regression. Phase 2 showed that the combined tree-plus-difference feature battery can overfit and produce poor LOO performance.
+
+## B2. Construct Causal Mask Families
+
+Choose one or more fixed physical graphs `G`. For each fixed `G`, generate masks matched on:
+
+```text
+input-coupled count
+aggregate M_mean
+possibly exact M_alpha distribution where feasible
+d_rel(G, Omega)
+```
+
+Then deliberately vary:
+
+```text
+min_tree_overlap_comparison
+min_tree_diff_overlap_comparison
+coord_load_gini
+edge_load_gini
+comparison_coord_imbalance
+```
+
+Construct at least these mask categories:
+
+1. **High tree-diff comparison overlap, balanced coordinate load.**
+2. **High tree-diff comparison overlap, imbalanced coordinate load.**
+3. **Low tree-diff comparison overlap, balanced aggregate multiplicity.**
+4. **Low tree-diff comparison overlap, high coordinate-load imbalance.**
+
+The goal is to isolate whether comparison-coordinate overlap in the tree/difference basis causes ICL changes, not merely whether mask families differ.
+
+## B3. Training Design
+
+For each selected mask group:
+
+- same physical graph `G`;
+- same `N_n, m, N_c, D`;
+- same input-coupled count;
+- matched `d_rel`;
+- matched or stratified aggregate multiplicity;
+- at least 5 seeds per group; more if feasible;
+- use novel-class ICL as primary outcome.
+
+Report separately:
+
+```text
+mean seed novel-class ICL
+best seed novel-class ICL
+seed standard deviation
+branch failures
+trained branch margin
+post-training tree/posterior metrics where available
+```
+
+Use grouped inference. Do not treat seeds as independent topology groups.
+
+## B4. Statistical Tests
+
+Compare models:
+
+```text
+raw count / input count baseline
+edge-level multiplicity
+tree-level multiplicity
+tree-difference multiplicity
+tree-difference + coordinate-load low-dimensional summary
+```
+
+Use:
+
+- grouped LOO `R^2`;
+- clustered bootstrap delta `R^2`;
+- regression residualized by physical graph if multiple physical graphs are used;
+- direct paired comparisons when masks are constructed as matched pairs.
+
+Primary causal contrast:
+
+```text
+high tree-diff comparison overlap vs low tree-diff comparison overlap
+```
+
+under matched `G`, count, `d_rel`, and aggregate multiplicity.
+
+## B5. Deliverables
+
+```text
+tree_multiplicity_causal_mask_library.md
+tree_multiplicity_causal_mask_library.json
+input_multiplicity_causal_control_training_plan.md
+input_multiplicity_causal_control_report.md
+input_multiplicity_causal_control_report.json
+```
+
+The final report must state whether the Phase 2 reanalysis signal survives causal control.
+
+# Track C: Exact-Degree / Exact-d_rel / Exact-Multiplicity Normal-Fan Expansion
+
+This track should start only after Track B has produced a clean causal-control library, and ideally after Track A has at least produced a working analytic gamma diagnostic. It does **not** require using `gamma*_ICL` as a selector if gamma remains gated off.
+
+## C1. Objective
+
+Scale the existing exact-degree normal-fan pilot. The previous pilot showed that one can fix:
+
+```text
+N_n, m, N_c, D
+exact in-degree sequence
+exact out-degree sequence
+d_rel
+```
+
+while varying normal-fan / tree-polytope diagnostics. It had only four trained topology groups, so it was design feedback, not proof.
+
+Now also fix or stratify by tree-level and tree-difference multiplicity distribution.
+
+## C2. Controls
+
+Fix:
+
+```text
+N_n
+m
+N_c
+D
+input count
+exact in-degree sequence
+exact out-degree sequence
+d_rel
+tree-level multiplicity distribution where feasible
+tree-difference multiplicity distribution or matched summary bins
+```
+
+Vary:
+
+```text
+active-tree count
+branch-tree NMI
+normal-fan support / active tree coverage
+tree-polytope support geometry
+branch sharpness R_{r,b}
+tree-diff comparison overlap if not fixed
+```
+
+If `gamma*_ICL` is still not repaired, do not include it as a selector. You may compute it and label it as gated/diagnostic only.
+
+## C3. Deliverables
+
+```text
+exact_degree_exact_drel_exact_multiplicity_normal_fan_library.md
+exact_degree_exact_drel_exact_multiplicity_normal_fan_training_report.md
+exact_degree_exact_drel_exact_multiplicity_normal_fan_training_report.json
+```
+
+# Track D: Thermodynamic Fmax Experiment, Delayed
+
+Do not start this until Tracks A-C are stable or explicitly requested.
+
+Existing arbitrary directed exponential-rate CRNs are not valid for thermodynamic force-budget claims. A valid thermodynamic experiment requires reversible support and a parameterization such as:
+
+```math
+W_{ij}=\exp(E_j-B_{ij}+F_{ij}/2+\text{input drive}),
+\qquad
 B_{ij}=B_{ji},
 \qquad
 F_{ij}=-F_{ji},
 \qquad
 |F_{ij}|\le F_{\max}.
-\]
+```
 
-First verify:
+Before sweeping `Fmax`, verify:
 
 - reversible edge support;
-- detailed-balance behavior at \(F_{\max}=0\);
+- detailed-balance behavior at `Fmax=0`;
 - correct generator convention;
 - stable steady-state solve;
-- valid comparison to the existing first-order CRN-ICL task.
+- valid comparison to the first-order CRN-ICL task.
 
-Then sweep \(F_{\max}\) and test whether:
+This is important but not the immediate next step.
 
-- novel-class ICL accuracy increases with \(F_{\max}\);
-- lower-tail branch margin increases with \(F_{\max}\);
-- branch sharpness increases with \(F_{\max}\);
-- learned solutions use non-equilibrium cycle affinities.
+# Non-Negotiable Rules
 
-Deliverables:
+1. Do not use current `gamma*_ICL` for topology selection until Track A passes.
+2. Do not interpret Phase 3 failure as failure of first-order topology expressivity.
+3. Do not launch broad new sweeps before analytic gamma repair and/or input-multiplicity causal controls.
+4. Do not use the bare name `tree_geometry`; use reconciled predictor names.
+5. Do not treat edge-level multiplicity as sufficient; use tree-level and tree-difference multiplicity.
+6. Do not use large combined feature batteries without regularization and small-sample safeguards.
+7. Do not treat seeds as independent topology groups.
+8. Do not conflate physical topology `G` with input mask `Omega`.
+9. Do not make thermodynamic claims from arbitrary directed graphs.
+10. Do not apply first-order matrix-tree theory to autocatalytic or WTA CRNs.
+11. Do not claim motif uniqueness.
+12. Use novel-class ICL accuracy as the primary outcome.
 
-- `thermodynamic_fmax_experiment_report.md`
-- `thermodynamic_fmax_experiment_report.json`
+# Minimum Final Synthesis Required
 
-This phase is important but should come after the tree-level multiplicity, toy \(\gamma^*\), and exact-control topology phases.
+At the end of this task, produce:
 
-## Required Final Synthesis
+```text
+post_phase3_markov_icl_synthesis.md
+post_phase3_markov_icl_synthesis.json
+```
 
-Produce a final synthesis that separates claims into:
+It must answer:
 
-- expressivity;
-- trainability;
-- mechanism;
-- causal interventions;
-- thermodynamics.
+1. Was `gamma*_ICL` repaired on analytic toy cases?
+2. If not, exactly which diagnostic failed: branch data, tree orientation, analytic construction, decoder, optimizer, or margin definition?
+3. Does tree-level or tree-difference multiplicity causally predict ICL under matched controls?
+4. Does the causal result support the Phase 2 reanalysis, or was Phase 2 mostly family/regime confounding?
+5. Which metric should be used for the next exact-degree normal-fan expansion?
+6. Which claims are now supported, which are weakened, and which remain open?
 
-The final synthesis must explicitly say what is supported and what is not.
+The synthesis must separate:
 
-At minimum, include:
+```text
+expressivity
+trainability
+mechanism
+causal evidence
+thermodynamic physics
+```
 
-- `final_markov_icl_next_phase_synthesis.md`
-- `final_markov_icl_next_phase_synthesis.json`
+# Success Criteria
 
-## Non-Negotiable Rules
+A strong positive outcome for this phase is:
 
-- Do not run broad sweeps before Phase 1-3 pass.
-- Do not treat edge-level multiplicity as sufficient; lift it to tree and tree-difference space.
-- Do not use \(\gamma^*_{\rm ICL}\) for experiment selection until it passes analytic toy validation.
-- Do not treat seeds as independent topologies; use grouped inference.
-- Do not conflate physical topology \(G\) with input mask \(\Omega\).
-- Do not make thermodynamic claims from arbitrary directed graphs.
-- Do not apply first-order tree-sum theory to autocatalytic or WTA CRNs.
-- Do not claim a universal scalar law unless held-out exact-control experiments support it.
-- Do not claim motif uniqueness.
-- Use novel-class ICL accuracy as the primary outcome.
+1. `gamma*_ICL` passes analytic toy validation, including no-bias Toy B and no-bias Toy C on delta-separated data; and/or
+2. tree-level or tree-difference comparison overlap causally predicts novel-class ICL at fixed `G`, input count, `d_rel`, and aggregate multiplicity.
 
-## Success Criteria
+A useful partial success is:
 
-A strong positive result would show that tree-level comparison multiplicity, branch sharpness, normal-fan diagnostics, and lower-tail \(\gamma^*_{\rm ICL}\) improve prediction of novel-class ICL beyond \(d_{\rm rel}\) and masked tree geometry under exact-count / exact-degree / exact-multiplicity controls.
+- `gamma*_ICL` remains unrepaired, but the exact source of failure is localized; and
+- the tree-level multiplicity causal control is completed and interpretable.
 
-A trainability result would show that \(\gamma^*_{\rm ICL}\) predicts best-seed ICL, while conditioning/redundancy/tree-entropy metrics predict mean-seed reliability or seed variance.
+A useful negative result is:
 
-A thermodynamic result would show that lower-tail ICL branch margin and novel-class ICL improve as allowed non-equilibrium driving \(F_{\max}\) increases in a valid reversible-support Markov parameterization.
+- tree-level multiplicity does not survive matched causal control, which would mean the Phase 2 reanalysis signal was probably confounded by mask family, graph family, or regime-level structure.
 
-A negative result is still useful if it shows that existing tree geometry is already as predictive as these richer Markov-expressivity metrics.
+Do not overstate any result. The goal is to sharpen the theory, not to force a positive conclusion.
 
-## Bottom Line
+# Bottom Line For The Agent
 
-This is the next long-running agent task, but it must be gated.
+The next scientific question is no longer whether topology matters in a broad sense. The immediate question is:
 
-Most important instruction:
+```text
+Does comparison-coordinate multiplicity in rooted-tree and tree-difference space causally control first-order CRN-ICL, and can a repaired lower-tail branch-margin capacity reproduce the known analytic toy cases?
+```
 
-\[
-\boxed{
-\text{Do Steps 1-3 before launching expensive new training.}
-}
-\]
-
-Then:
-
-\[
-\boxed{
-\text{Use Step 4 as the first causal control, Step 5 as the main topology falsification test, and Step 6 as a later physical-thermodynamic extension.}
-}
-\]
-
-This keeps the project from turning into another broad sweep and forces it to sharpen the actual theory.
+Answer that before launching another large topology sweep.
