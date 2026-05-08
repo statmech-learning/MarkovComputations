@@ -12,6 +12,7 @@ from branch_margin_capacity_v2 import (  # noqa: E402
     finite_matmul,
     lower_tail_capacity_probe,
     lower_tail_mean,
+    sample_exact_copy_branches,
     summarize_branch_margins,
 )
 from topology_metrics import complete_digraph  # noqa: E402
@@ -60,6 +61,40 @@ class BranchMarginCapacityV2Tests(unittest.TestCase):
             self.assertEqual(len(result["best"]["by_branch"]), 2)
             self.assertGreaterEqual(result["best"]["accuracy"], 0.0)
             self.assertLessEqual(result["best"]["accuracy"], 1.0)
+
+    def test_branch_subset_samples_only_requested_labels(self):
+        _, labels = sample_exact_copy_branches(
+            n_samples=200,
+            n_context=3,
+            z_dim=1,
+            seed=2,
+            branch_subset=[1],
+        )
+        self.assertEqual(set(labels.tolist()), {1})
+
+    def test_summarize_branch_margins_respects_active_branches(self):
+        margins = np.asarray([1.0, 1.0, -5.0, -5.0])
+        labels = np.asarray([0, 0, 1, 1])
+        active = summarize_branch_margins(margins, labels, n_context=2, alpha=0.5, active_branches=[0])
+        all_branches = summarize_branch_margins(margins, labels, n_context=2, alpha=0.5)
+        self.assertGreater(active["objective"], 0.0)
+        self.assertLess(all_branches["objective"], 0.0)
+        self.assertEqual(active["active_branches"], [0])
+
+    def test_lower_tail_probe_records_active_branches(self):
+        result = lower_tail_capacity_probe(
+            n_nodes=2,
+            edges=complete_digraph(2).edges,
+            n_context=2,
+            z_dim=1,
+            variant="exact",
+            n_samples=40,
+            trials=2,
+            seed=4,
+            branch_subset=[0],
+        )
+        self.assertEqual(result["active_branches"], [0])
+        self.assertEqual(result["best"]["active_branches"], [0])
 
 
 if __name__ == "__main__":

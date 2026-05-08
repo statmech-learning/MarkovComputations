@@ -67,6 +67,7 @@ def sample_exact_copy_branches(
     seed: int = 0,
     query_noise: float = 0.0,
     context_scale: float = 1.0,
+    branch_subset: Optional[Sequence[int]] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Sample flattened exact-copy context/query data and branch labels."""
 
@@ -76,9 +77,17 @@ def sample_exact_copy_branches(
         raise ValueError("n_context must be at least 2")
     if z_dim <= 0:
         raise ValueError("z_dim must be positive")
+    if branch_subset is None:
+        active_branches = np.arange(n_context, dtype=int)
+    else:
+        active_branches = np.asarray(sorted({int(item) for item in branch_subset}), dtype=int)
+        if active_branches.size == 0:
+            raise ValueError("branch_subset must contain at least one branch")
+        if np.any(active_branches < 0) or np.any(active_branches >= n_context):
+            raise ValueError(f"branch_subset entries must be in 0..{n_context - 1}")
     rng = np.random.default_rng(seed)
     contexts = rng.normal(0.0, context_scale, size=(n_samples, n_context, z_dim))
-    labels = rng.integers(0, n_context, size=n_samples)
+    labels = rng.choice(active_branches, size=n_samples)
     queries = contexts[np.arange(n_samples), labels].copy()
     if query_noise:
         queries += rng.normal(0.0, query_noise, size=queries.shape)
@@ -217,12 +226,17 @@ def summarize_branch_margins(
     labels: np.ndarray,
     n_context: int,
     alpha: float,
+    active_branches: Optional[Sequence[int]] = None,
 ) -> dict:
     by_branch = []
     lcvars = []
     failures = []
     accuracies = []
-    for branch in range(n_context):
+    if active_branches is None:
+        branch_iter = list(range(n_context))
+    else:
+        branch_iter = sorted({int(item) for item in active_branches})
+    for branch in branch_iter:
         branch_values = margins[labels == branch]
         lcvar = lower_tail_mean(branch_values, alpha)
         failure_rate = float(np.mean(branch_values <= 0.0)) if branch_values.size else 1.0
@@ -250,6 +264,7 @@ def summarize_branch_margins(
         "accuracy": float(np.mean(margins > 0.0)) if margins.size else 0.0,
         "margin_mean": float(np.mean(margins)) if margins.size else float("-inf"),
         "margin_p10": float(np.quantile(margins, 0.10)) if margins.size else float("-inf"),
+        "active_branches": branch_iter,
         "by_branch": by_branch,
     }
 
@@ -349,6 +364,7 @@ def evaluate_parameters(
     z_dim: int,
     variant: str,
     alpha: float,
+    active_branches: Optional[Sequence[int]] = None,
 ) -> dict:
     features = root_feature_matrix(
         z,
@@ -367,7 +383,13 @@ def evaluate_parameters(
         root_assignment=params.get("root_assignment"),
     )
     margins = margin_vector(logits, labels)
-    summary = summarize_branch_margins(margins, labels, n_context=n_context, alpha=alpha)
+    summary = summarize_branch_margins(
+        margins,
+        labels,
+        n_context=n_context,
+        alpha=alpha,
+        active_branches=active_branches,
+    )
     summary.update(
         tree_drive_range_summary(
             np.asarray(params["K"], dtype=float),
@@ -397,6 +419,7 @@ def lower_tail_capacity_probe(
     edge_bias_radius: float = 0.0,
     max_trees_per_root: Optional[int] = None,
     max_root_assignments: int = 60,
+    branch_subset: Optional[Sequence[int]] = None,
 ) -> dict:
     """Run a finite-sample lower-tail capacity probe."""
 
@@ -424,7 +447,9 @@ def lower_tail_capacity_probe(
         n_context=n_context,
         z_dim=z_dim,
         seed=seed,
+        branch_subset=branch_subset,
     )
+    active_branches = sorted({int(item) for item in (branch_subset if branch_subset is not None else range(n_context))})
 
     rng = np.random.default_rng(seed + 10007)
     if variant == "hard_root":
@@ -469,6 +494,7 @@ def lower_tail_capacity_probe(
                 z_dim=z_dim,
                 variant=variant,
                 alpha=alpha,
+                active_branches=active_branches,
             )
             row = {
                 "objective": summary["objective"],
@@ -499,6 +525,7 @@ def lower_tail_capacity_probe(
         "decoder_radius": decoder_radius,
         "edge_bias_radius": edge_bias_radius,
         "max_trees_per_root": max_trees_per_root,
+        "active_branches": active_branches,
         "n_trees_total": int(tree_incidence.shape[0]),
         "input_mask_density": float(np.mean(mask > 0)),
         "input_multiplicity_min": float(np.min(mask.sum(axis=0))),
@@ -591,6 +618,12 @@ def parse_args():
     parser.add_argument("--edge_bias_radius", type=float, default=0.0)
     parser.add_argument("--max_trees_per_root", type=int, default=None)
     parser.add_argument("--max_root_assignments", type=int, default=24)
+    parser.add_argument(
+        "--branch_subset",
+        type=str,
+        default=None,
+        help="Comma-separated branch labels to sample and include in the lower-tail objective.",
+    )
     parser.add_argument("--output_json", type=str, default=None)
     parser.add_argument("--output_md", type=str, default=None)
     return parser.parse_args()
@@ -614,6 +647,10 @@ def main():
     if args.input_mask_json:
         input_mask, _ = load_input_mask_json(args.input_mask_json, n_nodes, edges, p)
 
+    branch_subset = None
+    if args.branch_subset:
+        branch_subset = [int(item.strip()) for item in args.branch_subset.split(",") if item.strip()]
+
     results = []
     for variant in [item.strip() for item in args.variants.split(",") if item.strip()]:
         results.append(
@@ -633,6 +670,7 @@ def main():
                 edge_bias_radius=args.edge_bias_radius,
                 max_trees_per_root=args.max_trees_per_root,
                 max_root_assignments=args.max_root_assignments,
+                branch_subset=branch_subset,
             )
         )
 

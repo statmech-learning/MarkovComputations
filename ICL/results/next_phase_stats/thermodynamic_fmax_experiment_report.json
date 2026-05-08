@@ -1,0 +1,16 @@
+{
+  "existing_related_audit": "ICL/results/next_phase_stats/thermodynamic_force_budget_report.json",
+  "no_new_training_launched": true,
+  "phase_3_gate_passed": false,
+  "required_before_sweep": [
+    "bidirected reversible support",
+    "W_ij = exp(E_j - B_ij + F_ij/2 + input_drive)",
+    "B_ij = B_ji and F_ij = -F_ji",
+    "|F_ij| <= F_max",
+    "detailed-balance behavior at F_max=0",
+    "stable steady-state solve"
+  ],
+  "schema": "thermodynamic_fmax_experiment_report.v1",
+  "status": "not_launched_blocked_by_phase_3_gate_and_missing_thermodynamic_parameterization",
+  "thermodynamic_claim_supported": false
+}

@@ -1,0 +1,729 @@
+{
+  "alpha": 0.1,
+  "decoder_radius": 4.0,
+  "n_samples": 500,
+  "phase_3_gate_passed": false,
+  "phase_3_gate_reason": "Do not use gamma*_ICL for large topology selection yet.",
+  "probe": "ICL/branch_margin_capacity_v2.py lower_tail_capacity_probe",
+  "projection_radius": 4.0,
+  "schema": "gamma_toy_validation_report.v1",
+  "toy_cases": [
+    {
+      "branch_subset": null,
+      "expectation": "fail: gamma*_ICL <= 0 or persistent negative branch lower-tail margin",
+      "n_context": 2,
+      "n_nodes": 2,
+      "name": "toy_A_two_species_both_branches",
+      "results": {
+        "gamma_no_bias": {
+          "edge_bias_radius": 0.0,
+          "passed_expected_direction": true,
+          "reason": "expected failure observed",
+          "variant_rows": [
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.494,
+              "best_branch_accuracy_min": 0.4725274725274725,
+              "best_branch_failure_rate_max": 0.5274725274725275,
+              "best_branch_margin_lcvar_min": -0.08608712979888607,
+              "best_margin_p10": -0.06122880169164399,
+              "best_objective": -0.08608712979888607,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.4725274725274725,
+                  "branch": 0,
+                  "failure_rate": 0.5274725274725275,
+                  "margin_lcvar": -0.08544610394567144,
+                  "margin_mean": -0.0026733810354990363,
+                  "margin_min": -0.18283109927409624,
+                  "n": 273
+                },
+                {
+                  "accuracy": 0.5198237885462555,
+                  "branch": 1,
+                  "failure_rate": 0.4801762114537445,
+                  "margin_lcvar": -0.08608712979888607,
+                  "margin_mean": 0.001622785013624301,
+                  "margin_min": -0.1616061955239918,
+                  "n": 227
+                }
+              ],
+              "edge_bias_radius": 0.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 768,
+              "variant": "exact"
+            },
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.526,
+              "best_branch_accuracy_min": 0.5099601593625498,
+              "best_branch_failure_rate_max": 0.4900398406374502,
+              "best_branch_margin_lcvar_min": -0.11870730232193147,
+              "best_margin_p10": -0.07975944853249169,
+              "best_objective": -0.11870730232193147,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.5099601593625498,
+                  "branch": 0,
+                  "failure_rate": 0.4900398406374502,
+                  "margin_lcvar": -0.11870730232193147,
+                  "margin_mean": -0.00197642253699636,
+                  "margin_min": -0.20944256111379111,
+                  "n": 251
+                },
+                {
+                  "accuracy": 0.5421686746987951,
+                  "branch": 1,
+                  "failure_rate": 0.4578313253012048,
+                  "margin_lcvar": -0.09997867437081322,
+                  "margin_mean": 0.0074896183034888104,
+                  "margin_min": -0.17894655528938097,
+                  "n": 249
+                }
+              ],
+              "edge_bias_radius": 0.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 768,
+              "variant": "tropical"
+            },
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.518,
+              "best_branch_accuracy_min": 0.5102880658436214,
+              "best_branch_failure_rate_max": 0.4897119341563786,
+              "best_branch_margin_lcvar_min": -0.5535341091066805,
+              "best_margin_p10": -0.3707095151861437,
+              "best_objective": -0.5535341091066805,
+              "best_root_assignment": [
+                0,
+                1
+              ],
+              "by_branch": [
+                {
+                  "accuracy": 0.5252918287937743,
+                  "branch": 0,
+                  "failure_rate": 0.47470817120622566,
+                  "margin_lcvar": -0.5535341091066805,
+                  "margin_mean": 0.02409842534388418,
+                  "margin_min": -0.9621506831412603,
+                  "n": 257
+                },
+                {
+                  "accuracy": 0.5102880658436214,
+                  "branch": 1,
+                  "failure_rate": 0.4897119341563786,
+                  "margin_lcvar": -0.49278115981061693,
+                  "margin_mean": 0.01818731468074335,
+                  "margin_min": -0.7670917342623662,
+                  "n": 243
+                }
+              ],
+              "edge_bias_radius": 0.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 1536,
+              "variant": "hard_root"
+            }
+          ]
+        },
+        "gamma_with_bias": {
+          "edge_bias_radius": 2.0,
+          "passed_expected_direction": true,
+          "reason": "expected failure observed",
+          "variant_rows": [
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.46,
+              "best_branch_accuracy_min": 0.44052863436123346,
+              "best_branch_failure_rate_max": 0.5594713656387665,
+              "best_branch_margin_lcvar_min": -0.1733473273914539,
+              "best_margin_p10": -0.10450111207295423,
+              "best_objective": -0.1733473273914539,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.47619047619047616,
+                  "branch": 0,
+                  "failure_rate": 0.5238095238095238,
+                  "margin_lcvar": -0.1733473273914539,
+                  "margin_mean": 0.00518699571801893,
+                  "margin_min": -0.2898603739873169,
+                  "n": 273
+                },
+                {
+                  "accuracy": 0.44052863436123346,
+                  "branch": 1,
+                  "failure_rate": 0.5594713656387665,
+                  "margin_lcvar": -0.11052905892323009,
+                  "margin_mean": -0.008537717931022086,
+                  "margin_min": -0.17605657740804181,
+                  "n": 227
+                }
+              ],
+              "edge_bias_radius": 2.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 768,
+              "variant": "exact"
+            },
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.498,
+              "best_branch_accuracy_min": 0.2549800796812749,
+              "best_branch_failure_rate_max": 0.7450199203187251,
+              "best_branch_margin_lcvar_min": -0.15945106612025126,
+              "best_margin_p10": -0.10086419380154517,
+              "best_objective": -0.15945106612025126,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.2549800796812749,
+                  "branch": 0,
+                  "failure_rate": 0.7450199203187251,
+                  "margin_lcvar": -0.15945106612025126,
+                  "margin_mean": -0.0427201863353161,
+                  "margin_min": -0.2501863249121108,
+                  "n": 251
+                },
+                {
+                  "accuracy": 0.7429718875502008,
+                  "branch": 1,
+                  "failure_rate": 0.2570281124497992,
+                  "margin_lcvar": -0.05923491057249351,
+                  "margin_mean": 0.04823338210180854,
+                  "margin_min": -0.1382027914910613,
+                  "n": 249
+                }
+              ],
+              "edge_bias_radius": 2.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 768,
+              "variant": "tropical"
+            },
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.468,
+              "best_branch_accuracy_min": 0.35802469135802467,
+              "best_branch_failure_rate_max": 0.6419753086419753,
+              "best_branch_margin_lcvar_min": -0.5551470692102084,
+              "best_margin_p10": -0.38140736322632807,
+              "best_objective": -0.5551470692102084,
+              "best_root_assignment": [
+                1,
+                0
+              ],
+              "by_branch": [
+                {
+                  "accuracy": 0.5719844357976653,
+                  "branch": 0,
+                  "failure_rate": 0.4280155642023346,
+                  "margin_lcvar": -0.5551470692102084,
+                  "margin_mean": 0.06325619855073632,
+                  "margin_min": -0.8947387280957015,
+                  "n": 257
+                },
+                {
+                  "accuracy": 0.35802469135802467,
+                  "branch": 1,
+                  "failure_rate": 0.6419753086419753,
+                  "margin_lcvar": -0.4859587693337122,
+                  "margin_mean": -0.07523744949993484,
+                  "margin_min": -0.673858846453193,
+                  "n": 243
+                }
+              ],
+              "edge_bias_radius": 2.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 1536,
+              "variant": "hard_root"
+            }
+          ]
+        }
+      },
+      "z_dim": 1
+    },
+    {
+      "branch_subset": [
+        0
+      ],
+      "expectation": "pass: gamma*_ICL > 0 under reasonable norm budget",
+      "n_context": 2,
+      "n_nodes": 2,
+      "name": "toy_B_two_species_one_branch",
+      "results": {
+        "gamma_no_bias": {
+          "edge_bias_radius": 0.0,
+          "passed_expected_direction": false,
+          "reason": "one-branch margin was not positive",
+          "variant_rows": [
+            {
+              "active_branches": [
+                0
+              ],
+              "best_accuracy": 0.492,
+              "best_branch_accuracy_min": 0.492,
+              "best_branch_failure_rate_max": 0.508,
+              "best_branch_margin_lcvar_min": -0.011748679941935814,
+              "best_margin_p10": -0.008367310056280663,
+              "best_objective": -0.011748679941935814,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.492,
+                  "branch": 0,
+                  "failure_rate": 0.508,
+                  "margin_lcvar": -0.011748679941935814,
+                  "margin_mean": 0.00019040250222584115,
+                  "margin_min": -0.018032122464840317,
+                  "n": 500
+                }
+              ],
+              "edge_bias_radius": 0.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 768,
+              "variant": "exact"
+            },
+            {
+              "active_branches": [
+                0
+              ],
+              "best_accuracy": 0.528,
+              "best_branch_accuracy_min": 0.528,
+              "best_branch_failure_rate_max": 0.472,
+              "best_branch_margin_lcvar_min": -0.05371615737767283,
+              "best_margin_p10": -0.039855606060533955,
+              "best_objective": -0.05371615737767283,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.528,
+                  "branch": 0,
+                  "failure_rate": 0.472,
+                  "margin_lcvar": -0.05371615737767283,
+                  "margin_mean": 0.0009422822359789529,
+                  "margin_min": -0.08747147249713105,
+                  "n": 500
+                }
+              ],
+              "edge_bias_radius": 0.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 768,
+              "variant": "tropical"
+            },
+            {
+              "active_branches": [
+                0
+              ],
+              "best_accuracy": 0.506,
+              "best_branch_accuracy_min": 0.506,
+              "best_branch_failure_rate_max": 0.494,
+              "best_branch_margin_lcvar_min": -0.011627867421243674,
+              "best_margin_p10": -0.008444583475412193,
+              "best_objective": -0.011627867421243674,
+              "best_root_assignment": [
+                0,
+                1
+              ],
+              "by_branch": [
+                {
+                  "accuracy": 0.506,
+                  "branch": 0,
+                  "failure_rate": 0.494,
+                  "margin_lcvar": -0.011627867421243674,
+                  "margin_mean": 0.0001587116385813543,
+                  "margin_min": -0.021596208987536558,
+                  "n": 500
+                }
+              ],
+              "edge_bias_radius": 0.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 1536,
+              "variant": "hard_root"
+            }
+          ]
+        },
+        "gamma_with_bias": {
+          "edge_bias_radius": 2.0,
+          "passed_expected_direction": true,
+          "reason": "positive one-branch margin found",
+          "variant_rows": [
+            {
+              "active_branches": [
+                0
+              ],
+              "best_accuracy": 1.0,
+              "best_branch_accuracy_min": 1.0,
+              "best_branch_failure_rate_max": 0.0,
+              "best_branch_margin_lcvar_min": 3.6050800547905033,
+              "best_margin_p10": 3.8575615520738387,
+              "best_objective": 3.6050800547905033,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 1.0,
+                  "branch": 0,
+                  "failure_rate": 0.0,
+                  "margin_lcvar": 3.6050800547905033,
+                  "margin_mean": 4.552445613747784,
+                  "margin_min": 2.7684047512851775,
+                  "n": 500
+                }
+              ],
+              "edge_bias_radius": 2.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 768,
+              "variant": "exact"
+            },
+            {
+              "active_branches": [
+                0
+              ],
+              "best_accuracy": 1.0,
+              "best_branch_accuracy_min": 1.0,
+              "best_branch_failure_rate_max": 0.0,
+              "best_branch_margin_lcvar_min": 3.3564545501247323,
+              "best_margin_p10": 3.984929786628906,
+              "best_objective": 3.3564545501247323,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 1.0,
+                  "branch": 0,
+                  "failure_rate": 0.0,
+                  "margin_lcvar": 3.3564545501247323,
+                  "margin_mean": 6.00818528913227,
+                  "margin_min": 1.8668280160202482,
+                  "n": 500
+                }
+              ],
+              "edge_bias_radius": 2.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 768,
+              "variant": "tropical"
+            },
+            {
+              "active_branches": [
+                0
+              ],
+              "best_accuracy": 1.0,
+              "best_branch_accuracy_min": 1.0,
+              "best_branch_failure_rate_max": 0.0,
+              "best_branch_margin_lcvar_min": 3.0127871828966817,
+              "best_margin_p10": 3.2271596276977794,
+              "best_objective": 3.0127871828966817,
+              "best_root_assignment": [
+                0,
+                1
+              ],
+              "by_branch": [
+                {
+                  "accuracy": 1.0,
+                  "branch": 0,
+                  "failure_rate": 0.0,
+                  "margin_lcvar": 3.0127871828966817,
+                  "margin_mean": 3.822629036760799,
+                  "margin_min": 2.4761271887174505,
+                  "n": 500
+                }
+              ],
+              "edge_bias_radius": 2.0,
+              "n_samples": 500,
+              "n_trees_total": 2,
+              "total_trials": 1536,
+              "variant": "hard_root"
+            }
+          ]
+        }
+      },
+      "z_dim": 1
+    },
+    {
+      "branch_subset": null,
+      "expectation": "pass: gamma*_ICL > 0 or clear improvement over Toy A",
+      "n_context": 2,
+      "n_nodes": 3,
+      "name": "toy_C_three_species_both_branches",
+      "results": {
+        "gamma_no_bias": {
+          "edge_bias_radius": 0.0,
+          "passed_expected_direction": false,
+          "reason": "three-species case did not improve enough",
+          "variant_rows": [
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.508,
+              "best_branch_accuracy_min": 0.012048192771084338,
+              "best_branch_failure_rate_max": 0.9879518072289156,
+              "best_branch_margin_lcvar_min": -0.9711229571546076,
+              "best_margin_p10": -0.6321805957865448,
+              "best_objective": -0.9711229571546076,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.012048192771084338,
+                  "branch": 0,
+                  "failure_rate": 0.9879518072289156,
+                  "margin_lcvar": -0.9711229571546076,
+                  "margin_mean": -0.4353354748818502,
+                  "margin_min": -1.7280875422792867,
+                  "n": 249
+                },
+                {
+                  "accuracy": 1.0,
+                  "branch": 1,
+                  "failure_rate": 0.0,
+                  "margin_lcvar": 0.20194782046215856,
+                  "margin_mean": 0.5761265983718696,
+                  "margin_min": 0.12594705028129738,
+                  "n": 251
+                }
+              ],
+              "edge_bias_radius": 0.0,
+              "n_samples": 500,
+              "n_trees_total": 9,
+              "total_trials": 768,
+              "variant": "exact"
+            },
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.45,
+              "best_branch_accuracy_min": 0.3661417322834646,
+              "best_branch_failure_rate_max": 0.6338582677165354,
+              "best_branch_margin_lcvar_min": -0.41324700405375364,
+              "best_margin_p10": -0.29507926204355533,
+              "best_objective": -0.41324700405375364,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.5365853658536586,
+                  "branch": 0,
+                  "failure_rate": 0.4634146341463415,
+                  "margin_lcvar": -0.3445622663513429,
+                  "margin_mean": 0.0940570482805348,
+                  "margin_min": -0.6315237598701628,
+                  "n": 246
+                },
+                {
+                  "accuracy": 0.3661417322834646,
+                  "branch": 1,
+                  "failure_rate": 0.6338582677165354,
+                  "margin_lcvar": -0.41324700405375364,
+                  "margin_mean": -0.03498840135331189,
+                  "margin_min": -0.5922139093455105,
+                  "n": 254
+                }
+              ],
+              "edge_bias_radius": 0.0,
+              "n_samples": 500,
+              "n_trees_total": 9,
+              "total_trials": 768,
+              "variant": "tropical"
+            },
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.582,
+              "best_branch_accuracy_min": 0.5301204819277109,
+              "best_branch_failure_rate_max": 0.46987951807228917,
+              "best_branch_margin_lcvar_min": -0.321170994156535,
+              "best_margin_p10": -0.18955767303611654,
+              "best_objective": -0.321170994156535,
+              "best_root_assignment": [
+                1,
+                0
+              ],
+              "by_branch": [
+                {
+                  "accuracy": 0.5301204819277109,
+                  "branch": 0,
+                  "failure_rate": 0.46987951807228917,
+                  "margin_lcvar": -0.321170994156535,
+                  "margin_mean": 0.01337356472222692,
+                  "margin_min": -0.6627334059105685,
+                  "n": 249
+                },
+                {
+                  "accuracy": 0.6334661354581673,
+                  "branch": 1,
+                  "failure_rate": 0.3665338645418327,
+                  "margin_lcvar": -0.17300964948012185,
+                  "margin_mean": 0.09816163342201753,
+                  "margin_min": -0.24081319384117483,
+                  "n": 251
+                }
+              ],
+              "edge_bias_radius": 0.0,
+              "n_samples": 500,
+              "n_trees_total": 9,
+              "total_trials": 4608,
+              "variant": "hard_root"
+            }
+          ]
+        },
+        "gamma_with_bias": {
+          "edge_bias_radius": 2.0,
+          "passed_expected_direction": false,
+          "reason": "three-species case did not improve enough",
+          "variant_rows": [
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.496,
+              "best_branch_accuracy_min": 0.3293172690763052,
+              "best_branch_failure_rate_max": 0.6706827309236948,
+              "best_branch_margin_lcvar_min": -0.9603047853822452,
+              "best_margin_p10": -0.5506074594397565,
+              "best_objective": -0.9603047853822452,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.3293172690763052,
+                  "branch": 0,
+                  "failure_rate": 0.6706827309236948,
+                  "margin_lcvar": -0.6197515326276186,
+                  "margin_mean": 0.03693312631202414,
+                  "margin_min": -0.9020838340031725,
+                  "n": 249
+                },
+                {
+                  "accuracy": 0.6613545816733067,
+                  "branch": 1,
+                  "failure_rate": 0.3386454183266932,
+                  "margin_lcvar": -0.9603047853822452,
+                  "margin_mean": 0.07026747813294193,
+                  "margin_min": -1.670536638901754,
+                  "n": 251
+                }
+              ],
+              "edge_bias_radius": 2.0,
+              "n_samples": 500,
+              "n_trees_total": 9,
+              "total_trials": 768,
+              "variant": "exact"
+            },
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.528,
+              "best_branch_accuracy_min": 0.4409448818897638,
+              "best_branch_failure_rate_max": 0.5590551181102362,
+              "best_branch_margin_lcvar_min": -0.8918644209154443,
+              "best_margin_p10": -0.5009916380397341,
+              "best_objective": -0.8918644209154443,
+              "best_root_assignment": null,
+              "by_branch": [
+                {
+                  "accuracy": 0.6178861788617886,
+                  "branch": 0,
+                  "failure_rate": 0.3821138211382114,
+                  "margin_lcvar": -0.8918644209154443,
+                  "margin_mean": 0.11149252778170299,
+                  "margin_min": -1.2607154716020088,
+                  "n": 246
+                },
+                {
+                  "accuracy": 0.4409448818897638,
+                  "branch": 1,
+                  "failure_rate": 0.5590551181102362,
+                  "margin_lcvar": -0.5548637784276911,
+                  "margin_mean": 0.026668035085175668,
+                  "margin_min": -0.6400239721170458,
+                  "n": 254
+                }
+              ],
+              "edge_bias_radius": 2.0,
+              "n_samples": 500,
+              "n_trees_total": 9,
+              "total_trials": 768,
+              "variant": "tropical"
+            },
+            {
+              "active_branches": [
+                0,
+                1
+              ],
+              "best_accuracy": 0.496,
+              "best_branch_accuracy_min": 0.0,
+              "best_branch_failure_rate_max": 1.0,
+              "best_branch_margin_lcvar_min": -0.6626046027984623,
+              "best_margin_p10": -0.5874970402867411,
+              "best_objective": -0.6626046027984623,
+              "best_root_assignment": [
+                1,
+                0
+              ],
+              "by_branch": [
+                {
+                  "accuracy": 0.9959839357429718,
+                  "branch": 0,
+                  "failure_rate": 0.004016064257028112,
+                  "margin_lcvar": 0.18894095014592538,
+                  "margin_mean": 0.5184179483634846,
+                  "margin_min": -0.15262146160810808,
+                  "n": 249
+                },
+                {
+                  "accuracy": 0.0,
+                  "branch": 1,
+                  "failure_rate": 1.0,
+                  "margin_lcvar": -0.6626046027984623,
+                  "margin_mean": -0.5038180066754304,
+                  "margin_min": -0.7509251381436353,
+                  "n": 251
+                }
+              ],
+              "edge_bias_radius": 2.0,
+              "n_samples": 500,
+              "n_trees_total": 9,
+              "total_trials": 4608,
+              "variant": "hard_root"
+            }
+          ]
+        }
+      },
+      "z_dim": 1
+    }
+  ],
+  "trials": 768
+}

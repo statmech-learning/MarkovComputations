@@ -1,0 +1,76 @@
+{
+  "claims": {
+    "causal_interventions": {
+      "not_supported": [
+        "The requested causal control has not been launched because the Phase 3 gate failed."
+      ],
+      "supported": [
+        "A targeted matched-mask causal design is specified."
+      ]
+    },
+    "expressivity": {
+      "not_supported": [
+        "A validated universal scalar gamma*_ICL law.",
+        "Large gamma*-based topology selection."
+      ],
+      "supported": [
+        "The ambiguous fixed-m20 tree_geometry numbers are different regressions and now have separate names.",
+        "Tree-level and tree-difference multiplicity metrics are implemented in the rooted tree-sum basis.",
+        "Existing fixed-m20 data show tree/difference multiplicity can predict mean novel-class ICL better than edge-level multiplicity in grouped LOO screens."
+      ]
+    },
+    "mechanism": {
+      "not_supported": [
+        "Motif uniqueness or a universal mechanism law."
+      ],
+      "supported": [
+        "Mechanism metrics are treated as post-training outcomes/descriptors, not pre-training predictors."
+      ]
+    },
+    "thermodynamics": {
+      "not_supported": [
+        "Any F_max sweep result or entropy-production claim."
+      ],
+      "supported": [
+        "Existing arbitrary directed-rate runs are explicitly excluded from thermodynamic force-budget claims."
+      ]
+    },
+    "trainability": {
+      "not_supported": [
+        "A claim that gamma*_ICL predicts best-seed ICL; toy validation failed first."
+      ],
+      "supported": [
+        "Mean, best-seed, and seed-standard-deviation outcomes are separated in the reports.",
+        "Hard full-mask data include trained branch-margin and branch-failure outcomes for grouped screens."
+      ]
+    }
+  },
+  "deliverables": {
+    "gated_phase_4_to_6": [
+      "ICL/results/next_phase_stats/input_multiplicity_causal_control_report.md",
+      "ICL/results/next_phase_stats/input_multiplicity_causal_control_report.json",
+      "ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_normal_fan_report.md",
+      "ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_normal_fan_report.json",
+      "ICL/results/next_phase_stats/thermodynamic_fmax_experiment_report.md",
+      "ICL/results/next_phase_stats/thermodynamic_fmax_experiment_report.json"
+    ],
+    "phase_1": [
+      "ICL/results/next_phase_stats/predictor_name_reconciliation.md",
+      "ICL/results/next_phase_stats/predictor_name_reconciliation.json"
+    ],
+    "phase_2": [
+      "ICL/tree_level_multiplicity_metrics.py",
+      "ICL/results/next_phase_stats/tree_level_multiplicity_reanalysis.md",
+      "ICL/results/next_phase_stats/tree_level_multiplicity_reanalysis.json"
+    ],
+    "phase_3": [
+      "ICL/results/next_phase_stats/gamma_toy_validation_report.md",
+      "ICL/results/next_phase_stats/gamma_toy_validation_report.json"
+    ]
+  },
+  "phase_1_supported": true,
+  "phase_2_supported": true,
+  "phase_3_passed": false,
+  "schema": "final_markov_icl_next_phase_synthesis.v1",
+  "status": "gated_after_phase_3"
+}

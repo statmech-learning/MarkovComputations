@@ -1,0 +1,14 @@
+{
+  "existing_related_pilot": "ICL/results/next_phase_stats/exact_degree_multiplicity_normal_fan_report.json",
+  "missing_controls_before_claim": [
+    "exact d_rel matching across all trained groups",
+    "exact multiplicity distribution matching",
+    "held-out-family or held-out-base-graph checks",
+    "gamma*_ICL lower-tail validation"
+  ],
+  "no_new_training_launched": true,
+  "phase_3_gate_passed": false,
+  "primary_question": "After controlling count, degree sequence, d_rel, and multiplicity, does tree-polytope branch geometry still matter?",
+  "schema": "exact_degree_exact_drel_exact_multiplicity_normal_fan_report.v1",
+  "status": "not_launched_blocked_by_phase_3_gate"
+}

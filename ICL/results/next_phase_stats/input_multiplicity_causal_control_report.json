@@ -1,0 +1,182 @@
+{
+  "blocked_next_action": [
+    "repair gamma*_ICL toy validation or explicitly decouple Phase 4 from gamma gating",
+    "construct matched masks on one physical G with fixed input count, d_rel, and M_mean",
+    "train grouped seeds only after the gate is cleared"
+  ],
+  "existing_noncausal_screen": {
+    "fixed_m20_mean_novel_icl": {
+      "edge_level_multiplicity": {
+        "loo_r2": -0.002483835923423383,
+        "model": "edge_level_multiplicity",
+        "n_groups": 48,
+        "outcome": "mean_novel_icl",
+        "predictors": [
+          "edge_M_mean",
+          "edge_M_gini",
+          "edge_overlap_norm_min",
+          "edge_overlap_norm_mean",
+          "edge_comparison_imbalance_mean"
+        ]
+      },
+      "tree_and_difference_multiplicity": {
+        "loo_r2": 0.03730428537482411,
+        "model": "tree_and_difference_multiplicity",
+        "n_groups": 48,
+        "outcome": "mean_novel_icl",
+        "predictors": [
+          "tree_overlap_norm_min",
+          "tree_overlap_norm_mean",
+          "tree_coord_load_gini",
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini"
+        ]
+      },
+      "tree_difference_multiplicity": {
+        "loo_r2": 0.43547904457120323,
+        "model": "tree_difference_multiplicity",
+        "n_groups": 48,
+        "outcome": "mean_novel_icl",
+        "predictors": [
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini",
+          "diff_pair_count_log"
+        ]
+      },
+      "tree_level_multiplicity": {
+        "loo_r2": 0.40345064943830933,
+        "model": "tree_level_multiplicity",
+        "n_groups": 48,
+        "outcome": "mean_novel_icl",
+        "predictors": [
+          "tree_overlap_norm_min",
+          "tree_overlap_norm_mean",
+          "tree_coord_load_gini",
+          "tree_active_fraction_mean",
+          "tree_count_log"
+        ]
+      }
+    },
+    "hard_full_mask_branch_failures": {
+      "edge_level_multiplicity": {
+        "loo_r2": 0.7634965711355988,
+        "model": "edge_level_multiplicity",
+        "n_groups": 36,
+        "outcome": "branch_failure_percent",
+        "predictors": [
+          "edge_M_mean",
+          "edge_M_gini",
+          "edge_overlap_norm_min",
+          "edge_overlap_norm_mean",
+          "edge_comparison_imbalance_mean"
+        ]
+      },
+      "tree_and_difference_multiplicity": {
+        "loo_r2": -0.0634765625,
+        "model": "tree_and_difference_multiplicity",
+        "n_groups": 33,
+        "outcome": "branch_failure_percent",
+        "predictors": [
+          "tree_overlap_norm_min",
+          "tree_overlap_norm_mean",
+          "tree_coord_load_gini",
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini"
+        ]
+      },
+      "tree_difference_multiplicity": {
+        "loo_r2": 0.7931400873168433,
+        "model": "tree_difference_multiplicity",
+        "n_groups": 33,
+        "outcome": "branch_failure_percent",
+        "predictors": [
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini",
+          "diff_pair_count_log"
+        ]
+      },
+      "tree_level_multiplicity": {
+        "loo_r2": 0.8443366259138766,
+        "model": "tree_level_multiplicity",
+        "n_groups": 36,
+        "outcome": "branch_failure_percent",
+        "predictors": [
+          "tree_overlap_norm_min",
+          "tree_overlap_norm_mean",
+          "tree_coord_load_gini",
+          "tree_active_fraction_mean",
+          "tree_count_log"
+        ]
+      }
+    },
+    "hard_full_mask_trained_branch_margin": {
+      "edge_level_multiplicity": {
+        "loo_r2": 0.544026780854914,
+        "model": "edge_level_multiplicity",
+        "n_groups": 36,
+        "outcome": "trained_branch_margin",
+        "predictors": [
+          "edge_M_mean",
+          "edge_M_gini",
+          "edge_overlap_norm_min",
+          "edge_overlap_norm_mean",
+          "edge_comparison_imbalance_mean"
+        ]
+      },
+      "tree_and_difference_multiplicity": {
+        "loo_r2": -0.0634765625,
+        "model": "tree_and_difference_multiplicity",
+        "n_groups": 33,
+        "outcome": "trained_branch_margin",
+        "predictors": [
+          "tree_overlap_norm_min",
+          "tree_overlap_norm_mean",
+          "tree_coord_load_gini",
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini"
+        ]
+      },
+      "tree_difference_multiplicity": {
+        "loo_r2": 0.5862410421122581,
+        "model": "tree_difference_multiplicity",
+        "n_groups": 33,
+        "outcome": "trained_branch_margin",
+        "predictors": [
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini",
+          "diff_pair_count_log"
+        ]
+      },
+      "tree_level_multiplicity": {
+        "loo_r2": 0.6549185165052585,
+        "model": "tree_level_multiplicity",
+        "n_groups": 36,
+        "outcome": "trained_branch_margin",
+        "predictors": [
+          "tree_overlap_norm_min",
+          "tree_overlap_norm_mean",
+          "tree_coord_load_gini",
+          "tree_active_fraction_mean",
+          "tree_count_log"
+        ]
+      }
+    }
+  },
+  "gate_dependency": "gamma_toy_validation_report.phase_3_gate_passed",
+  "no_new_training_launched": true,
+  "phase_3_gate_passed": false,
+  "primary_question": "Does comparison-coordinate tree/difference overlap causally predict novel-class ICL at fixed count and d_rel?",
+  "schema": "input_multiplicity_causal_control_report.v1",
+  "source_artifacts": [
+    "ICL/results/next_phase_stats/tree_level_multiplicity_reanalysis.json",
+    "ICL/results/next_phase_stats/gamma_toy_validation_report.json",
+    "ICL/results/next_phase_stats/input_multiplicity_control_report.json"
+  ],
+  "status": "not_launched_blocked_by_phase_3_gate"
+}
