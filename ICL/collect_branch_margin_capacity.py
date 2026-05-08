@@ -150,6 +150,47 @@ FIELDS = [
     "gamma_star_decoder_norm_mean",
     "gamma_star_decoder_norm_max",
     "gamma_star_decoder_norm_std",
+    "gamma_star_opt_available",
+    "gamma_star_opt_restarts",
+    "gamma_star_opt_steps",
+    "gamma_star_opt_learning_rate",
+    "gamma_star_opt_projection_radius",
+    "gamma_star_opt_decoder_radius",
+    "gamma_star_opt_edge_bias_radius",
+    "gamma_star_opt_mode",
+    "gamma_star_opt_branch_softmin_temperature",
+    "gamma_star_opt_incorrect_temperature",
+    "gamma_star_opt_selected_restart",
+    "gamma_star_opt_selected_train_branch_margin_p10_min",
+    "gamma_star_opt_selected_train_branch_margin_mean_min",
+    "gamma_star_opt_selected_test_branch_margin_p10_min",
+    "gamma_star_opt_selected_test_branch_margin_mean_min",
+    "gamma_star_opt_selected_test_sample_margin_min",
+    "gamma_star_opt_selected_test_accuracy",
+    "gamma_star_opt_selected_projection_norm",
+    "gamma_star_opt_selected_decoder_norm",
+    "gamma_star_opt_selected_edge_bias_norm",
+    "gamma_star_opt_train_branch_margin_p10_min_mean",
+    "gamma_star_opt_train_branch_margin_p10_min_max",
+    "gamma_star_opt_train_branch_margin_p10_min_std",
+    "gamma_star_opt_test_branch_margin_p10_min_mean",
+    "gamma_star_opt_test_branch_margin_p10_min_max",
+    "gamma_star_opt_test_branch_margin_p10_min_std",
+    "gamma_star_opt_test_branch_margin_mean_min_mean",
+    "gamma_star_opt_test_branch_margin_mean_min_max",
+    "gamma_star_opt_test_branch_margin_mean_min_std",
+    "gamma_star_opt_test_accuracy_mean",
+    "gamma_star_opt_test_accuracy_max",
+    "gamma_star_opt_test_accuracy_std",
+    "gamma_star_opt_projection_norm_mean",
+    "gamma_star_opt_projection_norm_max",
+    "gamma_star_opt_projection_norm_std",
+    "gamma_star_opt_decoder_norm_mean",
+    "gamma_star_opt_decoder_norm_max",
+    "gamma_star_opt_decoder_norm_std",
+    "gamma_star_opt_edge_bias_norm_mean",
+    "gamma_star_opt_edge_bias_norm_max",
+    "gamma_star_opt_edge_bias_norm_std",
 ]
 
 
@@ -221,6 +262,11 @@ def capacity_row(row: dict, base_dir: str, args) -> dict:
         gamma_star_projection_radius=args.gamma_star_projection_radius,
         gamma_star_decoder_radius=args.gamma_star_decoder_radius,
         gamma_star_edge_bias_radius=args.gamma_star_edge_bias_radius,
+        gamma_star_opt_restarts=args.gamma_star_opt_restarts,
+        gamma_star_opt_steps=args.gamma_star_opt_steps,
+        gamma_star_opt_lr=args.gamma_star_opt_lr,
+        gamma_star_opt_branch_softmin_temperature=args.gamma_star_opt_branch_softmin_temperature,
+        gamma_star_opt_incorrect_temperature=args.gamma_star_opt_incorrect_temperature,
     )
     return {
         "topology_id": row.get("topology_id", ""),
@@ -354,6 +400,11 @@ def main():
     parser.add_argument("--gamma_star_projection_radius", type=float, default=1.0)
     parser.add_argument("--gamma_star_decoder_radius", type=float, default=1.0)
     parser.add_argument("--gamma_star_edge_bias_radius", type=float, default=0.0)
+    parser.add_argument("--gamma_star_opt_restarts", type=int, default=0)
+    parser.add_argument("--gamma_star_opt_steps", type=int, default=200)
+    parser.add_argument("--gamma_star_opt_lr", type=float, default=0.03)
+    parser.add_argument("--gamma_star_opt_branch_softmin_temperature", type=float, default=0.25)
+    parser.add_argument("--gamma_star_opt_incorrect_temperature", type=float, default=0.25)
     parser.add_argument("--include_unselected", action="store_true")
     args = parser.parse_args()
 

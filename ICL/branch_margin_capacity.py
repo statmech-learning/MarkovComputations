@@ -984,6 +984,251 @@ def bounded_gamma_star_proxy_capacity(
     return out
 
 
+def optimized_gamma_star_proxy_capacity(
+    arborescences: Mapping[int, Sequence[Sequence[int]]],
+    n_edges: int,
+    input_dim: int,
+    train_z: np.ndarray,
+    train_labels: Sequence[int],
+    test_z: np.ndarray,
+    test_labels: Sequence[int],
+    input_mask: Optional[np.ndarray] = None,
+    n_restarts: int = 0,
+    n_steps: int = 200,
+    seed: int = 0,
+    projection_radius: float = 1.0,
+    decoder_radius: float = 1.0,
+    edge_bias_radius: float = 0.0,
+    mode: str = "logsumexp",
+    learning_rate: float = 0.03,
+    branch_softmin_temperature: float = 0.25,
+    incorrect_temperature: float = 0.25,
+) -> dict:
+    """Gradient-optimized lower-bound probe for ``gamma*``.
+
+    This is a sharper companion to ``bounded_gamma_star_proxy_capacity``. It
+    directly optimizes bounded edge projections and a bounded decoder against a
+    differentiable surrogate of ``max_{K,B} min_b margin_b``. Torch is imported
+    lazily so the module remains usable in NumPy-only environments.
+    """
+
+    base = {
+        "gamma_star_opt_available": False,
+        "gamma_star_opt_restarts": int(n_restarts),
+        "gamma_star_opt_steps": int(n_steps),
+        "gamma_star_opt_learning_rate": float(learning_rate),
+        "gamma_star_opt_projection_radius": float(projection_radius),
+        "gamma_star_opt_decoder_radius": float(decoder_radius),
+        "gamma_star_opt_edge_bias_radius": float(edge_bias_radius),
+        "gamma_star_opt_mode": mode,
+        "gamma_star_opt_branch_softmin_temperature": float(branch_softmin_temperature),
+        "gamma_star_opt_incorrect_temperature": float(incorrect_temperature),
+    }
+    empty = {
+        "gamma_star_opt_selected_restart": None,
+        "gamma_star_opt_selected_train_branch_margin_p10_min": None,
+        "gamma_star_opt_selected_train_branch_margin_mean_min": None,
+        "gamma_star_opt_selected_test_branch_margin_p10_min": None,
+        "gamma_star_opt_selected_test_branch_margin_mean_min": None,
+        "gamma_star_opt_selected_test_sample_margin_min": None,
+        "gamma_star_opt_selected_test_accuracy": None,
+        "gamma_star_opt_selected_projection_norm": None,
+        "gamma_star_opt_selected_decoder_norm": None,
+        "gamma_star_opt_selected_edge_bias_norm": None,
+    }
+    if n_restarts <= 0 or n_steps <= 0:
+        out = dict(base)
+        out.update(empty)
+        return out
+    if mode not in {"max", "logsumexp"}:
+        raise ValueError("mode must be 'max' or 'logsumexp'")
+
+    try:
+        import torch
+        import torch.nn.functional as F
+    except Exception as exc:  # pragma: no cover - depends on optional torch install.
+        out = dict(base)
+        out.update(empty)
+        out["gamma_star_opt_unavailable_reason"] = str(exc)
+        return out
+
+    if input_mask is None:
+        mask = np.ones((n_edges, input_dim), dtype=float)
+    else:
+        mask = np.asarray(input_mask, dtype=float)
+        if mask.shape != (n_edges, input_dim):
+            raise ValueError(f"input_mask must have shape ({n_edges}, {input_dim})")
+
+    roots = sorted(arborescences)
+    if not roots:
+        out = dict(base)
+        out.update(empty)
+        out["gamma_star_opt_unavailable_reason"] = "no_arborescences"
+        return out
+
+    dtype = torch.float64
+    mask_t = torch.as_tensor(mask, dtype=dtype)
+    train_z_t = torch.as_tensor(np.asarray(train_z, dtype=float), dtype=dtype)
+    test_z_t = torch.as_tensor(np.asarray(test_z, dtype=float), dtype=dtype)
+    train_labels_np = np.asarray(train_labels, dtype=int)
+    test_labels_np = np.asarray(test_labels, dtype=int)
+    train_labels_t = torch.as_tensor(train_labels_np, dtype=torch.long)
+    test_labels_t = torch.as_tensor(test_labels_np, dtype=torch.long)
+    n_classes = int(max(np.max(train_labels_np), np.max(test_labels_np))) + 1
+    root_mats = [
+        torch.as_tensor(
+            np.ascontiguousarray(incidence_matrix({root: list(arborescences[root])}, n_edges), dtype=float),
+            dtype=dtype,
+        )
+        for root in roots
+    ]
+
+    def bounded_tensor(raw, radius, mask_tensor=None):
+        value = raw if mask_tensor is None else raw * mask_tensor
+        if radius is None or radius <= 0:
+            return value * 0.0
+        norm = torch.linalg.vector_norm(value)
+        scale = torch.clamp(torch.as_tensor(float(radius), dtype=dtype) / (norm + 1e-12), max=1.0)
+        return value * scale
+
+    def bounded_decoder(raw_w, raw_b):
+        if decoder_radius is None or decoder_radius <= 0:
+            return raw_w * 0.0, raw_b * 0.0
+        norm = torch.sqrt(torch.sum(raw_w * raw_w) + torch.sum(raw_b * raw_b))
+        scale = torch.clamp(torch.as_tensor(float(decoder_radius), dtype=dtype) / (norm + 1e-12), max=1.0)
+        return raw_w * scale, raw_b * scale
+
+    def root_features(z_tensor, edge_k, edge_b):
+        features = []
+        for M_root in root_mats:
+            if M_root.numel() == 0:
+                features.append(torch.full((z_tensor.shape[0],), -1e6, dtype=dtype))
+                continue
+            theta = M_root @ edge_k
+            beta = M_root @ edge_b
+            tree_scores = z_tensor @ theta.T + beta[None, :]
+            if mode == "max":
+                root_score = torch.max(tree_scores, dim=1).values
+            else:
+                root_score = torch.logsumexp(tree_scores, dim=1)
+            features.append(root_score)
+        feature_tensor = torch.stack(features, dim=1)
+        return feature_tensor - torch.logsumexp(feature_tensor, dim=1, keepdim=True)
+
+    def smooth_branch_min(scores, labels_tensor):
+        row_idx = torch.arange(scores.shape[0], dtype=torch.long)
+        correct = scores[row_idx, labels_tensor]
+        masked = scores.clone()
+        masked[row_idx, labels_tensor] = -1e9
+        tau = max(float(incorrect_temperature), 1e-6)
+        incorrect = tau * torch.logsumexp(masked / tau, dim=1)
+        margins = correct - incorrect
+        branch_values = []
+        for label in torch.unique(labels_tensor):
+            branch_values.append(torch.mean(margins[labels_tensor == label]))
+        branch_means = torch.stack(branch_values)
+        temp = max(float(branch_softmin_temperature), 1e-6)
+        return -temp * torch.logsumexp(-branch_means / temp, dim=0), margins
+
+    selected = None
+    train_gamma_p10 = []
+    test_gamma_p10 = []
+    test_gamma_mean = []
+    test_accuracy = []
+    projection_norms = []
+    decoder_norms = []
+    edge_bias_norms = []
+    rng = np.random.default_rng(seed)
+
+    for restart in range(n_restarts):
+        torch.manual_seed(int(rng.integers(0, 2**31 - 1)))
+        raw_k = torch.nn.Parameter(0.1 * torch.randn((n_edges, input_dim), dtype=dtype))
+        raw_edge_b = torch.nn.Parameter(0.1 * torch.randn((n_edges,), dtype=dtype))
+        raw_w = torch.nn.Parameter(0.1 * torch.randn((len(roots), n_classes), dtype=dtype))
+        raw_decoder_b = torch.nn.Parameter(torch.zeros((n_classes,), dtype=dtype))
+        optimizer = torch.optim.Adam([raw_k, raw_edge_b, raw_w, raw_decoder_b], lr=float(learning_rate))
+
+        for _ in range(n_steps):
+            optimizer.zero_grad()
+            K = bounded_tensor(raw_k, projection_radius, mask_t)
+            edge_b = bounded_tensor(raw_edge_b, edge_bias_radius)
+            W, decoder_b = bounded_decoder(raw_w, raw_decoder_b)
+            features = root_features(train_z_t, K, edge_b)
+            scores = features @ W + decoder_b[None, :]
+            branch_min, _ = smooth_branch_min(scores, train_labels_t)
+            per_sample_ce = F.cross_entropy(scores, train_labels_t, reduction="none")
+            branch_ce = torch.stack([
+                torch.mean(per_sample_ce[train_labels_t == label])
+                for label in torch.unique(train_labels_t)
+            ]).mean()
+            loss = branch_ce - branch_min
+            loss.backward()
+            optimizer.step()
+
+        with torch.no_grad():
+            K = bounded_tensor(raw_k, projection_radius, mask_t)
+            edge_b = bounded_tensor(raw_edge_b, edge_bias_radius)
+            W, decoder_b = bounded_decoder(raw_w, raw_decoder_b)
+            train_scores = (root_features(train_z_t, K, edge_b) @ W + decoder_b[None, :]).detach().cpu().numpy()
+            test_scores = (root_features(test_z_t, K, edge_b) @ W + decoder_b[None, :]).detach().cpu().numpy()
+            train_branch = branch_margin_by_label(train_scores, train_labels_np, "train")
+            test_branch = branch_margin_by_label(test_scores, test_labels_np, "test")
+            train_key = train_branch["train_branch_margin_p10_min"]
+            test_key = test_branch["test_branch_margin_p10_min"]
+            test_mean_key = test_branch["test_branch_margin_mean_min"]
+            acc = accuracy_from_scores(test_scores, test_labels_np)
+            projection_norm = float(torch.linalg.vector_norm(K).detach().cpu())
+            edge_bias_norm = float(torch.linalg.vector_norm(edge_b).detach().cpu())
+            decoder_norm = float(torch.sqrt(torch.sum(W * W) + torch.sum(decoder_b * decoder_b)).detach().cpu())
+
+        if train_key is not None and np.isfinite(train_key):
+            train_gamma_p10.append(float(train_key))
+        if test_key is not None and np.isfinite(test_key):
+            test_gamma_p10.append(float(test_key))
+        if test_mean_key is not None and np.isfinite(test_mean_key):
+            test_gamma_mean.append(float(test_mean_key))
+        test_accuracy.append(float(acc))
+        projection_norms.append(projection_norm)
+        decoder_norms.append(decoder_norm)
+        edge_bias_norms.append(edge_bias_norm)
+        score_for_selection = -np.inf if train_key is None else float(train_key)
+        if selected is None or score_for_selection > selected["selection_score"]:
+            selected = {
+                "selection_score": score_for_selection,
+                "restart": int(restart),
+                "train": train_branch,
+                "test": test_branch,
+                "test_accuracy": float(acc),
+                "projection_norm": projection_norm,
+                "decoder_norm": decoder_norm,
+                "edge_bias_norm": edge_bias_norm,
+            }
+
+    selected = selected or {"restart": None, "train": {}, "test": {}, "test_accuracy": None}
+    out = dict(base)
+    out["gamma_star_opt_available"] = True
+    out.update({
+        "gamma_star_opt_selected_restart": selected.get("restart"),
+        "gamma_star_opt_selected_train_branch_margin_p10_min": selected.get("train", {}).get("train_branch_margin_p10_min"),
+        "gamma_star_opt_selected_train_branch_margin_mean_min": selected.get("train", {}).get("train_branch_margin_mean_min"),
+        "gamma_star_opt_selected_test_branch_margin_p10_min": selected.get("test", {}).get("test_branch_margin_p10_min"),
+        "gamma_star_opt_selected_test_branch_margin_mean_min": selected.get("test", {}).get("test_branch_margin_mean_min"),
+        "gamma_star_opt_selected_test_sample_margin_min": selected.get("test", {}).get("test_sample_margin_min"),
+        "gamma_star_opt_selected_test_accuracy": selected.get("test_accuracy"),
+        "gamma_star_opt_selected_projection_norm": selected.get("projection_norm"),
+        "gamma_star_opt_selected_decoder_norm": selected.get("decoder_norm"),
+        "gamma_star_opt_selected_edge_bias_norm": selected.get("edge_bias_norm"),
+    })
+    out.update(_summarize_trial_values(train_gamma_p10, "gamma_star_opt_train_branch_margin_p10_min"))
+    out.update(_summarize_trial_values(test_gamma_p10, "gamma_star_opt_test_branch_margin_p10_min"))
+    out.update(_summarize_trial_values(test_gamma_mean, "gamma_star_opt_test_branch_margin_mean_min"))
+    out.update(_summarize_trial_values(test_accuracy, "gamma_star_opt_test_accuracy"))
+    out.update(_summarize_trial_values(projection_norms, "gamma_star_opt_projection_norm"))
+    out.update(_summarize_trial_values(decoder_norms, "gamma_star_opt_decoder_norm"))
+    out.update(_summarize_trial_values(edge_bias_norms, "gamma_star_opt_edge_bias_norm"))
+    return out
+
+
 def summarize_margin_scores(scores: np.ndarray, labels: Sequence[int], prefix: str) -> dict:
     margins = multiclass_margins(scores, labels)
     finite = margins[np.isfinite(margins)]
@@ -1025,6 +1270,11 @@ def branch_margin_capacity(
     gamma_star_projection_radius: float = 1.0,
     gamma_star_decoder_radius: float = 1.0,
     gamma_star_edge_bias_radius: float = 0.0,
+    gamma_star_opt_restarts: int = 0,
+    gamma_star_opt_steps: int = 200,
+    gamma_star_opt_lr: float = 0.03,
+    gamma_star_opt_branch_softmin_temperature: float = 0.25,
+    gamma_star_opt_incorrect_temperature: float = 0.25,
 ) -> dict:
     """Compute topology-gated branch-margin capacity proxy metrics."""
 
@@ -1237,6 +1487,28 @@ def branch_margin_capacity(
             ridge=ridge,
         )
     )
+    result.update(
+        optimized_gamma_star_proxy_capacity(
+            mats["arborescences"],
+            n_edges=len(edge_tuple),
+            input_dim=p,
+            train_z=train_z,
+            train_labels=train_labels,
+            test_z=test_z,
+            test_labels=test_labels,
+            input_mask=input_mask,
+            n_restarts=gamma_star_opt_restarts,
+            n_steps=gamma_star_opt_steps,
+            seed=seed + 4337,
+            projection_radius=gamma_star_projection_radius,
+            decoder_radius=gamma_star_decoder_radius,
+            edge_bias_radius=gamma_star_edge_bias_radius,
+            mode=tree_feature_mode,
+            learning_rate=gamma_star_opt_lr,
+            branch_softmin_temperature=gamma_star_opt_branch_softmin_temperature,
+            incorrect_temperature=gamma_star_opt_incorrect_temperature,
+        )
+    )
     return result
 
 
@@ -1311,6 +1583,10 @@ def markdown_report(result: dict) -> str:
             f"| selected test branch mean margin min | {result.get('gamma_star_selected_test_branch_margin_mean_min')} |",
             f"| selected test accuracy | {result.get('gamma_star_selected_test_accuracy')} |",
             f"| test branch p10 margin min mean/max | {result.get('gamma_star_test_branch_margin_p10_min_mean')} / {result.get('gamma_star_test_branch_margin_p10_min_max')} |",
+            f"| optimized available | {result.get('gamma_star_opt_available')} |",
+            f"| optimized restarts/steps | {result.get('gamma_star_opt_restarts')} / {result.get('gamma_star_opt_steps')} |",
+            f"| optimized selected test branch p10 margin min | {result.get('gamma_star_opt_selected_test_branch_margin_p10_min')} |",
+            f"| optimized selected test accuracy | {result.get('gamma_star_opt_selected_test_accuracy')} |",
         ]
     )
     lines.extend(
@@ -1369,6 +1645,11 @@ def parse_args():
     parser.add_argument("--gamma_star_projection_radius", type=float, default=1.0)
     parser.add_argument("--gamma_star_decoder_radius", type=float, default=1.0)
     parser.add_argument("--gamma_star_edge_bias_radius", type=float, default=0.0)
+    parser.add_argument("--gamma_star_opt_restarts", type=int, default=0)
+    parser.add_argument("--gamma_star_opt_steps", type=int, default=200)
+    parser.add_argument("--gamma_star_opt_lr", type=float, default=0.03)
+    parser.add_argument("--gamma_star_opt_branch_softmin_temperature", type=float, default=0.25)
+    parser.add_argument("--gamma_star_opt_incorrect_temperature", type=float, default=0.25)
     parser.add_argument("--output_json", type=str, default=None)
     parser.add_argument("--output_md", type=str, default=None)
     return parser.parse_args()
@@ -1416,6 +1697,11 @@ def main():
         gamma_star_projection_radius=args.gamma_star_projection_radius,
         gamma_star_decoder_radius=args.gamma_star_decoder_radius,
         gamma_star_edge_bias_radius=args.gamma_star_edge_bias_radius,
+        gamma_star_opt_restarts=args.gamma_star_opt_restarts,
+        gamma_star_opt_steps=args.gamma_star_opt_steps,
+        gamma_star_opt_lr=args.gamma_star_opt_lr,
+        gamma_star_opt_branch_softmin_temperature=args.gamma_star_opt_branch_softmin_temperature,
+        gamma_star_opt_incorrect_temperature=args.gamma_star_opt_incorrect_temperature,
     )
     result["topology_name"] = topology_name
     result["input_mask_name"] = input_mask_name

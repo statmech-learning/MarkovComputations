@@ -186,6 +186,23 @@ PREDICTOR_SETS = {
         "capacity_gamma_star_selected_test_accuracy",
         "capacity_gamma_star_test_branch_margin_p10_min_max",
     ],
+    "gamma_star_optimized_capacity": [
+        "input_coupled_parameter_count",
+        "capacity_gamma_star_opt_selected_test_branch_margin_p10_min",
+        "capacity_gamma_star_opt_selected_test_branch_margin_mean_min",
+        "capacity_gamma_star_opt_selected_test_accuracy",
+        "capacity_gamma_star_opt_test_branch_margin_p10_min_max",
+    ],
+    "gamma_star_optimized_capacity_plus_drel": [
+        "input_coupled_parameter_count",
+        "d_rel",
+        "comparison_branch_common_d_rel_min",
+        "comparison_branch_common_d_rel_gini",
+        "capacity_gamma_star_opt_selected_test_branch_margin_p10_min",
+        "capacity_gamma_star_opt_selected_test_branch_margin_mean_min",
+        "capacity_gamma_star_opt_selected_test_accuracy",
+        "capacity_gamma_star_opt_test_branch_margin_p10_min_max",
+    ],
 }
 
 

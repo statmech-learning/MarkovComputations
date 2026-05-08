@@ -17,6 +17,7 @@ from branch_margin_capacity import (  # noqa: E402
     markdown_report,
     normalized_rank_weights,
     normalized_mutual_information,
+    optimized_gamma_star_proxy_capacity,
     oracle_branch_scores,
     rank_geometry_summary,
     rooted_common_rank_tensor,
@@ -212,6 +213,37 @@ class BranchMarginCapacityTests(unittest.TestCase):
         summary = branch_margin_by_label(scores, labels, "toy")
         self.assertIn("toy_branch_margin_mean_min", summary)
         self.assertGreater(summary["toy_branch_margin_mean_min"], 0.0)
+
+    def test_optimized_gamma_star_proxy_reports_bounded_torch_capacity(self):
+        n_nodes = 3
+        n_context = 2
+        z_dim = 1
+        edges = complete_digraph(n_nodes).edges
+        mats = topology_matrices(n_nodes, edges)
+        train_z, train_labels = sample_exact_copy_branches(40, n_context, z_dim, seed=31)
+        test_z, test_labels = sample_exact_copy_branches(40, n_context, z_dim, seed=32)
+        p = (n_context + 1) * z_dim
+        result = optimized_gamma_star_proxy_capacity(
+            mats["arborescences"],
+            n_edges=len(edges),
+            input_dim=p,
+            train_z=train_z,
+            train_labels=train_labels,
+            test_z=test_z,
+            test_labels=test_labels,
+            n_restarts=1,
+            n_steps=3,
+            projection_radius=0.7,
+            decoder_radius=0.6,
+            seed=33,
+        )
+        self.assertEqual(result["gamma_star_opt_restarts"], 1)
+        self.assertEqual(result["gamma_star_opt_steps"], 3)
+        self.assertIn("gamma_star_opt_available", result)
+        if result["gamma_star_opt_available"]:
+            self.assertLessEqual(result["gamma_star_opt_selected_projection_norm"], 0.7000001)
+            self.assertLessEqual(result["gamma_star_opt_selected_decoder_norm"], 0.6000001)
+            self.assertIn("gamma_star_opt_selected_test_branch_margin_p10_min", result)
 
     def test_normal_fan_coverage_reports_branch_tree_assignment_nmi(self):
         n_nodes = 3

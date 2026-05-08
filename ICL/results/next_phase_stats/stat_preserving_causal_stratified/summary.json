@@ -1,0 +1,80 @@
+[
+  {
+    "bucket": "low",
+    "label": "g0267_hub_spoke_seed76_trainseed4",
+    "reported_test_novel_classes": "65.8",
+    "run_dir": "/home/aadarwal/repos/topology/ICL/results/expanded_hard_sweeps/n5_m12_N3_D2/g0267_hub_spoke_seed76_trainseed4",
+    "sampled_baseline_accuracy": 68.33333373069763,
+    "stat_preserving_branch_alignment_scramble_delta_max": -50.833334028720856,
+    "stat_preserving_branch_alignment_scramble_delta_mean": -50.833334028720856,
+    "stat_preserving_branch_alignment_scramble_delta_min": -50.833334028720856,
+    "stat_preserving_projection_scramble_delta_max": -38.333332538604736,
+    "stat_preserving_projection_scramble_delta_mean": -39.58333283662796,
+    "stat_preserving_projection_scramble_delta_min": -40.833333134651184
+  },
+  {
+    "bucket": "low",
+    "label": "g0289_two_module_seed2_trainseed5",
+    "reported_test_novel_classes": "67.4",
+    "run_dir": "/home/aadarwal/repos/topology/ICL/results/expanded_hard_sweeps/n5_m12_N3_D2/g0289_two_module_seed2_trainseed5",
+    "sampled_baseline_accuracy": 73.33333492279053,
+    "stat_preserving_branch_alignment_scramble_delta_max": -68.33333484828472,
+    "stat_preserving_branch_alignment_scramble_delta_mean": -68.33333484828472,
+    "stat_preserving_branch_alignment_scramble_delta_min": -68.33333484828472,
+    "stat_preserving_projection_scramble_delta_max": -23.333334922790527,
+    "stat_preserving_projection_scramble_delta_mean": -30.000001192092896,
+    "stat_preserving_projection_scramble_delta_min": -36.666667461395264
+  },
+  {
+    "bucket": "mid",
+    "label": "g0040_cycle_chords_seed41_trainseed3",
+    "reported_test_novel_classes": "85.4",
+    "run_dir": "/home/aadarwal/repos/topology/ICL/results/expanded_hard_sweeps/n5_m12_N3_D2/g0040_cycle_chords_seed41_trainseed3",
+    "sampled_baseline_accuracy": 88.33333253860474,
+    "stat_preserving_branch_alignment_scramble_delta_max": -76.66666582226753,
+    "stat_preserving_branch_alignment_scramble_delta_mean": -76.66666582226753,
+    "stat_preserving_branch_alignment_scramble_delta_min": -76.66666582226753,
+    "stat_preserving_projection_scramble_delta_max": -52.50000059604645,
+    "stat_preserving_projection_scramble_delta_mean": -55.416665971279144,
+    "stat_preserving_projection_scramble_delta_min": -58.33333134651184
+  },
+  {
+    "bucket": "mid",
+    "label": "g0187_random_sc_seed92_trainseed1",
+    "reported_test_novel_classes": "85.4",
+    "run_dir": "/home/aadarwal/repos/topology/ICL/results/expanded_hard_sweeps/n5_m12_N3_D2/g0187_random_sc_seed92_trainseed1",
+    "sampled_baseline_accuracy": 89.99999761581421,
+    "stat_preserving_branch_alignment_scramble_delta_max": -76.66666358709335,
+    "stat_preserving_branch_alignment_scramble_delta_mean": -76.66666358709335,
+    "stat_preserving_branch_alignment_scramble_delta_min": -76.66666358709335,
+    "stat_preserving_projection_scramble_delta_max": -49.166664481163025,
+    "stat_preserving_projection_scramble_delta_mean": -53.333331644535065,
+    "stat_preserving_projection_scramble_delta_min": -57.499998807907104
+  },
+  {
+    "bucket": "high",
+    "label": "g0187_random_sc_seed92_trainseed2",
+    "reported_test_novel_classes": "98.0",
+    "run_dir": "/home/aadarwal/repos/topology/ICL/results/expanded_hard_sweeps/n5_m12_N3_D2/g0187_random_sc_seed92_trainseed2",
+    "sampled_baseline_accuracy": 98.33333492279053,
+    "stat_preserving_branch_alignment_scramble_delta_max": -95.83333488553762,
+    "stat_preserving_branch_alignment_scramble_delta_mean": -95.83333488553762,
+    "stat_preserving_branch_alignment_scramble_delta_min": -95.83333488553762,
+    "stat_preserving_projection_scramble_delta_max": -63.333335518836975,
+    "stat_preserving_projection_scramble_delta_mean": -67.91666895151138,
+    "stat_preserving_projection_scramble_delta_min": -72.50000238418579
+  },
+  {
+    "bucket": "high",
+    "label": "g0354_degree_balanced_seed9_trainseed4",
+    "reported_test_novel_classes": "98.6",
+    "run_dir": "/home/aadarwal/repos/topology/ICL/results/expanded_hard_sweeps/n5_m12_N3_D2/g0354_degree_balanced_seed9_trainseed4",
+    "sampled_baseline_accuracy": 98.33333492279053,
+    "stat_preserving_branch_alignment_scramble_delta_max": -96.66666816920042,
+    "stat_preserving_branch_alignment_scramble_delta_mean": -96.66666816920042,
+    "stat_preserving_branch_alignment_scramble_delta_min": -96.66666816920042,
+    "stat_preserving_projection_scramble_delta_max": -60.00000238418579,
+    "stat_preserving_projection_scramble_delta_mean": -64.16666805744171,
+    "stat_preserving_projection_scramble_delta_min": -68.33333373069763
+  }
+]
