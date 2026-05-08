@@ -1,0 +1,47 @@
+{
+  "n_train_topologies": 4,
+  "selected_ids": [
+    "degrewire0027_baseg0354_degree_balanced_seed9_seed34",
+    "degrewire0003_baseg0354_degree_balanced_seed9_seed3",
+    "degrewire0002_baseg0354_degree_balanced_seed9_seed2",
+    "degrewire0024_baseg0354_degree_balanced_seed9_seed31"
+  ],
+  "selection": [
+    {
+      "active_tree_count": 45.25,
+      "branch_tree_nmi": 0.13570631739926678,
+      "linear_test_accuracy": 0.8833333333333333,
+      "metric": "normal_fan_branch_tree_nmi_mean",
+      "role": "low",
+      "topology_id": "degrewire0027_baseg0354_degree_balanced_seed9_seed34",
+      "value": 0.13570631739926678
+    },
+    {
+      "active_tree_count": 50.75,
+      "branch_tree_nmi": 0.16033345967029106,
+      "linear_test_accuracy": 0.8833333333333333,
+      "metric": "normal_fan_branch_tree_nmi_mean",
+      "role": "high",
+      "topology_id": "degrewire0003_baseg0354_degree_balanced_seed9_seed3",
+      "value": 0.16033345967029106
+    },
+    {
+      "active_tree_count": 39.25,
+      "branch_tree_nmi": 0.1364345916043961,
+      "linear_test_accuracy": 0.8833333333333333,
+      "metric": "normal_fan_active_tree_count_mean",
+      "role": "low",
+      "topology_id": "degrewire0002_baseg0354_degree_balanced_seed9_seed2",
+      "value": 39.25
+    },
+    {
+      "active_tree_count": 52.75,
+      "branch_tree_nmi": 0.15542376185688148,
+      "linear_test_accuracy": 0.8833333333333333,
+      "metric": "normal_fan_active_tree_count_mean",
+      "role": "high",
+      "topology_id": "degrewire0024_baseg0354_degree_balanced_seed9_seed31",
+      "value": 52.75
+    }
+  ]
+}

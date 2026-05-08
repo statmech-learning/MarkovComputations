@@ -1,0 +1,25 @@
+#!/bin/bash
+#SBATCH --job-name=topo_lib
+#SBATCH --output=/home/aadarwal/repos/topology/ICL/results/next_phase_stats/degree_rewire_normal_fan_n5_m12_N3_D2/training_sweep/_array_meta/task_%a.out
+#SBATCH --error=/home/aadarwal/repos/topology/ICL/results/next_phase_stats/degree_rewire_normal_fan_n5_m12_N3_D2/training_sweep/_array_meta/task_%a.err
+#SBATCH --time=02:00:00
+#SBATCH --partition=mit_normal
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=8G
+#SBATCH --array=0-19%8
+
+set -euo pipefail
+cd /home/aadarwal/repos/topology/ICL
+source $HOME/orcd/scratch/venvs/markov_icl/bin/activate
+
+LINE_NUM=$((SLURM_ARRAY_TASK_ID + 1))
+CMD=$(sed -n "${LINE_NUM}p" /home/aadarwal/repos/topology/ICL/results/next_phase_stats/degree_rewire_normal_fan_n5_m12_N3_D2/training_sweep/_array_meta/commands.txt)
+OUT=$(sed -n "${LINE_NUM}p" /home/aadarwal/repos/topology/ICL/results/next_phase_stats/degree_rewire_normal_fan_n5_m12_N3_D2/training_sweep/_array_meta/outputs.txt)
+mkdir -p "$OUT"
+if [ -f "$OUT/results.pkl" ] && [ "0" != "1" ]; then
+    echo "Skipping $OUT (results.pkl exists)"
+    exit 0
+fi
+echo "$CMD"
+eval "$CMD"

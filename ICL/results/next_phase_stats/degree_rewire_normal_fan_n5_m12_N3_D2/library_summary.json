@@ -1,0 +1,34 @@
+{
+  "base_edge_json": "/home/aadarwal/repos/topology/ICL/results/expanded_hard_libraries/n5_m12_N3_D2/topologies/g0354_degree_balanced_seed9.json",
+  "base_topology_id": "g0354_degree_balanced_seed9",
+  "d_rel_values": [
+    88.0
+  ],
+  "degree_signature": {
+    "in": [
+      3,
+      2,
+      2,
+      3,
+      2
+    ],
+    "out": [
+      3,
+      2,
+      2,
+      3,
+      2
+    ]
+  },
+  "edge_gini_max": 0.16153846153846163,
+  "edge_gini_min": 0.10000000000000009,
+  "n_context": 3,
+  "n_edges": 12,
+  "n_nodes": 5,
+  "n_variants": 32,
+  "root_gini_max": 0.0,
+  "root_gini_min": 0.0,
+  "tree_count_max": 85.0,
+  "tree_count_min": 55.0,
+  "z_dim": 2
+}

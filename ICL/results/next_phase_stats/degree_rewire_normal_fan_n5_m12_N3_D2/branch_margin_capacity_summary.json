@@ -1,0 +1,21 @@
+{
+  "n_rows": 32,
+  "families": {
+    "degree_rewire_exact_degree": {
+      "n": 32,
+      "linear_test_accuracy_mean": 0.8833333333333333,
+      "linear_test_accuracy_max": 0.8833333333333333,
+      "rank_weighted_linear_test_accuracy_mean": 0.8833333333333333,
+      "rank_weighted_linear_test_accuracy_max": 0.8833333333333333,
+      "tropical_linear_test_accuracy_mean": 0.41798502604166665,
+      "tropical_linear_test_accuracy_max": 0.5416666666666666,
+      "tropical_root_feature_effective_rank_mean": 3.005671629202059,
+      "rooted_polytope_supported_branch_dim_fraction_mean": 1.0,
+      "rooted_polytope_branch_best_rank_min_mean": 12.0,
+      "normal_fan_branch_tree_nmi_mean": 0.15085742073111386,
+      "normal_fan_active_tree_count_mean": 48.24609375,
+      "gamma_star_selected_test_branch_margin_p10_min_mean": null,
+      "gamma_star_selected_test_accuracy_mean": null
+    }
+  }
+}
