@@ -68,6 +68,15 @@ class CausalTopologyInterventionsTests(unittest.TestCase):
         self.assertAlmostEqual(deltas["target_accuracy_delta"], -20.0)
         self.assertAlmostEqual(deltas["branch_active_tree_mi_delta"], -0.2)
 
+    def test_parse_interventions_accepts_stat_preserving_scrambles(self):
+        parsed = parse_interventions(
+            "stat_preserving_branch_alignment_scramble,stat_preserving_projection_scramble"
+        )
+        self.assertEqual(
+            parsed,
+            ["stat_preserving_branch_alignment_scramble", "stat_preserving_projection_scramble"],
+        )
+
     def test_parse_interventions_rejects_unknown(self):
         with self.assertRaises(ValueError):
             parse_interventions("context_block_shuffle,nope")

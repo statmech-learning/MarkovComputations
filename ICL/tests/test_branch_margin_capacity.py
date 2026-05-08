@@ -9,6 +9,8 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from branch_margin_capacity import (  # noqa: E402
+    bounded_gamma_star_proxy_capacity,
+    branch_margin_by_label,
     branch_margin_capacity,
     comparison_feature_matrix,
     coordinate_common_rank_matrix,
@@ -98,6 +100,8 @@ class BranchMarginCapacityTests(unittest.TestCase):
         self.assertIn("rank_weighted_oracle_test_margin_mean", result)
         self.assertIn("tropical_linear_test_accuracy_mean", result)
         self.assertIn("normal_fan_branch_tree_nmi_mean", result)
+        self.assertIn("gamma_star_selected_test_branch_margin_p10_min", result)
+        self.assertIn("gamma_star_selected_test_accuracy", result)
         self.assertIn("rooted_polytope_supported_branch_dim_fraction", result)
         self.assertIn("rooted_common_rank_by_root_branch_dim", result)
         self.assertIn("rank_mass_gini", result)
@@ -174,6 +178,40 @@ class BranchMarginCapacityTests(unittest.TestCase):
         self.assertGreaterEqual(summary["tropical_linear_test_accuracy_mean"], 0.0)
         self.assertLessEqual(summary["tropical_linear_test_accuracy_mean"], 1.0)
         self.assertIn("tropical_root_feature_effective_rank_mean", summary)
+
+
+    def test_bounded_gamma_star_proxy_reports_norm_constrained_branch_margin(self):
+        n_nodes = 3
+        n_context = 2
+        z_dim = 1
+        edges = complete_digraph(n_nodes).edges
+        mats = topology_matrices(n_nodes, edges)
+        train_z, train_labels = sample_exact_copy_branches(80, n_context, z_dim, seed=21)
+        test_z, test_labels = sample_exact_copy_branches(80, n_context, z_dim, seed=22)
+        p = (n_context + 1) * z_dim
+        result = bounded_gamma_star_proxy_capacity(
+            mats["arborescences"],
+            n_edges=len(edges),
+            input_dim=p,
+            train_z=train_z,
+            train_labels=train_labels,
+            test_z=test_z,
+            test_labels=test_labels,
+            n_trials=4,
+            projection_radius=0.75,
+            decoder_radius=0.5,
+            seed=23,
+        )
+        self.assertEqual(result["gamma_star_proxy_trials"], 4)
+        self.assertLessEqual(result["gamma_star_selected_projection_norm"], 0.7500001)
+        self.assertLessEqual(result["gamma_star_selected_decoder_norm"], 0.5000001)
+        self.assertIn("gamma_star_selected_test_branch_margin_p10_min", result)
+
+        scores = np.asarray([[2.0, 0.0], [0.0, 1.0], [0.5, 0.25]])
+        labels = np.asarray([0, 1, 0])
+        summary = branch_margin_by_label(scores, labels, "toy")
+        self.assertIn("toy_branch_margin_mean_min", summary)
+        self.assertGreater(summary["toy_branch_margin_mean_min"], 0.0)
 
     def test_normal_fan_coverage_reports_branch_tree_assignment_nmi(self):
         n_nodes = 3

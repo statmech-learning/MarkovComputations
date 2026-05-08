@@ -19,6 +19,13 @@ The implemented interventions are intentionally mechanical and auditable:
 * ``decoder_root_permutation`` permutes decoder rows across species.
 * ``randomize_K_direction`` replaces each effective edge projection by a random
   vector on the same support with the same effective row norm.
+* ``stat_preserving_branch_alignment_scramble`` is an explicit branch-alignment
+  scramble: it preserves the physical graph, root tree counts, ``d_rel``, total
+  input-mask density, and per-edge projection row norms while permuting context
+  blocks relative to the query block.
+* ``stat_preserving_projection_scramble`` preserves the physical graph, root
+  tree counts, ``d_rel``, input-mask support, and per-edge projection row norms
+  while randomizing projection directions on the existing support.
 
 Each intervention is evaluated on the same sampled novel-class ICL batch as the
 baseline.  The output JSON is designed to be joined with mechanism summaries
@@ -43,6 +50,8 @@ DEFAULT_INTERVENTIONS = [
     "edge_rate_function_permutation",
     "decoder_root_permutation",
     "randomize_K_direction",
+    "stat_preserving_branch_alignment_scramble",
+    "stat_preserving_projection_scramble",
 ]
 
 
@@ -155,13 +164,25 @@ def apply_intervention(model, intervention: str, seed: int) -> dict:
 
     metadata = {"intervention": intervention, "seed": seed}
     device = model.K_params.device
-    if intervention == "context_block_shuffle":
+    if intervention in {"context_block_shuffle", "stat_preserving_branch_alignment_scramble"}:
         perm = context_block_permutation(model.N, model.z_dim, seed, include_query=False)
         perm_t = _torch_permutation(torch, perm, device)
         with torch.no_grad():
             model.K_params.copy_(model.K_params[:, perm_t])
             model.input_mask.copy_(model.input_mask[:, perm_t])
         metadata["coordinate_permutation"] = perm.tolist()
+        if intervention == "stat_preserving_branch_alignment_scramble":
+            metadata.update(
+                {
+                    "preserves_physical_graph": True,
+                    "preserves_root_tree_counts": True,
+                    "preserves_d_rel": True,
+                    "preserves_total_input_mask_density": True,
+                    "preserves_edge_projection_row_norms": True,
+                    "scrambles_branch_context_alignment": True,
+                    "query_block_fixed": True,
+                }
+            )
         return metadata
 
     if intervention == "all_coordinate_shuffle":
@@ -194,7 +215,7 @@ def apply_intervention(model, intervention: str, seed: int) -> dict:
         metadata["root_permutation"] = perm.tolist()
         return metadata
 
-    if intervention == "randomize_K_direction":
+    if intervention in {"randomize_K_direction", "stat_preserving_projection_scramble"}:
         with torch.no_grad():
             effective = (model.K_params * model.input_mask).detach().cpu().numpy()
             mask = model.input_mask.detach().cpu().numpy()
@@ -203,6 +224,17 @@ def apply_intervention(model, intervention: str, seed: int) -> dict:
             model.K_params.copy_(tensor)
         metadata["preserves_effective_row_norms"] = True
         metadata["preserves_input_mask"] = True
+        if intervention == "stat_preserving_projection_scramble":
+            metadata.update(
+                {
+                    "preserves_physical_graph": True,
+                    "preserves_root_tree_counts": True,
+                    "preserves_d_rel": True,
+                    "preserves_input_mask_support": True,
+                    "preserves_total_input_mask_density": True,
+                    "scrambles_projection_direction_on_existing_support": True,
+                }
+            )
         return metadata
 
     raise ValueError(f"Unknown intervention {intervention!r}")

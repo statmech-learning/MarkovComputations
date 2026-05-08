@@ -797,6 +797,193 @@ def tropical_tree_feature_capacity(
     return out
 
 
+def branch_margin_by_label(scores: np.ndarray, labels: Sequence[int], prefix: str) -> dict:
+    """Summarize the branch-wise margin objective in ``min_b margin_b`` form."""
+
+    margins = multiclass_margins(scores, labels)
+    labels = np.asarray(labels, dtype=int)
+    branch_means = []
+    branch_p10s = []
+    branch_mins = []
+    for label in sorted(np.unique(labels).tolist()):
+        values = margins[labels == label]
+        finite = values[np.isfinite(values)]
+        if finite.size == 0:
+            continue
+        branch_means.append(float(np.mean(finite)))
+        branch_p10s.append(float(np.quantile(finite, 0.10)))
+        branch_mins.append(float(np.min(finite)))
+    finite_all = margins[np.isfinite(margins)]
+    return {
+        f"{prefix}_branch_margin_mean_min": float(np.min(branch_means)) if branch_means else None,
+        f"{prefix}_branch_margin_mean_mean": float(np.mean(branch_means)) if branch_means else None,
+        f"{prefix}_branch_margin_p10_min": float(np.min(branch_p10s)) if branch_p10s else None,
+        f"{prefix}_branch_margin_p10_mean": float(np.mean(branch_p10s)) if branch_p10s else None,
+        f"{prefix}_branch_margin_min_min": float(np.min(branch_mins)) if branch_mins else None,
+        f"{prefix}_sample_margin_min": float(np.min(finite_all)) if finite_all.size else None,
+        f"{prefix}_sample_margin_mean": float(np.mean(finite_all)) if finite_all.size else None,
+    }
+
+
+def bounded_gamma_star_proxy_capacity(
+    arborescences: Mapping[int, Sequence[Sequence[int]]],
+    n_edges: int,
+    input_dim: int,
+    train_z: np.ndarray,
+    train_labels: Sequence[int],
+    test_z: np.ndarray,
+    test_labels: Sequence[int],
+    input_mask: Optional[np.ndarray] = None,
+    n_trials: int = 32,
+    seed: int = 0,
+    projection_radius: float = 1.0,
+    decoder_radius: float = 1.0,
+    edge_bias_radius: float = 0.0,
+    mode: str = "max",
+    ridge: float = 1e-3,
+) -> dict:
+    """Bounded lower-bound probe for the graph/mask capacity ``gamma*``.
+
+    The target theory object is ``max_{K,B} min_b margin_b`` under norm
+    constraints. This routine is not a global optimizer. It samples
+    Frobenius-norm-bounded edge projections respecting ``Omega``, optionally
+    samples bounded edge-bias vectors, fits a decoder with bounded Frobenius
+    norm, and reports the best branch-wise margin found. It is therefore a
+    reproducible lower-bound proxy for comparing against ``d_rel``.
+    """
+
+    if n_trials <= 0:
+        return {
+            "gamma_star_proxy_trials": 0,
+            "gamma_star_projection_radius": float(projection_radius),
+            "gamma_star_decoder_radius": float(decoder_radius),
+            "gamma_star_edge_bias_radius": float(edge_bias_radius),
+            "gamma_star_mode": mode,
+            "gamma_star_selected_train_branch_margin_p10_min": None,
+            "gamma_star_selected_test_branch_margin_p10_min": None,
+            "gamma_star_selected_test_accuracy": None,
+        }
+    if input_mask is None:
+        mask = np.ones((n_edges, input_dim), dtype=float)
+    else:
+        mask = np.asarray(input_mask, dtype=float)
+        if mask.shape != (n_edges, input_dim):
+            raise ValueError(f"input_mask must have shape ({n_edges}, {input_dim})")
+
+    rng = np.random.default_rng(seed)
+    n_classes = int(max(np.max(train_labels), np.max(test_labels))) + 1
+    selected = None
+    train_gamma_p10 = []
+    test_gamma_p10 = []
+    test_gamma_mean = []
+    test_accuracy = []
+    decoder_norms = []
+    projection_norms = []
+
+    for trial_idx in range(n_trials):
+        K = rng.normal(loc=0.0, scale=1.0, size=(n_edges, input_dim)) * mask
+        k_norm = float(np.linalg.norm(K))
+        if k_norm > 1e-12 and projection_radius > 0:
+            K = K * (projection_radius / k_norm)
+            k_norm = float(np.linalg.norm(K))
+        if edge_bias_radius > 0:
+            edge_bias = rng.normal(loc=0.0, scale=1.0, size=n_edges)
+            bias_norm = float(np.linalg.norm(edge_bias))
+            if bias_norm > 1e-12:
+                edge_bias = edge_bias * (edge_bias_radius / bias_norm)
+        else:
+            edge_bias = np.zeros(n_edges, dtype=float)
+
+        train_features = tropical_root_feature_matrix(
+            train_z,
+            arborescences,
+            n_edges=n_edges,
+            edge_projections=K,
+            edge_bias=edge_bias,
+            mode=mode,
+            normalize_roots=True,
+        )
+        test_features = tropical_root_feature_matrix(
+            test_z,
+            arborescences,
+            n_edges=n_edges,
+            edge_projections=K,
+            edge_bias=edge_bias,
+            mode=mode,
+            normalize_roots=True,
+        )
+        weights, bias = fit_ridge_multiclass(
+            train_features,
+            train_labels,
+            n_classes=n_classes,
+            ridge=ridge,
+            l2_radius=decoder_radius,
+        )
+        train_scores = linear_scores(train_features, weights, bias)
+        test_scores = linear_scores(test_features, weights, bias)
+        train_branch = branch_margin_by_label(train_scores, train_labels, "train")
+        test_branch = branch_margin_by_label(test_scores, test_labels, "test")
+        train_key = train_branch["train_branch_margin_p10_min"]
+        test_key = test_branch["test_branch_margin_p10_min"]
+        test_mean_key = test_branch["test_branch_margin_mean_min"]
+        acc = accuracy_from_scores(test_scores, test_labels)
+        decoder_norm = float(np.linalg.norm(weights))
+
+        if train_key is not None and np.isfinite(train_key):
+            train_gamma_p10.append(float(train_key))
+        if test_key is not None and np.isfinite(test_key):
+            test_gamma_p10.append(float(test_key))
+        if test_mean_key is not None and np.isfinite(test_mean_key):
+            test_gamma_mean.append(float(test_mean_key))
+        test_accuracy.append(float(acc))
+        decoder_norms.append(decoder_norm)
+        projection_norms.append(k_norm)
+
+        score_for_selection = -np.inf if train_key is None else float(train_key)
+        if selected is None or score_for_selection > selected["selection_score"]:
+            selected = {
+                "selection_score": score_for_selection,
+                "trial": int(trial_idx),
+                "train": train_branch,
+                "test": test_branch,
+                "test_accuracy": float(acc),
+                "projection_norm": k_norm,
+                "decoder_norm": decoder_norm,
+            }
+
+    selected = selected or {
+        "trial": None,
+        "train": {},
+        "test": {},
+        "test_accuracy": None,
+        "projection_norm": None,
+        "decoder_norm": None,
+    }
+    out = {
+        "gamma_star_proxy_trials": int(n_trials),
+        "gamma_star_projection_radius": float(projection_radius),
+        "gamma_star_decoder_radius": float(decoder_radius),
+        "gamma_star_edge_bias_radius": float(edge_bias_radius),
+        "gamma_star_mode": mode,
+        "gamma_star_selected_trial": selected.get("trial"),
+        "gamma_star_selected_train_branch_margin_p10_min": selected.get("train", {}).get("train_branch_margin_p10_min"),
+        "gamma_star_selected_train_branch_margin_mean_min": selected.get("train", {}).get("train_branch_margin_mean_min"),
+        "gamma_star_selected_test_branch_margin_p10_min": selected.get("test", {}).get("test_branch_margin_p10_min"),
+        "gamma_star_selected_test_branch_margin_mean_min": selected.get("test", {}).get("test_branch_margin_mean_min"),
+        "gamma_star_selected_test_sample_margin_min": selected.get("test", {}).get("test_sample_margin_min"),
+        "gamma_star_selected_test_accuracy": selected.get("test_accuracy"),
+        "gamma_star_selected_projection_norm": selected.get("projection_norm"),
+        "gamma_star_selected_decoder_norm": selected.get("decoder_norm"),
+    }
+    out.update(_summarize_trial_values(train_gamma_p10, "gamma_star_train_branch_margin_p10_min"))
+    out.update(_summarize_trial_values(test_gamma_p10, "gamma_star_test_branch_margin_p10_min"))
+    out.update(_summarize_trial_values(test_gamma_mean, "gamma_star_test_branch_margin_mean_min"))
+    out.update(_summarize_trial_values(test_accuracy, "gamma_star_test_accuracy"))
+    out.update(_summarize_trial_values(projection_norms, "gamma_star_projection_norm"))
+    out.update(_summarize_trial_values(decoder_norms, "gamma_star_decoder_norm"))
+    return out
+
+
 def summarize_margin_scores(scores: np.ndarray, labels: Sequence[int], prefix: str) -> dict:
     margins = multiclass_margins(scores, labels)
     finite = margins[np.isfinite(margins)]
@@ -834,6 +1021,10 @@ def branch_margin_capacity(
     tree_feature_mode: str = "max",
     tree_feature_projection_radius: float = 1.0,
     tree_feature_bias_scale: float = 0.0,
+    gamma_star_trials: int = 32,
+    gamma_star_projection_radius: float = 1.0,
+    gamma_star_decoder_radius: float = 1.0,
+    gamma_star_edge_bias_radius: float = 0.0,
 ) -> dict:
     """Compute topology-gated branch-margin capacity proxy metrics."""
 
@@ -1027,6 +1218,25 @@ def branch_margin_capacity(
             edge_bias_scale=tree_feature_bias_scale,
         )
     )
+    result.update(
+        bounded_gamma_star_proxy_capacity(
+            mats["arborescences"],
+            n_edges=len(edge_tuple),
+            input_dim=p,
+            train_z=train_z,
+            train_labels=train_labels,
+            test_z=test_z,
+            test_labels=test_labels,
+            input_mask=input_mask,
+            n_trials=gamma_star_trials,
+            seed=seed + 3251,
+            projection_radius=gamma_star_projection_radius,
+            decoder_radius=gamma_star_decoder_radius,
+            edge_bias_radius=gamma_star_edge_bias_radius,
+            mode=tree_feature_mode,
+            ridge=ridge,
+        )
+    )
     return result
 
 
@@ -1089,6 +1299,18 @@ def markdown_report(result: dict) -> str:
             f"| root feature effective rank mean/max | {result.get('tropical_root_feature_effective_rank_mean')} / {result.get('tropical_root_feature_effective_rank_max')} |",
             f"| normal fan branch-tree NMI mean/max | {result.get('normal_fan_branch_tree_nmi_mean')} / {result.get('normal_fan_branch_tree_nmi_max')} |",
             f"| normal fan active tree count mean | {result.get('normal_fan_active_tree_count_mean')} |",
+            "",
+            "## Bounded Gamma-Star Proxy",
+            "",
+            "| metric | value |",
+            "| --- | ---: |",
+            f"| trials | {result.get('gamma_star_proxy_trials')} |",
+            f"| projection radius | {result.get('gamma_star_projection_radius')} |",
+            f"| decoder radius | {result.get('gamma_star_decoder_radius')} |",
+            f"| selected test branch p10 margin min | {result.get('gamma_star_selected_test_branch_margin_p10_min')} |",
+            f"| selected test branch mean margin min | {result.get('gamma_star_selected_test_branch_margin_mean_min')} |",
+            f"| selected test accuracy | {result.get('gamma_star_selected_test_accuracy')} |",
+            f"| test branch p10 margin min mean/max | {result.get('gamma_star_test_branch_margin_p10_min_mean')} / {result.get('gamma_star_test_branch_margin_p10_min_max')} |",
         ]
     )
     lines.extend(
@@ -1143,6 +1365,10 @@ def parse_args():
     parser.add_argument("--tree_feature_mode", choices=["max", "logsumexp"], default="max")
     parser.add_argument("--tree_feature_projection_radius", type=float, default=1.0)
     parser.add_argument("--tree_feature_bias_scale", type=float, default=0.0)
+    parser.add_argument("--gamma_star_trials", type=int, default=32)
+    parser.add_argument("--gamma_star_projection_radius", type=float, default=1.0)
+    parser.add_argument("--gamma_star_decoder_radius", type=float, default=1.0)
+    parser.add_argument("--gamma_star_edge_bias_radius", type=float, default=0.0)
     parser.add_argument("--output_json", type=str, default=None)
     parser.add_argument("--output_md", type=str, default=None)
     return parser.parse_args()
@@ -1186,6 +1412,10 @@ def main():
         tree_feature_mode=args.tree_feature_mode,
         tree_feature_projection_radius=args.tree_feature_projection_radius,
         tree_feature_bias_scale=args.tree_feature_bias_scale,
+        gamma_star_trials=args.gamma_star_trials,
+        gamma_star_projection_radius=args.gamma_star_projection_radius,
+        gamma_star_decoder_radius=args.gamma_star_decoder_radius,
+        gamma_star_edge_bias_radius=args.gamma_star_edge_bias_radius,
     )
     result["topology_name"] = topology_name
     result["input_mask_name"] = input_mask_name

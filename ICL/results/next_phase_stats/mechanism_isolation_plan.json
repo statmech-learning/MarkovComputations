@@ -1,0 +1,116 @@
+{
+  "contrasts": [
+    {
+      "contrast_delta": 0.2365384615384618,
+      "contrast_metric": "edge_participation_gini",
+      "group_cols": [
+        "regime",
+        "n_nodes",
+        "n_edges",
+        "d_rel"
+      ],
+      "group_key": [
+        "n5_m12_N3_D2",
+        "5.0",
+        "12.0",
+        "88.0"
+      ],
+      "high_family": "cycle_chords",
+      "high_item": "cycle_chords",
+      "high_source_csv": "ICL/results/expanded_hard_libraries/n5_m12_N3_D2/selected.csv",
+      "high_value": 0.3166666666666669,
+      "low_family": "cycle_chords",
+      "low_item": "cycle_chords",
+      "low_source_csv": "ICL/results/expanded_hard_libraries/n5_m12_N3_D2/selected.csv",
+      "low_value": 0.08012820512820507,
+      "name": "same_drel_different_bottleneck_participation",
+      "rationale": "Hold relative tree rank fixed while separating bottleneck/edge-participation heterogeneity.",
+      "status": "ready"
+    },
+    {
+      "contrast_delta": 0.3125,
+      "contrast_metric": "root_tree_count_gini",
+      "group_cols": [
+        "regime",
+        "n_nodes",
+        "n_edges",
+        "n_trees_total_enum"
+      ],
+      "group_key": [
+        "n4_m6_N3_D2",
+        "4.0",
+        "6.0",
+        "8.0"
+      ],
+      "high_family": "cycle_chords",
+      "high_item": "cycle_chords",
+      "high_source_csv": "ICL/results/expanded_hard_libraries/n4_m6_N3_D2/selected.csv",
+      "high_value": 0.3125,
+      "low_family": "cycle_chords",
+      "low_item": "cycle_chords",
+      "low_source_csv": "ICL/results/expanded_hard_libraries/n4_m6_N3_D2/selected.csv",
+      "low_value": 0.0,
+      "name": "same_tree_count_different_root_balance",
+      "rationale": "Hold total rooted-tree count fixed while separating tree-count imbalance across roots.",
+      "status": "ready"
+    },
+    {
+      "candidate_metrics": [
+        "normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean"
+      ],
+      "group_cols": [
+        "regime",
+        "n_nodes",
+        "n_edges",
+        "in_degree_cv",
+        "out_degree_cv",
+        "d_rel"
+      ],
+      "name": "same_degree_sequence_different_normal_fan",
+      "rationale": "Approximately hold degree sequence/rank fixed while separating sampled tree-polytope normal-fan organization.",
+      "reason": "No group contained at least two rows with the required fixed columns and contrast metric.",
+      "status": "unavailable"
+    },
+    {
+      "candidate_metrics": [
+        "input_coord_load_gini",
+        "input_edge_load_gini"
+      ],
+      "group_cols": [
+        "regime",
+        "physical_topology_name",
+        "edge_json"
+      ],
+      "name": "same_physical_graph_permuted_input_masks",
+      "rationale": "Hold the physical graph fixed while separating input-coordinate load heterogeneity across masks.",
+      "reason": "No group contained at least two rows with the required fixed columns and contrast metric.",
+      "status": "unavailable"
+    },
+    {
+      "candidate_metrics": [
+        "input_coord_load_gini",
+        "input_edge_load_gini"
+      ],
+      "group_cols": [
+        "regime",
+        "n_nodes",
+        "n_edges",
+        "input_coupled_parameter_count"
+      ],
+      "name": "same_mask_count_different_coordinate_load",
+      "rationale": "Hold mask count fixed while separating coordinate-load and edge-load heterogeneity.",
+      "reason": "No group contained at least two rows with the required fixed columns and contrast metric.",
+      "status": "unavailable"
+    }
+  ],
+  "input_csv": [
+    "ICL/results/expanded_hard_libraries/n4_m6_N3_D2/selected.csv",
+    "ICL/results/expanded_hard_libraries/n5_m8_N3_D2/selected.csv",
+    "ICL/results/expanded_hard_libraries/n5_m12_N3_D2/selected.csv",
+    "ICL/results/expanded_hard_libraries/n4_m6_N3_D2/branch_margin_capacity.csv",
+    "ICL/results/expanded_hard_libraries/n5_m8_N3_D2/branch_margin_capacity.csv",
+    "ICL/results/expanded_hard_libraries/n5_m12_N3_D2/branch_margin_capacity.csv"
+  ],
+  "n_rows": 72
+}

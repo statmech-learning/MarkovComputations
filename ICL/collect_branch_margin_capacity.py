@@ -118,6 +118,38 @@ FIELDS = [
     "normal_fan_branch_active_tree_count_min_mean",
     "normal_fan_branch_active_tree_count_min_max",
     "normal_fan_branch_active_tree_count_min_std",
+    "gamma_star_proxy_trials",
+    "gamma_star_projection_radius",
+    "gamma_star_decoder_radius",
+    "gamma_star_edge_bias_radius",
+    "gamma_star_mode",
+    "gamma_star_selected_trial",
+    "gamma_star_selected_train_branch_margin_p10_min",
+    "gamma_star_selected_train_branch_margin_mean_min",
+    "gamma_star_selected_test_branch_margin_p10_min",
+    "gamma_star_selected_test_branch_margin_mean_min",
+    "gamma_star_selected_test_sample_margin_min",
+    "gamma_star_selected_test_accuracy",
+    "gamma_star_selected_projection_norm",
+    "gamma_star_selected_decoder_norm",
+    "gamma_star_train_branch_margin_p10_min_mean",
+    "gamma_star_train_branch_margin_p10_min_max",
+    "gamma_star_train_branch_margin_p10_min_std",
+    "gamma_star_test_branch_margin_p10_min_mean",
+    "gamma_star_test_branch_margin_p10_min_max",
+    "gamma_star_test_branch_margin_p10_min_std",
+    "gamma_star_test_branch_margin_mean_min_mean",
+    "gamma_star_test_branch_margin_mean_min_max",
+    "gamma_star_test_branch_margin_mean_min_std",
+    "gamma_star_test_accuracy_mean",
+    "gamma_star_test_accuracy_max",
+    "gamma_star_test_accuracy_std",
+    "gamma_star_projection_norm_mean",
+    "gamma_star_projection_norm_max",
+    "gamma_star_projection_norm_std",
+    "gamma_star_decoder_norm_mean",
+    "gamma_star_decoder_norm_max",
+    "gamma_star_decoder_norm_std",
 ]
 
 
@@ -185,6 +217,10 @@ def capacity_row(row: dict, base_dir: str, args) -> dict:
         tree_feature_mode=args.tree_feature_mode,
         tree_feature_projection_radius=args.tree_feature_projection_radius,
         tree_feature_bias_scale=args.tree_feature_bias_scale,
+        gamma_star_trials=args.gamma_star_trials,
+        gamma_star_projection_radius=args.gamma_star_projection_radius,
+        gamma_star_decoder_radius=args.gamma_star_decoder_radius,
+        gamma_star_edge_bias_radius=args.gamma_star_edge_bias_radius,
     )
     return {
         "topology_id": row.get("topology_id", ""),
@@ -262,6 +298,14 @@ def summary(rows: List[dict]) -> dict:
                 items,
                 "normal_fan_active_tree_count_mean",
             ),
+            "gamma_star_selected_test_branch_margin_p10_min_mean": family_float_mean(
+                items,
+                "gamma_star_selected_test_branch_margin_p10_min",
+            ),
+            "gamma_star_selected_test_accuracy_mean": family_float_mean(
+                items,
+                "gamma_star_selected_test_accuracy",
+            ),
         }
     return out
 
@@ -306,6 +350,10 @@ def main():
     parser.add_argument("--tree_feature_mode", choices=["max", "logsumexp"], default="max")
     parser.add_argument("--tree_feature_projection_radius", type=float, default=1.0)
     parser.add_argument("--tree_feature_bias_scale", type=float, default=0.0)
+    parser.add_argument("--gamma_star_trials", type=int, default=32)
+    parser.add_argument("--gamma_star_projection_radius", type=float, default=1.0)
+    parser.add_argument("--gamma_star_decoder_radius", type=float, default=1.0)
+    parser.add_argument("--gamma_star_edge_bias_radius", type=float, default=0.0)
     parser.add_argument("--include_unselected", action="store_true")
     args = parser.parse_args()
 
