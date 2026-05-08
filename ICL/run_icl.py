@@ -15,7 +15,7 @@ import time
 from data_generation import GaussianMixtureModel, generate_icl_gmm_data, build_input_projection_matrices
 from datasets import ICLGMMDataset, collate_fn
 from models import *
-from training import train_model
+from training import train_model, train_models_joint
 from evaluation import test_icl
 
 
@@ -39,8 +39,8 @@ output_dir = args.output
 # ============================================================
 L = 128                      # Number of output classes
 K = L                      # Number of GMM classes for data generation
-D = 8                        # Dimension of input features
-N = 3                        # Number of context examples per task
+D = 4                        # Dimension of input features
+N = 4                        # Number of context examples per task
 B = 1                        # Burstiness parameter (zipfian sampling weight)
 epsilon = 1e-3               # Within-class noise (standard deviation)
 seed = args.param2                     # Random seed for reproducibility
@@ -51,14 +51,31 @@ min_max_choice = None        # Optional constraint on min/max class indices
 unique_labels = False        # If True, ensure all context labels are unique
 
 # ============================================================
+# Input Projection Parameters
+# ============================================================
+input_proj_mode = "random"   # "identity" or "random"
+input_proj_scale = 10.0
+input_proj_dim = args.param1
+
+# ============================================================
 # Model Architecture Parameters
 # ============================================================
-n_nodes = args.param1                  # Number of nodes in the Markov chain
+n_nodes = 5                  # Number of nodes in the Markov chain
 transform_func = 'exp'       # Transformation function: 'exp', 'relu', or 'elu'
 learn_base_rates = True      # If True, allow gradient updates to unmasked base rates
+
 context_scorer_type = "linear"  # 'linear' or 'mlp' scorer head
 mlp_depth = 2    # MLP depth for scorer head (if enabled)
 mlp_width = 64    # MLP width for scorer head (if enabled)
+
+add_qk = True
+qk_dim = input_proj_dim       # Key/query latent dimension for QK baseline
+
+add_mlp = True
+mlp_baseline_depth = 2
+mlp_baseline_width = 64
+mlp_baseline_dropout = 0.0
+mlp_baseline_activation = "relu"
 
 # ============================================================
 # Sparsity Parameters - K_params (context-dependent modulation)
@@ -78,7 +95,7 @@ base_mask_value = float('-inf')            # Value for masked base rates: 0.0 (n
 epochs = 1000                # Number of training epochs
 lr = 0.0025                  # Learning rate
 batch_size = 50              # Batch size for training
-train_samples = 250        # Number of training samples
+train_samples = 25000        # Number of training samples
 val_samples = 5000           # Number of validation samples
 
 # ============================================================
@@ -86,9 +103,7 @@ val_samples = 5000           # Number of validation samples
 # ============================================================
 method = 'direct_solve'      # Steady-state solver: 'direct_solve', 'matrix_tree', or 'linear_solver'
 temperature = 1.0            # Softmax temperature for attention
-input_proj_mode = "identity"  # 'identity' or 'random'
-input_proj_scale = 1.0        # Std scale for random projections
-input_proj_dim = D            # Projection output dimension
+
 
 
 # Set parameters
@@ -109,11 +124,18 @@ params = {
     
     # Model architecture
     'n_nodes': n_nodes,
+    'add_qk': add_qk,
+    'add_mlp': add_mlp,
     'transform_func': transform_func,
     'learn_base_rates': learn_base_rates,
     'context_scorer_type': context_scorer_type,
     'mlp_depth': mlp_depth,
     'mlp_width': mlp_width,
+    'qk_dim': qk_dim,
+    'mlp_baseline_depth': mlp_baseline_depth,
+    'mlp_baseline_width': mlp_baseline_width,
+    'mlp_baseline_dropout': mlp_baseline_dropout,
+    'mlp_baseline_activation': mlp_baseline_activation,
     
     # Sparsity - K_params
     'sparsity_rho_edge': sparsity_rho_edge,
@@ -145,6 +167,7 @@ print("="*70)
 print("MARKOV ICL - CLASSIFICATION (Softmax Output)")
 print("="*70)
 print(f"K={params['K']}, D={params['D']}, N={params['N']}, B={params['B']}, nodes={params['n_nodes']}")
+print(f"Baselines enabled: add_qk={params['add_qk']}, add_mlp={params['add_mlp']}")
 print(f"Method: {params['method']}, Temperature: {params['temperature']}")
 print(f"Context scorer: {params['context_scorer_type']} (mlp_depth={params['mlp_depth']}, mlp_width={params['mlp_width']})")
 print(
@@ -195,49 +218,81 @@ train_loader = DataLoader(ICLGMMDataset(train_data), batch_size=params['batch_si
 val_loader = DataLoader(ICLGMMDataset(val_data), batch_size=params['batch_size'],
                        collate_fn=collate_fn)
 
-# Create model
+# Create models
 print("\nCreating model...")
-model = MatrixTreeMarkovICL(n_nodes=params['n_nodes'], z_dim=params['input_proj_dim'], 
-                           L=params['L'], N=params['N'], 
-                           learn_base_rates=params['learn_base_rates'], 
-                           transform_func=params['transform_func'],
-                           sparsity_rho_edge=params['sparsity_rho_edge'], 
-                           sparsity_rho_all=params['sparsity_rho_all'],
-                           sparsity_rho_edge_base_W=params['sparsity_rho_edge_base_W'],
-                           base_mask_value=params['base_mask_value'],
-                           context_scorer_type=params['context_scorer_type'],
-                           mlp_depth=params['mlp_depth'],
-                           mlp_width=params['mlp_width'])
+markov_model = MatrixTreeMarkovICL(n_nodes=params['n_nodes'], z_dim=params['input_proj_dim'],
+                                   L=params['L'], N=params['N'],
+                                   learn_base_rates=params['learn_base_rates'],
+                                   transform_func=params['transform_func'],
+                                   sparsity_rho_edge=params['sparsity_rho_edge'],
+                                   sparsity_rho_all=params['sparsity_rho_all'],
+                                   sparsity_rho_edge_base_W=params['sparsity_rho_edge_base_W'],
+                                   base_mask_value=params['base_mask_value'],
+                                   context_scorer_type=params['context_scorer_type'],
+                                   mlp_depth=params['mlp_depth'],
+                                   mlp_width=params['mlp_width'])
+models_to_train = {'markov': markov_model}
+
+if params['add_qk']:
+    qk_model = QKICL(
+        z_dim=params['input_proj_dim'],
+        L=params['L'],
+        N=params['N'],
+        d_k=params['qk_dim']
+    )
+    models_to_train['qk'] = qk_model
+if params['add_mlp']:
+    mlp_model = MLPICL(
+        z_dim=params['input_proj_dim'],
+        L=params['L'],
+        N=params['N'],
+        depth=params['mlp_baseline_depth'],
+        hidden_width=params['mlp_baseline_width'],
+        dropout=params['mlp_baseline_dropout'],
+        activation=params['mlp_baseline_activation'],
+    )
+    models_to_train['mlp'] = mlp_model
 
 # Train with ICL/IWL tracking
 start_time = time.time()
 print("\nTraining...")
 print("="*70)
-history = train_model(model, train_loader, val_loader, device, 
-                     n_epochs=params['epochs'], lr=params['lr'], 
-                     method=params['method'], temperature=params['temperature'],
-                     gmm=gmm, N=params['N'], B=params['B'], 
-                     L=params['L'], exact_copy=params['exact_copy'],
-                     eval_frequency=1, n_eval_samples=500, min_max_choice=params['min_max_choice'],
-                     unique_labels = params['unique_labels'], K_proj=K_proj, Q_proj=Q_proj)
+history = train_models_joint(
+    models_to_train, train_loader, val_loader, device,
+    n_epochs=params['epochs'], lr=params['lr'],
+    method=params['method'], temperature=params['temperature'],
+    gmm=gmm, N=params['N'], B=params['B'],
+    L=params['L'], exact_copy=params['exact_copy'],
+    eval_frequency=1, n_eval_samples=500, min_max_choice=params['min_max_choice'],
+    unique_labels=params['unique_labels'], K_proj=K_proj, Q_proj=Q_proj
+)
                      
 end_time = time.time()
 print(f"Training time: {end_time - start_time:.2f} seconds")
 
 # Test
-results = test_icl(model, gmm, params['N'], device, n_samples=1000, 
-                  exact_copy=params['exact_copy'], B=params['B'], 
-                  method=params['method'], L=params['L'],
-                  temperature=params['temperature'], shuffle_context=params['shuffle_context'],
-                  min_max_choice=params['min_max_choice'], unique_labels = params['unique_labels'],
-                  K_proj=K_proj, Q_proj=Q_proj)
+results = {}
+for name, model in models_to_train.items():
+    # Re-seed before each test call so all models are evaluated on the same sampled tasks.
+    torch.manual_seed(params['seed'])
+    np.random.seed(params['seed'])
+    results[name] = test_icl(model, gmm, params['N'], device, n_samples=1000,
+                             exact_copy=params['exact_copy'], B=params['B'],
+                             method=params['method'], L=params['L'],
+                             temperature=params['temperature'], shuffle_context=params['shuffle_context'],
+                             min_max_choice=params['min_max_choice'], unique_labels=params['unique_labels'],
+                             K_proj=K_proj, Q_proj=Q_proj)
 
 # Save results
 os.makedirs(output_dir, exist_ok=True)
 
 # Save model weights (small, portable)
-model_path = f'{output_dir}/model.pt'
-torch.save(model.state_dict(), model_path)
+for name, model in models_to_train.items():
+    if name == 'markov':
+        model_path = f'{output_dir}/model.pt'
+    else:
+        model_path = f'{output_dir}/model_{name}.pt'
+    torch.save(model.state_dict(), model_path)
 
 # Save results and metadata (for analysis)
 results_data = {
@@ -252,7 +307,12 @@ results_path = f'{output_dir}/results.pkl'
 with open(results_path, "wb") as file:
     pickle.dump(results_data, file)
 
-print(f"\n✓ Saved model to {model_path}")
+print("")
+for name in models_to_train.keys():
+    if name == 'markov':
+        print(f"✓ Saved {name.upper()} model to {output_dir}/model.pt")
+    else:
+        print(f"✓ Saved {name.upper()} model to {output_dir}/model_{name}.pt")
 print(f"✓ Saved results to {results_path}")
 print(f"✓ Execution Time: {end_time - start_time:.2f} seconds")
     

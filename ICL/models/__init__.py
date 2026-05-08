@@ -10,6 +10,9 @@ from .polynomial_icl import RandomPolynomialICL
 from .wta_icl import WinnerTakesAllICL
 from .nonlinear_markov_icl import NonlinearMarkovICL
 from .markov_icl_regression import MatrixTreeMarkovICLRegression
+from .mlp_icl_regression import MLPICLRegression
+from .qk_icl import QKICL
+from .mlp_icl import MLPICL
 
 __all__ = [
     'BaseICLModel',
@@ -17,6 +20,9 @@ __all__ = [
     'RandomPolynomialICL',
     'WinnerTakesAllICL',
     'NonlinearMarkovICL',
-    'MatrixTreeMarkovICLRegression'
+    'MatrixTreeMarkovICLRegression',
+    'MLPICLRegression',
+    'QKICL',
+    'MLPICL'
 ]
 
