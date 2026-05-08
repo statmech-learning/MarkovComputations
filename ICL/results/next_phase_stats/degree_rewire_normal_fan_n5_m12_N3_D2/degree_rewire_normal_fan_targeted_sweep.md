@@ -32,10 +32,12 @@ The branch-tree NMI contrast is modest, but active-tree count changes substantia
 - Seeds: `1,2,3,4,5`
 - Expected runs: `20`
 - Slurm job: `13538620`
-- Completed `results.pkl` files at report generation: `0`
-- Current `squeue` line: `13538620_[0-19%8] pending; commands hardened to use /home/aadarwal/orcd/scratch/venvs/markov_icl/bin/python`
+- Completed `results.pkl` files after collection: `20`
+- Current `squeue` line: `not in queue; completed`
 
 This sweep is intentionally small: it isolates the exact-degree/normal-fan mechanism rather than adding another broad graph-family sweep.
 
 
 Update: the first submission (`13538460`) failed because the job environment lacked `tqdm`; `tqdm` was installed into the project venv, the command manifest was hardened to use the absolute venv Python path, and the array was resubmitted as `13538620`.
+
+Final update: all `20/20` targeted training runs completed cleanly after resubmitting missing tasks in smaller arrays. Aggregated results are in `topology_seed_aggregates.csv`, `normal_fan_training_joined.csv`, and `normal_fan_training_results.md`.
