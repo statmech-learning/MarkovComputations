@@ -1,0 +1,69 @@
+{
+  "fixed_m20_gamma": {
+    "best_gamma_mean_loo_r2": 0.07797780210984329,
+    "best_gamma_model": "gamma_no_bias_plus_tree_difference_multiplicity",
+    "selector_gate": "not_cleared_for_large_sweeps",
+    "tree_difference_mean_loo_r2": 0.43547904457120246
+  },
+  "interpretation": {
+    "expressivity": "No tested repaired gamma_no_bias variant currently predicts best-seed ICL strongly. Normal-fan active-tree/tree-count variables give weak best-seed signal under exact controls.",
+    "gamma_status": "candidate_diagnostic_not_selector",
+    "trainability": "Mean-seed prediction tracks the same weak normal-fan/tree-count signal, while seed-std models remain negative or small; the current controls do not isolate a clean trainability metric."
+  },
+  "normal_fan_exact_control": {
+    "best_best_model": {
+      "loo_r2": 0.11708420265893826,
+      "model": "gamma_plus_normal_fan",
+      "n_groups": 32,
+      "predictors": [
+        "gamma_no_bias_exact_lcvar",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean"
+      ]
+    },
+    "gamma_best_r2": -0.07215516890537166,
+    "gamma_mean_r2": -0.12669674715786283,
+    "gamma_plus_normal_fan_best_r2": 0.11708420265893826,
+    "gamma_plus_normal_fan_mean_r2": 0.059380108173988644,
+    "mean_best_model": {
+      "loo_r2": 0.11382461802879684,
+      "model": "tree_count",
+      "n_groups": 32,
+      "predictors": [
+        "library_n_trees_total_enum_log"
+      ]
+    },
+    "seed_std_best_model": {
+      "loo_r2": -0.06873477592902333,
+      "model": "tree_count",
+      "n_groups": 32,
+      "predictors": [
+        "library_n_trees_total_enum_log"
+      ]
+    }
+  },
+  "prospective_exact_control": {
+    "best_controls_r2": 0.6011311734387197,
+    "best_gamma_r2": 0.5710524803529574,
+    "best_tree_diff_r2": 0.5454252641264747,
+    "mean_controls_r2": 0.48848399808159615,
+    "mean_gamma_r2": 0.3200434503300783,
+    "mean_tree_diff_r2": 0.44718388377464235,
+    "seed_std_best_model": {
+      "loo_r2": 0.29616577603453076,
+      "model": "edge_level_multiplicity_plus_controls",
+      "n_groups": 16,
+      "predictors": [
+        "input_coord_load_gini",
+        "edge_overlap_norm_min",
+        "edge_overlap_norm_mean"
+      ]
+    }
+  },
+  "schema": "expressivity_vs_trainability_exact_control_report.v1",
+  "source_artifacts": [
+    "repaired_gamma_existing_data_reanalysis.md",
+    "prospective_tree_diff_multiplicity_causal_report.md",
+    "exact_degree_exact_drel_exact_multiplicity_normal_fan_training_report.md"
+  ]
+}

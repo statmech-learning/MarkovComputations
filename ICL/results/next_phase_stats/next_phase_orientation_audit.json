@@ -1,0 +1,132 @@
+{
+  "fixed_m20_learned_k_availability": {
+    "available": true,
+    "counts": {
+      "ICL/results/input_mask_fixed_m20_cycle_chords_seed3_c200": {
+        "config_json": 80,
+        "exists": true,
+        "model_pt": 80,
+        "results_pkl": 80,
+        "topology_json": 80,
+        "train_dirs": 80
+      },
+      "ICL/results/input_mask_fixed_m20_hub_spoke_seed63_c200": {
+        "config_json": 80,
+        "exists": true,
+        "model_pt": 80,
+        "results_pkl": 80,
+        "topology_json": 80,
+        "train_dirs": 80
+      },
+      "ICL/results/input_mask_fixed_m20_random_sc_seed3_c200": {
+        "config_json": 80,
+        "exists": true,
+        "model_pt": 80,
+        "results_pkl": 80,
+        "topology_json": 80,
+        "train_dirs": 80
+      }
+    },
+    "location": "ssh:engaging:/home/aadarwal/repos/topology",
+    "note": "model.pt stores the learned K_params state_dict; aggregate CSVs do not store learned K tensors."
+  },
+  "fixed_m20_roots": [
+    "ICL/results/input_mask_fixed_m20_random_sc_seed3_c200",
+    "ICL/results/input_mask_fixed_m20_cycle_chords_seed3_c200",
+    "ICL/results/input_mask_fixed_m20_hub_spoke_seed63_c200"
+  ],
+  "git": {
+    "branch": "topology",
+    "commit": "ebb0c52781008dbff12f9b0759187c8460511d2c",
+    "commit_oneline": "ebb0c52 Update Markov ICL exact-control goal",
+    "status_short": "## topology...origin/topology\n?? ICL/exact_control_orientation_audit.py"
+  },
+  "required_reports": [
+    {
+      "bytes": 5467,
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/post_phase3_markov_icl_synthesis.md"
+    },
+    {
+      "bytes": 1384,
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/gamma_toy_repair_final_report.md"
+    },
+    {
+      "bytes": 4198,
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/input_multiplicity_causal_control_report.md"
+    },
+    {
+      "bytes": 6370,
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/tree_multiplicity_causal_mask_library.md"
+    },
+    {
+      "bytes": 13487,
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/predictor_name_reconciliation.md"
+    },
+    {
+      "bytes": 5203,
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/tree_level_multiplicity_reanalysis.md"
+    },
+    {
+      "bytes": 26719,
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/topology_icl_research_synthesis.md"
+    }
+  ],
+  "schema": "next_phase_orientation_audit.v1",
+  "script_map": [
+    {
+      "bytes": 34021,
+      "exists": true,
+      "path": "ICL/tree_level_multiplicity_metrics.py",
+      "purpose": "tree_level_and_tree_difference_multiplicity"
+    },
+    {
+      "bytes": 32000,
+      "exists": true,
+      "path": "ICL/analytic_gamma_repair.py",
+      "purpose": "repaired_gamma_toy_validation"
+    },
+    {
+      "bytes": 39817,
+      "exists": true,
+      "path": "ICL/tree_multiplicity_causal_control.py",
+      "purpose": "existing_data_causal_control"
+    },
+    {
+      "bytes": 18729,
+      "exists": true,
+      "path": "ICL/make_input_mask_library.py",
+      "purpose": "fixed_m20_mask_library_generation"
+    },
+    {
+      "bytes": 10673,
+      "exists": true,
+      "path": "ICL/submit_topology_library_sweep.py",
+      "purpose": "fixed_m20_training_submission"
+    },
+    {
+      "bytes": 21536,
+      "exists": true,
+      "path": "ICL/clustered_topology_inference.py",
+      "purpose": "grouped_loo_inference_structural"
+    },
+    {
+      "bytes": 39817,
+      "exists": true,
+      "path": "ICL/tree_multiplicity_causal_control.py",
+      "purpose": "grouped_loo_inference_markov"
+    },
+    {
+      "bytes": 25106,
+      "exists": true,
+      "path": "ICL/branch_margin_capacity_v2.py",
+      "purpose": "lower_tail_gamma_probe"
+    }
+  ]
+}

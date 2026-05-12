@@ -1,0 +1,215 @@
+{
+  "causal_intervention_summary": {
+    "collector_summary": {
+      "interventions": {
+        "context_block_shuffle": {
+          "n": 12,
+          "target_accuracy_delta_max": -39.58333134651184,
+          "target_accuracy_delta_mean": -71.45833394024521,
+          "target_accuracy_delta_min": -91.66666744276881
+        },
+        "decoder_root_permutation": {
+          "n": 12,
+          "target_accuracy_delta_max": -7.91667103767395,
+          "target_accuracy_delta_mean": -53.12500105549892,
+          "target_accuracy_delta_min": -75.83333402872086
+        },
+        "stat_preserving_branch_alignment_scramble": {
+          "n": 12,
+          "target_accuracy_delta_max": -11.666667461395264,
+          "target_accuracy_delta_mean": -57.77777858699361,
+          "target_accuracy_delta_min": -89.16666731238365
+        },
+        "stat_preserving_projection_scramble": {
+          "n": 12,
+          "target_accuracy_delta_max": -47.91666567325592,
+          "target_accuracy_delta_mean": -59.68750094374021,
+          "target_accuracy_delta_min": -72.0833346247673
+        }
+      },
+      "n_rows": 48,
+      "n_runs": 4
+    },
+    "interventions": {
+      "context_block_shuffle": {
+        "accuracy_delta_max": -39.58333134651184,
+        "accuracy_delta_mean": -71.45833394024521,
+        "accuracy_delta_min": -91.66666744276881,
+        "margin_delta_mean": -6.196146577596664,
+        "n": 12
+      },
+      "decoder_root_permutation": {
+        "accuracy_delta_max": -7.91667103767395,
+        "accuracy_delta_mean": -53.12500105549892,
+        "accuracy_delta_min": -75.83333402872086,
+        "margin_delta_mean": -4.762115851044655,
+        "n": 12
+      },
+      "stat_preserving_branch_alignment_scramble": {
+        "accuracy_delta_max": -11.666667461395264,
+        "accuracy_delta_mean": -57.77777858699361,
+        "accuracy_delta_min": -89.16666731238365,
+        "margin_delta_mean": -4.804318944613139,
+        "n": 12
+      },
+      "stat_preserving_projection_scramble": {
+        "accuracy_delta_max": -47.91666567325592,
+        "accuracy_delta_mean": -59.68750094374021,
+        "accuracy_delta_min": -72.0833346247673,
+        "margin_delta_mean": -6.005778024593989,
+        "n": 12
+      }
+    },
+    "n_rows": 48,
+    "n_runs": 4
+  },
+  "interpretation": {
+    "mechanism": "The trained prospective-control models expose branch-active tree/root organization, posterior matched comparison gaps, input ablation losses, physical edge ablation losses, and edge-importance concentration. These are post-training diagnostics, not selectors.",
+    "scope": "The scrambles were run on four selected prospective-control trained models, with three repeats per intervention. They are mechanism checks, not an additional training sweep.",
+    "scramble_result": "Selected-model statistic-preserving branch-alignment and projection scrambles reduce novel-class ICL sharply, supporting the branch/projection mechanism in trained models."
+  },
+  "mechanism_summary": {
+    "fields": {
+      "active_tree_matched_comparison_gap_mean": {
+        "available": true,
+        "max": -0.29734868343324794,
+        "mean": -0.4124621889683045,
+        "min": -0.5674148236937901,
+        "n": 80,
+        "std": 0.049797193131197265
+      },
+      "branch_active_root_mi": {
+        "available": true,
+        "max": 1.0287034507858837,
+        "mean": 0.6080904461993585,
+        "min": 0.29168306098466557,
+        "n": 80,
+        "std": 0.159575874589055
+      },
+      "branch_active_tree_mi": {
+        "available": true,
+        "max": 1.2508682496075019,
+        "mean": 0.9448812908164899,
+        "min": 0.62135935342193,
+        "n": 80,
+        "std": 0.11653361529288403
+      },
+      "edge_importance_gini": {
+        "available": true,
+        "max": 0.41185433588433784,
+        "mean": 0.2778577492125055,
+        "min": 0.16697655883502405,
+        "n": 80,
+        "std": 0.05708130995209105
+      },
+      "input_ablation_max_loss": {
+        "available": false,
+        "max": null,
+        "mean": null,
+        "min": null,
+        "n": 0,
+        "std": null
+      },
+      "physical_ablation_max_loss": {
+        "available": false,
+        "max": null,
+        "mean": null,
+        "min": null,
+        "n": 0,
+        "std": null
+      },
+      "posterior_matched_comparison_gap_mean": {
+        "available": true,
+        "max": -0.22324149795004433,
+        "mean": -0.32577867127503723,
+        "min": -0.4476852029595918,
+        "n": 80,
+        "std": 0.04441761007937683
+      },
+      "root_entropy_mean": {
+        "available": true,
+        "max": 1.2232575416564941,
+        "mean": 1.0304854214191437,
+        "min": 0.6853899359703064,
+        "n": 80,
+        "std": 0.0910196549006422
+      },
+      "target_logprob_margin_branch_mean_min": {
+        "available": true,
+        "max": 3.124642322621038,
+        "mean": 0.1279116333045261,
+        "min": -0.7511184640287414,
+        "n": 80,
+        "std": 0.8152936261512799
+      },
+      "tree_comparison_energy_fraction_mean": {
+        "available": true,
+        "max": 0.9921963821929836,
+        "mean": 0.9446422171326443,
+        "min": 0.7759579263700603,
+        "n": 80,
+        "std": 0.03930648963605505
+      },
+      "tree_entropy_mean": {
+        "available": true,
+        "max": 15.737096786499023,
+        "mean": 12.804943132400513,
+        "min": 10.28288745880127,
+        "n": 80,
+        "std": 1.1089333973277535
+      }
+    },
+    "n_groups": 16,
+    "n_rows": 80,
+    "trained_margin_by_load_family": {
+      "balanced_load": {
+        "mean": 0.5217904039266914,
+        "n": 40
+      },
+      "imbalanced_coord_load": {
+        "mean": -0.26596713731763927,
+        "n": 40
+      }
+    }
+  },
+  "schema": "mechanism_and_causal_scramble_followup_report.v1",
+  "selected_ablation_summary": {
+    "fields": {
+      "input_ablation_max_loss": {
+        "available": true,
+        "max": 28.75000238418579,
+        "mean": 21.145835518836975,
+        "min": 17.083334922790527,
+        "n": 4
+      },
+      "input_ablation_mean_loss": {
+        "available": true,
+        "max": 8.166669309139252,
+        "mean": 6.125000864267349,
+        "min": 4.812498390674591,
+        "n": 4
+      },
+      "physical_ablation_max_loss": {
+        "available": true,
+        "max": 32.91667103767395,
+        "mean": 26.56250149011612,
+        "min": 23.333334922790527,
+        "n": 4
+      },
+      "physical_ablation_mean_loss": {
+        "available": true,
+        "max": 13.250001966953278,
+        "mean": 11.010417193174362,
+        "min": 9.64583158493042,
+        "n": 4
+      }
+    },
+    "n_groups": 4,
+    "n_rows": 4
+  },
+  "source_artifacts": [
+    "prospective_tree_diff_multiplicity_mechanism_results.csv",
+    "prospective_tree_diff_multiplicity_causal_interventions.csv",
+    "prospective_tree_diff_multiplicity_causal_interventions.json"
+  ]
+}

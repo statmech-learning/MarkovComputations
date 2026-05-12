@@ -1,0 +1,337 @@
+{
+  "candidate_count": 32,
+  "capacity_csv": "ICL/results/next_phase_stats/degree_rewire_normal_fan_n5_m12_N3_D2/branch_margin_capacity.csv",
+  "controls": {
+    "d_rel_values": [
+      88.0
+    ],
+    "in_degree_sequence": [
+      3,
+      2,
+      2,
+      3,
+      2
+    ],
+    "input_coupled_count": 96,
+    "input_mask": "full; exact M_alpha=12 for all 8 input coordinates",
+    "n_context": 3,
+    "n_edges": 12,
+    "n_nodes": 5,
+    "out_degree_sequence": [
+      3,
+      2,
+      2,
+      3,
+      2
+    ],
+    "z_dim": 2
+  },
+  "gamma_rows": [
+    {
+      "gamma_no_bias_exact_accuracy": 0.35833333333333334,
+      "gamma_no_bias_exact_lcvar": -3.228501973073799,
+      "gamma_no_bias_hard_root_accuracy": 0.37083333333333335,
+      "gamma_no_bias_hard_root_lcvar": -1.8641852483463568,
+      "gamma_no_bias_tropical_accuracy": 0.22916666666666666,
+      "gamma_no_bias_tropical_lcvar": -1.877522783292383,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed0"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.30416666666666664,
+      "gamma_no_bias_exact_lcvar": -2.997249956206168,
+      "gamma_no_bias_hard_root_accuracy": 0.31666666666666665,
+      "gamma_no_bias_hard_root_lcvar": -1.9841486819070009,
+      "gamma_no_bias_tropical_accuracy": 0.3333333333333333,
+      "gamma_no_bias_tropical_lcvar": -1.3146120346618808,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed1"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.2833333333333333,
+      "gamma_no_bias_exact_lcvar": -1.9574433125331687,
+      "gamma_no_bias_hard_root_accuracy": 0.35,
+      "gamma_no_bias_hard_root_lcvar": -1.9279306274936623,
+      "gamma_no_bias_tropical_accuracy": 0.29583333333333334,
+      "gamma_no_bias_tropical_lcvar": -2.1903117123102662,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed10"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.29583333333333334,
+      "gamma_no_bias_exact_lcvar": -3.736741886833587,
+      "gamma_no_bias_hard_root_accuracy": 0.3625,
+      "gamma_no_bias_hard_root_lcvar": -1.8572043053609033,
+      "gamma_no_bias_tropical_accuracy": 0.35,
+      "gamma_no_bias_tropical_lcvar": -1.9116516461793718,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed11"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3,
+      "gamma_no_bias_exact_lcvar": -3.1352091253156757,
+      "gamma_no_bias_hard_root_accuracy": 0.39166666666666666,
+      "gamma_no_bias_hard_root_lcvar": -2.2588639059825404,
+      "gamma_no_bias_tropical_accuracy": 0.29583333333333334,
+      "gamma_no_bias_tropical_lcvar": -1.9118645161001429,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed12"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3416666666666667,
+      "gamma_no_bias_exact_lcvar": -3.6636226068465625,
+      "gamma_no_bias_hard_root_accuracy": 0.35833333333333334,
+      "gamma_no_bias_hard_root_lcvar": -1.9988164699724884,
+      "gamma_no_bias_tropical_accuracy": 0.2625,
+      "gamma_no_bias_tropical_lcvar": -1.6784773233269406,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed15"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.32083333333333336,
+      "gamma_no_bias_exact_lcvar": -3.0848101328776036,
+      "gamma_no_bias_hard_root_accuracy": 0.32083333333333336,
+      "gamma_no_bias_hard_root_lcvar": -1.8241531069413661,
+      "gamma_no_bias_tropical_accuracy": 0.3,
+      "gamma_no_bias_tropical_lcvar": -1.1989962181465685,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed16"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.275,
+      "gamma_no_bias_exact_lcvar": -2.3103501785237803,
+      "gamma_no_bias_hard_root_accuracy": 0.32916666666666666,
+      "gamma_no_bias_hard_root_lcvar": -1.9840903000928218,
+      "gamma_no_bias_tropical_accuracy": 0.37916666666666665,
+      "gamma_no_bias_tropical_lcvar": -1.8263435098713214,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed17"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3458333333333333,
+      "gamma_no_bias_exact_lcvar": -3.2752089465458694,
+      "gamma_no_bias_hard_root_accuracy": 0.37916666666666665,
+      "gamma_no_bias_hard_root_lcvar": -1.7943736429765222,
+      "gamma_no_bias_tropical_accuracy": 0.37083333333333335,
+      "gamma_no_bias_tropical_lcvar": -2.162797946106479,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed18"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.325,
+      "gamma_no_bias_exact_lcvar": -2.9467684898283695,
+      "gamma_no_bias_hard_root_accuracy": 0.3541666666666667,
+      "gamma_no_bias_hard_root_lcvar": -1.796108254836201,
+      "gamma_no_bias_tropical_accuracy": 0.3125,
+      "gamma_no_bias_tropical_lcvar": -2.102119012040328,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed2"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3333333333333333,
+      "gamma_no_bias_exact_lcvar": -2.5565519262834266,
+      "gamma_no_bias_hard_root_accuracy": 0.2916666666666667,
+      "gamma_no_bias_hard_root_lcvar": -1.8514681635256398,
+      "gamma_no_bias_tropical_accuracy": 0.37083333333333335,
+      "gamma_no_bias_tropical_lcvar": -3.01347826080769,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed21"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3625,
+      "gamma_no_bias_exact_lcvar": -2.7854228596898825,
+      "gamma_no_bias_hard_root_accuracy": 0.37916666666666665,
+      "gamma_no_bias_hard_root_lcvar": -1.7438883878299687,
+      "gamma_no_bias_tropical_accuracy": 0.3,
+      "gamma_no_bias_tropical_lcvar": -2.8073066146194687,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed22"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.32083333333333336,
+      "gamma_no_bias_exact_lcvar": -1.1060928069162905,
+      "gamma_no_bias_hard_root_accuracy": 0.325,
+      "gamma_no_bias_hard_root_lcvar": -1.8632900657287184,
+      "gamma_no_bias_tropical_accuracy": 0.37916666666666665,
+      "gamma_no_bias_tropical_lcvar": -2.864234437720014,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed24"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3458333333333333,
+      "gamma_no_bias_exact_lcvar": -3.334099329877629,
+      "gamma_no_bias_hard_root_accuracy": 0.3,
+      "gamma_no_bias_hard_root_lcvar": -2.1674433723640187,
+      "gamma_no_bias_tropical_accuracy": 0.31666666666666665,
+      "gamma_no_bias_tropical_lcvar": -1.90133175545138,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed25"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3416666666666667,
+      "gamma_no_bias_exact_lcvar": -3.1679616958611962,
+      "gamma_no_bias_hard_root_accuracy": 0.31666666666666665,
+      "gamma_no_bias_hard_root_lcvar": -2.255537065040249,
+      "gamma_no_bias_tropical_accuracy": 0.3375,
+      "gamma_no_bias_tropical_lcvar": -3.0270515347578115,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed26"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3333333333333333,
+      "gamma_no_bias_exact_lcvar": -3.085860780129526,
+      "gamma_no_bias_hard_root_accuracy": 0.30416666666666664,
+      "gamma_no_bias_hard_root_lcvar": -1.859721757704829,
+      "gamma_no_bias_tropical_accuracy": 0.31666666666666665,
+      "gamma_no_bias_tropical_lcvar": -3.980162014874173,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed27"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.30416666666666664,
+      "gamma_no_bias_exact_lcvar": -1.8959000284864556,
+      "gamma_no_bias_hard_root_accuracy": 0.35833333333333334,
+      "gamma_no_bias_hard_root_lcvar": -1.8949661818649415,
+      "gamma_no_bias_tropical_accuracy": 0.32083333333333336,
+      "gamma_no_bias_tropical_lcvar": -3.3215065789639815,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed3"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.22916666666666666,
+      "gamma_no_bias_exact_lcvar": -2.0333821318407033,
+      "gamma_no_bias_hard_root_accuracy": 0.3375,
+      "gamma_no_bias_hard_root_lcvar": -1.5688374264681628,
+      "gamma_no_bias_tropical_accuracy": 0.4166666666666667,
+      "gamma_no_bias_tropical_lcvar": -1.5714976717513975,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed30"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3125,
+      "gamma_no_bias_exact_lcvar": -3.345657921890595,
+      "gamma_no_bias_hard_root_accuracy": 0.36666666666666664,
+      "gamma_no_bias_hard_root_lcvar": -1.9625319025949413,
+      "gamma_no_bias_tropical_accuracy": 0.3416666666666667,
+      "gamma_no_bias_tropical_lcvar": -2.72059744233471,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed31"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.35,
+      "gamma_no_bias_exact_lcvar": -2.135332873548892,
+      "gamma_no_bias_hard_root_accuracy": 0.31666666666666665,
+      "gamma_no_bias_hard_root_lcvar": -2.224657110221917,
+      "gamma_no_bias_tropical_accuracy": 0.30833333333333335,
+      "gamma_no_bias_tropical_lcvar": -2.4308302008070912,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed32"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3541666666666667,
+      "gamma_no_bias_exact_lcvar": -3.009841376815194,
+      "gamma_no_bias_hard_root_accuracy": 0.275,
+      "gamma_no_bias_hard_root_lcvar": -1.952224824987017,
+      "gamma_no_bias_tropical_accuracy": 0.2625,
+      "gamma_no_bias_tropical_lcvar": -3.949134986501145,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed33"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.36666666666666664,
+      "gamma_no_bias_exact_lcvar": -3.88603609505855,
+      "gamma_no_bias_hard_root_accuracy": 0.29583333333333334,
+      "gamma_no_bias_hard_root_lcvar": -1.9752289621370807,
+      "gamma_no_bias_tropical_accuracy": 0.3875,
+      "gamma_no_bias_tropical_lcvar": -3.200434424543234,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed34"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3,
+      "gamma_no_bias_exact_lcvar": -3.1839438797399375,
+      "gamma_no_bias_hard_root_accuracy": 0.36666666666666664,
+      "gamma_no_bias_hard_root_lcvar": -1.9217239358249778,
+      "gamma_no_bias_tropical_accuracy": 0.3541666666666667,
+      "gamma_no_bias_tropical_lcvar": -2.5558367317882604,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed4"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.32083333333333336,
+      "gamma_no_bias_exact_lcvar": -2.1322306596921043,
+      "gamma_no_bias_hard_root_accuracy": 0.37083333333333335,
+      "gamma_no_bias_hard_root_lcvar": -1.7034215127577161,
+      "gamma_no_bias_tropical_accuracy": 0.2916666666666667,
+      "gamma_no_bias_tropical_lcvar": -1.5848094420943402,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed40"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.32916666666666666,
+      "gamma_no_bias_exact_lcvar": -2.274916472019137,
+      "gamma_no_bias_hard_root_accuracy": 0.3416666666666667,
+      "gamma_no_bias_hard_root_lcvar": -2.1343239693516916,
+      "gamma_no_bias_tropical_accuracy": 0.32083333333333336,
+      "gamma_no_bias_tropical_lcvar": -3.0090901310246574,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed42"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.275,
+      "gamma_no_bias_exact_lcvar": -2.6583722600796524,
+      "gamma_no_bias_hard_root_accuracy": 0.4375,
+      "gamma_no_bias_hard_root_lcvar": -1.92975821590706,
+      "gamma_no_bias_tropical_accuracy": 0.3958333333333333,
+      "gamma_no_bias_tropical_lcvar": -1.9772030673004348,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed46"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3333333333333333,
+      "gamma_no_bias_exact_lcvar": -1.7763273752365853,
+      "gamma_no_bias_hard_root_accuracy": 0.32083333333333336,
+      "gamma_no_bias_hard_root_lcvar": -2.053464074102455,
+      "gamma_no_bias_tropical_accuracy": 0.3458333333333333,
+      "gamma_no_bias_tropical_lcvar": -3.578217066516766,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed47"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.325,
+      "gamma_no_bias_exact_lcvar": -4.799524046555707,
+      "gamma_no_bias_hard_root_accuracy": 0.36666666666666664,
+      "gamma_no_bias_hard_root_lcvar": -1.9336851898199043,
+      "gamma_no_bias_tropical_accuracy": 0.3333333333333333,
+      "gamma_no_bias_tropical_lcvar": -3.069010136755831,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed5"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3625,
+      "gamma_no_bias_exact_lcvar": -3.5604513518616394,
+      "gamma_no_bias_hard_root_accuracy": 0.44583333333333336,
+      "gamma_no_bias_hard_root_lcvar": -1.8853362668645777,
+      "gamma_no_bias_tropical_accuracy": 0.2833333333333333,
+      "gamma_no_bias_tropical_lcvar": -2.08577647421506,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed6"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.35,
+      "gamma_no_bias_exact_lcvar": -3.065070092043989,
+      "gamma_no_bias_hard_root_accuracy": 0.4166666666666667,
+      "gamma_no_bias_hard_root_lcvar": -1.7087215040956911,
+      "gamma_no_bias_tropical_accuracy": 0.3625,
+      "gamma_no_bias_tropical_lcvar": -2.3573130068589827,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed7"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.3416666666666667,
+      "gamma_no_bias_exact_lcvar": -2.890968295675775,
+      "gamma_no_bias_hard_root_accuracy": 0.375,
+      "gamma_no_bias_hard_root_lcvar": -1.8323881596303084,
+      "gamma_no_bias_tropical_accuracy": 0.32083333333333336,
+      "gamma_no_bias_tropical_lcvar": -2.334060823309618,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed8"
+    },
+    {
+      "gamma_no_bias_exact_accuracy": 0.38333333333333336,
+      "gamma_no_bias_exact_lcvar": -2.6292719765354184,
+      "gamma_no_bias_hard_root_accuracy": 0.3541666666666667,
+      "gamma_no_bias_hard_root_lcvar": -1.5508007780123894,
+      "gamma_no_bias_tropical_accuracy": 0.32083333333333336,
+      "gamma_no_bias_tropical_lcvar": -1.879359728262021,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed9"
+    }
+  ],
+  "library_csv": "ICL/results/next_phase_stats/degree_rewire_normal_fan_n5_m12_N3_D2/library.csv",
+  "normal_fan_ranges": {
+    "active_tree_count_mean": [
+      39.25,
+      52.75
+    ],
+    "branch_tree_nmi_mean": [
+      0.13570631739926678,
+      0.16033345967029106
+    ],
+    "rooted_tree_count": [
+      55.0,
+      85.0
+    ]
+  },
+  "schema": "exact_degree_exact_drel_exact_multiplicity_normal_fan_library.v1",
+  "selected_count": 32,
+  "selected_csv": "ICL/results/next_phase_stats/degree_rewire_normal_fan_n5_m12_N3_D2/selected.csv"
+}

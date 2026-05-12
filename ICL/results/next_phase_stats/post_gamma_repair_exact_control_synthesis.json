@@ -1,0 +1,136 @@
+{
+  "answers": {
+    "gamma_predicts_best_or_mean": "neither_in_current_data",
+    "gamma_predicts_existing_data_better": "no",
+    "normal_fan_predicts_under_exact_controls": "weak_positive",
+    "prospective_tree_difference_causal_effect": "not_supported_in_first_exact_control",
+    "recommended_next_metric": "normal-fan active-tree/tree-count variables plus grouped controls; keep tree-difference overlap as a mask-design covariate and gamma_no_bias as a diagnostic, not a selector.",
+    "thermodynamic_tested": "no",
+    "tree_difference_survives_graph_mask_identity": "not_yet"
+  },
+  "claims": {
+    "causal_evidence": {
+      "open": [
+        "Whether another mask family or larger prospective design recovers the older fixed-m20 tree-difference signal."
+      ],
+      "supported": [
+        "The prospective mask library fixed G, input count, d_rel, aggregate/load distributions, and varied tree-difference overlap."
+      ],
+      "weakened": [
+        "High same-root tree-difference overlap did not improve ICL in the clean balanced-load contrast."
+      ]
+    },
+    "expressivity": {
+      "not_supported": [
+        "Repaired gamma_no_bias is not yet a reliable expressivity selector.",
+        "No universal scalar capacity law is supported."
+      ],
+      "supported": [
+        "First-order tree-sum basis remains the correct scoped theory for Markov-ICL steady states.",
+        "Normal-fan active-tree/tree-count variables show weak predictive signal for best-seed ICL under exact degree/d_rel/multiplicity controls."
+      ]
+    },
+    "mechanism": {
+      "not_supported": [
+        "Mechanism scrambles are not pre-training causal proof of tree-difference overlap."
+      ],
+      "supported": [
+        "Trained selected models are sensitive to branch-alignment, context-block, projection, and decoder-root scrambles.",
+        "Post-training mechanism metrics show branch/root/tree organization and ablation-sensitive edges."
+      ]
+    },
+    "thermodynamic_physics": {
+      "not_tested": [
+        "No reversible-support thermodynamic Fmax experiment was run in this phase."
+      ],
+      "supported": []
+    },
+    "trainability": {
+      "not_supported": [
+        "The current variables do not explain seed variance well.",
+        "No clean expressivity-vs-trainability split has been isolated."
+      ],
+      "supported": [
+        "Mean-seed ICL broadly tracks the weak normal-fan/tree-count signal in the exact-degree expansion."
+      ]
+    }
+  },
+  "evidence": {
+    "balanced_tree_diff_best_ci95": [
+      -9.0,
+      -0.14999999999997726
+    ],
+    "balanced_tree_diff_best_delta": -4.799999999999997,
+    "balanced_tree_diff_mean_ci95": [
+      -7.990499999999995,
+      0.6699999999999875
+    ],
+    "balanced_tree_diff_mean_delta": -3.969999999999999,
+    "causal_scramble_interventions": {
+      "context_block_shuffle": {
+        "accuracy_delta_max": -39.58333134651184,
+        "accuracy_delta_mean": -71.45833394024521,
+        "accuracy_delta_min": -91.66666744276881,
+        "margin_delta_mean": -6.196146577596664,
+        "n": 12
+      },
+      "decoder_root_permutation": {
+        "accuracy_delta_max": -7.91667103767395,
+        "accuracy_delta_mean": -53.12500105549892,
+        "accuracy_delta_min": -75.83333402872086,
+        "margin_delta_mean": -4.762115851044655,
+        "n": 12
+      },
+      "stat_preserving_branch_alignment_scramble": {
+        "accuracy_delta_max": -11.666667461395264,
+        "accuracy_delta_mean": -57.77777858699361,
+        "accuracy_delta_min": -89.16666731238365,
+        "margin_delta_mean": -4.804318944613139,
+        "n": 12
+      },
+      "stat_preserving_projection_scramble": {
+        "accuracy_delta_max": -47.91666567325592,
+        "accuracy_delta_mean": -59.68750094374021,
+        "accuracy_delta_min": -72.0833346247673,
+        "margin_delta_mean": -6.005778024593989,
+        "n": 12
+      }
+    },
+    "fixed_m20_best_gamma_mean_loo_r2": 0.07797780210984329,
+    "fixed_m20_tree_difference_mean_loo_r2": 0.43547904457120246,
+    "normal_fan_best_best_model": {
+      "loo_r2": 0.11708420265893826,
+      "model": "gamma_plus_normal_fan",
+      "n_groups": 32,
+      "predictors": [
+        "gamma_no_bias_exact_lcvar",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean"
+      ]
+    },
+    "normal_fan_gamma_exact_best_r2": -0.07215516890537166,
+    "normal_fan_gamma_exact_mean_r2": -0.12669674715786283,
+    "normal_fan_mean_best_model": {
+      "loo_r2": 0.11382461802879684,
+      "model": "tree_count",
+      "n_groups": 32,
+      "predictors": [
+        "library_n_trees_total_enum_log"
+      ]
+    }
+  },
+  "schema": "post_gamma_repair_exact_control_synthesis.v1",
+  "source_artifacts": [
+    "post_phase3_markov_icl_synthesis.md",
+    "gamma_toy_repair_final_report.md",
+    "input_multiplicity_causal_control_report.md",
+    "tree_multiplicity_causal_mask_library.md",
+    "predictor_name_reconciliation.md",
+    "tree_level_multiplicity_reanalysis.md",
+    "repaired_gamma_existing_data_reanalysis.md",
+    "prospective_tree_diff_multiplicity_causal_report.md",
+    "exact_degree_exact_drel_exact_multiplicity_training_report.md",
+    "expressivity_vs_trainability_exact_control_report.md",
+    "mechanism_and_causal_scramble_followup_report.md"
+  ]
+}
