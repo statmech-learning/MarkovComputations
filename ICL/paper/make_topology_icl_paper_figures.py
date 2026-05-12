@@ -6,6 +6,7 @@ import json
 import math
 from collections import defaultdict
 from pathlib import Path
+from statistics import mean
 
 import matplotlib
 matplotlib.use("Agg")
@@ -418,6 +419,188 @@ def fig_capacity_v2():
     save(fig, "fig_capacity_v2")
 
 
+def _rows_for_dataset(payload, dataset):
+    for analysis in payload["analyses"]:
+        if analysis["dataset"] == dataset:
+            return analysis["primary_grouped_loo"]
+    raise KeyError(dataset)
+
+
+def _loo(rows, outcome, model):
+    for row in rows:
+        if row.get("outcome") == outcome and row.get("model") == model:
+            return float(row["loo_r2"])
+    raise KeyError((outcome, model))
+
+
+def fig_gamma_repair_existing_data():
+    path = ROOT / "ICL/results/next_phase_stats/repaired_gamma_existing_data_reanalysis.json"
+    payload = json.load(open(path))
+    rows = _rows_for_dataset(payload, "fixed_m20_masks_cluster_topology")
+    models = [
+        ("tree-diff\nmultiplicity", "tree_difference_multiplicity", BLUE),
+        ("gamma\nexact", "repaired_gamma_no_bias_exact", RED),
+        ("gamma\ntropical", "repaired_gamma_no_bias_tropical", RED),
+        ("gamma\nhard-root", "repaired_gamma_no_bias_hard_root", RED),
+        ("gamma +\ntree-diff", "gamma_no_bias_plus_tree_difference_multiplicity", ORANGE),
+    ]
+    outcomes = [
+        ("mean novel-class ICL", "mean_novel_icl"),
+        ("best-seed novel-class ICL", "best_seed_novel_icl"),
+    ]
+    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.0), sharey=True)
+    for ax, (title, outcome) in zip(axes, outcomes):
+        vals = [_loo(rows, outcome, model) for _, model, _ in models]
+        colors = [color if v >= 0 else RED for v, (_, _, color) in zip(vals, models)]
+        bars = ax.bar(range(len(vals)), vals, color=colors, width=0.62, alpha=0.92)
+        ax.axhline(0, color=INK, lw=0.8)
+        ax.set_xticks(range(len(vals)), [label for label, _, _ in models], rotation=0)
+        ax.set_title(title, fontsize=10)
+        ax.set_ylim(-0.22, 0.52)
+        ax.grid(axis="y", color=LIGHT, lw=0.8)
+        for bar, val in zip(bars, vals):
+            y = val + (0.025 if val >= 0 else -0.035)
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                y,
+                f"{val:.3f}",
+                ha="center",
+                va="bottom" if val >= 0 else "top",
+                fontsize=7.5,
+            )
+    axes[0].set_ylabel(r"grouped LOO $R^2$")
+    fig.suptitle("Repaired gamma is a diagnostic, not yet a predictor", y=1.03, fontsize=11)
+    save(fig, "fig_gamma_repair_existing_data")
+
+
+def fig_prospective_tree_diff_control():
+    path = ROOT / "ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_causal_report.json"
+    payload = json.load(open(path))
+    group_rows = payload["group_rows"]
+    summary = {}
+    for row in group_rows:
+        key = (row["load_stratum"], row["contrast_level"])
+        summary.setdefault(key, {"mean": [], "best": [], "diff": []})
+        summary[key]["mean"].append(float(row["mean_seed_novel_icl"]))
+        summary[key]["best"].append(float(row["best_seed_novel_icl"]))
+        summary[key]["diff"].append(float(row["diff_overlap_norm_min"]))
+
+    load_labels = [("balanced_load", "balanced load"), ("imbalanced_coord_load", "imbalanced load")]
+    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.1), sharey=True)
+    width = 0.34
+    for ax, metric, title in zip(axes, ["mean", "best"], ["mean seed ICL", "best seed ICL"]):
+        x = list(range(len(load_labels)))
+        high = [mean(summary[(load, "high")][metric]) for load, _ in load_labels]
+        low = [mean(summary[(load, "low")][metric]) for load, _ in load_labels]
+        b1 = ax.bar([i - width / 2 for i in x], high, width=width, color=BLUE, label="high tree-diff")
+        b2 = ax.bar([i + width / 2 for i in x], low, width=width, color=TEAL, label="low tree-diff")
+        ax.set_xticks(x, [label for _, label in load_labels])
+        ax.set_title(title, fontsize=10)
+        ax.set_ylim(55, 94)
+        ax.grid(axis="y", color=LIGHT, lw=0.8)
+        for bars in [b1, b2]:
+            for bar in bars:
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    bar.get_height() + 0.8,
+                    f"{bar.get_height():.1f}",
+                    ha="center",
+                    fontsize=7.5,
+                )
+    axes[0].set_ylabel("novel-class ICL")
+    axes[1].legend(frameon=False, fontsize=8, loc="upper right")
+    fig.suptitle("Prospective exact control did not support tree-difference as a standalone knob", y=1.03, fontsize=10.5)
+    save(fig, "fig_prospective_tree_diff_control")
+
+
+def fig_exact_control_normal_fan_scaled():
+    path = ROOT / "ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_training_report.json"
+    payload = json.load(open(path))
+    models = ["active_tree_count", "normal_fan_pair", "tree_count", "gamma_no_bias_exact", "gamma_plus_normal_fan"]
+    labels = ["active\ntrees", "normal-fan\npair", "tree\ncount", "gamma\nexact", "gamma +\nnormal fan"]
+    outcomes = [("mean_seed_novel_icl", "mean seed"), ("best_seed_novel_icl", "best seed")]
+    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.1))
+    for ax, (outcome, title) in zip(axes, outcomes):
+        row_map = {row["model"]: float(row["loo_r2"]) for row in payload["model_results"][outcome]}
+        vals = [row_map[m] for m in models]
+        colors = [BLUE if v >= 0 else RED for v in vals]
+        bars = ax.bar(range(len(vals)), vals, color=colors, width=0.62, alpha=0.92)
+        ax.axhline(0, color=INK, lw=0.8)
+        ax.set_xticks(range(len(vals)), labels)
+        ax.set_title(title, fontsize=10)
+        ax.set_ylim(-0.18, 0.16)
+        ax.grid(axis="y", color=LIGHT, lw=0.8)
+        for bar, val in zip(bars, vals):
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                val + (0.012 if val >= 0 else -0.018),
+                f"{val:.3f}",
+                ha="center",
+                va="bottom" if val >= 0 else "top",
+                fontsize=7.4,
+            )
+    axes[0].set_ylabel(r"grouped LOO $R^2$")
+
+    # Inset-style scatter in a separate saved figure is overkill; keep the report
+    # focused on the prediction result and cite correlations in the text.
+    fig.suptitle("Scaled exact-degree normal-fan control: weak positive signal", y=1.03, fontsize=10.5)
+    save(fig, "fig_exact_control_normal_fan_scaled")
+
+
+def fig_exact_control_mechanism_scrambles():
+    path = ROOT / "ICL/results/next_phase_stats/mechanism_and_causal_scramble_followup_report.json"
+    payload = json.load(open(path))
+    interventions = payload["causal_intervention_summary"]["interventions"]
+    order = [
+        "context_block_shuffle",
+        "stat_preserving_projection_scramble",
+        "stat_preserving_branch_alignment_scramble",
+        "decoder_root_permutation",
+    ]
+    label_map = {
+        "context_block_shuffle": "context\nblock",
+        "stat_preserving_projection_scramble": "projection\nscramble",
+        "stat_preserving_branch_alignment_scramble": "branch-align.\nscramble",
+        "decoder_root_permutation": "decoder-root\nperm.",
+    }
+    deltas = [float(interventions[name]["accuracy_delta_mean"]) for name in order]
+
+    ablations = payload["selected_ablation_summary"]["fields"]
+    ablation_order = ["input_ablation_max_loss", "physical_ablation_max_loss"]
+    ablation_labels = ["input\nedge", "physical\nedge"]
+    ablation_vals = [float(ablations[name]["mean"]) for name in ablation_order]
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.05))
+    bars = axes[0].bar(range(len(order)), deltas, color=[RED, ORANGE, ORANGE, GRAY], width=0.62)
+    axes[0].axhline(0, color=INK, lw=0.8)
+    axes[0].set_xticks(range(len(order)), [label_map[name] for name in order])
+    axes[0].set_ylabel("accuracy change (points)")
+    axes[0].set_title("Statistic-preserving scrambles", fontsize=10)
+    axes[0].set_ylim(-82, 8)
+    axes[0].grid(axis="y", color=LIGHT, lw=0.8)
+    for bar, val in zip(bars, deltas):
+        axes[0].text(
+            bar.get_x() + bar.get_width() / 2,
+            val - 3.0,
+            f"{val:.1f}",
+            ha="center",
+            va="top",
+            fontsize=7.5,
+            color="white",
+        )
+
+    bars2 = axes[1].bar(range(len(ablation_vals)), ablation_vals, color=[BLUE, TEAL], width=0.5)
+    axes[1].set_xticks(range(len(ablation_vals)), ablation_labels)
+    axes[1].set_ylabel("max accuracy loss (points)")
+    axes[1].set_title("Selected edge ablations", fontsize=10)
+    axes[1].set_ylim(0, 32)
+    axes[1].grid(axis="y", color=LIGHT, lw=0.8)
+    for bar, val in zip(bars2, ablation_vals):
+        axes[1].text(bar.get_x() + bar.get_width() / 2, val + 0.8, f"{val:.1f}", ha="center", fontsize=8)
+    fig.suptitle("Post-training mechanism remains branch/projection dependent", y=1.03, fontsize=10.5)
+    save(fig, "fig_exact_control_mechanism_scrambles")
+
+
 def main():
     fig_tree_basis()
     fig_predictors()
@@ -430,6 +613,10 @@ def main():
     fig_input_multiplicity_controls()
     fig_expressivity_trainability()
     fig_capacity_v2()
+    fig_gamma_repair_existing_data()
+    fig_prospective_tree_diff_control()
+    fig_exact_control_normal_fan_scaled()
+    fig_exact_control_mechanism_scrambles()
     print(f"wrote figures to {OUT}")
 
 

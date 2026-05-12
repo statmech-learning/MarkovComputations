@@ -41,9 +41,9 @@ A concise account of the theory, experiments, audit, and current evidence
 \begin{minipage}[t]{0.40\textwidth}
 \raggedleft
 Topology worktree: \texttt{topology}\\
-Evidence source commit: \texttt{3c9c685}\\
-Markov extension: local artifacts\\
-May 8, 2026
+Evidence source commit: \texttt{556a4d1}\\
+Markov exact-control update: \texttt{2c4cba6}\\
+May 12, 2026
 \end{minipage}
 
 \vspace{0.5em}
@@ -55,7 +55,7 @@ For first-order CRNs with exponential input-dependent rates, topology is not jus
 \[
 \boxed{\;\Theta_T=\sum_{e\in T}K_e,\qquad T\in\T_r(G),\ r\in V.\;}
 \]
-The experiments support the scoped statement that, in the tested fixed-count regimes, topology-associated structural and functional variables explain residual novel-class ICL variation that raw trainable count does not explain. They do not yet give a universal scalar topology law.
+The experiments support the scoped statement that, in the tested fixed-count regimes, topology-associated structural and functional variables explain residual novel-class ICL variation that raw trainable count does not explain. The newest exact-control phase sharpens this: repaired no-bias $\gamma^\ast_{\rm ICL}$ passes analytic toy gates but is not yet predictive, prospective tree-difference overlap did not survive the first exact causal control, and normal-fan/tree-count geometry is now the best weak pre-training signal. There is still no universal scalar topology law.
 
 \vspace{0.6em}
 \noindent\textbf{Scope.}
@@ -423,14 +423,17 @@ This is compatible with the tree-sum view: many different graphs can provide usa
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \vspace{0.5em}
-\noindent The project implemented $\gstar$-style capacity probes because $\drel$ is too coarse. This was the right theoretical direction, but the current optimized proxy did not outperform tree geometry. In the hard $n5\_m12\_N3\_D2$ regression, optimized $\gamma$ capacity had LOO $R^2=-0.564$, while tree geometry had $0.324$ and masked tree geometry had $0.447$.
+\noindent The project implemented $\gstar$-style capacity probes because $\drel$ is too coarse. This was the right theoretical direction, but the first optimized proxy did not outperform tree geometry. In the hard $n5\_m12\_N3\_D2$ regression, optimized $\gamma$ capacity had LOO $R^2=-0.564$, while tree geometry had $0.324$ and masked tree geometry had $0.447$.
 
 \vspace{0.5em}
-\noindent This is an informative failure. The surrogate likely optimizes smooth average behavior more than the true worst-branch margin. ICL is closer to a worst-branch problem:
+\noindent The next audit repaired the analytic toy gate. The no-bias probe now reproduces the paper's small cases: two species with both branches fails, two species with the max branch passes, and the complete directed three-species both-branch construction passes. That repair validates the lower-tail object as a diagnostic. It does not make $\gamma^\ast_{\rm ICL}$ a predictor: in the fixed m20 reanalysis, tree-difference multiplicity reached mean-ICL LOO $R^2=0.435$, while the best repaired gamma model reached only $0.078$.
+
+\vspace{0.5em}
+\noindent The lesson is sharper than simple failure. ICL is a worst-branch problem:
 \[
 \max_{K,B}\min_{b\in\mathcal B}\operatorname{margin}_b(K,B;G,\Omega).
 \]
-A good capacity theory should target low-percentile or worst-branch separation under norm constraints.
+A good capacity theory should target low-percentile or worst-branch separation under norm constraints, but the current repaired $\gamma$ diagnostic still misses important topology/mask variables in trained regimes.
 
 \vspace{1em}
 \noindent\rule{\textwidth}{0.4pt}
@@ -575,13 +578,16 @@ m_\theta(z)=q_{y(z)}(z)-\max_{\ell\neq y(z)}q_\ell(z).
 The implemented variants are exact log-sum-exp tree features, tropical max-over-tree features, and hard-root structural compatibility. The constraints include row-norm bounds for $K_e$, decoder Frobenius norm bounds, edge-bias bounds, and the input mask $\Omega$.
 
 \vspace{0.5em}
-\noindent A small smoke run on a $5$-node, $12$-edge cycle-chords graph produced finite branch-wise reports for all three variants. The objectives were still negative: $-3.001$ for exact, $-2.800$ for tropical, and $-2.270$ for hard-root. This validates the reporting path and reinforces that average accuracy is not the right target; the worst branch can still fail.
+\noindent A small smoke run on a $5$-node, $12$-edge cycle-chords graph produced finite branch-wise reports for all three variants. The objectives were still negative: $-3.001$ for exact, $-2.800$ for tropical, and $-2.270$ for hard-root. This validated the reporting path and reinforced that average accuracy is not the right target; the worst branch can still fail.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.96\textwidth]{fig_capacity_v2.pdf}
 \caption{Lower-tail capacity V2 smoke result. The new probe reports the correct object: worst-branch lower-tail margin and branch failures. This smoke run is not an optimized capacity theorem.}
 \end{figure}
+
+\vspace{0.5em}
+\noindent The later toy repair passed the analytic gate, but the existing-data reanalysis remained negative for prediction. Repaired no-bias exact, tropical, and hard-root gamma variants had fixed-m20 mean-ICL LOO $R^2=-0.075$, $-0.115$, and $-0.150$, respectively. Combining repaired gamma with tree-difference multiplicity degraded the fixed-m20 mean-ICL model from $0.435$ to $0.078$. Thus $\gamma^\ast_{\rm ICL}$ should remain a diagnostic until it predicts held-out exact-control outcomes.
 
 \vspace{1em}
 \noindent\rule{\textwidth}{0.4pt}
@@ -631,97 +637,189 @@ Only then should we sweep $F_{\max}$ and ask whether ICL branch margins increase
 \vspace{1em}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\noindent\textbf{[16] What has now been achieved}
+\noindent\textbf{[16] Post-gamma exact-control phase}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \vspace{0.5em}
-\noindent Before this direction, the paper had:
-\[
-\text{CRNs can do ICL by subspace projection, and raw learned degrees of freedom are important.}
-\]
-After this direction, the first-order story is sharper:
-\begin{center}
-\fbox{\begin{minipage}{0.86\textwidth}
-raw degrees are useful only insofar as topology and masks turn them into relative tree-sum projections that cover comparison branches.
-\end{minipage}}
-\end{center}
+\noindent The next phase was deliberately gated. It did not launch another broad topology sweep. It first reconciled predictor names, lifted input multiplicity into tree and tree-difference space, repaired the analytic $\gamma^\ast_{\rm ICL}$ toy gate, and only then ran prospective exact controls.
 
 \vspace{0.5em}
-\noindent The concrete accomplishments are:
+\noindent The fixed-m20 tree-level multiplicity reanalysis was strong:
 \begin{center}
 \small
-\begin{tabular}{p{0.25\textwidth}p{0.64\textwidth}}
+\begin{tabular}{lccc}
 \toprule
-Layer & What was established\\
+outcome & edge multiplicity & tree multiplicity & tree-difference multiplicity\\
 \midrule
-Theory & The exact first-order computational basis is the rooted tree-sum basis $\{\Theta_T\}$, not the isolated edge basis $\{K_e\}$.\\
-Structural evidence & Fixed-count regimes show residual ICL variation explained by tree and masked-tree geometry beyond raw count.\\
-Input topology & Fixed physical graph/count/$\drel$ masks can still differ sharply, so the object is $\gstar(G,\Omega)$.\\
-Mechanism & Successful trained models organize projection/root/tree features around comparison branches.\\
-Causality & Statistic-preserving scrambles that break alignment sharply reduce ICL.\\
-Markov expressivity & Input multiplicity, monotonicity risk, branch sharpness, coefficient controllability, and lower-tail capacity were formalized for first-order Markov-ICL.\\
-Trainability & Best seed, mean seed, and seed variance are now treated as different targets rather than one accuracy summary.\\
-Thermodynamics & The current arbitrary directed models were correctly not used for force-budget claims; a reversible-edge $F_{\max}$ sweep is the needed next experiment.\\
-Limits & $\drel$ is not a capacity law; current $\gamma$ probes are not final; motifs are not unique; nonlinear CRNs are out of scope.\\
+mean novel-class ICL & $-0.002$ & $0.403$ & $0.435$\\
+best-seed novel-class ICL & $0.109$ & $0.245$ & $0.419$\\
 \bottomrule
 \end{tabular}
 \end{center}
+This supports the statement that useful input multiplicity lives in rooted-tree and tree-difference space, not merely edge space.
 
 \vspace{0.5em}
-\noindent The concrete Markov-extension artifacts added for this phase are:
+\noindent The repaired gamma gate passed the analytic small cases, but the existing-data prediction test was negative. In fixed m20, tree-difference multiplicity reached mean-ICL LOO $R^2=0.435$, while the best repaired gamma model reached only $0.078$. Repaired exact, tropical, and hard-root gamma alone were all negative.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{fig_gamma_repair_existing_data.pdf}
+\caption{Repaired no-bias gamma passes analytic toys but does not yet predict trained ICL in existing data. Tree-difference multiplicity remains stronger in fixed m20.}
+\end{figure}
+
+\vspace{0.5em}
+\noindent The first prospective tree-difference causal control then fixed one physical graph, input-coupled count, $\drel$, aggregate multiplicity, edge load, and coordinate-load stratum. It trained 16 mask groups with five seeds each. The intended high-overlap contrast did not improve ICL:
 \begin{center}
-\scriptsize
-\begin{tabular}{p{0.36\textwidth}p{0.54\textwidth}}
+\small
+\begin{tabular}{llccc}
 \toprule
-artifact & purpose\\
+stratum & outcome & high overlap & low overlap & high--low\\
 \midrule
-\path{ICL/markov_icl_expressivity_theory.md} & theory note formalizing tree-sum Markov-ICL expressivity\\
-\path{ICL/markov_expressivity_reanalysis.py} & existing-data reanalysis and report generator\\
-\path{ICL/branch_margin_capacity_v2.py} & exact, tropical, and hard-root lower-tail branch-capacity probe\\
-\path{existing_data_markov_expressivity_reanalysis.md/json} & grouped Markov-expressivity model checks\\
-\path{input_multiplicity_control_report.md/json} & fixed-count input-mask multiplicity control\\
-\path{exact_degree_multiplicity_normal_fan_report.md/json} & exact-degree pilot reanalysis\\
-\path{expressivity_vs_trainability_report.md/json} & best-seed, mean-seed, and seed-variance separation\\
-\path{thermodynamic_force_budget_report.md/json} & reversible-support audit and valid $F_{\max}$ requirements\\
-\path{markov_icl_final_synthesis.md} & claim separation: expressivity, trainability, mechanism, thermodynamics\\
-\path{markov_icl_goal_completion_audit.md} & verification and evidence-boundary audit\\
+balanced load & mean ICL & $75.360$ & $79.330$ & $-3.970$\\
+balanced load & best ICL & $84.900$ & $89.700$ & $-4.800$\\
+imbalanced load & mean ICL & $68.830$ & $69.900$ & $-1.070$\\
+imbalanced load & best ICL & $74.450$ & $76.250$ & $-1.800$\\
 \bottomrule
 \end{tabular}
 \end{center}
+The balanced mean-ICL CI was $[-7.9905,0.6700]$, and the balanced best-ICL CI was $[-9.000,-0.150]$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\textwidth]{fig_prospective_tree_diff_control.pdf}
+\caption{Prospective tree-difference exact control. High same-root tree-difference comparison overlap did not causally improve novel-class ICL under the first balanced-load exact-control design.}
+\end{figure}
 
 \vspace{0.5em}
-\noindent The most defensible statement is:
-\begin{center}
-\fbox{\begin{minipage}{0.86\textwidth}
-In the tested first-order fixed-count regimes, topology-associated structural and functional variables explain residual novel-class ICL variation that raw trainable count does not explain. The strongest mechanism evidence is that trained models depend on branch/projection/tree alignment.
-\end{minipage}}
-\end{center}
+\noindent Grouped LOO tells the same story. For mean ICL, controls alone reached $0.488$, tree-difference plus controls reached $0.447$, and gamma plus controls reached $0.320$. For best ICL, controls alone reached $0.601$, tree-level plus controls reached $0.631$, tree-difference plus controls reached $0.545$, and gamma plus controls reached $0.571$.
 
 \vspace{1em}
 \noindent\rule{\textwidth}{0.4pt}
 \vspace{1em}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\noindent\textbf{[17] What should come next}
+\noindent\textbf{[17] Exact-degree normal-fan expansion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \vspace{0.5em}
-\noindent The next phase should not be a loose sweep. It should scale the exact-degree/normal-fan design:
+\noindent The exact-degree normal-fan pilot was then scaled. The expanded experiment fixed
 \[
-\begin{gathered}
-\text{fix }N_n,m,N_c,D,\text{ input count, degree sequence, and }\drel,\\
-\text{vary tree-polytope and normal-fan diagnostics, then train enough groups for grouped inference.}
-\end{gathered}
+N_n=5,\qquad m=12,\qquad N_c=3,\qquad D=2,
 \]
-Then compare raw count, $\drel$, masked tree geometry, normal-fan diagnostics, and an improved worst-branch $\gstar(G,\Omega)$ probe.
+the exact in-degree and out-degree sequence, full input coupling, $\drel=88$, and the full-coupling multiplicity distribution. It trained 32 topology groups with five seeds per group, for 160 runs.
 
 \vspace{0.5em}
-\noindent The theoretical target is:
+\noindent This is now the best pre-training signal, but it is weak. Grouped LOO values were:
+\begin{center}
+\small
+\begin{tabular}{lccc}
+\toprule
+model & mean ICL & best ICL & seed std.\\
+\midrule
+active-tree count & $0.099$ & $0.091$ & $-0.069$\\
+normal-fan pair & $0.112$ & $0.110$ & $-0.101$\\
+tree count & $0.114$ & $0.093$ & $-0.069$\\
+gamma exact & $-0.127$ & $-0.072$ & $-0.105$\\
+gamma + normal fan & $0.059$ & $0.117$ & $-0.126$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\textwidth]{fig_exact_control_normal_fan_scaled.pdf}
+\caption{Scaled exact-degree normal-fan experiment. Active-tree/tree-count variables are the best current pre-training signal under exact controls, but the effect is small and does not justify a universal scalar law.}
+\end{figure}
+
+\vspace{0.5em}
+\noindent Correlations were clearer than LOO prediction: active-tree count correlated about $0.446$ with mean ICL and $0.441$ with best ICL; log rooted-tree count correlated about $0.460$ with mean ICL and $0.439$ with best ICL. This suggests that the next experiment must separate total rooted-tree count from genuine normal-fan branch geometry across multiple base graphs or degree sequences.
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent\textbf{[18] Updated mechanism evidence}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.5em}
+\noindent The exact-control phase also added post-training mechanism and causal intervention checks for the prospective-control models. Mechanism metrics were collected for all 80 runs. Four selected high-performing models were then subjected to statistic-preserving scrambles and selected edge ablations.
+
+\vspace{0.5em}
+\noindent The causal drops were large:
+\begin{center}
+\small
+\begin{tabular}{lc}
+\toprule
+intervention & mean accuracy change\\
+\midrule
+context-block shuffle & $-71.458$\\
+stat-preserving projection scramble & $-59.688$\\
+stat-preserving branch-alignment scramble & $-57.778$\\
+decoder-root permutation & $-53.125$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Selected edge ablations also showed dependence on input-coupled and physical edges: mean max input-ablation loss was $21.146$ points, and mean max physical-edge ablation loss was $26.563$ points.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{fig_exact_control_mechanism_scrambles.pdf}
+\caption{Mechanism follow-up after the prospective exact-control phase. Trained successful models still depend on branch/projection organization and ablation-sensitive edges.}
+\end{figure}
+
+\vspace{0.5em}
+\noindent This is an important separation. The prospective pre-training tree-difference overlap contrast was negative or inconclusive, but trained models that do work still causally depend on branch/projection organization. The mechanism claim is stronger than the current pre-training selector claim.
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent\textbf{[19] Current synthesis and next step}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.5em}
+\noindent The current claim separation is:
+\begin{center}
+\small
+\begin{tabular}{p{0.22\textwidth}p{0.67\textwidth}}
+\toprule
+category & current status\\
+\midrule
+Expressivity & First-order tree-sum basis is exact. Normal-fan active-tree/tree-count variables weakly predict best-seed ICL under exact controls.\\
+Trainability & Mean-seed ICL follows the same weak normal-fan/tree-count signal, but seed variance is not explained well.\\
+Mechanism & Trained models rely on branch/projection/tree organization; statistic-preserving scrambles collapse selected trained models.\\
+Causal evidence & The first prospective tree-difference causal control did not support tree-difference overlap as a standalone causal knob.\\
+Thermodynamics & Untested. No $F_{\max}$ claim should be made until a reversible-support parameterization is implemented.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\noindent The concrete next task is no longer to prove that topology matters broadly. It is:
 \begin{center}
 \fbox{\begin{minipage}{0.86\textwidth}
-derive a norm-constrained tree-polytope branch-margin capacity that predicts whether $(G,\Omega)$ can cover ICL branches.
+diagnose why the fixed-m20 tree-difference signal failed under prospective exact control, and test whether normal-fan active-tree/tree-count geometry survives multi-base exact controls after separating it from total rooted-tree count.
 \end{minipage}}
 \end{center}
-That would turn the current empirical and mechanistic evidence into a true first-order topology theory.
+
+\vspace{0.5em}
+\noindent The next model should therefore:
+\begin{enumerate}
+\item compare the prospective masks against fixed-m20 masks to find the source of the tree-difference failure;
+\item build a wider matched-pair tree-difference mask library before training;
+\item expand exact-degree normal-fan controls across multiple base graphs or degree sequences;
+\item keep repaired $\gamma^\ast_{\rm ICL}$ as a diagnostic rather than a selector;
+\item keep thermodynamics delayed until reversible support and detailed-balance behavior at $F_{\max}=0$ are verified.
+\end{enumerate}
+
+\vspace{0.5em}
+\noindent The most defensible statement is now:
+\begin{center}
+\fbox{\begin{minipage}{0.86\textwidth}
+In tested first-order regimes, topology and masks shape the rooted tree-sum basis used for ICL. Existing-data tree-difference multiplicity is predictive, but the first prospective exact-control contrast did not support it as a standalone causal knob. The best current pre-training signal is weak normal-fan/tree-count geometry, while the strongest mechanism evidence remains post-training branch/projection dependence.
+\end{minipage}}
+\end{center}
 
 \end{document}
