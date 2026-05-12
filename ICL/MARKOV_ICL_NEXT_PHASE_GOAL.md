@@ -1,32 +1,82 @@
-# Long-Running Agent Goal: Prospective Markov-ICL Exact-Control Phase
+# Long-Running Agent Goal: Markov-ICL Post Exact-Control Handoff
 
-## Executive Objective
+## Purpose
 
-Continue the first-order Markov-ICL / topology-ICL project **after the repaired gamma toy gate and the existing-data tree-multiplicity control**.
+This file is the current handoff for the next long-running agent. It replaces
+the previous prospective exact-control goal because that phase has now been
+completed.
 
-The project is now past the question "does topology matter at all?" in the tested first-order regimes. The next task is to determine whether the best current structural variables -- especially **same-root tree-difference comparison overlap** and repaired **lower-tail `gamma*_ICL`** -- survive prospective exact controls and predict novel-class ICL before training.
-
-The immediate scientific question is:
-
-```text
-At fixed physical graph controls, input-coupled count, d_rel, aggregate multiplicity, and preferably degree / load distributions, does comparison-coordinate co-participation in rooted-tree and tree-difference features causally control first-order CRN-ICL?
-```
-
-A second, coupled question is:
+Use this file as the high-level `@` reference:
 
 ```text
-Does repaired no-bias gamma*_ICL predict best-seed expressivity or mean-seed trainability beyond tree-difference overlap and existing masked-tree geometry?
+@/Users/aadarwal/code/statmech/topology/ICL/MARKOV_ICL_NEXT_PHASE_GOAL.md
 ```
 
-This should be a **targeted exact-control program**, not a broad topology sweep.
+The concrete completed reports live under:
+
+```text
+@/Users/aadarwal/code/statmech/topology/ICL/results/next_phase_stats/
+```
+
+The most important completed synthesis is:
+
+```text
+@/Users/aadarwal/code/statmech/topology/ICL/results/next_phase_stats/post_gamma_repair_exact_control_synthesis.md
+```
+
+Exact-control results commit:
+
+```text
+2c4cba6dfd729e8c43d52351288665940fd1e80e
+```
+
+Exact-control GitHub commit:
+
+```text
+https://github.com/statmech-learning/MarkovComputations/commit/2c4cba6dfd729e8c43d52351288665940fd1e80e
+```
 
 ---
 
-## Current State To Preserve
+## What Was Just Completed
 
-### 1. First-order tree-sum theory is established
+The completed phase tested whether repaired no-bias `gamma*_ICL` and normalized
+same-root tree-difference comparison overlap survive exact controls as
+pre-training predictors of first-order Markov-ICL.
 
-For a strongly connected directed first-order CRN with exponential input-dependent rates,
+Completed tracks:
+
+```text
+Track 0: orientation audit
+Track 1: repaired-gamma existing-data reanalysis
+Track 2: prospective tree-difference multiplicity causal control
+Track 3: exact-degree / exact-drel / exact-multiplicity normal-fan expansion
+Track 4: expressivity vs trainability split
+Track 5: mechanism and causal scramble follow-up
+Track 6: thermodynamic Fmax delayed and not tested
+```
+
+Verification:
+
+```text
+prospective tree-diff training: 80 / 80 runs completed
+exact-degree normal-fan training: 160 / 160 runs completed
+mechanism metrics: 80 prospective-control rows
+selected causal scrambles: 48 intervention rows
+selected edge ablations: 4 trained models
+```
+
+Thermodynamic claims were not tested. Do not infer thermodynamic results from
+these arbitrary directed first-order exponential-rate CRNs.
+
+---
+
+## Current Scientific State
+
+### 1. First-order tree-sum theory remains the scoped theory
+
+For a strongly connected directed first-order CRN with exponential
+input-dependent rates,
 
 ```math
 k_e(z)=\exp(b_e+K_e^\top z),
@@ -49,11 +99,16 @@ the matrix-tree theorem gives
 \Theta_T=\sum_{e\in T}K_e.
 ```
 
-Thus the computational basis is the rooted tree-sum basis `{Theta_T}`, not the isolated edge-vector basis `{K_e}`.
+The computational basis is the rooted tree-sum basis `{Theta_T}`, not the
+isolated edge-vector basis `{K_e}`.
 
-### 2. Phase 1 predictor naming is resolved
+This theory remains scoped to first-order CRNs / Markov jump processes with
+exponential input-dependent rates. Do not apply it directly to autocatalytic or
+winner-take-all CRNs.
 
-The previous `tree_geometry` name collision is resolved. Do not use the bare name `tree_geometry`.
+### 2. Predictor naming is resolved
+
+Do not use the bare name `tree_geometry`.
 
 Use:
 
@@ -61,7 +116,7 @@ Use:
 tree_geometry_structural_full
 ```
 
-for the fixed-m20 structural model with group-mean LOO `R2 = 0.409`, and
+for the fixed-m20 structural model with group-mean LOO `R2 = 0.409`, and:
 
 ```text
 tree_geometry_markov_reanalysis_subset
@@ -69,9 +124,9 @@ tree_geometry_markov_reanalysis_subset
 
 for the Markov-reanalysis subset model with group-mean LOO `R2 = 0.158`.
 
-### 3. Phase 2 tree-level multiplicity succeeded
+### 3. Tree-level multiplicity still matters, but the causal story changed
 
-Edge-level multiplicity is not sufficient. In the fixed-m20 mask data, grouped LOO results showed:
+The fixed-m20 reanalysis showed a strong existing-data signal:
 
 ```text
 mean novel-class ICL:
@@ -85,35 +140,59 @@ best-seed novel-class ICL:
   tree-difference multiplicity     R2 =  0.419
 ```
 
-This supports the refined statement:
+The previous existing-data causal control was supportive but not decisive:
 
 ```text
-For first-order CRN-ICL, useful input multiplicity lives in rooted-tree and tree-difference space, not merely edge space.
+controls-only mean ICL LOO R2                       = 0.376
+tree-difference + controls mean ICL LOO R2          = 0.452
+strict d_rel=200 controls-only R2                   = 0.187
+strict d_rel=200 tree-difference + controls R2      = 0.293
+matched high-low mean ICL contrast                  = +2.195 points
+bootstrap 95% CI                                    = [-0.882, 5.122]
 ```
 
-### 4. The existing-data causal control is supportive but not final
-
-In the fixed-m20 existing trained mask library:
+The new prospective exact-control test did not reproduce a positive causal
+effect:
 
 ```text
-controls-only mean ICL LOO R2                         = 0.376
-tree-difference multiplicity + controls mean ICL R2   = 0.452
-strict d_rel=200 controls-only R2                     = 0.187
-strict d_rel=200 tree-difference + controls R2        = 0.293
+balanced-load high tree-diff mean ICL   = 75.360
+balanced-load low tree-diff mean ICL    = 79.330
+high-minus-low mean ICL delta           = -3.970
+bootstrap 95% CI                        = [-7.9905, 0.6700]
+
+balanced-load high tree-diff best ICL   = 84.900
+balanced-load low tree-diff best ICL    = 89.700
+high-minus-low best ICL delta           = -4.800
+bootstrap 95% CI                        = [-9.000, -0.150]
 ```
 
-The matched high-low tree-difference contrast was positive but not decisive:
+Grouped LOO in the prospective test:
 
 ```text
-mean novel-class ICL high-low contrast = +2.195 points
-bootstrap 95% CI                       = [-0.882, 5.122]
+mean ICL:
+  controls only                         R2 = 0.488
+  tree-level + controls                 R2 = 0.488
+  tree-difference + controls            R2 = 0.447
+  gamma + controls                      R2 = 0.320
+
+best ICL:
+  controls only                         R2 = 0.601
+  tree-level + controls                 R2 = 0.631
+  tree-difference + controls            R2 = 0.545
+  gamma + controls                      R2 = 0.571
 ```
 
-Therefore tree-difference overlap is the right metric to carry forward, but causal proof is still open.
+Interpretation:
 
-### 5. Gamma toy gate is now repaired
+```text
+Tree-difference overlap remains a useful mask-design covariate, but the first
+prospective balanced-load exact-control test weakens the claim that it is a
+standalone causal knob.
+```
 
-The current repaired `gamma*_ICL` gate passed:
+### 4. Gamma is repaired on toys but is not a predictor yet
+
+The repaired toy gate passed before this exact-control phase:
 
 ```text
 Toy A: two species, both branches, no bias       -> fails as expected
@@ -129,452 +208,309 @@ Toy B accuracy = 1.000, LCVaR =   3.513
 Toy C accuracy = 1.000, LCVaR =   1.516
 ```
 
-Optimizer warm starts preserved or improved the analytic constructions:
+However, repaired gamma did not predict existing or exact-control outcomes
+better than current tree/mask metrics:
 
 ```text
-Toy B final LCVaR = 4.929
-Toy C final LCVaR = 3.035
+fixed-m20 mean ICL:
+  tree-difference multiplicity          R2 =  0.435
+  best repaired gamma model             R2 =  0.078
+  repaired gamma exact                  R2 = -0.075
+  repaired gamma tropical               R2 = -0.115
+  repaired gamma hard-root              R2 = -0.150
+
+exact-degree normal-fan expansion:
+  gamma exact, mean ICL                 R2 = -0.127
+  gamma exact, best ICL                 R2 = -0.072
 ```
 
-This means `gamma*_ICL` is no longer gated off. It is now a **candidate diagnostic**, not yet a proven predictor.
-
----
-
-## Scope And Non-Negotiable Rules
-
-1. Stay within **first-order CRNs / Markov jump processes with exponential input-dependent rates** unless explicitly deriving a separate nonlinear theory.
-2. Do not apply first-order tree-sum claims to autocatalytic or WTA CRNs.
-3. Use **novel-class ICL accuracy** as the primary metric.
-4. Keep physical topology `G`, input-encoding mask `Omega`, trained functional topology, and post-training mechanism diagnostics separate.
-5. Use grouped / hierarchical inference. Training seeds are nested inside topology/mask groups and are not independent topology samples.
-6. Do not use the bare predictor name `tree_geometry`.
-7. Do not treat edge-level multiplicity as sufficient.
-8. Do not claim causal control from the existing fixed-m20 library alone; its high-low contrast is supportive but not decisive.
-9. Do not claim `gamma*_ICL` is a capacity law just because it passes analytic toys.
-10. Do not launch broad sweeps before the exact-control mask and gamma reanalysis phases below.
-11. Do not make thermodynamic `Fmax` claims from arbitrary directed exponential-rate models.
-12. Do not claim motif uniqueness.
-
----
-
-## Required Source Reports To Read First
-
-Read and preserve the conclusions of:
+Interpretation:
 
 ```text
-post_phase3_markov_icl_synthesis.md
-gamma_toy_repair_final_report.md
-input_multiplicity_causal_control_report.md
-tree_multiplicity_causal_mask_library.md
-predictor_name_reconciliation.md
-tree_level_multiplicity_reanalysis.md
-prior topology-ICL first-order report / synthesis
-original CRN-ICL paper, especially Fig. 3 and Appendix B.2-B.3
-Markov expressivity paper, especially input multiplicity, monotonicity, coefficient constraints, and sharpness
+gamma_no_bias is a candidate diagnostic, not a topology selector.
+Do not launch a gamma-selected sweep unless the experiment is explicitly
+designed to test gamma as a hypothesis.
 ```
 
----
+### 5. Normal-fan / tree-count variables are now the best next pre-training signal
 
-# Track 0: Audit Current State And Code Paths
-
-## Goal
-
-Create a short reproducibility / orientation artifact before doing new analyses.
-
-## Tasks
-
-1. Confirm the current branch and commit.
-2. Confirm that the repaired gamma report and tree multiplicity reports are present.
-3. Locate the exact scripts used for:
-   - tree-level and tree-difference multiplicity;
-   - repaired gamma toy validation;
-   - existing-data causal control;
-   - fixed-m20 mask library generation;
-   - grouped LOO inference.
-4. Confirm whether learned `K` tensors are available for the fixed-m20 runs. If not, mark post-training weighted tree-overlap analyses as unavailable for that dataset.
-
-## Deliverable
+The exact-degree / exact-drel / exact-multiplicity normal-fan expansion fixed:
 
 ```text
-next_phase_orientation_audit.md
-next_phase_orientation_audit.json
-```
-
----
-
-# Track 1: Existing-Data Predictive Reanalysis With Repaired Gamma
-
-## Why
-
-Now that `gamma*_ICL` passes the analytic toy gate, the cheapest next test is whether repaired no-bias gamma predicts existing trained outcomes better than current structural metrics.
-
-This phase should not launch new training.
-
-## Metrics To Compare
-
-For each available existing topology/mask group, compute or collect:
-
-```text
-raw_count_structural
-raw_plus_drel_structural
-masked_tree_geometry_structural
-tree_geometry_structural_full
-tree_geometry_markov_reanalysis_subset
-edge_multiplicity_markov_reanalysis
-tree_level_multiplicity
-tree_difference_multiplicity
-repaired_gamma_no_bias_exact
-repaired_gamma_no_bias_tropical
-repaired_gamma_no_bias_hard_root
-gamma_no_bias + tree_difference_multiplicity summaries
-```
-
-If `gamma_with_bias` is computed, report it separately and do not use it to claim capacity for the original no-bias first-order setting.
-
-## Outcomes
-
-Evaluate against:
-
-```text
-mean novel-class ICL
-best-seed novel-class ICL
-seed standard deviation
-branch failures, where available
-trained branch margin, where available
-post-training branch/tree/projection diagnostics, where available
-```
-
-## Statistical Protocol
-
-Use:
-
-- grouped LOO `R2`;
-- clustered bootstrap delta `R2`;
-- strict `d_rel` subset sensitivity where applicable;
-- held-out physical graph / backbone tests where possible;
-- regime-residualized correlations for pooled hard-regime results.
-
-## Key Questions
-
-1. Does repaired `gamma_no_bias` improve prediction over `d_rel`, masked tree geometry, and tree-difference multiplicity?
-2. Does `gamma_no_bias` predict **best seed** better than **mean seed**, suggesting it captures expressivity more than trainability?
-3. Does adding tree-difference multiplicity to `gamma_no_bias` improve prediction?
-4. Does gamma fail in regimes where multiplicity succeeds, or vice versa?
-
-## Deliverables
-
-```text
-repaired_gamma_existing_data_reanalysis.md
-repaired_gamma_existing_data_reanalysis.json
-```
-
-## Gate
-
-Do not use gamma as a selector for new large sweeps unless this reanalysis shows at least one meaningful improvement over existing structural metrics, or unless the new sweep is explicitly designed to test gamma as a hypothesis.
-
----
-
-# Track 2: Prospective Tree-Difference Multiplicity Causal Control
-
-## Goal
-
-Run the first true prospective causal test of the Phase 2 tree-difference multiplicity signal.
-
-The question is:
-
-```text
-At fixed G, input-coupled count, aggregate multiplicity, and d_rel, does normalized same-root tree-difference comparison overlap causally improve novel-class ICL?
-```
-
-## Preferred Design
-
-Start with one or more fixed physical graphs `G`. For each graph, generate masks prospectively rather than reusing the old fixed-m20 library.
-
-Match or control:
-
-```text
-N_n, m, N_c, D
-physical graph G
-input-coupled parameter count
-aggregate M_mean
-preferably full M_alpha distribution
-input edge count
-input coordinate count
-edge-load Gini
-coordinate-load Gini, if not the target contrast
-d_rel(G, Omega)
-```
-
-Vary deliberately:
-
-```text
-min normalized same-root tree-difference comparison overlap
-mean normalized same-root tree-difference comparison overlap
-gini of tree-difference comparison overlap
-normalized tree-level comparison overlap as secondary variable
-```
-
-## Core Metrics
-
-For input mask `Omega`, define edge-level multiplicity:
-
-```math
-M_\alpha=\sum_e \Omega_{e\alpha}.
-```
-
-Tree-level participation:
-
-```math
-A_{T,\alpha}=\sum_{e\in T}\Omega_{e\alpha}.
-```
-
-Same-root tree-difference participation:
-
-```math
-A^{\mathrm{diff}}_{T,T',\alpha}
-=
-\sum_e |s_T(e)-s_{T'}(e)|\Omega_{e\alpha}.
-```
-
-Root-conditioned tree overlap:
-
-```math
-\bar O^{\mathrm{tree}}_{r,i,q,d}
-=
-\frac{1}{|\mathcal T_r|}
-\sum_{T\in\mathcal T_r}
-\mathbf 1[A_{T,i,d}>0]\mathbf 1[A_{T,q,d}>0].
-```
-
-Same-root tree-difference overlap:
-
-```math
-\bar O^{\mathrm{diff}}_{r,i,q,d}
-=
-\frac{1}{|\mathcal P_r|}
-\sum_{(T,T')\in\mathcal P_r}
-\mathbf 1[A^{\mathrm{diff}}_{T,T',i,d}>0]
-\mathbf 1[A^{\mathrm{diff}}_{T,T',q,d}>0].
-```
-
-Use normalized scores. Raw counts must not be used alone.
-
-## Mask Categories
-
-Construct matched masks in categories such as:
-
-1. high tree-diff comparison overlap, balanced coordinate load;
-2. low tree-diff comparison overlap, balanced coordinate load;
-3. high tree-diff comparison overlap, imbalanced coordinate load;
-4. low tree-diff comparison overlap, imbalanced coordinate load.
-
-The cleanest first causal contrast is category 1 vs category 2 with coordinate/load summaries matched as tightly as possible.
-
-## Training
-
-For each mask group:
-
-```text
-same training protocol as prior first-order topology runs
-at least 5 seeds per group; more if feasible
-novel-class ICL primary outcome
-```
-
-Report:
-
-```text
-mean seed novel-class ICL
-best seed novel-class ICL
-seed standard deviation
-branch failures
-trained branch margin
-post-training branch/tree/projection diagnostics where available
-```
-
-## Statistical Tests
-
-Compare:
-
-```text
-controls only
-edge-level multiplicity + controls
-tree-level multiplicity + controls
-tree-difference multiplicity + controls
-gamma_no_bias + controls
-gamma_no_bias + tree-difference multiplicity + controls
-```
-
-Use grouped LOO, matched-pair contrasts, and clustered bootstrap.
-
-## Success Criteria
-
-A strong positive result would show:
-
-```text
-high tree-difference comparison overlap > low tree-difference comparison overlap
-```
-
-under matched `G`, input count, aggregate multiplicity, and `d_rel`, with confidence intervals not crossing zero for mean novel-class ICL or best-seed ICL.
-
-A useful negative result would show that the Phase 2 signal was mostly due to confounding by mask family, graph family, or load imbalance.
-
-## Deliverables
-
-```text
-prospective_tree_diff_multiplicity_mask_library.md
-prospective_tree_diff_multiplicity_mask_library.json
-prospective_tree_diff_multiplicity_training_plan.md
-prospective_tree_diff_multiplicity_causal_report.md
-prospective_tree_diff_multiplicity_causal_report.json
-```
-
----
-
-# Track 3: Exact-Degree / Exact-d_rel / Exact-Multiplicity Normal-Fan Expansion
-
-## Start Condition
-
-Begin this only after Track 1 and the first prospective Track 2 causal library are complete or explicitly waived.
-
-## Goal
-
-Scale the exact-degree / normal-fan pilot into a real statistical test.
-
-The question is:
-
-```text
-After controlling count, degree sequence, d_rel, and tree-difference multiplicity, does normal-fan / tree-polytope branch geometry still predict ICL?
-```
-
-## Controls
-
-Fix:
-
-```text
-N_n, m, N_c, D
+Nn, m, Nc, D
 exact in-degree sequence
 exact out-degree sequence
-input-coupled count
+full input-coupled count
 d_rel
-aggregate M_mean
-preferably M_alpha distribution
-normalized tree-difference comparison overlap stratum
+full-coupling multiplicity distribution
 ```
 
-Vary:
+It trained:
 
 ```text
-active-tree count
-branch-tree NMI
-normal-fan support / active tree coverage
-tree-polytope support geometry
-branch sharpness R_{r,b}
-repaired gamma_no_bias metrics
-rooted tree counts / log tree counts if not fixed
-edge participation heterogeneity if not fixed
+32 topology groups
+5 seeds per group
+160 total runs
 ```
 
-## Sampling Strategy
-
-Generate many degree-preserving directed rewires per base graph. Stratify by normal-fan/tree-polytope variables while holding the controls above fixed.
-
-Do not select only extremes unless the goal is an initial contrast. For regression, sample across the full range.
-
-## Training
-
-Train enough topology/mask groups for grouped inference.
-
-Minimum recommended structure:
+Grouped LOO results:
 
 ```text
->= 30 topology/mask groups per regime if feasible
->= 5 seeds per group
-multiple base graphs or base degree sequences if feasible
+mean seed ICL:
+  active_tree_count                     R2 =  0.099
+  normal_fan_pair                       R2 =  0.112
+  tree_count                            R2 =  0.114
+  gamma_no_bias_exact                   R2 = -0.127
+  gamma_plus_normal_fan                 R2 =  0.059
+
+best seed ICL:
+  active_tree_count                     R2 =  0.091
+  normal_fan_pair                       R2 =  0.110
+  tree_count                            R2 =  0.093
+  gamma_no_bias_exact                   R2 = -0.072
+  gamma_plus_normal_fan                 R2 =  0.117
+
+seed std:
+  all tested models were negative or very small
 ```
 
-## Outcomes
-
-Same as Track 2:
+Interpretation:
 
 ```text
-mean novel-class ICL
-best-seed novel-class ICL
-seed std
-branch failures
-trained branch margin
-post-training active tree / branch-tree diagnostics
-causal scrambles for selected high/mid/low trained models
+Normal-fan active-tree/tree-count variables give the strongest new
+pre-training signal, but the signal is weak. This is not a universal scalar law.
 ```
 
-## Deliverables
+### 6. Mechanism evidence is strong after training
+
+Mechanism diagnostics were collected for all 80 prospective-control trained
+runs. Selected causal scrambles were run on four high-performing trained models.
+
+Selected scramble accuracy drops:
 
 ```text
-exact_degree_exact_drel_exact_multiplicity_normal_fan_library.md
-exact_degree_exact_drel_exact_multiplicity_training_report.md
-exact_degree_exact_drel_exact_multiplicity_training_report.json
+context_block_shuffle                         mean delta = -71.458 points
+stat_preserving_projection_scramble           mean delta = -59.688 points
+stat_preserving_branch_alignment_scramble     mean delta = -57.778 points
+decoder_root_permutation                      mean delta = -53.125 points
+```
+
+Selected edge ablations:
+
+```text
+input_ablation_max_loss       mean = 21.146 points
+input_ablation_mean_loss      mean =  6.125 points
+physical_ablation_max_loss    mean = 26.563 points
+physical_ablation_mean_loss   mean = 11.010 points
+```
+
+Interpretation:
+
+```text
+Trained models that work depend on branch/projection organization and
+ablation-sensitive edges. This is mechanism evidence after training, not
+pre-training causal proof of tree-difference overlap.
 ```
 
 ---
 
-# Track 4: Expressivity vs Trainability Split
+## Required Reports To Read First
 
-## Goal
-
-Separate what a topology/mask **can express** from how reliably gradient training finds it.
-
-Use:
+Read these before doing any new work:
 
 ```text
-best-seed ICL       ~= expressivity upper envelope
-mean-seed ICL       ~= trainability / reliability
-seed std            ~= optimization instability
+ICL/results/next_phase_stats/post_gamma_repair_exact_control_synthesis.md
+ICL/results/next_phase_stats/repaired_gamma_existing_data_reanalysis.md
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_causal_report.md
+ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_training_report.md
+ICL/results/next_phase_stats/expressivity_vs_trainability_exact_control_report.md
+ICL/results/next_phase_stats/mechanism_and_causal_scramble_followup_report.md
+ICL/results/next_phase_stats/next_phase_orientation_audit.md
+ICL/results/next_phase_stats/post_phase3_markov_icl_synthesis.md
+ICL/results/next_phase_stats/gamma_toy_repair_final_report.md
+ICL/results/next_phase_stats/input_multiplicity_causal_control_report.md
+ICL/results/next_phase_stats/tree_multiplicity_causal_mask_library.md
+ICL/results/next_phase_stats/predictor_name_reconciliation.md
+ICL/results/next_phase_stats/tree_level_multiplicity_reanalysis.md
 ```
 
-## Experiment
-
-Construct matched pairs or groups with similar:
+Also preserve the conclusions of:
 
 ```text
-gamma_no_bias
-tree-difference comparison overlap
-d_rel
-input count
-```
-
-but different:
-
-```text
-conditioning of masked tree-difference matrix
-edge participation bottlenecks
-tree posterior entropy / active-tree entropy
-redundancy / number of alternative trees
-normal-fan concentration
-```
-
-## Hypotheses
-
-If best seed is similar but mean seed differs, the structural capacity is similar but trainability differs.
-
-If both best and mean differ, the capacity metric is missing an expressivity-relevant variable.
-
-## Deliverable
-
-```text
-expressivity_vs_trainability_exact_control_report.md
-expressivity_vs_trainability_exact_control_report.json
+the original CRN-ICL paper, especially Fig. 3 and Appendix B.2-B.3
+the Markov expressivity paper, especially input multiplicity, monotonicity,
+coefficient constraints, and sharpness
+the topology-ICL first-order report / synthesis
 ```
 
 ---
 
-# Track 5: Mechanistic Follow-Up And Causal Scrambles
+## Local Artifacts And Data
 
-## Goal
+Committed report artifacts:
 
-For any high-performing or surprising groups from Tracks 2-4, determine whether trained models use the predicted mechanism.
+```text
+ICL/results/next_phase_stats/post_gamma_repair_exact_control_synthesis.md
+ICL/results/next_phase_stats/post_gamma_repair_exact_control_synthesis.json
+ICL/results/next_phase_stats/repaired_gamma_existing_data_reanalysis.md
+ICL/results/next_phase_stats/repaired_gamma_existing_data_reanalysis.json
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_mask_library.md
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_mask_library.json
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_training_plan.md
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_causal_report.md
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_causal_report.json
+ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_normal_fan_library.md
+ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_normal_fan_library.json
+ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_training_report.md
+ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_training_report.json
+ICL/results/next_phase_stats/expressivity_vs_trainability_exact_control_report.md
+ICL/results/next_phase_stats/expressivity_vs_trainability_exact_control_report.json
+ICL/results/next_phase_stats/mechanism_and_causal_scramble_followup_report.md
+ICL/results/next_phase_stats/mechanism_and_causal_scramble_followup_report.json
+ICL/results/next_phase_stats/next_phase_orientation_audit.md
+ICL/results/next_phase_stats/next_phase_orientation_audit.json
+```
 
-## Required Analyses
+Committed CSV summaries:
 
-For selected trained models, compute:
+```text
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_training_results.csv
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_training_manifest.csv
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_mechanism_results.csv
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_selected_ablation_mechanism_results.csv
+ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_causal_interventions.csv
+ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_normal_fan_training_results.csv
+ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_normal_fan_training_manifest.csv
+ICL/results/next_phase_stats/repaired_gamma_existing_data_gamma_rows.csv
+```
+
+Committed prospective mask library:
+
+```text
+ICL/results/prospective_tree_diff_multiplicity_n6_m20_c200/
+```
+
+Local untracked raw trained-model directories, if still present in this
+workspace:
+
+```text
+ICL/results/prospective_tree_diff_multiplicity_training/
+ICL/results/exact_degree_exact_drel_exact_multiplicity_normal_fan_training/
+```
+
+These raw directories contain model checkpoints and per-run files. They were
+not pushed to GitHub; the committed CSV summaries and reports are the stable
+shared artifacts.
+
+---
+
+## Next Recommended Long-Running Task
+
+The next task should not rerun the just-completed phase. It should use the
+completed negative/inconclusive result to sharpen the theory.
+
+Immediate objective:
+
+```text
+Determine whether normal-fan active-tree/tree-count geometry remains
+predictive after separating it from raw rooted-tree count, and diagnose why
+the fixed-m20 tree-difference signal failed under the first prospective
+exact-control mask design.
+```
+
+### Track A: Diagnose the tree-difference prospective failure
+
+Questions:
+
+```text
+Was the prospective tree-difference range too narrow in the balanced stratum?
+Did the generated masks introduce hidden branch difficulty or load correlations?
+Does fixed-m20 tree-difference signal depend on mask family or graph family?
+Does tree-difference overlap only help when paired with normal-fan support?
+```
+
+Required analyses:
+
+```text
+Compare prospective masks against fixed-m20 masks in tree-level, tree-difference,
+edge overlap, coordinate-load, branch-common d_rel, condition number, root tree
+count, and normal-fan summaries.
+
+Residualize fixed-m20 outcomes by physical graph / mask family where possible.
+
+Construct a wider matched-pair mask library on at least two physical graphs,
+but do not train until the library proves the intended contrast is clean.
+```
+
+Deliverables:
+
+```text
+tree_difference_failure_diagnostic_report.md
+tree_difference_failure_diagnostic_report.json
+tree_difference_wider_contrast_mask_library.md
+tree_difference_wider_contrast_mask_library.json
+```
+
+### Track B: Expand normal-fan exact controls across base graphs
+
+Questions:
+
+```text
+Does active-tree/tree-count geometry survive multiple base graphs or degree
+sequences?
+Is the weak normal-fan signal really geometry, or mostly total rooted-tree count?
+Can branch-tree NMI or active-tree count predict held-out base graph families?
+```
+
+Design:
+
+```text
+Use multiple base degree sequences.
+Preserve exact in-degree and out-degree within each family.
+Fix or stratify d_rel and input-coupled count.
+Fix or stratify multiplicity distribution.
+Track rooted-tree count separately from normal-fan active-tree support.
+Use grouped LOO, held-out base graph, and clustered bootstrap.
+```
+
+Do not claim a universal scalar law. The current signal is weak.
+
+Deliverables:
+
+```text
+normal_fan_multibase_exact_control_library.md
+normal_fan_multibase_exact_control_library.json
+normal_fan_multibase_exact_control_report.md
+normal_fan_multibase_exact_control_report.json
+```
+
+### Track C: Keep gamma as a diagnostic, not a selector
+
+Questions:
+
+```text
+Why does repaired gamma pass analytic toys but fail prediction?
+Is the issue lower-tail margin definition, root assignment, branch sampling,
+or mismatch between expressivity and trainability?
+Does gamma predict any subset once normal-fan/tree-count variables are controlled?
+```
+
+Required rule:
+
+```text
+Do not select new topologies solely by gamma_no_bias.
+```
+
+Deliverables:
+
+```text
+gamma_predictor_failure_audit.md
+gamma_predictor_failure_audit.json
+```
+
+### Track D: Mechanism checks on normal-fan extremes
+
+Use selected high/mid/low normal-fan trained models. Compute:
 
 ```text
 branch-active-tree MI
@@ -586,35 +522,23 @@ posterior matched comparison gap
 input-coupling ablation loss
 physical edge ablation loss
 functional edge importance
+stat-preserving branch-alignment scrambles
+stat-preserving projection scrambles
+context-block shuffles
+decoder-root permutations
 ```
 
-Then run statistic-preserving scrambles:
+Deliverables:
 
 ```text
-branch-alignment scramble
-projection scramble
-context-block shuffle
-decoder-root permutation
+normal_fan_mechanism_scramble_report.md
+normal_fan_mechanism_scramble_report.json
 ```
 
-Preserve as many coarse statistics as possible, including graph, mask support, `d_rel`, root tree counts, and projection row norms.
+### Track E: Thermodynamics remains delayed
 
-## Deliverable
-
-```text
-mechanism_and_causal_scramble_followup_report.md
-mechanism_and_causal_scramble_followup_report.json
-```
-
----
-
-# Track 6: Thermodynamic Fmax Experiment, Delayed
-
-Do not start this until the first-order exact-control tracks are stable or the user explicitly requests it.
-
-Existing arbitrary directed exponential-rate CRNs are not valid for thermodynamic force-budget claims.
-
-A valid thermodynamic Markov experiment requires reversible support and a parameterization such as:
+Do not make thermodynamic claims until a reversible-support Markov
+parameterization is implemented and validated:
 
 ```math
 W_{ij}=\exp(E_j-B_{ij}+F_{ij}/2+\text{input drive}),
@@ -626,93 +550,53 @@ F_{ij}=-F_{ji},
 |F_{ij}|\le F_{\max}.
 ```
 
-Before training, verify:
+First verify:
 
 ```text
 reversible edge support
-detailed-balance behavior at Fmax=0
+detailed balance at Fmax=0
 correct generator convention
 stable steady-state solve
 valid comparison to the first-order CRN-ICL task
 ```
 
-Only then sweep `Fmax` and ask whether novel-class ICL and lower-tail branch margin increase with allowed non-equilibrium driving.
+---
 
-Deliverable, if run:
+## Non-Negotiable Rules For The Next Agent
 
-```text
-thermodynamic_fmax_markov_icl_report.md
-thermodynamic_fmax_markov_icl_report.json
-```
+1. Stay within first-order CRNs / Markov jump processes unless explicitly
+   deriving a separate nonlinear theory.
+2. Do not apply first-order tree-sum claims to autocatalytic or WTA CRNs.
+3. Use novel-class ICL accuracy as the primary metric.
+4. Keep physical topology `G`, input mask `Omega`, trained functional topology,
+   and post-training mechanism diagnostics separate.
+5. Use grouped or hierarchical inference; seeds are nested inside topology/mask
+   groups.
+6. Do not use the bare predictor name `tree_geometry`.
+7. Do not treat edge-level multiplicity as sufficient.
+8. Do not treat the completed prospective tree-difference result as positive
+   causal proof; it was negative/inconclusive.
+9. Do not use `gamma_no_bias` as a topology selector yet.
+10. Do not launch a broad sweep and call it causal.
+11. Do not make thermodynamic claims from arbitrary directed graphs.
+12. Do not claim motif uniqueness or a universal scalar law.
 
 ---
 
-# Required Final Synthesis
+## Concrete Bottom Line
 
-At the end of this task, produce:
-
-```text
-post_gamma_repair_exact_control_synthesis.md
-post_gamma_repair_exact_control_synthesis.json
-```
-
-It must separate claims into:
+The project state is now:
 
 ```text
-expressivity
-trainability
-mechanism
-causal evidence
-thermodynamic physics
+Gamma is repaired on analytic toys but not predictive in current data.
+Tree-difference overlap was strong in fixed-m20 reanalysis but failed the
+first prospective exact-control causal test.
+Normal-fan active-tree/tree-count variables are the best current pre-training
+signal, but only weakly.
+Trained successful models causally depend on branch/projection organization.
+Thermodynamic physics remains untested.
 ```
 
-It must answer:
-
-1. Does repaired `gamma_no_bias` predict existing-data ICL better than current tree/mask metrics?
-2. Does prospective tree-difference comparison overlap causally affect ICL under exact controls?
-3. Does the tree-difference signal survive beyond mask family and physical graph identity?
-4. Does exact-degree / exact-drel / exact-multiplicity normal-fan geometry predict ICL?
-5. Does gamma predict best-seed expressivity, mean-seed trainability, both, or neither?
-6. Which metric should be used in the next larger experiment?
-7. Which claims are supported, weakened, or still open?
-8. Was any thermodynamic claim tested? If not, say explicitly that it remains untested.
-
----
-
-# Acceptance Criteria
-
-## Strong positive outcome
-
-At least one prospective exact-control experiment shows that normalized same-root tree-difference comparison overlap, repaired `gamma_no_bias`, or normal-fan/tree-polytope geometry improves prediction of novel-class ICL beyond `d_rel`, raw count, physical graph controls, and aggregate multiplicity.
-
-## Strong expressivity/trainability outcome
-
-`gamma_no_bias` or tree-difference overlap predicts best-seed ICL, while separate conditioning/redundancy metrics explain mean-seed reliability or seed variance.
-
-## Useful negative outcome
-
-The prospective exact-control experiment fails to reproduce the existing-data tree-difference signal. Then the Phase 2 signal was likely confounded by mask family, physical graph identity, or load imbalance.
-
-## Invalid outcome
-
-A broad sweep is run without exact controls and then interpreted as a causal topology result. Do not do this.
-
----
-
-# Bottom Line For The Agent
-
-The current project state is:
-
-```text
-Gamma is repaired on analytic toys.
-Tree-difference comparison overlap is the best current input-mask structural metric.
-Existing-data causal evidence is supportive but not final.
-```
-
-The immediate next goal is:
-
-```text
-Use repaired gamma and normalized same-root tree-difference comparison overlap in prospective exact-control tests.
-```
-
-Answer this before launching another broad topology sweep or a thermodynamic extension.
+The next model should diagnose the failed tree-difference causal contrast and
+run a multi-base exact-control normal-fan expansion, while keeping gamma as a
+diagnostic and thermodynamics delayed.
