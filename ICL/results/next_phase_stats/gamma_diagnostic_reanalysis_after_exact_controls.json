@@ -1,0 +1,25 @@
+{
+  "fixed_m20": {
+    "fixed_m20_best_gamma_mean_loo_r2": 0.07797780210984329,
+    "fixed_m20_best_gamma_model": "gamma_no_bias_plus_tree_difference_multiplicity",
+    "fixed_m20_mean_tree_difference_loo_r2": 0.43547904457120246,
+    "gamma_selector_gate": "not_cleared_for_large_sweeps",
+    "hard_full_mask_has_branch_failure_and_trained_margin": true,
+    "reason": "No repaired gamma model is allowed as a broad selector unless it improves over existing structural metrics."
+  },
+  "interpretation": "Gamma remains a sanity-checked diagnostic. It passed analytic toys, but exact-control trained data do not support using it as a topology selector.",
+  "normal_fan_exact_control": {
+    "best_gamma_exact_r2": -0.07215516890537166,
+    "best_gamma_plus_normal_fan_r2": 0.11708420265893826,
+    "mean_gamma_exact_r2": -0.12669674715786283,
+    "mean_gamma_plus_normal_fan_r2": 0.059380108173988644
+  },
+  "prospective_exact_control": {
+    "best_gamma_plus_controls_r2": 0.5710524803529574,
+    "branch_failures_gamma_plus_controls_r2": 0.31666043278289757,
+    "mean_gamma_plus_controls_r2": 0.3200434503300783,
+    "trained_margin_gamma_plus_controls_r2": 0.3541160363185464
+  },
+  "schema": "gamma_diagnostic_reanalysis_after_exact_controls.v1",
+  "status": "diagnostic_not_selector"
+}

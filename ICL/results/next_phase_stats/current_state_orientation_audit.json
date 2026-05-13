@@ -1,0 +1,129 @@
+{
+  "branch": "## topology...origin/topology",
+  "branch_failure_and_margin_availability": {
+    "normal_fan_branch_failures": false,
+    "normal_fan_trained_branch_margin": false,
+    "prospective_branch_failures": true,
+    "prospective_trained_branch_margin": true
+  },
+  "commit": "caa3c0900221170eeb12f0e3674233a5fca3940e",
+  "learned_tensor_availability": {
+    "fixed_m20_aggregate_csv_contains_K_tensors": false,
+    "fixed_m20_remote_model_pt_sample_available": true,
+    "normal_fan_local_model_pt": 160,
+    "prospective_tree_diff_local_model_pt": 80
+  },
+  "output_locations": {
+    "normal_fan_raw_training_dir": "ICL/results/exact_degree_exact_drel_exact_multiplicity_normal_fan_training",
+    "normal_fan_training_results": "ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_normal_fan_training_results.csv",
+    "prospective_raw_training_dir": "ICL/results/prospective_tree_diff_multiplicity_training",
+    "prospective_tree_diff_training_results": "ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_training_results.csv"
+  },
+  "required_artifacts": {
+    "gamma_toy_repair": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/gamma_toy_repair_final_report.md"
+    },
+    "goal": {
+      "exists": true,
+      "path": "ICL/MARKOV_ICL_NEXT_PHASE_GOAL.md"
+    },
+    "input_multiplicity_causal_control": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/input_multiplicity_causal_control_report.md"
+    },
+    "latex_pdf": {
+      "exists": true,
+      "path": "ICL/paper/topology_icl_first_order_report.pdf"
+    },
+    "mechanism_followup_report": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/mechanism_and_causal_scramble_followup_report.md"
+    },
+    "normal_fan_training_report": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/exact_degree_exact_drel_exact_multiplicity_normal_fan_training_report.md"
+    },
+    "post_gamma_exact_control_synthesis": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/post_gamma_repair_exact_control_synthesis.md"
+    },
+    "post_phase3_synthesis": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/post_phase3_markov_icl_synthesis.md"
+    },
+    "predictor_name_reconciliation": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/predictor_name_reconciliation.md"
+    },
+    "prospective_tree_diff_causal_report": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/prospective_tree_diff_multiplicity_causal_report.md"
+    },
+    "repaired_gamma_existing_data_reanalysis": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/repaired_gamma_existing_data_reanalysis.md"
+    },
+    "tree_level_multiplicity_reanalysis": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/tree_level_multiplicity_reanalysis.md"
+    },
+    "tree_multiplicity_causal_mask_library": {
+      "exists": true,
+      "path": "ICL/results/next_phase_stats/tree_multiplicity_causal_mask_library.md"
+    }
+  },
+  "schema": "current_state_orientation_audit.v1",
+  "script_paths": {
+    "causal_intervention_collection": {
+      "exists": true,
+      "path": "ICL/collect_causal_interventions.py"
+    },
+    "causal_interventions": {
+      "exists": true,
+      "path": "ICL/causal_topology_interventions.py"
+    },
+    "cross_root_metrics": {
+      "exists": true,
+      "path": "ICL/cross_root_tree_contrast_metrics.py"
+    },
+    "current_script": {
+      "exists": true,
+      "path": "ICL/exact_control_failure_diagnosis.py"
+    },
+    "fixed_m20_causal_control": {
+      "exists": true,
+      "path": "ICL/tree_multiplicity_causal_control.py"
+    },
+    "mechanism_collection": {
+      "exists": true,
+      "path": "ICL/collect_mechanism_results.py"
+    },
+    "prospective_tree_difference_library": {
+      "exists": true,
+      "path": "ICL/prospective_tree_diff_multiplicity_control.py"
+    },
+    "prospective_tree_difference_training_report": {
+      "exists": true,
+      "path": "ICL/prospective_tree_diff_multiplicity_training_report.py"
+    },
+    "repaired_gamma_existing_data_reanalysis": {
+      "exists": true,
+      "path": "ICL/repaired_gamma_existing_data_reanalysis.py"
+    },
+    "scaled_normal_fan_expansion": {
+      "exists": true,
+      "path": "ICL/exact_degree_normal_fan_scale_report.py"
+    },
+    "tree_level_and_tree_difference_multiplicity": {
+      "exists": true,
+      "path": "ICL/tree_level_multiplicity_metrics.py"
+    }
+  },
+  "status": "ready_for_diagnostic_reanalysis",
+  "untracked_items": [
+    "?? ICL/results/exact_degree_exact_drel_exact_multiplicity_normal_fan_training/",
+    "?? ICL/results/prospective_tree_diff_multiplicity_training/"
+  ],
+  "worktree_status": "## topology...origin/topology\nA  ICL/cross_root_tree_contrast_metrics.py\nAM ICL/exact_control_failure_diagnosis.py\nA  ICL/results/next_phase_stats/cross_root_tree_contrast_reanalysis.json\nA  ICL/results/next_phase_stats/cross_root_tree_contrast_reanalysis.md\nA  ICL/results/next_phase_stats/current_state_orientation_audit.json\nA  ICL/results/next_phase_stats/current_state_orientation_audit.md\nA  ICL/results/next_phase_stats/expressivity_vs_trainability_after_exact_controls.json\nA  ICL/results/next_phase_stats/expressivity_vs_trainability_after_exact_controls.md\nA  ICL/results/next_phase_stats/gamma_diagnostic_reanalysis_after_exact_controls.json\nA  ICL/results/next_phase_stats/gamma_diagnostic_reanalysis_after_exact_controls.md\nA  ICL/results/next_phase_stats/mechanism_followup_after_exact_controls.json\nA  ICL/results/next_phase_stats/mechanism_followup_after_exact_controls.md\nA  ICL/results/next_phase_stats/normal_fan_tree_count_separation_library.json\nA  ICL/results/next_phase_stats/normal_fan_tree_count_separation_library.md\nA  ICL/results/next_phase_stats/normal_fan_tree_count_training_report.json\nA  ICL/results/next_phase_stats/normal_fan_tree_count_training_report.md\nA  ICL/results/next_phase_stats/post_exact_control_failure_diagnosis_synthesis.json\nA  ICL/results/next_phase_stats/post_exact_control_failure_diagnosis_synthesis.md\nA  ICL/results/next_phase_stats/tree_difference_failure_diagnosis.json\nA  ICL/results/next_phase_stats/tree_difference_failure_diagnosis.md\nA  ICL/tests/test_cross_root_tree_contrast_metrics.py\n?? ICL/results/exact_degree_exact_drel_exact_multiplicity_normal_fan_training/\n?? ICL/results/prospective_tree_diff_multiplicity_training/"
+}

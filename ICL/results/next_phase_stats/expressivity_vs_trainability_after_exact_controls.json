@@ -1,0 +1,271 @@
+{
+  "datasets": {
+    "exact_degree_normal_fan": {
+      "best_seed_best_model": {
+        "categorical_predictors": [],
+        "design_columns": [
+          "cross_separation_norm_mean",
+          "cross_imbalance_norm_mean",
+          "cross_contrast_effective_rank_mean",
+          "cross_edge_participation_gini"
+        ],
+        "loo_r2": 0.08970416319686403,
+        "model": "cross_root_oriented",
+        "n_groups": 32,
+        "n_predictors": 4,
+        "numeric_predictors": [
+          "cross_separation_norm_mean",
+          "cross_imbalance_norm_mean",
+          "cross_contrast_effective_rank_mean",
+          "cross_edge_participation_gini"
+        ],
+        "outcome": "outcome_best"
+      },
+      "mean_seed_best_model": {
+        "categorical_predictors": [],
+        "design_columns": [
+          "cross_separation_norm_mean",
+          "cross_imbalance_norm_mean",
+          "cross_contrast_effective_rank_mean",
+          "cross_edge_participation_gini"
+        ],
+        "loo_r2": 0.08683091314542346,
+        "model": "cross_root_oriented",
+        "n_groups": 32,
+        "n_predictors": 4,
+        "numeric_predictors": [
+          "cross_separation_norm_mean",
+          "cross_imbalance_norm_mean",
+          "cross_contrast_effective_rank_mean",
+          "cross_edge_participation_gini"
+        ],
+        "outcome": "outcome_mean"
+      },
+      "seed_std_best_model": {
+        "categorical_predictors": [],
+        "design_columns": [
+          "cross_overlap_norm_min",
+          "cross_overlap_norm_mean",
+          "cross_best_root_pair_overlap_norm_min",
+          "cross_root_pair_overlap_entropy_mean"
+        ],
+        "loo_r2": -0.06555671175858468,
+        "model": "cross_root_overlap",
+        "n_groups": 32,
+        "n_predictors": 4,
+        "numeric_predictors": [
+          "cross_overlap_norm_min",
+          "cross_overlap_norm_mean",
+          "cross_best_root_pair_overlap_norm_min",
+          "cross_root_pair_overlap_entropy_mean"
+        ],
+        "outcome": "outcome_seed_std"
+      }
+    },
+    "fixed_m20_retrospective": {
+      "best_seed_best_model": {
+        "categorical_predictors": [
+          "physical_topology_name"
+        ],
+        "design_columns": [
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini",
+          "physical_topology_name=cycle_chords_n6_m20_seed3",
+          "physical_topology_name=hub_spoke_n6_m20_seed63",
+          "physical_topology_name=random_sc_n6_m20_seed3"
+        ],
+        "loo_r2": 0.4051898587885018,
+        "model": "same_root_tree_diff",
+        "n_groups": 48,
+        "n_predictors": 6,
+        "numeric_predictors": [
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini"
+        ],
+        "outcome": "outcome_best"
+      },
+      "mean_seed_best_model": {
+        "categorical_predictors": [
+          "physical_topology_name"
+        ],
+        "design_columns": [
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini",
+          "physical_topology_name=cycle_chords_n6_m20_seed3",
+          "physical_topology_name=hub_spoke_n6_m20_seed63",
+          "physical_topology_name=random_sc_n6_m20_seed3"
+        ],
+        "loo_r2": 0.41238209927896863,
+        "model": "same_root_tree_diff",
+        "n_groups": 48,
+        "n_predictors": 6,
+        "numeric_predictors": [
+          "diff_overlap_norm_min",
+          "diff_overlap_norm_mean",
+          "diff_coord_load_gini"
+        ],
+        "outcome": "outcome_mean"
+      },
+      "seed_std_best_model": {
+        "categorical_predictors": [
+          "physical_topology_name"
+        ],
+        "design_columns": [
+          "cross_separation_norm_mean",
+          "cross_imbalance_norm_mean",
+          "cross_contrast_effective_rank_mean",
+          "cross_edge_participation_gini",
+          "physical_topology_name=cycle_chords_n6_m20_seed3",
+          "physical_topology_name=hub_spoke_n6_m20_seed63",
+          "physical_topology_name=random_sc_n6_m20_seed3"
+        ],
+        "loo_r2": -0.06905292333801327,
+        "model": "cross_root_oriented",
+        "n_groups": 48,
+        "n_predictors": 7,
+        "numeric_predictors": [
+          "cross_separation_norm_mean",
+          "cross_imbalance_norm_mean",
+          "cross_contrast_effective_rank_mean",
+          "cross_edge_participation_gini"
+        ],
+        "outcome": "outcome_seed_std"
+      }
+    },
+    "prospective_tree_diff_exact_control": {
+      "best_seed_best_model": {
+        "categorical_predictors": [
+          "load_stratum"
+        ],
+        "design_columns": [
+          "cross_overlap_norm_min",
+          "cross_overlap_norm_mean",
+          "cross_best_root_pair_overlap_norm_min",
+          "cross_root_pair_overlap_entropy_mean",
+          "load_stratum=balanced_load",
+          "load_stratum=imbalanced_coord_load"
+        ],
+        "loo_r2": 0.7725524160144714,
+        "model": "cross_root_overlap",
+        "n_groups": 16,
+        "n_predictors": 6,
+        "numeric_predictors": [
+          "cross_overlap_norm_min",
+          "cross_overlap_norm_mean",
+          "cross_best_root_pair_overlap_norm_min",
+          "cross_root_pair_overlap_entropy_mean"
+        ],
+        "outcome": "outcome_best"
+      },
+      "mean_seed_best_model": {
+        "categorical_predictors": [
+          "load_stratum"
+        ],
+        "design_columns": [
+          "cross_overlap_norm_min",
+          "cross_overlap_norm_mean",
+          "cross_best_root_pair_overlap_norm_min",
+          "cross_root_pair_overlap_entropy_mean",
+          "load_stratum=balanced_load",
+          "load_stratum=imbalanced_coord_load"
+        ],
+        "loo_r2": 0.48328946811944007,
+        "model": "cross_root_overlap",
+        "n_groups": 16,
+        "n_predictors": 6,
+        "numeric_predictors": [
+          "cross_overlap_norm_min",
+          "cross_overlap_norm_mean",
+          "cross_best_root_pair_overlap_norm_min",
+          "cross_root_pair_overlap_entropy_mean"
+        ],
+        "outcome": "outcome_mean"
+      },
+      "seed_std_best_model": {
+        "categorical_predictors": [
+          "load_stratum"
+        ],
+        "design_columns": [
+          "diff_overlap_norm_min",
+          "cross_overlap_norm_min",
+          "cross_best_root_pair_overlap_norm_min",
+          "cross_contrast_effective_rank_mean",
+          "load_stratum=balanced_load",
+          "load_stratum=imbalanced_coord_load"
+        ],
+        "loo_r2": 0.39445837688044716,
+        "model": "same_plus_cross_minimal",
+        "n_groups": 16,
+        "n_predictors": 6,
+        "numeric_predictors": [
+          "diff_overlap_norm_min",
+          "cross_overlap_norm_min",
+          "cross_best_root_pair_overlap_norm_min",
+          "cross_contrast_effective_rank_mean"
+        ],
+        "outcome": "outcome_seed_std"
+      }
+    }
+  },
+  "interpretation": {
+    "best_seed": "best-seed ICL remains the closest available expressivity envelope",
+    "mean_seed": "mean-seed ICL mixes expressivity and training reliability",
+    "seed_std": "current structural metrics generally do not explain seed variance well"
+  },
+  "normal_fan_tree_count_models": {
+    "best_seed_best_model": {
+      "categorical_predictors": [],
+      "design_columns": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "loo_r2": 0.1692731045789917,
+      "model": "normal_fan_only",
+      "n_groups": 32,
+      "n_predictors": 3,
+      "numeric_predictors": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "outcome": "outcome_best"
+    },
+    "mean_seed_best_model": {
+      "categorical_predictors": [],
+      "design_columns": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "loo_r2": 0.11222042930283738,
+      "model": "tree_count_only",
+      "n_groups": 32,
+      "n_predictors": 2,
+      "numeric_predictors": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "outcome": "outcome_mean"
+    },
+    "seed_std_best_model": {
+      "categorical_predictors": [],
+      "design_columns": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "loo_r2": -0.07025968032753394,
+      "model": "tree_count_only",
+      "n_groups": 32,
+      "n_predictors": 2,
+      "numeric_predictors": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "outcome": "outcome_seed_std"
+    }
+  },
+  "schema": "expressivity_vs_trainability_after_exact_controls.v1"
+}

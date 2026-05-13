@@ -1,0 +1,493 @@
+{
+  "arms": {
+    "arm_A_fixed_tree_count_variable_normal_fan": "not available cleanly in current one-base library because active-tree count and log rooted-tree count are highly correlated",
+    "arm_B_variable_tree_count_matched_normal_fan": "not available cleanly in current one-base library for the same collinearity reason",
+    "arm_C_multi_base_rewire_libraries": "required next; current library uses one base degree sequence"
+  },
+  "controls": [
+    "N_n=5",
+    "m=12",
+    "N_c=3",
+    "D=2",
+    "exact in-degree sequence",
+    "exact out-degree sequence",
+    "full input coupling",
+    "d_rel=88"
+  ],
+  "feature_correlations": [
+    {
+      "n": 32,
+      "r": null,
+      "x": "library_n_trees_total_enum_log",
+      "y": "library_root_tree_count_gini"
+    },
+    {
+      "n": 32,
+      "r": 0.9744422259870522,
+      "x": "capacity_normal_fan_active_tree_count_mean",
+      "y": "library_n_trees_total_enum_log"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "capacity_normal_fan_active_tree_count_mean",
+      "y": "library_root_tree_count_gini"
+    },
+    {
+      "n": 32,
+      "r": 0.791929890353375,
+      "x": "capacity_normal_fan_active_tree_count_mean",
+      "y": "capacity_normal_fan_branch_tree_nmi_mean"
+    },
+    {
+      "n": 32,
+      "r": 0.9471429132860775,
+      "x": "capacity_normal_fan_active_tree_count_mean",
+      "y": "capacity_normal_fan_branch_active_tree_count_min_mean"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "capacity_normal_fan_active_tree_count_mean",
+      "y": "cross_overlap_norm_min"
+    },
+    {
+      "n": 32,
+      "r": 0.9500107979168154,
+      "x": "capacity_normal_fan_active_tree_count_mean",
+      "y": "cross_contrast_effective_rank_mean"
+    },
+    {
+      "n": 32,
+      "r": 0.7886208512767043,
+      "x": "capacity_normal_fan_branch_tree_nmi_mean",
+      "y": "library_n_trees_total_enum_log"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "capacity_normal_fan_branch_tree_nmi_mean",
+      "y": "library_root_tree_count_gini"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "capacity_normal_fan_branch_tree_nmi_mean",
+      "y": "cross_overlap_norm_min"
+    },
+    {
+      "n": 32,
+      "r": 0.7510280589662954,
+      "x": "capacity_normal_fan_branch_tree_nmi_mean",
+      "y": "cross_contrast_effective_rank_mean"
+    },
+    {
+      "n": 32,
+      "r": 0.9394095285402011,
+      "x": "capacity_normal_fan_branch_active_tree_count_min_mean",
+      "y": "library_n_trees_total_enum_log"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "capacity_normal_fan_branch_active_tree_count_min_mean",
+      "y": "library_root_tree_count_gini"
+    },
+    {
+      "n": 32,
+      "r": 0.6953743148452634,
+      "x": "capacity_normal_fan_branch_active_tree_count_min_mean",
+      "y": "capacity_normal_fan_branch_tree_nmi_mean"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "capacity_normal_fan_branch_active_tree_count_min_mean",
+      "y": "cross_overlap_norm_min"
+    },
+    {
+      "n": 32,
+      "r": 0.9024456523793286,
+      "x": "capacity_normal_fan_branch_active_tree_count_min_mean",
+      "y": "cross_contrast_effective_rank_mean"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "cross_overlap_norm_min",
+      "y": "library_n_trees_total_enum_log"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "cross_overlap_norm_min",
+      "y": "library_root_tree_count_gini"
+    },
+    {
+      "n": 32,
+      "r": 0.9711705820309287,
+      "x": "cross_contrast_effective_rank_mean",
+      "y": "library_n_trees_total_enum_log"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "cross_contrast_effective_rank_mean",
+      "y": "library_root_tree_count_gini"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "cross_contrast_effective_rank_mean",
+      "y": "cross_overlap_norm_min"
+    }
+  ],
+  "n_groups": 32,
+  "schema": "normal_fan_tree_count_separation_library.v1",
+  "selected_group_rows": [
+    {
+      "best_seed_novel_icl": 98.8,
+      "capacity_normal_fan_active_tree_count_mean": 51.625,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15825281392185891,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 85.0,
+      "library_n_trees_total_enum_log": 1.9294189257142929,
+      "mean_seed_novel_icl": 96.12,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed0"
+    },
+    {
+      "best_seed_novel_icl": 99.0,
+      "capacity_normal_fan_active_tree_count_mean": 47.0,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.14725968363837505,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 70.0,
+      "library_n_trees_total_enum_log": 1.845098040014257,
+      "mean_seed_novel_icl": 86.88,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed1"
+    },
+    {
+      "best_seed_novel_icl": 95.0,
+      "capacity_normal_fan_active_tree_count_mean": 52.0,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15408497493532541,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 85.0,
+      "library_n_trees_total_enum_log": 1.9294189257142929,
+      "mean_seed_novel_icl": 85.67999999999999,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed10"
+    },
+    {
+      "best_seed_novel_icl": 96.2,
+      "capacity_normal_fan_active_tree_count_mean": 48.75,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15288684291140034,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 75.0,
+      "library_n_trees_total_enum_log": 1.8750612633917,
+      "mean_seed_novel_icl": 87.76,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed11"
+    },
+    {
+      "best_seed_novel_icl": 94.6,
+      "capacity_normal_fan_active_tree_count_mean": 43.125,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.1459978338629331,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 60.0,
+      "library_n_trees_total_enum_log": 1.7781512503836436,
+      "mean_seed_novel_icl": 80.44000000000001,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed12"
+    },
+    {
+      "best_seed_novel_icl": 96.0,
+      "capacity_normal_fan_active_tree_count_mean": 48.0,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15076296073318615,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 75.0,
+      "library_n_trees_total_enum_log": 1.8750612633917,
+      "mean_seed_novel_icl": 90.91999999999999,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed15"
+    },
+    {
+      "best_seed_novel_icl": 97.0,
+      "capacity_normal_fan_active_tree_count_mean": 50.375,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15482644524742128,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 80.0,
+      "library_n_trees_total_enum_log": 1.9030899869919435,
+      "mean_seed_novel_icl": 93.11999999999999,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed16"
+    },
+    {
+      "best_seed_novel_icl": 98.0,
+      "capacity_normal_fan_active_tree_count_mean": 48.625,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15206118294645443,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 75.0,
+      "library_n_trees_total_enum_log": 1.8750612633917,
+      "mean_seed_novel_icl": 95.2,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed17"
+    },
+    {
+      "best_seed_novel_icl": 98.0,
+      "capacity_normal_fan_active_tree_count_mean": 51.75,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15162214913612407,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 85.0,
+      "library_n_trees_total_enum_log": 1.9294189257142929,
+      "mean_seed_novel_icl": 88.04,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed18"
+    },
+    {
+      "best_seed_novel_icl": 94.4,
+      "capacity_normal_fan_active_tree_count_mean": 39.25,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.1364345916043961,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 55.0,
+      "library_n_trees_total_enum_log": 1.7403626894942439,
+      "mean_seed_novel_icl": 84.32000000000001,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed2"
+    },
+    {
+      "best_seed_novel_icl": 95.2,
+      "capacity_normal_fan_active_tree_count_mean": 52.5,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15684424844975287,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 85.0,
+      "library_n_trees_total_enum_log": 1.9294189257142929,
+      "mean_seed_novel_icl": 91.63999999999999,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed21"
+    },
+    {
+      "best_seed_novel_icl": 97.4,
+      "capacity_normal_fan_active_tree_count_mean": 46.625,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.1465538544744735,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 70.0,
+      "library_n_trees_total_enum_log": 1.845098040014257,
+      "mean_seed_novel_icl": 87.64000000000001,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed22"
+    },
+    {
+      "best_seed_novel_icl": 96.8,
+      "capacity_normal_fan_active_tree_count_mean": 49.625,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15620054102823816,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 80.0,
+      "library_n_trees_total_enum_log": 1.9030899869919435,
+      "mean_seed_novel_icl": 92.52000000000001,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed24"
+    },
+    {
+      "best_seed_novel_icl": 96.4,
+      "capacity_normal_fan_active_tree_count_mean": 47.625,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.14497180559343092,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 75.0,
+      "library_n_trees_total_enum_log": 1.8750612633917,
+      "mean_seed_novel_icl": 93.92,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed25"
+    },
+    {
+      "best_seed_novel_icl": 95.2,
+      "capacity_normal_fan_active_tree_count_mean": 47.0,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.1522973785243572,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 70.0,
+      "library_n_trees_total_enum_log": 1.845098040014257,
+      "mean_seed_novel_icl": 79.68,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed26"
+    },
+    {
+      "best_seed_novel_icl": 95.4,
+      "capacity_normal_fan_active_tree_count_mean": 44.375,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.14605069332252374,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 65.0,
+      "library_n_trees_total_enum_log": 1.8129133566428555,
+      "mean_seed_novel_icl": 91.04,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed27"
+    },
+    {
+      "best_seed_novel_icl": 97.6,
+      "capacity_normal_fan_active_tree_count_mean": 50.75,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.16033345967029106,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 85.0,
+      "library_n_trees_total_enum_log": 1.9294189257142929,
+      "mean_seed_novel_icl": 89.36000000000001,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed3"
+    },
+    {
+      "best_seed_novel_icl": 96.6,
+      "capacity_normal_fan_active_tree_count_mean": 50.25,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.1556791797592431,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 85.0,
+      "library_n_trees_total_enum_log": 1.9294189257142929,
+      "mean_seed_novel_icl": 83.43999999999998,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed30"
+    },
+    {
+      "best_seed_novel_icl": 98.4,
+      "capacity_normal_fan_active_tree_count_mean": 52.75,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15542376185688148,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 85.0,
+      "library_n_trees_total_enum_log": 1.9294189257142929,
+      "mean_seed_novel_icl": 97.48,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed31"
+    },
+    {
+      "best_seed_novel_icl": 96.2,
+      "capacity_normal_fan_active_tree_count_mean": 48.875,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.1589172781973695,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 75.0,
+      "library_n_trees_total_enum_log": 1.8750612633917,
+      "mean_seed_novel_icl": 88.68,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed32"
+    },
+    {
+      "best_seed_novel_icl": 97.4,
+      "capacity_normal_fan_active_tree_count_mean": 50.375,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15818258555235692,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 80.0,
+      "library_n_trees_total_enum_log": 1.9030899869919435,
+      "mean_seed_novel_icl": 88.00000000000001,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed33"
+    },
+    {
+      "best_seed_novel_icl": 96.0,
+      "capacity_normal_fan_active_tree_count_mean": 45.25,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.13570631739926678,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 65.0,
+      "library_n_trees_total_enum_log": 1.8129133566428555,
+      "mean_seed_novel_icl": 86.75999999999999,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed34"
+    },
+    {
+      "best_seed_novel_icl": 95.8,
+      "capacity_normal_fan_active_tree_count_mean": 44.625,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.14496965517060703,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 65.0,
+      "library_n_trees_total_enum_log": 1.8129133566428555,
+      "mean_seed_novel_icl": 84.24,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed4"
+    },
+    {
+      "best_seed_novel_icl": 96.2,
+      "capacity_normal_fan_active_tree_count_mean": 49.375,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15170933929078248,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 80.0,
+      "library_n_trees_total_enum_log": 1.9030899869919435,
+      "mean_seed_novel_icl": 91.0,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed40"
+    },
+    {
+      "best_seed_novel_icl": 94.6,
+      "capacity_normal_fan_active_tree_count_mean": 48.0,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15129183798599768,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 75.0,
+      "library_n_trees_total_enum_log": 1.8750612633917,
+      "mean_seed_novel_icl": 84.96000000000001,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed42"
+    },
+    {
+      "best_seed_novel_icl": 95.4,
+      "capacity_normal_fan_active_tree_count_mean": 48.0,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15608524732651755,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 75.0,
+      "library_n_trees_total_enum_log": 1.8750612633917,
+      "mean_seed_novel_icl": 82.08,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed46"
+    },
+    {
+      "best_seed_novel_icl": 95.6,
+      "capacity_normal_fan_active_tree_count_mean": 46.875,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15165517158325462,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 70.0,
+      "library_n_trees_total_enum_log": 1.845098040014257,
+      "mean_seed_novel_icl": 84.84,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed47"
+    },
+    {
+      "best_seed_novel_icl": 97.8,
+      "capacity_normal_fan_active_tree_count_mean": 47.875,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.14517105847922615,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 75.0,
+      "library_n_trees_total_enum_log": 1.8750612633917,
+      "mean_seed_novel_icl": 96.03999999999999,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed5"
+    },
+    {
+      "best_seed_novel_icl": 97.8,
+      "capacity_normal_fan_active_tree_count_mean": 47.0,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.14320201355560358,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 70.0,
+      "library_n_trees_total_enum_log": 1.845098040014257,
+      "mean_seed_novel_icl": 86.92,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed6"
+    },
+    {
+      "best_seed_novel_icl": 96.8,
+      "capacity_normal_fan_active_tree_count_mean": 48.0,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.1487834046059703,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 75.0,
+      "library_n_trees_total_enum_log": 1.8750612633917,
+      "mean_seed_novel_icl": 84.44,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed7"
+    },
+    {
+      "best_seed_novel_icl": 95.8,
+      "capacity_normal_fan_active_tree_count_mean": 49.0,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.15172586062309662,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 80.0,
+      "library_n_trees_total_enum_log": 1.9030899869919435,
+      "mean_seed_novel_icl": 87.24000000000001,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed8"
+    },
+    {
+      "best_seed_novel_icl": 98.4,
+      "capacity_normal_fan_active_tree_count_mean": 48.625,
+      "capacity_normal_fan_branch_tree_nmi_mean": 0.1514932920089267,
+      "cross_overlap_norm_min": 1.0,
+      "library_n_trees_total_enum": 80.0,
+      "library_n_trees_total_enum_log": 1.9030899869919435,
+      "mean_seed_novel_icl": 96.32000000000001,
+      "topology_name": "degree_rewire_n5_m12_base_g0354_degree_balanced_seed9_seed9"
+    }
+  ],
+  "source": "existing exact-degree normal-fan library and its trained 32 groups",
+  "tree_count_bins": {
+    "high_tree_count": {
+      "active_tree_mean": 50.69230769230769,
+      "best_icl": 97.01538461538462,
+      "branch_tree_nmi_mean": 0.15510605011386916,
+      "mean_icl": 90.76615384615384,
+      "n_groups": 13
+    },
+    "low_tree_count": {
+      "active_tree_mean": 45.1125,
+      "best_icl": 96.12,
+      "branch_tree_nmi_mean": 0.14501271931357906,
+      "mean_icl": 85.27600000000001,
+      "n_groups": 10
+    },
+    "middle_tree_count": {
+      "active_tree_mean": 48.19444444444444,
+      "best_icl": 96.37777777777778,
+      "branch_tree_nmi_mean": 0.15121462430883922,
+      "mean_icl": 89.33333333333333,
+      "n_groups": 9
+    }
+  }
+}

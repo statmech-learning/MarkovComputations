@@ -1,0 +1,373 @@
+{
+  "correlations": [
+    {
+      "n": 32,
+      "r": 0.4600151602447863,
+      "x": "library_n_trees_total_enum_log",
+      "y": "outcome_mean"
+    },
+    {
+      "n": 32,
+      "r": 0.43891782958636366,
+      "x": "library_n_trees_total_enum_log",
+      "y": "outcome_best"
+    },
+    {
+      "n": 32,
+      "r": -0.19167068052301506,
+      "x": "library_n_trees_total_enum_log",
+      "y": "outcome_seed_std"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "library_root_tree_count_gini",
+      "y": "outcome_mean"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "library_root_tree_count_gini",
+      "y": "outcome_best"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "library_root_tree_count_gini",
+      "y": "outcome_seed_std"
+    },
+    {
+      "n": 32,
+      "r": 0.4455911683837532,
+      "x": "capacity_normal_fan_active_tree_count_mean",
+      "y": "outcome_mean"
+    },
+    {
+      "n": 32,
+      "r": 0.4414145365703981,
+      "x": "capacity_normal_fan_active_tree_count_mean",
+      "y": "outcome_best"
+    },
+    {
+      "n": 32,
+      "r": -0.19878527865455373,
+      "x": "capacity_normal_fan_active_tree_count_mean",
+      "y": "outcome_seed_std"
+    },
+    {
+      "n": 32,
+      "r": 0.20714936285452723,
+      "x": "capacity_normal_fan_branch_tree_nmi_mean",
+      "y": "outcome_mean"
+    },
+    {
+      "n": 32,
+      "r": 0.21387436640006,
+      "x": "capacity_normal_fan_branch_tree_nmi_mean",
+      "y": "outcome_best"
+    },
+    {
+      "n": 32,
+      "r": -0.05461246627665966,
+      "x": "capacity_normal_fan_branch_tree_nmi_mean",
+      "y": "outcome_seed_std"
+    },
+    {
+      "n": 32,
+      "r": 0.43740368877564856,
+      "x": "capacity_normal_fan_branch_active_tree_count_min_mean",
+      "y": "outcome_mean"
+    },
+    {
+      "n": 32,
+      "r": 0.3472111463040486,
+      "x": "capacity_normal_fan_branch_active_tree_count_min_mean",
+      "y": "outcome_best"
+    },
+    {
+      "n": 32,
+      "r": -0.2139995142870978,
+      "x": "capacity_normal_fan_branch_active_tree_count_min_mean",
+      "y": "outcome_seed_std"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "cross_overlap_norm_min",
+      "y": "outcome_mean"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "cross_overlap_norm_min",
+      "y": "outcome_best"
+    },
+    {
+      "n": 32,
+      "r": null,
+      "x": "cross_overlap_norm_min",
+      "y": "outcome_seed_std"
+    },
+    {
+      "n": 32,
+      "r": 0.47311046749866914,
+      "x": "cross_contrast_effective_rank_mean",
+      "y": "outcome_mean"
+    },
+    {
+      "n": 32,
+      "r": 0.45175422682475214,
+      "x": "cross_contrast_effective_rank_mean",
+      "y": "outcome_best"
+    },
+    {
+      "n": 32,
+      "r": -0.18067044909384516,
+      "x": "cross_contrast_effective_rank_mean",
+      "y": "outcome_seed_std"
+    }
+  ],
+  "interpretation": {
+    "next_test": "Build multi-base degree-preserving libraries with arms that hold tree count approximately fixed while varying normal-fan coverage and vice versa.",
+    "tree_count_vs_normal_fan": "Current one-base exact-degree data cannot separate total rooted-tree abundance from active-tree/normal-fan geometry. log rooted-tree count and active-tree count are strongly correlated, so their weak positive predictive signals should be treated as a combined geometry/abundance direction."
+  },
+  "loo_models": [
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "loo_r2": 0.11222042930283738,
+      "model": "tree_count_only",
+      "n_groups": 32,
+      "n_predictors": 2,
+      "numeric_predictors": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "outcome": "outcome_mean"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "loo_r2": 0.03385988160799047,
+      "model": "normal_fan_only",
+      "n_groups": 32,
+      "n_predictors": 3,
+      "numeric_predictors": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "outcome": "outcome_mean"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "loo_r2": -0.029381867505686055,
+      "model": "tree_count_plus_normal_fan",
+      "n_groups": 32,
+      "n_predictors": 5,
+      "numeric_predictors": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "outcome": "outcome_mean"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean",
+        "cross_overlap_norm_min",
+        "cross_contrast_effective_rank_mean"
+      ],
+      "loo_r2": -0.03680263072072365,
+      "model": "normal_fan_plus_cross_root",
+      "n_groups": 32,
+      "n_predictors": 5,
+      "numeric_predictors": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean",
+        "cross_overlap_norm_min",
+        "cross_contrast_effective_rank_mean"
+      ],
+      "outcome": "outcome_mean"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "loo_r2": 0.09241327908569363,
+      "model": "tree_count_only",
+      "n_groups": 32,
+      "n_predictors": 2,
+      "numeric_predictors": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "outcome": "outcome_best"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "loo_r2": 0.1692731045789917,
+      "model": "normal_fan_only",
+      "n_groups": 32,
+      "n_predictors": 3,
+      "numeric_predictors": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "outcome": "outcome_best"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "loo_r2": 0.13746268281845986,
+      "model": "tree_count_plus_normal_fan",
+      "n_groups": 32,
+      "n_predictors": 5,
+      "numeric_predictors": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "outcome": "outcome_best"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean",
+        "cross_overlap_norm_min",
+        "cross_contrast_effective_rank_mean"
+      ],
+      "loo_r2": 0.10207500482937082,
+      "model": "normal_fan_plus_cross_root",
+      "n_groups": 32,
+      "n_predictors": 5,
+      "numeric_predictors": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean",
+        "cross_overlap_norm_min",
+        "cross_contrast_effective_rank_mean"
+      ],
+      "outcome": "outcome_best"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "loo_r2": -0.07025968032753394,
+      "model": "tree_count_only",
+      "n_groups": 32,
+      "n_predictors": 2,
+      "numeric_predictors": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini"
+      ],
+      "outcome": "outcome_seed_std"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "loo_r2": -0.2008236220808659,
+      "model": "normal_fan_only",
+      "n_groups": 32,
+      "n_predictors": 3,
+      "numeric_predictors": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "outcome": "outcome_seed_std"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "loo_r2": -0.3175498285836147,
+      "model": "tree_count_plus_normal_fan",
+      "n_groups": 32,
+      "n_predictors": 5,
+      "numeric_predictors": [
+        "library_n_trees_total_enum_log",
+        "library_root_tree_count_gini",
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean"
+      ],
+      "outcome": "outcome_seed_std"
+    },
+    {
+      "categorical_predictors": [],
+      "design_columns": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean",
+        "cross_overlap_norm_min",
+        "cross_contrast_effective_rank_mean"
+      ],
+      "loo_r2": -0.30708741534176354,
+      "model": "normal_fan_plus_cross_root",
+      "n_groups": 32,
+      "n_predictors": 5,
+      "numeric_predictors": [
+        "capacity_normal_fan_active_tree_count_mean",
+        "capacity_normal_fan_branch_tree_nmi_mean",
+        "capacity_normal_fan_branch_active_tree_count_min_mean",
+        "cross_overlap_norm_min",
+        "cross_contrast_effective_rank_mean"
+      ],
+      "outcome": "outcome_seed_std"
+    }
+  ],
+  "n_trained_groups": 32,
+  "schema": "normal_fan_tree_count_training_report.v1",
+  "status": "existing_training_reanalyzed_no_new_training_launched"
+}

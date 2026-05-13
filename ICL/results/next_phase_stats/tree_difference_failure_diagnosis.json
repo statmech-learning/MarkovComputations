@@ -1,0 +1,245 @@
+{
+  "conclusions": {
+    "single_best_explanation": "The prospective contrast did not reproduce the fixed-m20 signal because same-root co-participation is too coarse once graph, count, d_rel, and load structure are fixed.  The prospective high/low masks were genuinely separated in same-root overlap, and high masks also usually had higher cross-root minimum overlap, but they did not improve best seed, mean seed, branch failures, or trained margins.  Balanced low masks were not in the zero-overlap regime that helped drive the retrospective family signal, and imbalanced masks tested lower overlap only under a trainability/load confound.  The failure is therefore not explained by a single saturation story; it points to missing orientation, controllability, root-pair choice, and optimization variables.",
+    "viable_hypotheses": [
+      "the balanced prospective library did not test the low/zero-overlap regime present in retrospective coord-block masks",
+      "co-participation without sign/orientation or controllability is too coarse",
+      "one-graph prospective evidence is insufficient even though fixed-m20 within-graph correlations were positive",
+      "trainability and post-training organization remain important because branch/projection scrambles cause large drops"
+    ],
+    "weakened_hypotheses": [
+      "same-root tree-difference overlap is a standalone causal knob",
+      "repaired gamma can be used as a topology selector"
+    ]
+  },
+  "fixed_cycle_diff_correlation": {
+    "n": 16,
+    "r": 0.48464569582601674,
+    "x": "diff_overlap_norm_min",
+    "y": "outcome_mean"
+  },
+  "fixed_feature_summary": {
+    "cross_best_root_pair_overlap_norm_min": {
+      "max": 1.0,
+      "mean": 0.9283139423704044,
+      "median": 0.9983,
+      "min": 0.0,
+      "n": 48,
+      "p25": 0.9861989854153456,
+      "p75": 1.0,
+      "std": 0.24033959879840158
+    },
+    "cross_overlap_norm_min": {
+      "max": 0.9886387655886705,
+      "mean": 0.8796514248224078,
+      "median": 0.9587749999999999,
+      "min": 0.0,
+      "n": 48,
+      "p25": 0.894325,
+      "p75": 0.980125,
+      "std": 0.23469697127028147
+    },
+    "diff_overlap_norm_min": {
+      "max": 0.9833515881708653,
+      "mean": 0.8395828979092831,
+      "median": 0.9212029042386185,
+      "min": 0.0,
+      "n": 48,
+      "p25": 0.8198106269534841,
+      "p75": 0.9611103383432169,
+      "std": 0.23345263233224858
+    }
+  },
+  "fixed_within_graph_diff_overlap_correlations": [
+    {
+      "n": 16,
+      "physical_topology_name": "cycle_chords_n6_m20_seed3",
+      "r": 0.48464569582601674,
+      "x": "diff_overlap_norm_min",
+      "y": "outcome_mean"
+    },
+    {
+      "n": 16,
+      "physical_topology_name": "hub_spoke_n6_m20_seed63",
+      "r": 0.5552887648321225,
+      "x": "diff_overlap_norm_min",
+      "y": "outcome_mean"
+    },
+    {
+      "n": 16,
+      "physical_topology_name": "random_sc_n6_m20_seed3",
+      "r": 0.4449088406197683,
+      "x": "diff_overlap_norm_min",
+      "y": "outcome_mean"
+    }
+  ],
+  "load_and_tree_count_notes": {
+    "d_rel_fixed_prospectively": true,
+    "input_coupled_count_fixed_prospectively": true,
+    "load_strata": [
+      "balanced_load",
+      "imbalanced_coord_load"
+    ],
+    "physical_graph_fixed_prospectively": true,
+    "tree_count_fixed_prospectively": true
+  },
+  "n_fixed_cycle_groups": 16,
+  "n_fixed_groups": 48,
+  "n_prospective_groups": 16,
+  "prospective_category_summary": [
+    {
+      "best_icl": 84.9,
+      "contrast_level": "high",
+      "cross_best_root_pair_overlap_norm_min_mean": 0.9928625,
+      "cross_contrast_effective_rank_mean": 13.12616553608809,
+      "cross_overlap_norm_min_mean": 0.9633627719379543,
+      "diff_overlap_norm_min_mean": 0.9356330125490919,
+      "load_stratum": "balanced_load",
+      "mean_icl": 75.36,
+      "n_groups": 4
+    },
+    {
+      "best_icl": 89.7,
+      "contrast_level": "low",
+      "cross_best_root_pair_overlap_norm_min_mean": 0.9944376096491228,
+      "cross_contrast_effective_rank_mean": 13.07165915579725,
+      "cross_overlap_norm_min_mean": 0.9486384300359332,
+      "diff_overlap_norm_min_mean": 0.8583682657972365,
+      "load_stratum": "balanced_load",
+      "mean_icl": 79.33,
+      "n_groups": 4
+    },
+    {
+      "best_icl": 74.45,
+      "contrast_level": "high",
+      "cross_best_root_pair_overlap_norm_min_mean": 0.8680186234817814,
+      "cross_contrast_effective_rank_mean": 11.896590874880385,
+      "cross_overlap_norm_min_mean": 0.745801754385965,
+      "diff_overlap_norm_min_mean": 0.6579987534528273,
+      "load_stratum": "imbalanced_coord_load",
+      "mean_icl": 68.83,
+      "n_groups": 4
+    },
+    {
+      "best_icl": 76.25,
+      "contrast_level": "low",
+      "cross_best_root_pair_overlap_norm_min_mean": 0.874325,
+      "cross_contrast_effective_rank_mean": 11.73302455014466,
+      "cross_overlap_norm_min_mean": 0.714074915654521,
+      "diff_overlap_norm_min_mean": 0.3086991189457659,
+      "load_stratum": "imbalanced_coord_load",
+      "mean_icl": 69.9,
+      "n_groups": 4
+    }
+  ],
+  "prospective_feature_summary": {
+    "cross_best_root_pair_overlap_norm_min": {
+      "max": 0.99635,
+      "mean": 0.9324109332827261,
+      "median": 0.938475,
+      "min": 0.852,
+      "n": 16,
+      "p25": 0.8734186234817813,
+      "p75": 0.9931749999999999,
+      "std": 0.06165165817184017
+    },
+    "cross_overlap_norm_min": {
+      "max": 0.96775,
+      "mean": 0.8429694680035933,
+      "median": 0.8476535087719299,
+      "min": 0.67425,
+      "n": 16,
+      "p25": 0.7349375,
+      "p75": 0.9566448953709574,
+      "std": 0.1148979390936046
+    },
+    "diff_overlap_norm_min": {
+      "max": 0.9371069182389937,
+      "mean": 0.6901747876862304,
+      "median": 0.7576530494631468,
+      "min": 0.30346841913106976,
+      "n": 16,
+      "p25": 0.5647154225822674,
+      "p75": 0.8841113108061667,
+      "std": 0.24250199676418896
+    }
+  },
+  "prospective_high_low_contrasts": [
+    {
+      "high_mean": 75.36,
+      "high_minus_low": -3.969999999999999,
+      "load_stratum": "balanced_load",
+      "low_mean": 79.33,
+      "outcome": "outcome_mean"
+    },
+    {
+      "high_mean": 84.9,
+      "high_minus_low": -4.799999999999997,
+      "load_stratum": "balanced_load",
+      "low_mean": 89.7,
+      "outcome": "outcome_best"
+    },
+    {
+      "high_mean": 53.99446283561266,
+      "high_minus_low": 11.603818242633658,
+      "load_stratum": "balanced_load",
+      "low_mean": 42.390644592979,
+      "outcome": "branch_failures"
+    },
+    {
+      "high_mean": 0.20449993042532863,
+      "high_minus_low": -0.6345809470027256,
+      "load_stratum": "balanced_load",
+      "low_mean": 0.8390808774280543,
+      "outcome": "trained_branch_margin"
+    },
+    {
+      "high_mean": 68.83,
+      "high_minus_low": -1.0700000000000074,
+      "load_stratum": "imbalanced_coord_load",
+      "low_mean": 69.9,
+      "outcome": "outcome_mean"
+    },
+    {
+      "high_mean": 74.45,
+      "high_minus_low": -1.7999999999999972,
+      "load_stratum": "imbalanced_coord_load",
+      "low_mean": 76.25,
+      "outcome": "outcome_best"
+    },
+    {
+      "high_mean": 67.47517268932108,
+      "high_minus_low": 3.1754935052525894,
+      "load_stratum": "imbalanced_coord_load",
+      "low_mean": 64.2996791840685,
+      "outcome": "branch_failures"
+    },
+    {
+      "high_mean": -0.315660228364825,
+      "high_minus_low": -0.09938618209437142,
+      "load_stratum": "imbalanced_coord_load",
+      "low_mean": -0.21627404627045357,
+      "outcome": "trained_branch_margin"
+    }
+  ],
+  "saturation_diagnostic": {
+    "balanced_low_above_fixed_median": 0.0,
+    "balanced_low_above_fixed_p75": 0.0,
+    "fixed_m20_diff_overlap_quantiles": {
+      "0.0": 0.0,
+      "0.25": 0.8198106269534841,
+      "0.5": 0.9212029042386185,
+      "0.75": 0.9611103383432169,
+      "0.9": 0.9751702867418854,
+      "1.0": 0.9833515881708653
+    },
+    "imbalanced_low_above_fixed_median": 0.0,
+    "prospective_balanced_low_mean": 0.8583682657972365,
+    "prospective_imbalanced_low_mean": 0.3086991189457659
+  },
+  "schema": "tree_difference_failure_diagnosis.v1",
+  "source_datasets": [
+    "fixed_m20_retrospective",
+    "prospective_tree_diff_exact_control"
+  ]
+}
