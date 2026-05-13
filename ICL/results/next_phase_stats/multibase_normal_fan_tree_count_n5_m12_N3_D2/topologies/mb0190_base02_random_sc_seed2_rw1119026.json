@@ -1,0 +1,362 @@
+{
+  "base_family": "random_sc",
+  "base_id": "base02_random_sc_seed2",
+  "base_seed": 2,
+  "cross_root_metrics": {
+    "cross_all_supported_effective_rank": 8.054049494200926,
+    "cross_contrast_effective_rank_mean": 8.054049494200926
+  },
+  "edges": [
+    [
+      0,
+      4
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "family": "multibase_degree_rewire_exact_degree",
+  "metrics": {
+    "bottleneck_edge_fraction_095": 0.0,
+    "comparison_branch_common_d_rel_gini": 0.0,
+    "comparison_branch_common_d_rel_max": 22,
+    "comparison_branch_common_d_rel_mean": 22.0,
+    "comparison_branch_common_d_rel_min": 22,
+    "comparison_branch_common_d_rel_values": [
+      22,
+      22,
+      22
+    ],
+    "comparison_branch_d_rel_gini": 0.0,
+    "comparison_branch_d_rel_max": 22,
+    "comparison_branch_d_rel_mean": 22.0,
+    "comparison_branch_d_rel_min": 22,
+    "comparison_branch_d_rel_values": [
+      22,
+      22,
+      22
+    ],
+    "comparison_branch_input_count_gini": 0.0,
+    "comparison_branch_input_count_max": 24,
+    "comparison_branch_input_count_mean": 24.0,
+    "comparison_branch_input_count_min": 24,
+    "comparison_branch_input_count_values": [
+      24,
+      24,
+      24
+    ],
+    "comparison_branch_input_overlap_gini": 0.0,
+    "comparison_branch_input_overlap_max": 24,
+    "comparison_branch_input_overlap_mean": 24.0,
+    "comparison_branch_input_overlap_min": 24,
+    "comparison_branch_input_overlap_values": [
+      24,
+      24,
+      24
+    ],
+    "condition_number_D": 8.131457681291451,
+    "condition_number_D_masked": 8.131457681291451,
+    "d_rel": 88,
+    "edge_participation": [
+      0.1875,
+      0.515625,
+      0.5,
+      0.34375,
+      0.25,
+      0.375,
+      0.25,
+      0.28125,
+      0.25,
+      0.328125,
+      0.46875,
+      0.25
+    ],
+    "edge_participation_gini": 0.173828125,
+    "edge_participation_mean": 0.3333333333333333,
+    "edge_participation_var": 0.011081271701388888,
+    "edges": [
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "effective_rank_D": 8.177038058040273,
+    "effective_rank_D_masked": 65.4163044643222,
+    "in_degree": [
+      1,
+      1,
+      4,
+      3,
+      3
+    ],
+    "in_degree_cv": 0.5000000000000001,
+    "max_trees_per_root": null,
+    "mean_shortest_path": 1.6,
+    "n_edges": 12,
+    "n_nodes": 5,
+    "n_trees_total_enum": 64,
+    "out_degree": [
+      4,
+      2,
+      1,
+      2,
+      3
+    ],
+    "out_degree_cv": 0.4249182927993988,
+    "p": 8,
+    "rank_D": 11,
+    "rank_D_anchor": 11,
+    "rank_M": 12,
+    "root_tree_count_cv": 0.9341084486021951,
+    "root_tree_count_gini": 0.5062500000000001,
+    "singular_values_D": [
+      5.650103080238159,
+      5.388169937657568,
+      4.7869326522468505,
+      4.4425459997378764,
+      4.026815082290208,
+      3.9946120362999107,
+      3.4899442265423133,
+      3.1497789946476793,
+      1.746604710400606,
+      0.86188724924102,
+      0.6948450452171326,
+      3.954716327898776e-16
+    ],
+    "singular_values_D_anchor": [
+      12.977464499038765,
+      5.528355605784733,
+      4.808422591337222,
+      4.561815774088361,
+      4.092264731886659,
+      3.994970252015422,
+      3.650187040113278,
+      3.2130411046973104,
+      1.8105887791078374,
+      1.7073450475312588,
+      0.7378571281730483,
+      6.940850356346429e-16
+    ],
+    "singular_values_D_masked": [
+      5.650103080238159,
+      5.388169937657568,
+      4.7869326522468505,
+      4.4425459997378764,
+      4.026815082290208,
+      3.9946120362999107,
+      3.4899442265423133,
+      3.1497789946476793,
+      1.746604710400606,
+      0.86188724924102,
+      0.6948450452171326,
+      3.954716327898776e-16,
+      5.650103080238159,
+      5.388169937657568,
+      4.7869326522468505,
+      4.4425459997378764,
+      4.026815082290208,
+      3.9946120362999107,
+      3.4899442265423133,
+      3.1497789946476793,
+      1.746604710400606,
+      0.86188724924102,
+      0.6948450452171326,
+      3.954716327898776e-16,
+      5.650103080238159,
+      5.388169937657568,
+      4.7869326522468505,
+      4.4425459997378764,
+      4.026815082290208,
+      3.9946120362999107,
+      3.4899442265423133,
+      3.1497789946476793,
+      1.746604710400606,
+      0.86188724924102,
+      0.6948450452171326,
+      3.954716327898776e-16,
+      5.650103080238159,
+      5.388169937657568,
+      4.7869326522468505,
+      4.4425459997378764,
+      4.026815082290208,
+      3.9946120362999107,
+      3.4899442265423133,
+      3.1497789946476793,
+      1.746604710400606,
+      0.86188724924102,
+      0.6948450452171326,
+      3.954716327898776e-16,
+      5.650103080238159,
+      5.388169937657568,
+      4.7869326522468505,
+      4.4425459997378764,
+      4.026815082290208,
+      3.9946120362999107,
+      3.4899442265423133,
+      3.1497789946476793,
+      1.746604710400606,
+      0.86188724924102,
+      0.6948450452171326,
+      3.954716327898776e-16,
+      5.650103080238159,
+      5.388169937657568,
+      4.7869326522468505,
+      4.4425459997378764,
+      4.026815082290208,
+      3.9946120362999107,
+      3.4899442265423133,
+      3.1497789946476793,
+      1.746604710400606,
+      0.86188724924102,
+      0.6948450452171326,
+      3.954716327898776e-16,
+      5.650103080238159,
+      5.388169937657568,
+      4.7869326522468505,
+      4.4425459997378764,
+      4.026815082290208,
+      3.9946120362999107,
+      3.4899442265423133,
+      3.1497789946476793,
+      1.746604710400606,
+      0.86188724924102,
+      0.6948450452171326,
+      3.954716327898776e-16,
+      5.650103080238159,
+      5.388169937657568,
+      4.7869326522468505,
+      4.4425459997378764,
+      4.026815082290208,
+      3.9946120362999107,
+      3.4899442265423133,
+      3.1497789946476793,
+      1.746604710400606,
+      0.86188724924102,
+      0.6948450452171326,
+      3.954716327898776e-16
+    ],
+    "strongly_connected": true,
+    "tree_counts_det": [
+      2,
+      1,
+      32,
+      21,
+      8
+    ],
+    "tree_counts_enum": [
+      2,
+      1,
+      32,
+      21,
+      8
+    ],
+    "tree_counts_match_det": true,
+    "tree_enumeration_truncated": false
+  },
+  "n_nodes": 5,
+  "name": "multibase_base02_random_sc_seed2_rewire_seed1119026",
+  "normal_fan_metrics": {
+    "normal_fan_active_root_count_max": 5.0,
+    "normal_fan_active_root_count_mean": 4.625,
+    "normal_fan_active_root_count_std": 0.4841229182759271,
+    "normal_fan_active_tree_count_max": 58.0,
+    "normal_fan_active_tree_count_mean": 51.875,
+    "normal_fan_active_tree_count_std": 3.585997071945263,
+    "normal_fan_branch_active_tree_count_min_max": 40.0,
+    "normal_fan_branch_active_tree_count_min_mean": 35.625,
+    "normal_fan_branch_active_tree_count_min_std": 2.912795049432761,
+    "normal_fan_branch_root_nmi_max": 0.037250094135557035,
+    "normal_fan_branch_root_nmi_mean": 0.02087378618830981,
+    "normal_fan_branch_root_nmi_std": 0.012062247411843247,
+    "normal_fan_branch_tree_nmi_max": 0.13000301694829156,
+    "normal_fan_branch_tree_nmi_mean": 0.10698132597579639,
+    "normal_fan_branch_tree_nmi_std": 0.012560025645864214,
+    "normal_fan_trials": 8
+  },
+  "rewire_seed": 1119026
+}

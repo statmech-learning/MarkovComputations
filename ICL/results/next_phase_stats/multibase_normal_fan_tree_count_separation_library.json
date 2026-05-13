@@ -1,0 +1,142 @@
+{
+  "arm_quality": {
+    "arm_A_fixed_tree_count_variable_normal_fan": {
+      "mean_abs_normal_fan_delta": 4.352558097990983,
+      "mean_abs_tree_delta": 0.9090909090909091,
+      "n_pairs": 11
+    },
+    "arm_B_variable_tree_count_matched_normal_fan": {
+      "mean_abs_normal_fan_delta": 0.06029979813358263,
+      "mean_abs_tree_delta": 14.666666666666666,
+      "n_pairs": 9
+    }
+  },
+  "base_summary": {
+    "base00_degree_balanced_seed9": {
+      "candidate_count": 80,
+      "in_degree_sequence": "3 2 2 3 2",
+      "normal_fan_score_range": [
+        -4.72748171899873,
+        4.685491951404499
+      ],
+      "out_degree_sequence": "3 2 2 3 2",
+      "selected_count": 5,
+      "tree_count_range": [
+        55.0,
+        85.0
+      ]
+    },
+    "base01_degree_balanced_seed60": {
+      "candidate_count": 80,
+      "in_degree_sequence": "3 3 2 2 2",
+      "normal_fan_score_range": [
+        -2.0905633794853338,
+        6.044497179528069
+      ],
+      "out_degree_sequence": "2 2 3 3 2",
+      "selected_count": 7,
+      "tree_count_range": [
+        63.0,
+        96.0
+      ]
+    },
+    "base02_random_sc_seed2": {
+      "candidate_count": 80,
+      "in_degree_sequence": "1 1 4 3 3",
+      "normal_fan_score_range": [
+        -4.64696533079197,
+        1.090372498897572
+      ],
+      "out_degree_sequence": "4 2 1 2 3",
+      "selected_count": 2,
+      "tree_count_range": [
+        64.0,
+        66.0
+      ]
+    },
+    "base03_random_sc_seed92": {
+      "candidate_count": 80,
+      "in_degree_sequence": "3 2 3 2 2",
+      "normal_fan_score_range": [
+        -5.038009100985015,
+        3.798505855360493
+      ],
+      "out_degree_sequence": "1 2 3 3 3",
+      "selected_count": 4,
+      "tree_count_range": [
+        54.0,
+        84.0
+      ]
+    },
+    "base04_cycle_chords_seed41": {
+      "candidate_count": 80,
+      "in_degree_sequence": "1 4 4 2 1",
+      "normal_fan_score_range": [
+        -1.4684483833378281,
+        4.61324931941978
+      ],
+      "out_degree_sequence": "3 1 2 3 3",
+      "selected_count": 4,
+      "tree_count_range": [
+        72.0,
+        78.0
+      ]
+    },
+    "base05_redundant_paths_seed1": {
+      "candidate_count": 80,
+      "in_degree_sequence": "2 2 3 3 2",
+      "normal_fan_score_range": [
+        -2.7846464103274435,
+        6.879477559985576
+      ],
+      "out_degree_sequence": "3 3 2 2 2",
+      "selected_count": 9,
+      "tree_count_range": [
+        63.0,
+        94.0
+      ]
+    },
+    "base06_two_module_seed2": {
+      "candidate_count": 80,
+      "in_degree_sequence": "2 3 3 2 2",
+      "normal_fan_score_range": [
+        -8.915552953432755,
+        -0.02204936397792126
+      ],
+      "out_degree_sequence": "1 2 4 2 3",
+      "selected_count": 6,
+      "tree_count_range": [
+        42.0,
+        69.0
+      ]
+    }
+  },
+  "candidate_count": 560,
+  "controls": {
+    "degree_control": "exact in/out degree sequence within each base_id",
+    "input_mask": "full coupling; exact multiplicity M_alpha=m for every input coordinate",
+    "n_context": 3,
+    "n_edges": 12,
+    "n_nodes": 5,
+    "p": 8,
+    "target_d_rel": 88,
+    "z_dim": 2
+  },
+  "files": {
+    "array_script": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/_array_meta/run_task.sh",
+    "candidate_library_csv": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/candidate_library.csv",
+    "pair_manifest_csv": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/pair_manifest.csv",
+    "selected_csv": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/selected.csv",
+    "training_manifest_csv": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/training_manifest.csv"
+  },
+  "pair_count": 20,
+  "pair_count_by_arm": {
+    "arm_A_fixed_tree_count_variable_normal_fan": 11,
+    "arm_B_variable_tree_count_matched_normal_fan": 9
+  },
+  "schema": "multibase_normal_fan_tree_count_separation_library.v1",
+  "selected_topology_count": 37,
+  "status": "library_and_training_manifest_ready_not_submitted",
+  "train_seeds_per_topology": 5,
+  "training_task_count": 185
+}

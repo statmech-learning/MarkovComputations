@@ -1,0 +1,25 @@
+{
+  "array_script": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/_array_meta/run_task.sh",
+  "inference": [
+    "grouped LOO",
+    "held-out-base checks",
+    "matched-pair contrasts",
+    "clustered bootstrap by base_id"
+  ],
+  "manifest": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/training_manifest.csv",
+  "primary_models": [
+    "controls/base_id only",
+    "tree_count_only + base_id",
+    "normal_fan_only + base_id",
+    "tree_count + normal_fan + base_id",
+    "cross_root_rank + normal_fan + tree_count + base_id"
+  ],
+  "primary_outcomes": [
+    "mean novel-class ICL",
+    "best-seed novel-class ICL",
+    "seed std"
+  ],
+  "schema": "multibase_normal_fan_tree_count_training_plan.v1",
+  "status": "ready_to_submit",
+  "submission_command": "sbatch /home/aadarwal/repos/topology/ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/_array_meta/run_task.sh"
+}

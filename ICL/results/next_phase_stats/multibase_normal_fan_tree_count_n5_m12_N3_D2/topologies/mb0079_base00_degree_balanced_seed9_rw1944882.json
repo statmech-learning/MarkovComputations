@@ -1,0 +1,362 @@
+{
+  "base_family": "degree_balanced",
+  "base_id": "base00_degree_balanced_seed9",
+  "base_seed": 9,
+  "cross_root_metrics": {
+    "cross_all_supported_effective_rank": 8.98774078774405,
+    "cross_contrast_effective_rank_mean": 8.98774078774405
+  },
+  "edges": [
+    [
+      0,
+      4
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "family": "multibase_degree_rewire_exact_degree",
+  "metrics": {
+    "bottleneck_edge_fraction_095": 0.0,
+    "comparison_branch_common_d_rel_gini": 0.0,
+    "comparison_branch_common_d_rel_max": 22,
+    "comparison_branch_common_d_rel_mean": 22.0,
+    "comparison_branch_common_d_rel_min": 22,
+    "comparison_branch_common_d_rel_values": [
+      22,
+      22,
+      22
+    ],
+    "comparison_branch_d_rel_gini": 0.0,
+    "comparison_branch_d_rel_max": 22,
+    "comparison_branch_d_rel_mean": 22.0,
+    "comparison_branch_d_rel_min": 22,
+    "comparison_branch_d_rel_values": [
+      22,
+      22,
+      22
+    ],
+    "comparison_branch_input_count_gini": 0.0,
+    "comparison_branch_input_count_max": 24,
+    "comparison_branch_input_count_mean": 24.0,
+    "comparison_branch_input_count_min": 24,
+    "comparison_branch_input_count_values": [
+      24,
+      24,
+      24
+    ],
+    "comparison_branch_input_overlap_gini": 0.0,
+    "comparison_branch_input_overlap_max": 24,
+    "comparison_branch_input_overlap_mean": 24.0,
+    "comparison_branch_input_overlap_min": 24,
+    "comparison_branch_input_overlap_values": [
+      24,
+      24,
+      24
+    ],
+    "condition_number_D": 3.0684933323307897,
+    "condition_number_D_masked": 3.0684933323307897,
+    "d_rel": 88,
+    "edge_participation": [
+      0.24,
+      0.48,
+      0.32,
+      0.25333333333333335,
+      0.44,
+      0.21333333333333335,
+      0.28,
+      0.48,
+      0.32,
+      0.36,
+      0.3333333333333333,
+      0.28
+    ],
+    "edge_participation_gini": 0.14500000000000002,
+    "edge_participation_mean": 0.3333333333333333,
+    "edge_participation_var": 0.007555555555555554,
+    "edges": [
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "effective_rank_D": 8.814573931925766,
+    "effective_rank_D_masked": 70.51659145540619,
+    "in_degree": [
+      3,
+      2,
+      2,
+      3,
+      2
+    ],
+    "in_degree_cv": 0.2041241452319315,
+    "max_trees_per_root": null,
+    "mean_shortest_path": 1.4,
+    "n_edges": 12,
+    "n_nodes": 5,
+    "n_trees_total_enum": 75,
+    "out_degree": [
+      3,
+      2,
+      2,
+      3,
+      2
+    ],
+    "out_degree_cv": 0.2041241452319315,
+    "p": 8,
+    "rank_D": 11,
+    "rank_D_anchor": 11,
+    "rank_M": 12,
+    "root_tree_count_cv": 0.0,
+    "root_tree_count_gini": 0.0,
+    "singular_values_D": [
+      5.886481897224754,
+      5.6209837783525725,
+      5.461842546132419,
+      4.974830460340278,
+      4.697782597675387,
+      4.070675653129049,
+      3.7734581543906835,
+      2.471252543392833,
+      2.2367110808928907,
+      2.1690049811650125,
+      1.9183622904448205,
+      1.1638916705655454e-15
+    ],
+    "singular_values_D_anchor": [
+      14.436321711176083,
+      5.855210518245593,
+      5.472616293941017,
+      5.060735834019851,
+      4.805774918285334,
+      4.078499532373683,
+      4.059373259105528,
+      2.5917987731293306,
+      2.269879821764964,
+      2.2291765562267205,
+      2.1682719603397986,
+      8.514740627750997e-16
+    ],
+    "singular_values_D_masked": [
+      5.886481897224754,
+      5.6209837783525725,
+      5.461842546132419,
+      4.974830460340278,
+      4.697782597675387,
+      4.070675653129049,
+      3.7734581543906835,
+      2.471252543392833,
+      2.2367110808928907,
+      2.1690049811650125,
+      1.9183622904448205,
+      1.1638916705655454e-15,
+      5.886481897224754,
+      5.6209837783525725,
+      5.461842546132419,
+      4.974830460340278,
+      4.697782597675387,
+      4.070675653129049,
+      3.7734581543906835,
+      2.471252543392833,
+      2.2367110808928907,
+      2.1690049811650125,
+      1.9183622904448205,
+      1.1638916705655454e-15,
+      5.886481897224754,
+      5.6209837783525725,
+      5.461842546132419,
+      4.974830460340278,
+      4.697782597675387,
+      4.070675653129049,
+      3.7734581543906835,
+      2.471252543392833,
+      2.2367110808928907,
+      2.1690049811650125,
+      1.9183622904448205,
+      1.1638916705655454e-15,
+      5.886481897224754,
+      5.6209837783525725,
+      5.461842546132419,
+      4.974830460340278,
+      4.697782597675387,
+      4.070675653129049,
+      3.7734581543906835,
+      2.471252543392833,
+      2.2367110808928907,
+      2.1690049811650125,
+      1.9183622904448205,
+      1.1638916705655454e-15,
+      5.886481897224754,
+      5.6209837783525725,
+      5.461842546132419,
+      4.974830460340278,
+      4.697782597675387,
+      4.070675653129049,
+      3.7734581543906835,
+      2.471252543392833,
+      2.2367110808928907,
+      2.1690049811650125,
+      1.9183622904448205,
+      1.1638916705655454e-15,
+      5.886481897224754,
+      5.6209837783525725,
+      5.461842546132419,
+      4.974830460340278,
+      4.697782597675387,
+      4.070675653129049,
+      3.7734581543906835,
+      2.471252543392833,
+      2.2367110808928907,
+      2.1690049811650125,
+      1.9183622904448205,
+      1.1638916705655454e-15,
+      5.886481897224754,
+      5.6209837783525725,
+      5.461842546132419,
+      4.974830460340278,
+      4.697782597675387,
+      4.070675653129049,
+      3.7734581543906835,
+      2.471252543392833,
+      2.2367110808928907,
+      2.1690049811650125,
+      1.9183622904448205,
+      1.1638916705655454e-15,
+      5.886481897224754,
+      5.6209837783525725,
+      5.461842546132419,
+      4.974830460340278,
+      4.697782597675387,
+      4.070675653129049,
+      3.7734581543906835,
+      2.471252543392833,
+      2.2367110808928907,
+      2.1690049811650125,
+      1.9183622904448205,
+      1.1638916705655454e-15
+    ],
+    "strongly_connected": true,
+    "tree_counts_det": [
+      15,
+      15,
+      15,
+      15,
+      15
+    ],
+    "tree_counts_enum": [
+      15,
+      15,
+      15,
+      15,
+      15
+    ],
+    "tree_counts_match_det": true,
+    "tree_enumeration_truncated": false
+  },
+  "n_nodes": 5,
+  "name": "multibase_base00_degree_balanced_seed9_rewire_seed1944882",
+  "normal_fan_metrics": {
+    "normal_fan_active_root_count_max": 5.0,
+    "normal_fan_active_root_count_mean": 5.0,
+    "normal_fan_active_root_count_std": 0.0,
+    "normal_fan_active_tree_count_max": 61.0,
+    "normal_fan_active_tree_count_mean": 57.0,
+    "normal_fan_active_tree_count_std": 2.449489742783178,
+    "normal_fan_branch_active_tree_count_min_max": 41.0,
+    "normal_fan_branch_active_tree_count_min_mean": 39.0,
+    "normal_fan_branch_active_tree_count_min_std": 1.4142135623730951,
+    "normal_fan_branch_root_nmi_max": 0.03428519001712654,
+    "normal_fan_branch_root_nmi_mean": 0.01898214772921878,
+    "normal_fan_branch_root_nmi_std": 0.00938328936931136,
+    "normal_fan_branch_tree_nmi_max": 0.1256124618667941,
+    "normal_fan_branch_tree_nmi_mean": 0.10940686001905109,
+    "normal_fan_branch_tree_nmi_std": 0.011924119924580912,
+    "normal_fan_trials": 8
+  },
+  "rewire_seed": 1944882
+}

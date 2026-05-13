@@ -1,0 +1,362 @@
+{
+  "base_family": "redundant_paths",
+  "base_id": "base05_redundant_paths_seed1",
+  "base_seed": 1,
+  "cross_root_metrics": {
+    "cross_all_supported_effective_rank": 8.470830404759731,
+    "cross_contrast_effective_rank_mean": 8.470830404759731
+  },
+  "edges": [
+    [
+      0,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      0
+    ]
+  ],
+  "family": "multibase_degree_rewire_exact_degree",
+  "metrics": {
+    "bottleneck_edge_fraction_095": 0.0,
+    "comparison_branch_common_d_rel_gini": 0.0,
+    "comparison_branch_common_d_rel_max": 22,
+    "comparison_branch_common_d_rel_mean": 22.0,
+    "comparison_branch_common_d_rel_min": 22,
+    "comparison_branch_common_d_rel_values": [
+      22,
+      22,
+      22
+    ],
+    "comparison_branch_d_rel_gini": 0.0,
+    "comparison_branch_d_rel_max": 22,
+    "comparison_branch_d_rel_mean": 22.0,
+    "comparison_branch_d_rel_min": 22,
+    "comparison_branch_d_rel_values": [
+      22,
+      22,
+      22
+    ],
+    "comparison_branch_input_count_gini": 0.0,
+    "comparison_branch_input_count_max": 24,
+    "comparison_branch_input_count_mean": 24.0,
+    "comparison_branch_input_count_min": 24,
+    "comparison_branch_input_count_values": [
+      24,
+      24,
+      24
+    ],
+    "comparison_branch_input_overlap_gini": 0.0,
+    "comparison_branch_input_overlap_max": 24,
+    "comparison_branch_input_overlap_mean": 24.0,
+    "comparison_branch_input_overlap_min": 24,
+    "comparison_branch_input_overlap_values": [
+      24,
+      24,
+      24
+    ],
+    "condition_number_D": 4.047539430960533,
+    "condition_number_D_masked": 4.047539430960533,
+    "d_rel": 88,
+    "edge_participation": [
+      0.25,
+      0.25,
+      0.375,
+      0.375,
+      0.375,
+      0.375,
+      0.375,
+      0.375,
+      0.375,
+      0.375,
+      0.25,
+      0.25
+    ],
+    "edge_participation_gini": 0.08333333333333348,
+    "edge_participation_mean": 0.3333333333333333,
+    "edge_participation_var": 0.003472222222222222,
+    "edges": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "effective_rank_D": 8.367758861948351,
+    "effective_rank_D_masked": 66.94207089558682,
+    "in_degree": [
+      2,
+      2,
+      3,
+      3,
+      2
+    ],
+    "in_degree_cv": 0.2041241452319315,
+    "max_trees_per_root": null,
+    "mean_shortest_path": 1.4,
+    "n_edges": 12,
+    "n_nodes": 5,
+    "n_trees_total_enum": 64,
+    "out_degree": [
+      3,
+      3,
+      2,
+      2,
+      2
+    ],
+    "out_degree_cv": 0.2041241452319315,
+    "p": 8,
+    "rank_D": 11,
+    "rank_D_anchor": 11,
+    "rank_M": 12,
+    "root_tree_count_cv": 0.30618621784789724,
+    "root_tree_count_gini": 0.15000000000000013,
+    "singular_values_D": [
+      6.134674689829176,
+      5.279024677344164,
+      4.915774053632573,
+      4.6072336550282476,
+      4.4734204065113525,
+      3.288358964066602,
+      3.097355536416444,
+      2.5953192402984735,
+      2.254663515869922,
+      1.6035653048686662,
+      1.5156553245420368,
+      8.870185698964947e-16
+    ],
+    "singular_values_D_anchor": [
+      14.080296925403308,
+      5.298316617910357,
+      4.942732951464858,
+      4.743246175279138,
+      4.570097550673664,
+      3.5756183539711484,
+      3.1062577267298814,
+      2.7246785683276205,
+      2.2717861854807717,
+      2.1057568551125385,
+      1.5509072161673487,
+      6.786178360954464e-16
+    ],
+    "singular_values_D_masked": [
+      6.134674689829176,
+      5.279024677344164,
+      4.915774053632573,
+      4.6072336550282476,
+      4.4734204065113525,
+      3.288358964066602,
+      3.097355536416444,
+      2.5953192402984735,
+      2.254663515869922,
+      1.6035653048686662,
+      1.5156553245420368,
+      8.870185698964947e-16,
+      6.134674689829176,
+      5.279024677344164,
+      4.915774053632573,
+      4.6072336550282476,
+      4.4734204065113525,
+      3.288358964066602,
+      3.097355536416444,
+      2.5953192402984735,
+      2.254663515869922,
+      1.6035653048686662,
+      1.5156553245420368,
+      8.870185698964947e-16,
+      6.134674689829176,
+      5.279024677344164,
+      4.915774053632573,
+      4.6072336550282476,
+      4.4734204065113525,
+      3.288358964066602,
+      3.097355536416444,
+      2.5953192402984735,
+      2.254663515869922,
+      1.6035653048686662,
+      1.5156553245420368,
+      8.870185698964947e-16,
+      6.134674689829176,
+      5.279024677344164,
+      4.915774053632573,
+      4.6072336550282476,
+      4.4734204065113525,
+      3.288358964066602,
+      3.097355536416444,
+      2.5953192402984735,
+      2.254663515869922,
+      1.6035653048686662,
+      1.5156553245420368,
+      8.870185698964947e-16,
+      6.134674689829176,
+      5.279024677344164,
+      4.915774053632573,
+      4.6072336550282476,
+      4.4734204065113525,
+      3.288358964066602,
+      3.097355536416444,
+      2.5953192402984735,
+      2.254663515869922,
+      1.6035653048686662,
+      1.5156553245420368,
+      8.870185698964947e-16,
+      6.134674689829176,
+      5.279024677344164,
+      4.915774053632573,
+      4.6072336550282476,
+      4.4734204065113525,
+      3.288358964066602,
+      3.097355536416444,
+      2.5953192402984735,
+      2.254663515869922,
+      1.6035653048686662,
+      1.5156553245420368,
+      8.870185698964947e-16,
+      6.134674689829176,
+      5.279024677344164,
+      4.915774053632573,
+      4.6072336550282476,
+      4.4734204065113525,
+      3.288358964066602,
+      3.097355536416444,
+      2.5953192402984735,
+      2.254663515869922,
+      1.6035653048686662,
+      1.5156553245420368,
+      8.870185698964947e-16,
+      6.134674689829176,
+      5.279024677344164,
+      4.915774053632573,
+      4.6072336550282476,
+      4.4734204065113525,
+      3.288358964066602,
+      3.097355536416444,
+      2.5953192402984735,
+      2.254663515869922,
+      1.6035653048686662,
+      1.5156553245420368,
+      8.870185698964947e-16
+    ],
+    "strongly_connected": true,
+    "tree_counts_det": [
+      8,
+      8,
+      16,
+      16,
+      16
+    ],
+    "tree_counts_enum": [
+      8,
+      8,
+      16,
+      16,
+      16
+    ],
+    "tree_counts_match_det": true,
+    "tree_enumeration_truncated": false
+  },
+  "n_nodes": 5,
+  "name": "multibase_base05_redundant_paths_seed1_rewire_seed1815058",
+  "normal_fan_metrics": {
+    "normal_fan_active_root_count_max": 5.0,
+    "normal_fan_active_root_count_mean": 5.0,
+    "normal_fan_active_root_count_std": 0.0,
+    "normal_fan_active_tree_count_max": 59.0,
+    "normal_fan_active_tree_count_mean": 53.125,
+    "normal_fan_active_tree_count_std": 3.950870157319777,
+    "normal_fan_branch_active_tree_count_min_max": 42.0,
+    "normal_fan_branch_active_tree_count_min_mean": 36.875,
+    "normal_fan_branch_active_tree_count_min_std": 2.5708704751503917,
+    "normal_fan_branch_root_nmi_max": 0.03515457448456452,
+    "normal_fan_branch_root_nmi_mean": 0.013603020389163535,
+    "normal_fan_branch_root_nmi_std": 0.009696534893268476,
+    "normal_fan_branch_tree_nmi_max": 0.1437500004996827,
+    "normal_fan_branch_tree_nmi_mean": 0.10040758891113427,
+    "normal_fan_branch_tree_nmi_std": 0.02378609788844854,
+    "normal_fan_trials": 8
+  },
+  "rewire_seed": 1815058
+}

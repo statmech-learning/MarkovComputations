@@ -1,0 +1,362 @@
+{
+  "base_family": "cycle_chords",
+  "base_id": "base04_cycle_chords_seed41",
+  "base_seed": 41,
+  "cross_root_metrics": {
+    "cross_all_supported_effective_rank": 8.262537677266007,
+    "cross_contrast_effective_rank_mean": 8.262537677266009
+  },
+  "edges": [
+    [
+      0,
+      3
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      4,
+      1
+    ]
+  ],
+  "family": "multibase_degree_rewire_exact_degree",
+  "metrics": {
+    "bottleneck_edge_fraction_095": 0.0,
+    "comparison_branch_common_d_rel_gini": 0.0,
+    "comparison_branch_common_d_rel_max": 22,
+    "comparison_branch_common_d_rel_mean": 22.0,
+    "comparison_branch_common_d_rel_min": 22,
+    "comparison_branch_common_d_rel_values": [
+      22,
+      22,
+      22
+    ],
+    "comparison_branch_d_rel_gini": 0.0,
+    "comparison_branch_d_rel_max": 22,
+    "comparison_branch_d_rel_mean": 22.0,
+    "comparison_branch_d_rel_min": 22,
+    "comparison_branch_d_rel_values": [
+      22,
+      22,
+      22
+    ],
+    "comparison_branch_input_count_gini": 0.0,
+    "comparison_branch_input_count_max": 24,
+    "comparison_branch_input_count_mean": 24.0,
+    "comparison_branch_input_count_min": 24,
+    "comparison_branch_input_count_values": [
+      24,
+      24,
+      24
+    ],
+    "comparison_branch_input_overlap_gini": 0.0,
+    "comparison_branch_input_overlap_max": 24,
+    "comparison_branch_input_overlap_mean": 24.0,
+    "comparison_branch_input_overlap_min": 24,
+    "comparison_branch_input_overlap_values": [
+      24,
+      24,
+      24
+    ],
+    "condition_number_D": 9.086442698523937,
+    "condition_number_D_masked": 9.086442698523937,
+    "d_rel": 88,
+    "edge_participation": [
+      0.25,
+      0.5,
+      0.3333333333333333,
+      0.375,
+      0.2222222222222222,
+      0.3611111111111111,
+      0.3333333333333333,
+      0.25,
+      0.375,
+      0.3333333333333333,
+      0.3333333333333333,
+      0.3333333333333333
+    ],
+    "edge_participation_gini": 0.10821759259259278,
+    "edge_participation_mean": 0.3333333333333333,
+    "edge_participation_var": 0.004854681069958848,
+    "edges": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "effective_rank_D": 8.376594942237352,
+    "effective_rank_D_masked": 67.01275953789889,
+    "in_degree": [
+      1,
+      4,
+      4,
+      2,
+      1
+    ],
+    "in_degree_cv": 0.5651941652604391,
+    "max_trees_per_root": null,
+    "mean_shortest_path": 1.6,
+    "n_edges": 12,
+    "n_nodes": 5,
+    "n_trees_total_enum": 72,
+    "out_degree": [
+      3,
+      1,
+      2,
+      3,
+      3
+    ],
+    "out_degree_cv": 0.33333333333333337,
+    "p": 8,
+    "rank_D": 11,
+    "rank_D_anchor": 11,
+    "rank_M": 12,
+    "root_tree_count_cv": 0.9364448795020874,
+    "root_tree_count_gini": 0.5055555555555555,
+    "singular_values_D": [
+      5.709089029984213,
+      5.20885309494953,
+      5.159905641416812,
+      5.049463979801911,
+      4.942290749300666,
+      4.516396629963608,
+      3.7018210022035865,
+      3.54796021855559,
+      1.8034015874576867,
+      1.0933385004306702,
+      0.6283084832430227,
+      1.4696509966447428e-15
+    ],
+    "singular_values_D_anchor": [
+      14.406238376489998,
+      5.324291337463549,
+      5.160930350241129,
+      5.131029825576762,
+      4.959059420965301,
+      4.707418823475632,
+      4.005417612514285,
+      3.5482516617306423,
+      1.9058868026865032,
+      1.7223465219282679,
+      1.0794183481925588,
+      9.141800820371542e-16
+    ],
+    "singular_values_D_masked": [
+      5.709089029984213,
+      5.20885309494953,
+      5.159905641416812,
+      5.049463979801911,
+      4.942290749300666,
+      4.516396629963608,
+      3.7018210022035865,
+      3.54796021855559,
+      1.8034015874576867,
+      1.0933385004306702,
+      0.6283084832430227,
+      1.4696509966447428e-15,
+      5.709089029984213,
+      5.20885309494953,
+      5.159905641416812,
+      5.049463979801911,
+      4.942290749300666,
+      4.516396629963608,
+      3.7018210022035865,
+      3.54796021855559,
+      1.8034015874576867,
+      1.0933385004306702,
+      0.6283084832430227,
+      1.4696509966447428e-15,
+      5.709089029984213,
+      5.20885309494953,
+      5.159905641416812,
+      5.049463979801911,
+      4.942290749300666,
+      4.516396629963608,
+      3.7018210022035865,
+      3.54796021855559,
+      1.8034015874576867,
+      1.0933385004306702,
+      0.6283084832430227,
+      1.4696509966447428e-15,
+      5.709089029984213,
+      5.20885309494953,
+      5.159905641416812,
+      5.049463979801911,
+      4.942290749300666,
+      4.516396629963608,
+      3.7018210022035865,
+      3.54796021855559,
+      1.8034015874576867,
+      1.0933385004306702,
+      0.6283084832430227,
+      1.4696509966447428e-15,
+      5.709089029984213,
+      5.20885309494953,
+      5.159905641416812,
+      5.049463979801911,
+      4.942290749300666,
+      4.516396629963608,
+      3.7018210022035865,
+      3.54796021855559,
+      1.8034015874576867,
+      1.0933385004306702,
+      0.6283084832430227,
+      1.4696509966447428e-15,
+      5.709089029984213,
+      5.20885309494953,
+      5.159905641416812,
+      5.049463979801911,
+      4.942290749300666,
+      4.516396629963608,
+      3.7018210022035865,
+      3.54796021855559,
+      1.8034015874576867,
+      1.0933385004306702,
+      0.6283084832430227,
+      1.4696509966447428e-15,
+      5.709089029984213,
+      5.20885309494953,
+      5.159905641416812,
+      5.049463979801911,
+      4.942290749300666,
+      4.516396629963608,
+      3.7018210022035865,
+      3.54796021855559,
+      1.8034015874576867,
+      1.0933385004306702,
+      0.6283084832430227,
+      1.4696509966447428e-15,
+      5.709089029984213,
+      5.20885309494953,
+      5.159905641416812,
+      5.049463979801911,
+      4.942290749300666,
+      4.516396629963608,
+      3.7018210022035865,
+      3.54796021855559,
+      1.8034015874576867,
+      1.0933385004306702,
+      0.6283084832430227,
+      1.4696509966447428e-15
+    ],
+    "strongly_connected": true,
+    "tree_counts_det": [
+      1,
+      36,
+      24,
+      3,
+      8
+    ],
+    "tree_counts_enum": [
+      1,
+      36,
+      24,
+      3,
+      8
+    ],
+    "tree_counts_match_det": true,
+    "tree_enumeration_truncated": false
+  },
+  "n_nodes": 5,
+  "name": "multibase_base04_cycle_chords_seed41_rewire_seed5435942",
+  "normal_fan_metrics": {
+    "normal_fan_active_root_count_max": 5.0,
+    "normal_fan_active_root_count_mean": 4.875,
+    "normal_fan_active_root_count_std": 0.33071891388307384,
+    "normal_fan_active_tree_count_max": 62.0,
+    "normal_fan_active_tree_count_mean": 56.625,
+    "normal_fan_active_tree_count_std": 4.998437255783052,
+    "normal_fan_branch_active_tree_count_min_max": 45.0,
+    "normal_fan_branch_active_tree_count_min_mean": 38.875,
+    "normal_fan_branch_active_tree_count_min_std": 3.585997071945263,
+    "normal_fan_branch_root_nmi_max": 0.05043955096838465,
+    "normal_fan_branch_root_nmi_mean": 0.02052576014837304,
+    "normal_fan_branch_root_nmi_std": 0.012853005293222464,
+    "normal_fan_branch_tree_nmi_max": 0.12263638665231948,
+    "normal_fan_branch_tree_nmi_mean": 0.10527840789148493,
+    "normal_fan_branch_tree_nmi_std": 0.015694086493262465,
+    "normal_fan_trials": 8
+  },
+  "rewire_seed": 5435942
+}
