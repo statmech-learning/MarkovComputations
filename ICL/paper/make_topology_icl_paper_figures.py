@@ -679,6 +679,119 @@ def fig_multibase_tree_count_design():
     save(fig, "fig_multibase_tree_count_design")
 
 
+def fig_multibase_exact_control_results():
+    path = ROOT / "ICL/results/next_phase_stats/multibase_exact_control_results_report.json"
+    payload = json.load(open(path))
+    model_rows = payload["model_results"]
+    models = [
+        ("controls\nbase", "controls_base_only"),
+        ("tree\ncount", "tree_count_plus_base"),
+        ("normal\nfan", "normal_fan_plus_base"),
+        ("tree +\nfan", "tree_count_plus_normal_fan_plus_base"),
+        ("cross-root\n+ tree/fan", "cross_root_plus_tree_count_normal_fan_plus_base"),
+        ("gamma", "gamma_exact_plus_base"),
+    ]
+    outcomes = [
+        ("mean_novel_icl", "mean seed"),
+        ("best_seed_novel_icl", "best seed"),
+    ]
+    by = {(row["outcome"], row["model"]): float(row["loo_r2"]) for row in model_rows if row.get("loo_r2") is not None}
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.15))
+    ax = axes[0]
+    x = list(range(len(models)))
+    width = 0.35
+    colors = [BLUE, TEAL]
+    for offset, (outcome, label), color in zip([-width / 2, width / 2], outcomes, colors):
+        vals = [by[(outcome, model)] for _, model in models]
+        bars = ax.bar([i + offset for i in x], vals, width=width, color=color, label=label)
+        for bar, val in zip(bars, vals):
+            if val > 0.50 or val < 0.0:
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    val + (0.025 if val >= 0 else -0.035),
+                    f"{val:.2f}",
+                    ha="center",
+                    va="bottom" if val >= 0 else "top",
+                    fontsize=7.0,
+                )
+    ax.axhline(0, color=INK, lw=0.8)
+    ax.set_xticks(x, [label for label, _ in models])
+    ax.set_ylabel(r"grouped LOO $R^2$")
+    ax.set_title("Group-level prediction", fontsize=10)
+    ax.set_ylim(0.25, 0.90)
+    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    ax.grid(axis="y", color=LIGHT, lw=0.8)
+
+    ax2 = axes[1]
+    pair_summary = payload["pair_summary"]
+    arms = [
+        ("Arm A\nfixed tree", "arm_A_fixed_tree_count_variable_normal_fan", BLUE),
+        ("Arm B\nmatched fan", "arm_B_variable_tree_count_matched_normal_fan", ORANGE),
+    ]
+    means = []
+    lows = []
+    highs = []
+    for _, key, _ in arms:
+        item = pair_summary[key]["mean_delta_mean_novel_icl"]
+        means.append(float(item["mean"]))
+        lows.append(float(item["mean"]) - float(item["ci95"][0]))
+        highs.append(float(item["ci95"][1]) - float(item["mean"]))
+    ax2.bar(range(len(arms)), means, yerr=[lows, highs], color=[color for _, _, color in arms], width=0.55, capsize=4)
+    ax2.axhline(0, color=INK, lw=0.8)
+    ax2.set_xticks(range(len(arms)), [label for label, _, _ in arms])
+    ax2.set_ylabel(r"paired $\Delta$ mean ICL")
+    ax2.set_title("Matched-pair contrasts", fontsize=10)
+    ax2.grid(axis="y", color=LIGHT, lw=0.8)
+    for idx, value in enumerate(means):
+        ax2.text(idx, value + (0.5 if value >= 0 else -0.5), f"{value:.1f}", ha="center", va="bottom" if value >= 0 else "top", fontsize=8)
+
+    fig.suptitle("Multi-base exact controls: rooted-tree count is the clearest current signal", y=1.03, fontsize=10.5)
+    save(fig, "fig_multibase_exact_control_results")
+
+
+def fig_multibase_mechanism_results():
+    path = ROOT / "ICL/results/next_phase_stats/multibase_mechanism_followup_report.json"
+    payload = json.load(open(path))
+    summary = payload["scramble_summary"]
+    order = [
+        "context_block_shuffle",
+        "stat_preserving_projection_scramble",
+        "stat_preserving_branch_alignment_scramble",
+        "decoder_root_permutation",
+    ]
+    labels = [
+        "context\nblock",
+        "projection\nscramble",
+        "branch-align.\nscramble",
+        "decoder-root\nperm.",
+    ]
+    vals = [float(summary[name]["target_accuracy_delta_mean"]) for name in order]
+    lows = [float(summary[name]["target_accuracy_delta_mean"]) - float(summary[name]["target_accuracy_delta_min"]) for name in order]
+    highs = [float(summary[name]["target_accuracy_delta_max"]) - float(summary[name]["target_accuracy_delta_mean"]) for name in order]
+
+    fig, ax = plt.subplots(figsize=(5.9, 3.0))
+    bars = ax.bar(range(len(order)), vals, yerr=[lows, highs], color=[RED, ORANGE, ORANGE, GRAY], width=0.62, capsize=4)
+    ax.axhline(0, color=INK, lw=0.8)
+    ax.set_xticks(range(len(order)), labels)
+    ax.set_ylabel("accuracy change (points)")
+    ax.set_title("Multi-base mechanism scrambles on selected trained models", fontsize=10)
+    ax.set_ylim(-105, 12)
+    ax.grid(axis="y", color=LIGHT, lw=0.8)
+    for bar, val in zip(bars, vals):
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            val - 4.0,
+            f"{val:.1f}",
+            ha="center",
+            va="top",
+            fontsize=8,
+            color="white",
+        )
+    ax.text(0.02, 0.96, "8 models, 64 scramble rows", transform=ax.transAxes, va="top", fontsize=8.2)
+    save(fig, "fig_multibase_mechanism_results")
+
+
 def main():
     fig_tree_basis()
     fig_predictors()
@@ -696,6 +809,8 @@ def main():
     fig_exact_control_normal_fan_scaled()
     fig_exact_control_mechanism_scrambles()
     fig_multibase_tree_count_design()
+    fig_multibase_exact_control_results()
+    fig_multibase_mechanism_results()
     print(f"wrote figures to {OUT}")
 
 
