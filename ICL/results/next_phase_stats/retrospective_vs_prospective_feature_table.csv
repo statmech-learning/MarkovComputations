@@ -1,0 +1,4 @@
+dataset,n_groups,same_root_tree_difference_status,same_root_tree_difference_mean_icl_loo_r2,same_root_tree_difference_best_icl_loo_r2,prospective_contrast,cross_root_status,interpretation
+fixed_m20_retrospective,,strong retrospective predictor,0.435,0.419,,implemented later,"screening signal, not causal proof"
+prospective_tree_diff_control,16,failed standalone contrast,0.447,0.545,balanced high-low mean ICL = -3.970,same-root not rescued,keep as secondary diagnostic; not selector
+multibase_full_coupling,37,not a mask contrast under full coupling,,,normal-fan/tree-count arms,binary overlap saturated; rank summaries vary,tests abundance/normal-fan/cross-root rank rather than mask multiplicity

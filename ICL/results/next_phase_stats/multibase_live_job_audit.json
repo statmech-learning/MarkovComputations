@@ -1,0 +1,19 @@
+{
+  "branch": "topology",
+  "command_count": 185,
+  "commit": "ebb0c52781008dbff12f9b0759187c8460511d2c",
+  "complete_groups": 37,
+  "completed_result_count": 185,
+  "coverage_groups": 37,
+  "expected_task_count": 185,
+  "failed_task_ids": [],
+  "incomplete_groups": {},
+  "library_root": "/home/aadarwal/repos/topology/ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2",
+  "missing_result_count": 0,
+  "missing_task_ids": [],
+  "old_failed_system_python_results_present": false,
+  "schema": "multibase_live_job_audit.v1",
+  "selected_topology_count": 37,
+  "training_root": "/home/aadarwal/repos/topology/ICL/results/multibase_normal_fan_tree_count_training",
+  "worktree_status_short_untracked_omitted": "M ICL/__pycache__/data_generation.cpython-312.pyc\n M ICL/__pycache__/datasets.cpython-312.pyc\n M ICL/__pycache__/evaluation.cpython-312.pyc\n M ICL/__pycache__/training.cpython-312.pyc\n M ICL/models/__pycache__/__init__.cpython-312.pyc\n M ICL/models/__pycache__/base_icl_model.cpython-312.pyc\n M ICL/models/__pycache__/markov_icl.cpython-312.pyc\n M ICL/models/__pycache__/nonlinear_markov_icl.cpython-312.pyc\n M ICL/models/__pycache__/polynomial_icl.cpython-312.pyc\n M ICL/models/__pycache__/wta_icl.cpython-312.pyc\n M ICL/tree_level_multiplicity_metrics.py"
+}

@@ -1,0 +1,70 @@
+{
+  "correlations": {
+    "best_seed_novel_icl": {
+      "cross_all_supported_effective_rank": 0.7448934993998633,
+      "cross_contrast_effective_rank_mean": 0.7448934993998628,
+      "decoder_topk_assignment_score": null
+    },
+    "mean_novel_icl": {
+      "cross_all_supported_effective_rank": 0.7436729597375138,
+      "cross_contrast_effective_rank_mean": 0.7436729597375137,
+      "decoder_topk_assignment_score": null
+    },
+    "seed_std_novel_icl": {
+      "cross_all_supported_effective_rank": -0.2493258097630553,
+      "cross_contrast_effective_rank_mean": -0.2493258097630558,
+      "decoder_topk_assignment_score": null
+    }
+  },
+  "interpretation": "Full input coupling makes binary cross-root overlap mostly saturated; rank/effective-rank and decoder-agnostic root-pair summaries are the varying cross-root diagnostics.",
+  "metric_file": "ICL/cross_root_decoder_contrast_metrics.py",
+  "model_results": [
+    {
+      "features": [
+        "n_trees_total_enum_log",
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean",
+        "cross_contrast_effective_rank_mean",
+        "cross_all_supported_effective_rank",
+        "decoder_topk_assignment_score"
+      ],
+      "loo_r2": 0.44609769756008244,
+      "model": "cross_root_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log",
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean",
+        "cross_contrast_effective_rank_mean",
+        "cross_all_supported_effective_rank",
+        "decoder_topk_assignment_score"
+      ],
+      "loo_r2": 0.7866060145659255,
+      "model": "cross_root_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log",
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean",
+        "cross_contrast_effective_rank_mean",
+        "cross_all_supported_effective_rank",
+        "decoder_topk_assignment_score"
+      ],
+      "loo_r2": -0.2479043132415435,
+      "model": "cross_root_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    }
+  ],
+  "n_groups": 37,
+  "schema": "cross_root_decoder_contrast_reanalysis.v1"
+}

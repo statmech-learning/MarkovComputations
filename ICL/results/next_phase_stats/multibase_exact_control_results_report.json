@@ -1,0 +1,679 @@
+{
+  "base_residualized_correlations": {
+    "best_seed_novel_icl": {
+      "cross_all_supported_effective_rank": 0.43306167606361556,
+      "cross_contrast_effective_rank_mean": 0.4330616760636152,
+      "decoder_topk_assignment_score": null,
+      "gamma_exact_lcvar": 0.2975860585297369,
+      "n_trees_total_enum_log": 0.504474557124686,
+      "normal_fan_active_tree_count_mean": 0.5757641501195394,
+      "normal_fan_branch_tree_nmi_mean": 0.21875336092267111,
+      "normal_fan_score": 0.45866106637760834
+    },
+    "mean_novel_icl": {
+      "cross_all_supported_effective_rank": 0.531021571680051,
+      "cross_contrast_effective_rank_mean": 0.5310215716800516,
+      "decoder_topk_assignment_score": null,
+      "gamma_exact_lcvar": 0.21736775661613225,
+      "n_trees_total_enum_log": 0.5445534655485572,
+      "normal_fan_active_tree_count_mean": 0.4999019867476265,
+      "normal_fan_branch_tree_nmi_mean": 0.031655638576215464,
+      "normal_fan_score": 0.2808067817478435
+    },
+    "seed_std_novel_icl": {
+      "cross_all_supported_effective_rank": -0.20654714900916524,
+      "cross_contrast_effective_rank_mean": -0.20654714900916604,
+      "decoder_topk_assignment_score": null,
+      "gamma_exact_lcvar": -0.03253490965978046,
+      "n_trees_total_enum_log": -0.2594482741000108,
+      "normal_fan_active_tree_count_mean": -0.19200953304636584,
+      "normal_fan_branch_tree_nmi_mean": -0.08943644074183381,
+      "normal_fan_score": -0.11517749293537576
+    }
+  },
+  "correlations": {
+    "best_seed_novel_icl": {
+      "cross_all_supported_effective_rank": 0.7448934993998633,
+      "cross_contrast_effective_rank_mean": 0.7448934993998628,
+      "decoder_topk_assignment_score": null,
+      "gamma_exact_lcvar": 0.14429803869314392,
+      "n_trees_total_enum_log": 0.16081365570619371,
+      "normal_fan_active_tree_count_mean": 0.15257180087354114,
+      "normal_fan_branch_tree_nmi_mean": 0.15920083308402613,
+      "normal_fan_score": 0.18109209122333345
+    },
+    "mean_novel_icl": {
+      "cross_all_supported_effective_rank": 0.7436729597375138,
+      "cross_contrast_effective_rank_mean": 0.7436729597375137,
+      "decoder_topk_assignment_score": null,
+      "gamma_exact_lcvar": 0.1297987498569525,
+      "n_trees_total_enum_log": 0.47213276029578344,
+      "normal_fan_active_tree_count_mean": 0.43244743782801054,
+      "normal_fan_branch_tree_nmi_mean": 0.20558494958736934,
+      "normal_fan_score": 0.3762896416661982
+    },
+    "seed_std_novel_icl": {
+      "cross_all_supported_effective_rank": -0.2493258097630553,
+      "cross_contrast_effective_rank_mean": -0.2493258097630558,
+      "decoder_topk_assignment_score": null,
+      "gamma_exact_lcvar": -0.01420642792065682,
+      "n_trees_total_enum_log": -0.3122017048019999,
+      "normal_fan_active_tree_count_mean": -0.277644266046457,
+      "normal_fan_branch_tree_nmi_mean": -0.18359690002028284,
+      "normal_fan_score": -0.2374098890869518
+    }
+  },
+  "held_out_base": {
+    "best_seed_novel_icl": {
+      "n": 37,
+      "per_base": [
+        {
+          "base_id": "base00_degree_balanced_seed9",
+          "mean_pred": 97.01823431389045,
+          "mean_true": 96.08,
+          "n": 5
+        },
+        {
+          "base_id": "base01_degree_balanced_seed60",
+          "mean_pred": 96.21932301576014,
+          "mean_true": 97.25714285714287,
+          "n": 7
+        },
+        {
+          "base_id": "base02_random_sc_seed2",
+          "mean_pred": 94.70391626326138,
+          "mean_true": 91.9,
+          "n": 2
+        },
+        {
+          "base_id": "base03_random_sc_seed92",
+          "mean_pred": 95.19039486337307,
+          "mean_true": 94.94999999999999,
+          "n": 4
+        },
+        {
+          "base_id": "base04_cycle_chords_seed41",
+          "mean_pred": 96.61970920689048,
+          "mean_true": 87.60000000000001,
+          "n": 4
+        },
+        {
+          "base_id": "base05_redundant_paths_seed1",
+          "mean_pred": 96.81849035453834,
+          "mean_true": 97.2,
+          "n": 9
+        },
+        {
+          "base_id": "base06_two_module_seed2",
+          "mean_pred": 93.99458296797258,
+          "mean_true": 96.23333333333333,
+          "n": 6
+        }
+      ],
+      "r2": -0.13622599215194953
+    },
+    "mean_novel_icl": {
+      "n": 37,
+      "per_base": [
+        {
+          "base_id": "base00_degree_balanced_seed9",
+          "mean_pred": 92.80497170558132,
+          "mean_true": 87.42399999999999,
+          "n": 5
+        },
+        {
+          "base_id": "base01_degree_balanced_seed60",
+          "mean_pred": 87.94867979348452,
+          "mean_true": 93.42857142857143,
+          "n": 7
+        },
+        {
+          "base_id": "base02_random_sc_seed2",
+          "mean_pred": 84.26572080879544,
+          "mean_true": 85.32,
+          "n": 2
+        },
+        {
+          "base_id": "base03_random_sc_seed92",
+          "mean_pred": 85.74614154469306,
+          "mean_true": 86.44,
+          "n": 4
+        },
+        {
+          "base_id": "base04_cycle_chords_seed41",
+          "mean_pred": 89.02787019004043,
+          "mean_true": 80.46000000000001,
+          "n": 4
+        },
+        {
+          "base_id": "base05_redundant_paths_seed1",
+          "mean_pred": 90.27419296307079,
+          "mean_true": 93.13333333333334,
+          "n": 9
+        },
+        {
+          "base_id": "base06_two_module_seed2",
+          "mean_pred": 82.15716725208362,
+          "mean_true": 87.47333333333334,
+          "n": 6
+        }
+      ],
+      "r2": -0.1571520264863815
+    },
+    "seed_std_novel_icl": {
+      "n": 37,
+      "per_base": [
+        {
+          "base_id": "base00_degree_balanced_seed9",
+          "mean_pred": 5.8925328963983095,
+          "mean_true": 8.830660321139664,
+          "n": 5
+        },
+        {
+          "base_id": "base01_degree_balanced_seed60",
+          "mean_pred": 7.989974300151742,
+          "mean_true": 5.013496716240047,
+          "n": 7
+        },
+        {
+          "base_id": "base02_random_sc_seed2",
+          "mean_pred": 8.915586981598214,
+          "mean_true": 6.631056363472469,
+          "n": 2
+        },
+        {
+          "base_id": "base03_random_sc_seed92",
+          "mean_pred": 9.185706201553158,
+          "mean_true": 8.527879507536682,
+          "n": 4
+        },
+        {
+          "base_id": "base04_cycle_chords_seed41",
+          "mean_pred": 8.33747591097098,
+          "mean_true": 6.763267502105974,
+          "n": 4
+        },
+        {
+          "base_id": "base05_redundant_paths_seed1",
+          "mean_pred": 6.803367760321321,
+          "mean_true": 4.316020169189252,
+          "n": 9
+        },
+        {
+          "base_id": "base06_two_module_seed2",
+          "mean_pred": 11.27398423870981,
+          "mean_true": 6.62765683353889,
+          "n": 6
+        }
+      ],
+      "r2": -0.41016137011616793
+    }
+  },
+  "library_summary": {
+    "arm_quality": {
+      "arm_A_fixed_tree_count_variable_normal_fan": {
+        "mean_abs_normal_fan_delta": 4.352558097990983,
+        "mean_abs_tree_delta": 0.9090909090909091,
+        "n_pairs": 11
+      },
+      "arm_B_variable_tree_count_matched_normal_fan": {
+        "mean_abs_normal_fan_delta": 0.06029979813358263,
+        "mean_abs_tree_delta": 14.666666666666666,
+        "n_pairs": 9
+      }
+    },
+    "base_summary": {
+      "base00_degree_balanced_seed9": {
+        "candidate_count": 80,
+        "in_degree_sequence": "3 2 2 3 2",
+        "normal_fan_score_range": [
+          -4.72748171899873,
+          4.685491951404499
+        ],
+        "out_degree_sequence": "3 2 2 3 2",
+        "selected_count": 5,
+        "tree_count_range": [
+          55.0,
+          85.0
+        ]
+      },
+      "base01_degree_balanced_seed60": {
+        "candidate_count": 80,
+        "in_degree_sequence": "3 3 2 2 2",
+        "normal_fan_score_range": [
+          -2.0905633794853338,
+          6.044497179528069
+        ],
+        "out_degree_sequence": "2 2 3 3 2",
+        "selected_count": 7,
+        "tree_count_range": [
+          63.0,
+          96.0
+        ]
+      },
+      "base02_random_sc_seed2": {
+        "candidate_count": 80,
+        "in_degree_sequence": "1 1 4 3 3",
+        "normal_fan_score_range": [
+          -4.64696533079197,
+          1.090372498897572
+        ],
+        "out_degree_sequence": "4 2 1 2 3",
+        "selected_count": 2,
+        "tree_count_range": [
+          64.0,
+          66.0
+        ]
+      },
+      "base03_random_sc_seed92": {
+        "candidate_count": 80,
+        "in_degree_sequence": "3 2 3 2 2",
+        "normal_fan_score_range": [
+          -5.038009100985015,
+          3.798505855360493
+        ],
+        "out_degree_sequence": "1 2 3 3 3",
+        "selected_count": 4,
+        "tree_count_range": [
+          54.0,
+          84.0
+        ]
+      },
+      "base04_cycle_chords_seed41": {
+        "candidate_count": 80,
+        "in_degree_sequence": "1 4 4 2 1",
+        "normal_fan_score_range": [
+          -1.4684483833378281,
+          4.61324931941978
+        ],
+        "out_degree_sequence": "3 1 2 3 3",
+        "selected_count": 4,
+        "tree_count_range": [
+          72.0,
+          78.0
+        ]
+      },
+      "base05_redundant_paths_seed1": {
+        "candidate_count": 80,
+        "in_degree_sequence": "2 2 3 3 2",
+        "normal_fan_score_range": [
+          -2.7846464103274435,
+          6.879477559985576
+        ],
+        "out_degree_sequence": "3 3 2 2 2",
+        "selected_count": 9,
+        "tree_count_range": [
+          63.0,
+          94.0
+        ]
+      },
+      "base06_two_module_seed2": {
+        "candidate_count": 80,
+        "in_degree_sequence": "2 3 3 2 2",
+        "normal_fan_score_range": [
+          -8.915552953432755,
+          -0.02204936397792126
+        ],
+        "out_degree_sequence": "1 2 4 2 3",
+        "selected_count": 6,
+        "tree_count_range": [
+          42.0,
+          69.0
+        ]
+      }
+    },
+    "candidate_count": 560,
+    "controls": {
+      "degree_control": "exact in/out degree sequence within each base_id",
+      "input_mask": "full coupling; exact multiplicity M_alpha=m for every input coordinate",
+      "n_context": 3,
+      "n_edges": 12,
+      "n_nodes": 5,
+      "p": 8,
+      "target_d_rel": 88,
+      "z_dim": 2
+    },
+    "files": {
+      "array_script": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/_array_meta/run_task.sh",
+      "candidate_library_csv": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/candidate_library.csv",
+      "pair_manifest_csv": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/pair_manifest.csv",
+      "selected_csv": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/selected.csv",
+      "training_manifest_csv": "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/training_manifest.csv"
+    },
+    "pair_count": 20,
+    "pair_count_by_arm": {
+      "arm_A_fixed_tree_count_variable_normal_fan": 11,
+      "arm_B_variable_tree_count_matched_normal_fan": 9
+    },
+    "schema": "multibase_normal_fan_tree_count_separation_library.v1",
+    "selected_topology_count": 37,
+    "status": "library_and_training_manifest_ready_not_submitted",
+    "train_seeds_per_topology": 5,
+    "training_task_count": 185
+  },
+  "mechanism_selected_topology_ids": [
+    "mb0347_base04_cycle_chords_seed41_rw3434009",
+    "mb0354_base04_cycle_chords_seed41_rw7178112",
+    "mb0250_base03_random_sc_seed92_rw5413294",
+    "mb0100_base01_degree_balanced_seed60_rw5708776",
+    "mb0122_base01_degree_balanced_seed60_rw5473513",
+    "mb0455_base05_redundant_paths_seed1_rw6331647",
+    "mb0429_base05_redundant_paths_seed1_rw2766586",
+    "mb0127_base01_degree_balanced_seed60_rw7026294"
+  ],
+  "model_results": [
+    {
+      "features": [],
+      "loo_r2": 0.43147434423204567,
+      "model": "controls_base_only",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log"
+      ],
+      "loo_r2": 0.5614916477835699,
+      "model": "tree_count_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean"
+      ],
+      "loo_r2": 0.5180161205824474,
+      "model": "normal_fan_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log",
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean"
+      ],
+      "loo_r2": 0.49870229709452707,
+      "model": "tree_count_plus_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log",
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean",
+        "cross_contrast_effective_rank_mean",
+        "cross_all_supported_effective_rank",
+        "decoder_topk_assignment_score"
+      ],
+      "loo_r2": 0.44609769756008244,
+      "model": "cross_root_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar"
+      ],
+      "loo_r2": 0.37492378313670316,
+      "model": "gamma_exact_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar",
+        "n_trees_total_enum_log",
+        "normal_fan_score"
+      ],
+      "loo_r2": 0.47019922358680133,
+      "model": "gamma_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [],
+      "loo_r2": 0.792973355596379,
+      "model": "controls_base_only",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log"
+      ],
+      "loo_r2": 0.8338156032976274,
+      "model": "tree_count_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean"
+      ],
+      "loo_r2": 0.7964098083122453,
+      "model": "normal_fan_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log",
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean"
+      ],
+      "loo_r2": 0.7880845711292621,
+      "model": "tree_count_plus_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log",
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean",
+        "cross_contrast_effective_rank_mean",
+        "cross_all_supported_effective_rank",
+        "decoder_topk_assignment_score"
+      ],
+      "loo_r2": 0.7866060145659255,
+      "model": "cross_root_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar"
+      ],
+      "loo_r2": 0.7971885996372804,
+      "model": "gamma_exact_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar",
+        "n_trees_total_enum_log",
+        "normal_fan_score"
+      ],
+      "loo_r2": 0.8064333873547672,
+      "model": "gamma_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [],
+      "loo_r2": -0.14823712380864795,
+      "model": "controls_base_only",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log"
+      ],
+      "loo_r2": -0.16817379706503277,
+      "model": "tree_count_plus_base",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    },
+    {
+      "features": [
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean"
+      ],
+      "loo_r2": -0.10189057620665976,
+      "model": "normal_fan_plus_base",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log",
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean"
+      ],
+      "loo_r2": -0.1519644872300241,
+      "model": "tree_count_plus_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    },
+    {
+      "features": [
+        "n_trees_total_enum_log",
+        "normal_fan_score",
+        "normal_fan_active_tree_count_mean",
+        "normal_fan_branch_tree_nmi_mean",
+        "cross_contrast_effective_rank_mean",
+        "cross_all_supported_effective_rank",
+        "decoder_topk_assignment_score"
+      ],
+      "loo_r2": -0.2479043132415435,
+      "model": "cross_root_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar"
+      ],
+      "loo_r2": -0.273132844425761,
+      "model": "gamma_exact_plus_base",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar",
+        "n_trees_total_enum_log",
+        "normal_fan_score"
+      ],
+      "loo_r2": -0.35888139748039194,
+      "model": "gamma_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    }
+  ],
+  "n_group_rows": 37,
+  "n_run_rows": 185,
+  "pair_summary": {
+    "arm_A_fixed_tree_count_variable_normal_fan": {
+      "mean_delta_best_seed_novel_icl": {
+        "ci95": [
+          -0.0909090909090922,
+          1.5636363636363626
+        ],
+        "mean": 0.7636363636363616,
+        "n": 11
+      },
+      "mean_delta_mean_novel_icl": {
+        "ci95": [
+          -1.2910909090909106,
+          4.0074545454545385
+        ],
+        "mean": 1.1927272727272693,
+        "n": 11
+      },
+      "mean_delta_normal_fan_score": {
+        "ci95": [
+          3.953618981576161,
+          4.790945051300367
+        ],
+        "mean": 4.352558097990983,
+        "n": 11
+      },
+      "mean_delta_seed_std_novel_icl": {
+        "ci95": [
+          -3.314914918132876,
+          3.327512237764908
+        ],
+        "mean": 0.07260151584136164,
+        "n": 11
+      },
+      "mean_delta_tree_count_log": {
+        "ci95": [
+          0.002063626372288771,
+          0.009781697902461917
+        ],
+        "mean": 0.005845583716790357,
+        "n": 11
+      },
+      "n_pairs": 11
+    },
+    "arm_B_variable_tree_count_matched_normal_fan": {
+      "mean_delta_best_seed_novel_icl": {
+        "ci95": [
+          -0.533333333333333,
+          1.4888888888888863
+        ],
+        "mean": 0.5555555555555524,
+        "n": 9
+      },
+      "mean_delta_mean_novel_icl": {
+        "ci95": [
+          0.8755555555555566,
+          7.364444444444435
+        ],
+        "mean": 4.066666666666665,
+        "n": 9
+      },
+      "mean_delta_normal_fan_score": {
+        "ci95": [
+          -0.034825898975963186,
+          0.058303328539632854
+        ],
+        "mean": 0.013331848380344383,
+        "n": 9
+      },
+      "mean_delta_seed_std_novel_icl": {
+        "ci95": [
+          -5.028699919746365,
+          1.716500486486013
+        ],
+        "mean": -1.736766779687283,
+        "n": 9
+      },
+      "mean_delta_tree_count_log": {
+        "ci95": [
+          0.08070453909742675,
+          0.09810032512120075
+        ],
+        "mean": 0.08970798564687106,
+        "n": 9
+      },
+      "n_pairs": 9
+    }
+  },
+  "schema": "multibase_exact_control_results_report.v1"
+}

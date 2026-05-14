@@ -1,0 +1,83 @@
+{
+  "correlations": {
+    "best_seed_novel_icl": {
+      "gamma_exact_lcvar": 0.14429803869314392
+    },
+    "mean_novel_icl": {
+      "gamma_exact_lcvar": 0.1297987498569525
+    },
+    "seed_std_novel_icl": {
+      "gamma_exact_lcvar": -0.01420642792065682
+    }
+  },
+  "gamma_params": {
+    "edge_bias_radius": 0.0,
+    "n_samples": 180,
+    "trials": 6
+  },
+  "interpretation": "Gamma remains a diagnostic unless it improves held-out exact-control prediction beyond tree count, normal fan, and base controls.",
+  "model_results": [
+    {
+      "features": [
+        "gamma_exact_lcvar"
+      ],
+      "loo_r2": 0.37492378313670316,
+      "model": "gamma_exact_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar",
+        "n_trees_total_enum_log",
+        "normal_fan_score"
+      ],
+      "loo_r2": 0.47019922358680133,
+      "model": "gamma_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar"
+      ],
+      "loo_r2": 0.7971885996372804,
+      "model": "gamma_exact_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar",
+        "n_trees_total_enum_log",
+        "normal_fan_score"
+      ],
+      "loo_r2": 0.8064333873547672,
+      "model": "gamma_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar"
+      ],
+      "loo_r2": -0.273132844425761,
+      "model": "gamma_exact_plus_base",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    },
+    {
+      "features": [
+        "gamma_exact_lcvar",
+        "n_trees_total_enum_log",
+        "normal_fan_score"
+      ],
+      "loo_r2": -0.35888139748039194,
+      "model": "gamma_plus_tree_count_normal_fan_plus_base",
+      "n": 37,
+      "outcome": "seed_std_novel_icl"
+    }
+  ],
+  "schema": "gamma_multibase_diagnostic_report.v1",
+  "status": "computed"
+}

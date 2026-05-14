@@ -1,0 +1,309 @@
+{
+  "bottom_line": "The multibase library tests whether rooted-tree abundance, normal-fan geometry, or cross-root contrast rank improves pre-training prediction under exact controls. Claims should be based on grouped LOO, paired arms, and held-out-base behavior rather than seed-level rows.",
+  "causal_interventions": "Same-root tree-difference overlap failed as a standalone prospective causal knob. Multibase mechanism scrambles are only supported if the collected scramble rows are nonempty.",
+  "cross_root_decoder_contrast": "Full input coupling makes binary cross-root overlap mostly saturated; rank/effective-rank and decoder-agnostic root-pair summaries are the varying cross-root diagnostics.",
+  "exact_theory": "First-order CRNs compute through rooted tree-sum projections by the matrix-tree theorem; this remains exact.",
+  "expressivity": "Best-seed ICL is reported separately as the expressivity envelope; do not collapse it with mean-seed trainability.",
+  "gamma": "Gamma remains a diagnostic unless it improves held-out exact-control prediction beyond tree count, normal fan, and base controls.",
+  "post_training_mechanism": {
+    "mechanism_rows": 8,
+    "schema": "multibase_mechanism_followup_report.v1",
+    "scramble_rows": 64,
+    "scramble_summary": {
+      "context_block_shuffle": {
+        "n": 16,
+        "target_accuracy_delta_max": -37.50000149011612,
+        "target_accuracy_delta_mean": -79.56249979324639,
+        "target_accuracy_delta_min": -96.50000147521496
+      },
+      "decoder_root_permutation": {
+        "n": 16,
+        "target_accuracy_delta_max": -11.500000953674316,
+        "target_accuracy_delta_mean": -48.18749916739762,
+        "target_accuracy_delta_min": -84.49999764561653
+      },
+      "stat_preserving_branch_alignment_scramble": {
+        "n": 16,
+        "target_accuracy_delta_max": -2.999997138977051,
+        "target_accuracy_delta_mean": -54.4062496162951,
+        "target_accuracy_delta_min": -71.00000083446503
+      },
+      "stat_preserving_projection_scramble": {
+        "n": 16,
+        "target_accuracy_delta_max": -30.500000715255737,
+        "target_accuracy_delta_mean": -55.031249672174454,
+        "target_accuracy_delta_min": -66.50000214576721
+      }
+    },
+    "selected_command_file": "ICL/results/next_phase_stats/multibase_mechanism_selection_commands.sh",
+    "selected_topology_ids": [
+      "mb0347_base04_cycle_chords_seed41_rw3434009",
+      "mb0354_base04_cycle_chords_seed41_rw7178112",
+      "mb0250_base03_random_sc_seed92_rw5413294",
+      "mb0100_base01_degree_balanced_seed60_rw5708776",
+      "mb0122_base01_degree_balanced_seed60_rw5473513",
+      "mb0455_base05_redundant_paths_seed1_rw6331647",
+      "mb0429_base05_redundant_paths_seed1_rw2766586",
+      "mb0127_base01_degree_balanced_seed60_rw7026294"
+    ],
+    "status": "computed"
+  },
+  "pre_training_prediction": {
+    "best_best_seed_model": {
+      "features": [
+        "n_trees_total_enum_log"
+      ],
+      "loo_r2": 0.8338156032976274,
+      "model": "tree_count_plus_base",
+      "n": 37,
+      "outcome": "best_seed_novel_icl"
+    },
+    "best_mean_model": {
+      "features": [
+        "n_trees_total_enum_log"
+      ],
+      "loo_r2": 0.5614916477835699,
+      "model": "tree_count_plus_base",
+      "n": 37,
+      "outcome": "mean_novel_icl"
+    },
+    "held_out_base": {
+      "best_seed_novel_icl": {
+        "n": 37,
+        "per_base": [
+          {
+            "base_id": "base00_degree_balanced_seed9",
+            "mean_pred": 97.01823431389045,
+            "mean_true": 96.08,
+            "n": 5
+          },
+          {
+            "base_id": "base01_degree_balanced_seed60",
+            "mean_pred": 96.21932301576014,
+            "mean_true": 97.25714285714287,
+            "n": 7
+          },
+          {
+            "base_id": "base02_random_sc_seed2",
+            "mean_pred": 94.70391626326138,
+            "mean_true": 91.9,
+            "n": 2
+          },
+          {
+            "base_id": "base03_random_sc_seed92",
+            "mean_pred": 95.19039486337307,
+            "mean_true": 94.94999999999999,
+            "n": 4
+          },
+          {
+            "base_id": "base04_cycle_chords_seed41",
+            "mean_pred": 96.61970920689048,
+            "mean_true": 87.60000000000001,
+            "n": 4
+          },
+          {
+            "base_id": "base05_redundant_paths_seed1",
+            "mean_pred": 96.81849035453834,
+            "mean_true": 97.2,
+            "n": 9
+          },
+          {
+            "base_id": "base06_two_module_seed2",
+            "mean_pred": 93.99458296797258,
+            "mean_true": 96.23333333333333,
+            "n": 6
+          }
+        ],
+        "r2": -0.13622599215194953
+      },
+      "mean_novel_icl": {
+        "n": 37,
+        "per_base": [
+          {
+            "base_id": "base00_degree_balanced_seed9",
+            "mean_pred": 92.80497170558132,
+            "mean_true": 87.42399999999999,
+            "n": 5
+          },
+          {
+            "base_id": "base01_degree_balanced_seed60",
+            "mean_pred": 87.94867979348452,
+            "mean_true": 93.42857142857143,
+            "n": 7
+          },
+          {
+            "base_id": "base02_random_sc_seed2",
+            "mean_pred": 84.26572080879544,
+            "mean_true": 85.32,
+            "n": 2
+          },
+          {
+            "base_id": "base03_random_sc_seed92",
+            "mean_pred": 85.74614154469306,
+            "mean_true": 86.44,
+            "n": 4
+          },
+          {
+            "base_id": "base04_cycle_chords_seed41",
+            "mean_pred": 89.02787019004043,
+            "mean_true": 80.46000000000001,
+            "n": 4
+          },
+          {
+            "base_id": "base05_redundant_paths_seed1",
+            "mean_pred": 90.27419296307079,
+            "mean_true": 93.13333333333334,
+            "n": 9
+          },
+          {
+            "base_id": "base06_two_module_seed2",
+            "mean_pred": 82.15716725208362,
+            "mean_true": 87.47333333333334,
+            "n": 6
+          }
+        ],
+        "r2": -0.1571520264863815
+      },
+      "seed_std_novel_icl": {
+        "n": 37,
+        "per_base": [
+          {
+            "base_id": "base00_degree_balanced_seed9",
+            "mean_pred": 5.8925328963983095,
+            "mean_true": 8.830660321139664,
+            "n": 5
+          },
+          {
+            "base_id": "base01_degree_balanced_seed60",
+            "mean_pred": 7.989974300151742,
+            "mean_true": 5.013496716240047,
+            "n": 7
+          },
+          {
+            "base_id": "base02_random_sc_seed2",
+            "mean_pred": 8.915586981598214,
+            "mean_true": 6.631056363472469,
+            "n": 2
+          },
+          {
+            "base_id": "base03_random_sc_seed92",
+            "mean_pred": 9.185706201553158,
+            "mean_true": 8.527879507536682,
+            "n": 4
+          },
+          {
+            "base_id": "base04_cycle_chords_seed41",
+            "mean_pred": 8.33747591097098,
+            "mean_true": 6.763267502105974,
+            "n": 4
+          },
+          {
+            "base_id": "base05_redundant_paths_seed1",
+            "mean_pred": 6.803367760321321,
+            "mean_true": 4.316020169189252,
+            "n": 9
+          },
+          {
+            "base_id": "base06_two_module_seed2",
+            "mean_pred": 11.27398423870981,
+            "mean_true": 6.62765683353889,
+            "n": 6
+          }
+        ],
+        "r2": -0.41016137011616793
+      }
+    },
+    "pair_summary": {
+      "arm_A_fixed_tree_count_variable_normal_fan": {
+        "mean_delta_best_seed_novel_icl": {
+          "ci95": [
+            -0.0909090909090922,
+            1.5636363636363626
+          ],
+          "mean": 0.7636363636363616,
+          "n": 11
+        },
+        "mean_delta_mean_novel_icl": {
+          "ci95": [
+            -1.2910909090909106,
+            4.0074545454545385
+          ],
+          "mean": 1.1927272727272693,
+          "n": 11
+        },
+        "mean_delta_normal_fan_score": {
+          "ci95": [
+            3.953618981576161,
+            4.790945051300367
+          ],
+          "mean": 4.352558097990983,
+          "n": 11
+        },
+        "mean_delta_seed_std_novel_icl": {
+          "ci95": [
+            -3.314914918132876,
+            3.327512237764908
+          ],
+          "mean": 0.07260151584136164,
+          "n": 11
+        },
+        "mean_delta_tree_count_log": {
+          "ci95": [
+            0.002063626372288771,
+            0.009781697902461917
+          ],
+          "mean": 0.005845583716790357,
+          "n": 11
+        },
+        "n_pairs": 11
+      },
+      "arm_B_variable_tree_count_matched_normal_fan": {
+        "mean_delta_best_seed_novel_icl": {
+          "ci95": [
+            -0.533333333333333,
+            1.4888888888888863
+          ],
+          "mean": 0.5555555555555524,
+          "n": 9
+        },
+        "mean_delta_mean_novel_icl": {
+          "ci95": [
+            0.8755555555555566,
+            7.364444444444435
+          ],
+          "mean": 4.066666666666665,
+          "n": 9
+        },
+        "mean_delta_normal_fan_score": {
+          "ci95": [
+            -0.034825898975963186,
+            0.058303328539632854
+          ],
+          "mean": 0.013331848380344383,
+          "n": 9
+        },
+        "mean_delta_seed_std_novel_icl": {
+          "ci95": [
+            -5.028699919746365,
+            1.716500486486013
+          ],
+          "mean": -1.736766779687283,
+          "n": 9
+        },
+        "mean_delta_tree_count_log": {
+          "ci95": [
+            0.08070453909742675,
+            0.09810032512120075
+          ],
+          "mean": 0.08970798564687106,
+          "n": 9
+        },
+        "n_pairs": 9
+      }
+    }
+  },
+  "schema": "post_multibase_exact_control_synthesis.v1",
+  "thermodynamics": "Thermodynamics remains untested; no F_max or entropy-production claim is supported.",
+  "trainability": "Seed standard deviation is reported separately; weak seed-std prediction means trainability is not reduced to the same scalar as expressivity.",
+  "tree_difference_failure_diagnosis": "Same-root tree-difference overlap should not be used as a standalone selector. It remains a secondary diagnostic and should be modified toward cross-root/decoder-aware contrast geometry where feasible."
+}

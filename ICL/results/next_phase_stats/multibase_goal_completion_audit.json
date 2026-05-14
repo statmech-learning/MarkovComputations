@@ -1,0 +1,76 @@
+{
+  "schema": "multibase_goal_completion_audit.v1",
+  "objective": "Complete ICL/MARKOV_ICL_NEXT_PHASE_GOAL.md for the multi-base normal-fan / tree-count phase using the existing Engaging tmux pane.",
+  "deliverables": {
+    "multibase_live_job_audit": [
+      "ICL/results/next_phase_stats/multibase_live_job_audit.md",
+      "ICL/results/next_phase_stats/multibase_live_job_audit.json"
+    ],
+    "multibase_exact_control_results": [
+      "ICL/results/next_phase_stats/multibase_exact_control_results_report.md",
+      "ICL/results/next_phase_stats/multibase_exact_control_results_report.json",
+      "ICL/results/next_phase_stats/multibase_exact_control_results_table.csv",
+      "ICL/results/next_phase_stats/multibase_exact_control_pairwise_contrasts.csv"
+    ],
+    "cross_root_decoder_contrast": [
+      "ICL/cross_root_decoder_contrast_metrics.py",
+      "ICL/results/next_phase_stats/cross_root_decoder_contrast_reanalysis.md",
+      "ICL/results/next_phase_stats/cross_root_decoder_contrast_reanalysis.json"
+    ],
+    "tree_difference_diagnostic": [
+      "ICL/results/next_phase_stats/retrospective_vs_prospective_tree_difference_diagnostic.md",
+      "ICL/results/next_phase_stats/retrospective_vs_prospective_tree_difference_diagnostic.json",
+      "ICL/results/next_phase_stats/retrospective_vs_prospective_feature_table.csv"
+    ],
+    "mechanism_followup": [
+      "ICL/results/next_phase_stats/multibase_mechanism_followup_report.md",
+      "ICL/results/next_phase_stats/multibase_mechanism_followup_report.json",
+      "ICL/results/next_phase_stats/multibase_mechanism_diagnostics.csv",
+      "ICL/results/next_phase_stats/multibase_causal_scramble_results.csv"
+    ],
+    "gamma_diagnostic": [
+      "ICL/results/next_phase_stats/gamma_multibase_diagnostic_report.md",
+      "ICL/results/next_phase_stats/gamma_multibase_diagnostic_report.json",
+      "ICL/results/next_phase_stats/gamma_multibase_rows.json"
+    ],
+    "final_synthesis": [
+      "ICL/results/next_phase_stats/post_multibase_exact_control_synthesis.md",
+      "ICL/results/next_phase_stats/post_multibase_exact_control_synthesis.json"
+    ]
+  },
+  "evidence": {
+    "training_tasks_expected": 185,
+    "training_tasks_completed": 185,
+    "selected_topology_groups": 37,
+    "complete_topology_groups": 37,
+    "group_level_rows": 37,
+    "seed_rows": 185,
+    "arm_a_pairs": 11,
+    "arm_b_pairs": 9,
+    "mechanism_rows": 8,
+    "scramble_rows": 64,
+    "py_compile": "python3 -m py_compile ICL/cross_root_decoder_contrast_metrics.py ICL/multibase_exact_control_analysis.py"
+  },
+  "headline_results": {
+    "best_mean_icl_grouped_loo_model": "tree_count_plus_base",
+    "best_mean_icl_grouped_loo_r2": 0.561,
+    "best_seed_grouped_loo_model": "tree_count_plus_base",
+    "best_seed_grouped_loo_r2": 0.834,
+    "arm_a_mean_icl_high_minus_low": 1.193,
+    "arm_a_mean_icl_ci95": [
+      -1.291,
+      4.007
+    ],
+    "arm_b_mean_icl_high_minus_low": 4.067,
+    "arm_b_mean_icl_ci95": [
+      0.876,
+      7.364
+    ],
+    "context_block_shuffle_mean_accuracy_delta": -79.562,
+    "projection_scramble_mean_accuracy_delta": -55.031,
+    "branch_alignment_scramble_mean_accuracy_delta": -54.406,
+    "decoder_root_permutation_mean_accuracy_delta": -48.187
+  },
+  "completion_judgment": "complete",
+  "interpretive_caveat": "The positive multibase signal is strongest for rooted-tree abundance plus base controls, not for a universal scalar topology law."
+}

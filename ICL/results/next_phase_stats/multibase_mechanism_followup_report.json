@@ -1,0 +1,43 @@
+{
+  "mechanism_rows": 8,
+  "schema": "multibase_mechanism_followup_report.v1",
+  "scramble_rows": 64,
+  "scramble_summary": {
+    "context_block_shuffle": {
+      "n": 16,
+      "target_accuracy_delta_max": -37.50000149011612,
+      "target_accuracy_delta_mean": -79.56249979324639,
+      "target_accuracy_delta_min": -96.50000147521496
+    },
+    "decoder_root_permutation": {
+      "n": 16,
+      "target_accuracy_delta_max": -11.500000953674316,
+      "target_accuracy_delta_mean": -48.18749916739762,
+      "target_accuracy_delta_min": -84.49999764561653
+    },
+    "stat_preserving_branch_alignment_scramble": {
+      "n": 16,
+      "target_accuracy_delta_max": -2.999997138977051,
+      "target_accuracy_delta_mean": -54.4062496162951,
+      "target_accuracy_delta_min": -71.00000083446503
+    },
+    "stat_preserving_projection_scramble": {
+      "n": 16,
+      "target_accuracy_delta_max": -30.500000715255737,
+      "target_accuracy_delta_mean": -55.031249672174454,
+      "target_accuracy_delta_min": -66.50000214576721
+    }
+  },
+  "selected_command_file": "ICL/results/next_phase_stats/multibase_mechanism_selection_commands.sh",
+  "selected_topology_ids": [
+    "mb0347_base04_cycle_chords_seed41_rw3434009",
+    "mb0354_base04_cycle_chords_seed41_rw7178112",
+    "mb0250_base03_random_sc_seed92_rw5413294",
+    "mb0100_base01_degree_balanced_seed60_rw5708776",
+    "mb0122_base01_degree_balanced_seed60_rw5473513",
+    "mb0455_base05_redundant_paths_seed1_rw6331647",
+    "mb0429_base05_redundant_paths_seed1_rw2766586",
+    "mb0127_base01_degree_balanced_seed60_rw7026294"
+  ],
+  "status": "computed"
+}
