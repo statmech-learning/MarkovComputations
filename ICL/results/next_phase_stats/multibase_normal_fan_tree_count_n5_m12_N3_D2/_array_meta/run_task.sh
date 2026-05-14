@@ -11,6 +11,7 @@
 
 set -euo pipefail
 cd /home/aadarwal/repos/topology/ICL
+module load miniforge/25.11.0-0
 LINE_NUM=$((SLURM_ARRAY_TASK_ID + 1))
 CMD=$(sed -n "${LINE_NUM}p" /home/aadarwal/repos/topology/ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/_array_meta/commands.txt)
 OUT=$(sed -n "${LINE_NUM}p" /home/aadarwal/repos/topology/ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2/_array_meta/outputs.txt)

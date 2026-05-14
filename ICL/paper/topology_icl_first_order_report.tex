@@ -43,7 +43,8 @@ A concise account of the theory, experiments, audit, and current evidence
 Topology worktree: \texttt{topology}\\
 Evidence source commit: \texttt{556a4d1}\\
 Markov exact-control update: \texttt{2c4cba6}\\
-May 12, 2026
+Multi-base handoff update: \texttt{d849378}\\
+May 13, 2026
 \end{minipage}
 
 \vspace{0.5em}
@@ -55,7 +56,7 @@ For first-order CRNs with exponential input-dependent rates, topology is not jus
 \[
 \boxed{\;\Theta_T=\sum_{e\in T}K_e,\qquad T\in\T_r(G),\ r\in V.\;}
 \]
-The experiments support the scoped statement that, in the tested fixed-count regimes, topology-associated structural and functional variables explain residual novel-class ICL variation that raw trainable count does not explain. The newest exact-control phase sharpens this: repaired no-bias $\gamma^\ast_{\rm ICL}$ passes analytic toy gates but is not yet predictive, prospective tree-difference overlap did not survive the first exact causal control, and normal-fan/tree-count geometry is now the best weak pre-training signal. There is still no universal scalar topology law.
+The experiments support the scoped statement that, in the tested fixed-count regimes, topology-associated structural and functional variables explain residual novel-class ICL variation that raw trainable count does not explain. The exact-control phase sharpens this: repaired no-bias $\gamma^\ast_{\rm ICL}$ passes analytic toy gates but is not yet predictive, prospective tree-difference overlap did not survive the first exact causal control, and normal-fan/tree-count geometry is now the best weak pre-training signal. The current handoff has built the next multi-base exact-degree library to separate rooted-tree abundance from task-aligned normal-fan geometry. There is still no universal scalar topology law.
 
 \vspace{0.6em}
 \noindent\textbf{Scope.}
@@ -797,7 +798,7 @@ Thermodynamics & Untested. No $F_{\max}$ claim should be made until a reversible
 \end{center}
 
 \vspace{0.5em}
-\noindent The concrete next task is no longer to prove that topology matters broadly. It is:
+\noindent The concrete next task is no longer to prove that topology matters broadly. As of the latest handoff, it is:
 \begin{center}
 \fbox{\begin{minipage}{0.86\textwidth}
 diagnose why the fixed-m20 tree-difference signal failed under prospective exact control, and test whether normal-fan active-tree/tree-count geometry survives multi-base exact controls after separating it from total rooted-tree count.
@@ -807,9 +808,9 @@ diagnose why the fixed-m20 tree-difference signal failed under prospective exact
 \vspace{0.5em}
 \noindent The next model should therefore:
 \begin{enumerate}
-\item compare the prospective masks against fixed-m20 masks to find the source of the tree-difference failure;
-\item build a wider matched-pair tree-difference mask library before training;
-\item expand exact-degree normal-fan controls across multiple base graphs or degree sequences;
+\item treat same-root tree-difference overlap as a failed standalone causal knob, not as the main selector;
+\item use cross-root and decoder-aware contrast metrics as diagnostics, not as proof;
+\item consume the new multi-base exact-degree library that separates rooted-tree count from normal-fan geometry;
 \item keep repaired $\gamma^\ast_{\rm ICL}$ as a diagnostic rather than a selector;
 \item keep thermodynamics delayed until reversible support and detailed-balance behavior at $F_{\max}=0$ are verified.
 \end{enumerate}
@@ -819,6 +820,87 @@ diagnose why the fixed-m20 tree-difference signal failed under prospective exact
 \begin{center}
 \fbox{\begin{minipage}{0.86\textwidth}
 In tested first-order regimes, topology and masks shape the rooted tree-sum basis used for ICL. Existing-data tree-difference multiplicity is predictive, but the first prospective exact-control contrast did not support it as a standalone causal knob. The best current pre-training signal is weak normal-fan/tree-count geometry, while the strongest mechanism evidence remains post-training branch/projection dependence.
+\end{minipage}}
+\end{center}
+
+\clearpage
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent\textbf{[20] May 13 multi-base exact-control handoff}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.5em}
+\noindent The next clean test has now been constructed. The file
+\[
+\texttt{ICL/multibase\_normal\_fan\_tree\_count\_library.py}
+\]
+builds a multi-base exact-degree library whose purpose is to separate total rooted-tree abundance from task-aligned normal-fan/active-tree geometry. This is a targeted exact-control design, not a broad sweep.
+
+\vspace{0.5em}
+\noindent The controls are:
+\[
+N_n=5,\qquad m=12,\qquad N_c=3,\qquad D=2,\qquad p=8,\qquad \drel=88,
+\]
+with full input coupling, exact multiplicity $M_\alpha=m$ for every input coordinate, and exact in/out degree sequence within each base graph. The design uses seven base graph families, 80 directed degree-preserving rewires per base, and paired selection arms:
+\begin{center}
+\small
+\begin{tabular}{lccc}
+\toprule
+arm & pairs & mean $|\Delta$ tree count$|$ & mean $|\Delta$ normal-fan score$|$\\
+\midrule
+fixed tree count, variable normal fan & $11$ & $0.909$ & $4.353$\\
+variable tree count, matched normal fan & $9$ & $14.667$ & $0.060$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\noindent The resulting handoff contains 560 candidate topologies, 37 selected topology groups, 20 matched pairs, and 185 training tasks. The primary analysis plan is:
+\[
+\begin{aligned}
+&\text{controls/base only},\\
+&\text{tree count + base},\\
+&\text{normal fan + base},\\
+&\text{tree count + normal fan + base},\\
+&\text{cross-root rank + tree count + normal fan + base}.
+\end{aligned}
+\]
+The outcomes remain mean novel-class ICL, best-seed novel-class ICL, and seed standard deviation, using grouped LOO, held-out-base checks, matched-pair contrasts, and clustered bootstrap by base.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\textwidth]{fig_multibase_tree_count_design.pdf}
+\caption{Multi-base exact-control design. Arm A holds rooted-tree count nearly fixed while varying normal-fan score. Arm B varies rooted-tree count while matching normal-fan score. This is the next test for whether the weak normal-fan/tree-count signal is abundance, branch geometry, both, or neither.}
+\end{figure}
+
+\vspace{0.5em}
+\noindent The local handoff paths are:
+\begin{center}
+\scriptsize
+\begin{tabular}{p{0.30\textwidth}p{0.58\textwidth}}
+\toprule
+artifact & path\\
+\midrule
+training plan & \path{ICL/results/next_phase_stats/multibase_normal_fan_tree_count_training_plan.md}\\
+library report & \path{ICL/results/next_phase_stats/multibase_normal_fan_tree_count_separation_library.md}\\
+library directory & \path{ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2}\\
+array script & \path{_array_meta/run_task.sh}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\noindent Operational status matters. The first Engaging submission, Slurm array \texttt{13858996}, failed immediately because the generated script used system Python and did not load the Miniforge environment containing \texttt{numpy}/\texttt{torch}. The generator and concrete array script were patched to load \texttt{miniforge/25.11.0-0}. The corrected array was submitted as Slurm job \texttt{13902539}; at the time of this report update, the first 24 tasks had completed with exit code 0 and the remaining tasks were queued behind the array concurrency limit. No multi-base training result should be claimed until all 185 result files are collected.
+
+\vspace{0.5em}
+\noindent The new current state is therefore:
+\begin{center}
+\fbox{\begin{minipage}{0.86\textwidth}
+The theory is exact at the tree-sum level; repaired gamma is analytic-toy valid but not predictive; same-root tree-difference overlap failed as a standalone causal knob; post-training branch/projection dependence remains strong; and the next live experiment is a multi-base exact-degree library designed to separate total rooted-tree count from normal-fan branch geometry.
 \end{minipage}}
 \end{center}
 

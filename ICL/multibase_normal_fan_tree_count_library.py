@@ -546,6 +546,7 @@ def write_array_files(output_root: Path, training_rows: Sequence[Mapping[str, An
 
 set -euo pipefail
 cd {CLUSTER_ROOT / 'ICL'}
+module load miniforge/25.11.0-0
 LINE_NUM=$((SLURM_ARRAY_TASK_ID + 1))
 CMD=$(sed -n "${{LINE_NUM}}p" {cluster_path(commands)})
 OUT=$(sed -n "${{LINE_NUM}}p" {cluster_path(outputs)})

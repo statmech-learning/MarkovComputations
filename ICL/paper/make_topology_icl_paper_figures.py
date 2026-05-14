@@ -601,6 +601,84 @@ def fig_exact_control_mechanism_scrambles():
     save(fig, "fig_exact_control_mechanism_scrambles")
 
 
+def fig_multibase_tree_count_design():
+    base = ROOT / "ICL/results/next_phase_stats/multibase_normal_fan_tree_count_n5_m12_N3_D2"
+    rows = list(csv.DictReader(open(base / "candidate_library.csv", newline="")))
+    selected = {row["topology_id"] for row in csv.DictReader(open(base / "selected.csv", newline=""))}
+    pairs = list(csv.DictReader(open(base / "pair_manifest.csv", newline="")))
+    by_id = {row["topology_id"]: row for row in rows}
+    bases = sorted({row["base_id"] for row in rows})
+    color_map = {base_id: plt.cm.tab10(i % 10) for i, base_id in enumerate(bases)}
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.15))
+    ax = axes[0]
+    for base_id in bases:
+        br = [row for row in rows if row["base_id"] == base_id]
+        ax.scatter(
+            [float(row["n_trees_total_enum"]) for row in br],
+            [float(row["normal_fan_score"]) for row in br],
+            s=12,
+            color=color_map[base_id],
+            alpha=0.18,
+            linewidth=0,
+        )
+    sel_rows = [row for row in rows if row["topology_id"] in selected]
+    ax.scatter(
+        [float(row["n_trees_total_enum"]) for row in sel_rows],
+        [float(row["normal_fan_score"]) for row in sel_rows],
+        s=28,
+        facecolors="white",
+        edgecolors=INK,
+        linewidth=0.75,
+        label="selected",
+    )
+    for pair in pairs:
+        lo = by_id[pair["low_role_topology_id"]]
+        hi = by_id[pair["high_role_topology_id"]]
+        x = [float(lo["n_trees_total_enum"]), float(hi["n_trees_total_enum"])]
+        y = [float(lo["normal_fan_score"]), float(hi["normal_fan_score"])]
+        color = BLUE if pair["arm"].startswith("arm_A") else ORANGE
+        ax.plot(x, y, color=color, lw=1.1, alpha=0.78)
+    ax.set_xlabel("total rooted-tree count")
+    ax.set_ylabel("normal-fan score")
+    ax.set_title("Multi-base exact-degree candidates", fontsize=10)
+    ax.grid(color=LIGHT, lw=0.8)
+    ax.text(0.02, 0.98, "560 candidates\n37 selected", transform=ax.transAxes, va="top", fontsize=8.2)
+
+    arm_quality = json.load(open(base / "library_summary.json"))["arm_quality"]
+    labels = ["Arm A\nfixed tree count", "Arm B\nmatched normal fan"]
+    tree_delta = [
+        arm_quality["arm_A_fixed_tree_count_variable_normal_fan"]["mean_abs_tree_delta"],
+        arm_quality["arm_B_variable_tree_count_matched_normal_fan"]["mean_abs_tree_delta"],
+    ]
+    fan_delta = [
+        arm_quality["arm_A_fixed_tree_count_variable_normal_fan"]["mean_abs_normal_fan_delta"],
+        arm_quality["arm_B_variable_tree_count_matched_normal_fan"]["mean_abs_normal_fan_delta"],
+    ]
+    x = [0, 1]
+    width = 0.35
+    ax2 = axes[1]
+    b1 = ax2.bar([i - width / 2 for i in x], tree_delta, width=width, color=BLUE, label="tree-count delta")
+    b2 = ax2.bar([i + width / 2 for i in x], fan_delta, width=width, color=ORANGE, label="normal-fan delta")
+    ax2.set_xticks(x, labels)
+    ax2.set_ylabel("mean absolute paired delta")
+    ax2.set_title("Designed separation arms", fontsize=10)
+    ax2.legend(frameon=False, fontsize=7.8, loc="upper left")
+    ax2.grid(axis="y", color=LIGHT, lw=0.8)
+    for bars in [b1, b2]:
+        for bar in bars:
+            ax2.text(
+                bar.get_x() + bar.get_width() / 2,
+                bar.get_height() + 0.35,
+                f"{bar.get_height():.2f}",
+                ha="center",
+                fontsize=7.5,
+            )
+    ax2.set_ylim(0, max(tree_delta + fan_delta) * 1.25)
+    fig.suptitle("Next exact-control library separates rooted-tree abundance from normal-fan geometry", y=1.03, fontsize=10.5)
+    save(fig, "fig_multibase_tree_count_design")
+
+
 def main():
     fig_tree_basis()
     fig_predictors()
@@ -617,6 +695,7 @@ def main():
     fig_prospective_tree_diff_control()
     fig_exact_control_normal_fan_scaled()
     fig_exact_control_mechanism_scrambles()
+    fig_multibase_tree_count_design()
     print(f"wrote figures to {OUT}")
 
 
