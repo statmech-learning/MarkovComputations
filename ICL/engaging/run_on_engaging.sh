@@ -73,8 +73,14 @@ if [ "${1:-}" = "--setup-only" ]; then
 fi
 
 # --- 3. choose which jobs to run ---------------------------------------------
-# Each entry is "n_nodes rho_all seed".
-if [ "${1:-}" = "--sweep" ]; then
+# Each entry is "n_nodes rho_all seed". Override the default set WITHOUT
+# editing this file by exporting WTA_JOBS (semicolon-separated triples):
+#     WTA_JOBS="12 1.0 20"           bash ICL/engaging/run_on_engaging.sh
+#     WTA_JOBS="8 1.0 30;12 1.0 20"  bash ICL/engaging/run_on_engaging.sh
+if [ -n "${WTA_JOBS:-}" ]; then
+    IFS=';' read -ra JOBS <<< "$WTA_JOBS"
+    echo "Mode: custom jobs from \$WTA_JOBS (${#JOBS[@]} job(s))"
+elif [ "${1:-}" = "--sweep" ]; then
     JOBS=( "8 1.0 30" "12 1.0 20" )      # <-- edit/extend for a wider sweep
     echo "Mode: sweep (${#JOBS[@]} jobs)"
 else
