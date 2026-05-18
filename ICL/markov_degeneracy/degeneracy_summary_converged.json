@@ -1,0 +1,240 @@
+{
+  "config": {
+    "eval_samples": 600,
+    "eval_gmm_seed": 12345,
+    "grid": "ICL/markov_degeneracy/retrained_grid"
+  },
+  "aggregate": {
+    "n_groups": 4,
+    "functional_trained_vs_trained": {
+      "error_slot_agreement_mean": 0.23031909738977752,
+      "slot_kappa_mean": 0.6963654708302542,
+      "pred_agreement_mean": 0.77595833837986,
+      "attention_agreement_mean": 0.75307477414608,
+      "steady_state_agreement_mean": 0.35245053470134735
+    },
+    "functional_trained_vs_random": {
+      "slot_kappa_mean": 0.0,
+      "pred_agreement_mean": 0.2696666650474071,
+      "attention_agreement_mean": 0.3626289933919907,
+      "steady_state_agreement_mean": 0.4558655619621277
+    },
+    "parametric_trained_vs_trained": {
+      "combined_cosine_mean": 0.001949074259027839,
+      "K_colcentered_cosine_mean": -0.005239724682178348,
+      "base_cosine_mean": 0.055156188347609714,
+      "B_cosine_mean": -0.0008406131761148575
+    },
+    "parametric_trained_vs_random": {
+      "combined_cosine_mean": 0.013904152298346161
+    },
+    "verdict": "DIVERGENT",
+    "reason": "error-conditioned slot agreement = +0.230 (0 = independent mistakes, 1 = identical function); gauge-quotiented weight cosine = +0.002 vs random-init floor +0.014."
+  },
+  "groups": [
+    {
+      "group": "cycle_chords_n6_m20_seed3__prospective_balanced_load_0066_c200_seed60684",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "n_models": 5,
+      "accuracy_pct": {
+        "per_seed": [
+          96.33333086967468,
+          94.49999928474426,
+          92.5000011920929,
+          74.33333396911621,
+          95.333331823349
+        ],
+        "mean": 90.59999942779541,
+        "std": 8.230430556445516,
+        "stored_novel_classes": [
+          96.6,
+          96.3,
+          93.9,
+          79.3,
+          96.4
+        ]
+      },
+      "functional_trained_vs_trained": {
+        "error_slot_agreement": 0.24967949092388153,
+        "slot_kappa": 0.771765303703418,
+        "pred_agreement": 0.8298333346843719,
+        "attention_agreement": 0.805157619714737,
+        "steady_state_agreement": 0.3421274185180664
+      },
+      "functional_trained_vs_random": {
+        "slot_kappa": 0.0,
+        "pred_agreement": 0.28866666555404663,
+        "attention_agreement": 0.31620088815689085,
+        "steady_state_agreement": 0.46254673004150393
+      },
+      "parametric_trained_vs_trained": {
+        "combined_cosine": 0.00810685083270073,
+        "K_colcentered_cosine": 0.05300587262026966,
+        "base_cosine": -0.03245065461378545,
+        "B_cosine": -0.03131916290149093
+      },
+      "parametric_trained_vs_random": {
+        "combined_cosine": -0.026917004957795143
+      }
+    },
+    {
+      "group": "cycle_chords_n6_m20_seed3__prospective_balanced_load_0114_c200_seed60732",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "n_models": 5,
+      "accuracy_pct": {
+        "per_seed": [
+          82.4999988079071,
+          97.50000238418579,
+          95.16666531562805,
+          91.66666865348816,
+          95.6666648387909
+        ],
+        "mean": 92.5,
+        "std": 5.34477986307407,
+        "stored_novel_classes": [
+          85.4,
+          98.5,
+          96.1,
+          93.2,
+          95.6
+        ]
+      },
+      "functional_trained_vs_trained": {
+        "error_slot_agreement": NaN,
+        "slot_kappa": 0.8106541826908906,
+        "pred_agreement": 0.8588333368301392,
+        "attention_agreement": 0.8079843401908875,
+        "steady_state_agreement": 0.3653733730316162
+      },
+      "functional_trained_vs_random": {
+        "slot_kappa": 0.0,
+        "pred_agreement": 0.28799999356269834,
+        "attention_agreement": 0.3202005624771118,
+        "steady_state_agreement": 0.46642743349075316
+      },
+      "parametric_trained_vs_trained": {
+        "combined_cosine": -0.005023114383220673,
+        "K_colcentered_cosine": -0.0061224490404129025,
+        "base_cosine": 0.098111080378294,
+        "B_cosine": -0.022110920026898385
+      },
+      "parametric_trained_vs_random": {
+        "combined_cosine": -0.008819445595145225
+      }
+    },
+    {
+      "group": "cycle_chords_n6_m20_seed3__prospective_imbalanced_coord_load_0207_c200_seed60665",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "n_models": 5,
+      "accuracy_pct": {
+        "per_seed": [
+          75.99999904632568,
+          79.666668176651,
+          88.83333206176758,
+          69.83333230018616,
+          70.83333134651184
+        ],
+        "mean": 77.03333258628845,
+        "std": 6.892347084276797,
+        "stored_novel_classes": [
+          78.7,
+          79.8,
+          89.0,
+          72.2,
+          74.0
+        ]
+      },
+      "functional_trained_vs_trained": {
+        "error_slot_agreement": 0.23640833273530007,
+        "slot_kappa": 0.5549307090734384,
+        "pred_agreement": 0.6711666703224182,
+        "attention_agreement": 0.6828031480312348,
+        "steady_state_agreement": 0.36108304262161256
+      },
+      "functional_trained_vs_random": {
+        "slot_kappa": 0.0,
+        "pred_agreement": 0.19066666662693024,
+        "attention_agreement": 0.42122634649276736,
+        "steady_state_agreement": 0.4590784788131714
+      },
+      "parametric_trained_vs_trained": {
+        "combined_cosine": 0.00962785016745329,
+        "K_colcentered_cosine": -0.01549485819414258,
+        "base_cosine": 0.10463905818760395,
+        "B_cosine": 0.010541559755802154
+      },
+      "parametric_trained_vs_random": {
+        "combined_cosine": 0.048143365420401096
+      }
+    },
+    {
+      "group": "cycle_chords_n6_m20_seed3__prospective_imbalanced_coord_load_0220_c200_seed60678",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "n_models": 5,
+      "accuracy_pct": {
+        "per_seed": [
+          81.83333277702332,
+          86.16666793823242,
+          78.66666913032532,
+          76.33333206176758,
+          77.99999713897705
+        ],
+        "mean": 80.19999980926514,
+        "std": 3.475949922958911,
+        "stored_novel_classes": [
+          80.8,
+          85.6,
+          77.2,
+          76.3,
+          77.7
+        ]
+      },
+      "functional_trained_vs_trained": {
+        "error_slot_agreement": 0.20486946851015092,
+        "slot_kappa": 0.6481116878532702,
+        "pred_agreement": 0.7440000116825104,
+        "attention_agreement": 0.7163539886474609,
+        "steady_state_agreement": 0.34121830463409425
+      },
+      "functional_trained_vs_random": {
+        "slot_kappa": 0.0,
+        "pred_agreement": 0.31133333444595335,
+        "attention_agreement": 0.3928881764411926,
+        "steady_state_agreement": 0.4354096055030823
+      },
+      "parametric_trained_vs_trained": {
+        "combined_cosine": -0.004915289580821991,
+        "K_colcentered_cosine": -0.05234746411442757,
+        "base_cosine": 0.05032526943832636,
+        "B_cosine": 0.03952607046812773
+      },
+      "parametric_trained_vs_random": {
+        "combined_cosine": 0.04320969432592392
+      }
+    }
+  ]
+}
