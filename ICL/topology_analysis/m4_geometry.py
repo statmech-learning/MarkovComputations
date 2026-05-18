@@ -185,17 +185,22 @@ def _fig_score_space(plt, ck, tr, outdir):
 
     # --- top-3 simplex (ternary) ------------------------------------------
     ax = axes[1, 0]
-    # global top-3 species by mean Y_frac (consistent axes for all examples)
+    # global top-3 species by mean Y_frac (consistent axes for all examples).
+    # Pad with zero columns when n_nodes < 3 so the ternary map still works.
     order = np.argsort(-tr.Y_frac.mean(axis=0))
     top3_idx = order[:3]
     top3 = tr.Y_frac[:, top3_idx]
+    if top3.shape[1] < 3:
+        top3 = np.concatenate(
+            [top3, np.zeros((top3.shape[0], 3 - top3.shape[1]))], axis=1)
     xy = _ternary_xy(top3)
     sca = ax.scatter(xy[:, 0], xy[:, 1], c=tr.dom_species, cmap="tab10",
                      s=9, alpha=0.7, linewidths=0)
     # triangle frame + vertex labels
     tri = np.array([[0, 0], [1, 0], [0.5, np.sqrt(3) / 2], [0, 0]])
     ax.plot(tri[:, 0], tri[:, 1], color="k", lw=1.0)
-    vlabels = [f"sp{top3_idx[0]}", f"sp{top3_idx[1]}", f"sp{top3_idx[2]}"]
+    vlabels = [f"sp{top3_idx[i]}" if i < len(top3_idx) else "(none)"
+               for i in range(3)]
     for (vx, vy), lab, ha in zip(tri[:3], vlabels,
                                  ("right", "left", "center")):
         ax.annotate(lab, (vx, vy), ha=ha,
