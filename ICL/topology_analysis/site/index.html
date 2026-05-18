@@ -79,11 +79,12 @@
 
 <p class="kicker">Mechanistic analysis</p>
 <h1>Topology of In-Context Learning in Chemical Reaction Networks</h1>
-<p class="dek">A Winner-Take-All chemical reaction network learns to classify in
-context with no attention mechanism. We open up 15 trained networks and recover
-how it works.</p>
-<p class="meta">15 trained networks &middot; capacity sweep n = 2&ndash;12 &middot;
-seed replicates at n = 8, 12 &middot; trained on MIT Engaging &middot;
+<p class="dek">Two attention-free chemical reaction networks learn to classify in
+context. We open up 95 trained networks &mdash; a Winner-Take-All network and a
+first-order Markov network &mdash; and recover how the computation works, and
+what training does and does not pin down.</p>
+<p class="meta">95 trained networks &middot; WTA capacity sweep n = 2&ndash;12 &middot;
+Markov grid of 16 reaction topologies &times; 5 seeds, trained to convergence &middot;
 repo <code style="font-family:inherit">statmech-learning/MarkovComputations</code>,
 branch <code style="font-family:inherit">wta-icl-reproduction</code></p>
 
@@ -92,7 +93,8 @@ branch <code style="font-family:inherit">wta-icl-reproduction</code></p>
 <p>In-context learning (ICL) in these chemical reaction networks is not a
 discrete winner-take-all computation and not attention. It emerges at a hard
 capacity threshold, runs on a graded mixture of chemical species, and is
-implemented by a degenerate family of circuits. Four results:</p>
+implemented by a degenerate family of circuits. <strong>Part&nbsp;I</strong>
+&mdash; four results on the Winner-Take-All network:</p>
 <ol>
 <li><strong>ICL emerges at a capacity threshold.</strong> Accuracy is at chance
 with 2 species and saturates near 99% from 8 species &mdash; with four context
@@ -110,6 +112,19 @@ runs reach parametrically different circuits (cross-seed weight similarity
 <p>We also establish an exact <strong>gauge symmetry</strong> of the model
 (&sect;7) which makes the bare reaction parameters K and &beta; individually
 unphysical.</p>
+<p><strong>Part&nbsp;II</strong> turns to the paper&rsquo;s other attention-free
+model &mdash; a first-order Markov reaction network &mdash; and to a prior effort
+that asked whether reaction-graph topology controls its in-context learning.
+Two further results:</p>
+<ol start="5">
+<li><strong>The learned circuit is degenerate.</strong> Five seeds of one
+topology reach networks with no shared weight structure (cross-seed weight
+similarity = chance), and &mdash; below the accuracy ceiling &mdash; not even the
+same function. This survives training to convergence.</li>
+<li><strong>Capacity is projection coverage.</strong> The accuracy ceiling is
+set by how well the input mask covers the input space. The prior effort&rsquo;s
+competing topology metrics turn out to be that one quantity in disguise.</li>
+</ol>
 </div>
 
 <nav>
@@ -120,7 +135,10 @@ unphysical.</p>
 <a href="#r3">5 &middot; The soft mixture</a>
 <a href="#r4">6 &middot; Degeneracy</a>
 <a href="#gauge">7 &middot; The gauge symmetry</a>
-<a href="#synthesis">8 &middot; What it means</a>
+<a href="#markov">8 &middot; The Markov network</a>
+<a href="#r5">9 &middot; Markov degeneracy</a>
+<a href="#r6">10 &middot; Capacity is coverage</a>
+<a href="#synthesis">11 &middot; What it means</a>
 </nav>
 
 <h2 id="model"><span class="no">1</span>The model</h2>
@@ -386,31 +404,210 @@ are deliberately not shown &mdash; individually they are gauge and carry no
 physical content.</figcaption>
 </figure>
 
-<h2 id="synthesis"><span class="no">8</span>What it means</h2>
+<p class="kicker" style="margin-top:72px">Part II &middot; The first-order Markov network</p>
 
-<p>In-context learning in these chemical reaction networks emerges at a hard
-capacity threshold of roughly two detector species per context position. It is
-executed not by a discrete winner but by a soft, graded mixture of chemical
-species. And it is implemented by a parametrically degenerate family of circuits
-constrained only to cover the right comparison subspaces &mdash; there is no
-single canonical topology, and the underlying reaction parameters K and &beta;
-are individually unidentifiable.</p>
+<h2 id="markov"><span class="no">8</span>The other network</h2>
 
-<p>The headline of the model &mdash; that a tiny attention-free reaction network
-does in-context learning &mdash; survives scrutiny. But the form of the
-computation is not the one the name suggests: it is subspace projection feeding
-a graded mixture, and the &ldquo;winner-take-all&rdquo; is, in practice, soft.</p>
+<p>The paper introduces a second attention-free ICL network, and a separate
+research effort built a large experimental program around it &mdash; asking
+whether the <i>topology</i> of its reaction graph controls how well it learns in
+context. We re-examined that program, and the model.</p>
+
+<p><strong>The model.</strong> The task is the same as Part&nbsp;I &mdash; four
+context examples plus a query, novel classes, predict the query&rsquo;s label.
+But the network is now a <strong>first-order Markov reaction network</strong>:
+<i class="v">n</i>&nbsp;=&nbsp;6 chemical species joined by 20 directed reactions.
+The flattened input <i class="v">X</i>&nbsp;&isin;&nbsp;&#8477;<sup>20</sup> sets
+the 20 reaction log-rates through a weight matrix <i class="v">K</i>; the network
+relaxes to a steady-state distribution over the six species (via the
+matrix-tree theorem); a learned decoder <i class="v">B</i> maps that onto the
+four context positions, which vote their labels &mdash; the same readout idea as
+Part&nbsp;I.</p>
+
+<div class="pipe">
+  <div class="step"><b>input</b> X &isin; &#8477;<sup>20</sup><br>context + query</div>
+  <div class="arr">&rarr;</div>
+  <div class="step"><b>rates</b> log r = (K&#8857;mask)&middot;X</div>
+  <div class="arr">&rarr;</div>
+  <div class="step"><b>steady state</b> p<br>over 6 species</div>
+  <div class="arr">&rarr;</div>
+  <div class="step"><b>decode</b> q = p&#7488;B<br>softmax over positions</div>
+  <div class="arr">&rarr;</div>
+  <div class="step"><b>label</b><br>vote context labels</div>
+</div>
+
+<p><strong>The input mask.</strong> The weight matrix <i class="v">K</i> has
+20&times;20&nbsp;=&nbsp;400 entries. A fixed binary <strong>input mask</strong>
+&mdash; chosen before training, part of the architecture &mdash; decides which
+half of those entries may be nonzero: which input coordinates are allowed to
+couple to which reactions. The prior program varied this mask, called it
+&ldquo;topology&rdquo;, and asked which masks make the network a better
+in-context learner.</p>
+
+<p><strong>What we test.</strong> Two questions. <i>Is the learned circuit
+unique?</i> &mdash; do independent training runs reach one solution, a degenerate
+family, or scatter? And <i>what sets the capacity?</i> &mdash; does the mask
+structure control the accuracy ceiling, and through which property? We retrain a
+grid of <strong>16 masks &times; 5 seeds = 80 networks to convergence</strong>.
+The prior program&rsquo;s runs were single-seed and stopped early; both choices,
+we found, corrupt the conclusions &mdash; so every result below is multi-seed and
+trained to convergence.</p>
+
+<h2 id="r5"><span class="no">9</span>Result 5 &mdash; The learned circuit is degenerate</h2>
+
+<p><strong>Five seeds of one fixed topology reach networks that share no weight
+structure &mdash; and, below the accuracy ceiling, not even the same function.
+Training to convergence does not change this.</strong></p>
+
+<p>For each topology we trained five seeds and compared them pairwise. The trap
+is that &ldquo;agreement&rdquo; conflates three things: two networks being
+accurate, computing the same function, and having the same weights. We measure
+each separately. The decisive functional probe is <i>error-conditioned</i>: on
+the queries that <i>both</i> networks get wrong, do they make the <i>same</i>
+mistake? Two accurate networks agree just by both being right &mdash; only the
+shared mistakes reveal a shared function.</p>
+
+<ul>
+<li><strong>Parameters &mdash; non-identifiable.</strong> After removing the
+model&rsquo;s exact gauge freedoms, the cross-seed weight cosine is
+&asymp;&nbsp;0 &mdash; indistinguishable from the cosine between random
+<i>untrained</i> initialisations. No two seeds share any parametric structure.</li>
+<li><strong>Internal state &mdash; divergent.</strong> Two trained seeds&rsquo;
+steady-state distributions are <i>more different from each other</i> than from
+an untrained network. Training pushes each seed onto its own region of state
+space.</li>
+<li><strong>Function &mdash; only partly shared.</strong> Error-conditioned
+agreement is about +0.25 of a possible 1.0. The seeds converge <i>toward</i> a
+common function as a topology&rsquo;s accuracy ceiling rises, but never
+<i>onto</i> it &mdash; the residual mistakes stay seed-specific.</li>
+</ul>
+
+<p>Crucially this <i>survives convergence</i>. Retraining lifted accuracy from
+~75% to 77&ndash;98%; the weight cosine and the internal-state divergence did
+not move. The scatter of solutions is not an artefact of stopping early.</p>
+
+<figure>
+<img src="figures/f8-markov-degeneracy.png" alt="Cross-seed degeneracy test for the Markov network">
+<figcaption><b>Figure 8.</b> The cross-seed test; one dot per topology, its five
+seeds summarised. <b>Vertical:</b> similarity of the trained weights once the
+model&rsquo;s gauge freedom is removed &mdash; 0 means as unrelated as random
+untrained networks. <b>Horizontal:</b> error-conditioned functional agreement
+&mdash; 0 means independent mistakes, 1 means an identical function. All 16
+topologies sit at weight-similarity &asymp;&nbsp;0 (red trained seed-pairs,
+indistinguishable from the blue trained-vs-untrained markers) and far left of
+functional agreement 1. Independent runs reach unrelated circuits computing
+different, similarly accurate functions.</figcaption>
+</figure>
+
+<p>This refines the Part&nbsp;I picture. The WTA network was <i>parametrically
+degenerate but functionally constrained</i> (&sect;6) &mdash; one function, many
+circuits &mdash; because it was trained <i>above</i> its capacity threshold to a
+~99% ceiling, where the function is fully pinned. The Markov networks here cap
+<i>below</i> 100%, and below the ceiling both the weights and the function
+scatter. Degeneracy is the rule; a pinned function is the special case of
+reaching the ceiling.</p>
+
+<h2 id="r6"><span class="no">10</span>Result 6 &mdash; ICL capacity is projection coverage</h2>
+
+<p><strong>The accuracy ceiling is set by one quantity: how well the input mask
+covers the input space. The prior program&rsquo;s competing &ldquo;topology
+metrics&rdquo; are that one quantity in different disguises.</strong></p>
+
+<p>The prior program&rsquo;s method was to regress accuracy on a bag of mask
+metrics &mdash; an effective rank, a &ldquo;tree-diff multiplicity&rdquo;, a load
+balance &mdash; and crown the strongest predictor. That method has no
+identifiability here, for a structural reason.</p>
+
+<p><strong>The predictors are one quantity.</strong> We searched 8,000 admissible
+masks and measured two supposedly distinct properties: the <i>shape</i> of the
+mask (how evenly it spreads input coupling across coordinates) and its
+<i>coverage</i> (the effective rank of the masked projection). They are
+<i>r</i>&nbsp;=&nbsp;&minus;0.95 collinear, with <i>zero</i> achievable overlap:
+no mask is even-but-low-coverage, and none is uneven-but-high-coverage. They are
+not two knobs. Mechanically they cannot be &mdash; a starved input coordinate is
+rank-deficient, so an uneven mask simply <i>is</i> a low-coverage mask. Across
+the 16-mask grid all five varying metrics are mutually collinear
+(|<i>r</i>|&nbsp;=&nbsp;0.70&ndash;1.00). The prior regression horse-race was
+comparing one quantity with itself.</p>
+
+<figure>
+<img src="figures/f9-coverage-inseparable.png" alt="Load shape and coverage lie on one diagonal band">
+<figcaption><b>Figure 9.</b> 8,000 candidate input masks, each a dot.
+<b>Horizontal:</b> how unevenly the mask spreads input coupling &mdash; load
+shape. <b>Vertical:</b> how much of the input space the masked projection covers
+&mdash; effective rank. The two collapse onto a single diagonal band
+(<i>r</i>&nbsp;=&nbsp;&minus;0.95). A fair &ldquo;shape vs coverage&rdquo; test
+needs masks in all four corners; only two corners exist (green). The two
+properties are one quantity, so a regression between them cannot identify a
+cause.</figcaption>
+</figure>
+
+<p><strong>And that quantity sets the ceiling.</strong> Trained to convergence,
+high-coverage masks reach a 94&ndash;98% accuracy ceiling; low-coverage masks
+86&ndash;95%. Accuracy tracks coverage at Spearman
+<i>r</i>&nbsp;&asymp;&nbsp;+0.6 to +0.8. Within either group there is no further
+signal &mdash; the effect is the coverage axis alone. This is the Part&nbsp;I
+mechanism (&sect;4) carried to the Markov network: in-context learning capacity
+is a property of how well the input-coupled projection covers the input space,
+not of graph shape.</p>
+
+<figure>
+<img src="figures/f10-coverage.png" alt="Converged accuracy versus coverage, and the predictor correlation matrix">
+<figcaption><b>Figure 10.</b> <b>Left:</b> converged ICL accuracy against
+projection coverage, one mask per point (blue&nbsp;= high-coverage
+&ldquo;balanced&rdquo; masks, red&nbsp;= low-coverage &ldquo;imbalanced&rdquo;;
+circles&nbsp;= best seed, squares&nbsp;= mean). Coverage sets the ceiling, with a
+clean gap and no within-group trend. <b>Right:</b> Spearman correlations among
+the mask metrics and accuracy &mdash; every candidate predictor is collinear with
+every other, confirming they measure one thing.</figcaption>
+</figure>
+
+<p>One question this grid cannot reach: all 16 masks sit on a single fixed
+reaction graph, so whether the <i>graph&rsquo;s</i> own shape matters beyond the
+mask is untestable here. That is the open follow-up.</p>
+
+<h2 id="synthesis"><span class="no">11</span>What it means</h2>
+
+<p><strong>Two attention-free reaction networks, one mechanism.</strong> In both,
+in-context learning is <i>subspace projection</i>: the joint context&ndash;query
+vector is projected onto learned comparison directions, and capacity is set by
+how well those projections cover the input space &mdash; a hard threshold for the
+WTA network (&sect;3, two detectors per context position), a graded coverage axis
+for the Markov network (&sect;10). Neither forms a query&ndash;key product;
+neither needs attention. The WTA computation runs on a soft, graded mixture of
+species, not a discrete winner.</p>
+
+<p><strong>In both, the solution is degenerate.</strong> Independent training
+runs reach circuits with no shared weight structure. What they share is
+functional &mdash; and only as far as training is pushed. The WTA network,
+trained above capacity to its ~99% ceiling, converges onto one function carried
+by many different circuits. The Markov network, capped below its ceiling, does
+not even fully converge in function: weights and residual behaviour both
+scatter. A trained network is one sample from a family, not a canonical circuit,
+and its bare reaction parameters are gauge (&sect;7) &mdash; individually
+unphysical. Degeneracy is the rule; a pinned function is the special case of
+reaching the ceiling.</p>
+
+<p><strong>This also resets the prior topology program.</strong> Its central
+question &mdash; does reaction-graph topology control in-context learning &mdash;
+was answered with single-seed, under-trained runs and a regression between
+metrics that are one quantity in disguise. Corrected, the answer is cleaner than
+the program&rsquo;s own: capacity is projection coverage, the per-topology
+scatter it chased was seed degeneracy, and whether graph <i>shape</i> matters
+&mdash; varying the reaction graph itself, not just the input mask &mdash; is
+still open. That is the one experiment worth running next.</p>
 
 <div class="foot">
-<p>Analysis code: <code>ICL/topology_analysis/</code> (six modules
-m1&ndash;m6 over a shared instrumented core, plus <code>run_all.py</code>).
-Full output &mdash; 112 figures and <code>summary.json</code> &mdash;
-<code>ICL/results/topology_analysis/</code>. Checkpoints:
-<code>ICL/paper_checkpoints/</code> and
-<code>ICL/results/wta_n_nodes_rhoall_seed/</code>.</p>
+<p>Part&nbsp;I analysis code: <code>ICL/topology_analysis/</code> (six modules
+m1&ndash;m6 over a shared instrumented core, plus <code>run_all.py</code>); full
+output &mdash; 112 figures and <code>summary.json</code> &mdash;
+<code>ICL/results/topology_analysis/</code>. Part&nbsp;II:
+<code>ICL/markov_degeneracy/</code> (<code>degeneracy_test.py</code>,
+<code>retrain.py</code>, <code>make_decorrelated_masks.py</code>,
+<code>rank_vs_shape.py</code>, and <code>FINDINGS.md</code>).</p>
 <p>Repository <code>statmech-learning/MarkovComputations</code>, branch
-<code>wta-icl-reproduction</code>. Model: the Winner-Take-All ICL chemical
-reaction network (arXiv 2601.06712).</p>
+<code>wta-icl-reproduction</code>. Models: the Winner-Take-All and first-order
+Markov ICL chemical reaction networks (arXiv 2601.06712).</p>
 </div>
 
 </div>
