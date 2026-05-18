@@ -1,0 +1,154 @@
+======================================================================
+WTA ICL - CLASSIFICATION (Softmax Output)
+======================================================================
+K=128, D=4, N=4, B=1, nodes=8
+Method: soft, Temperature: 0.1
+seed=32, rho_all=1.0, epochs=1000, lr=0.0025
+======================================================================
+
+Device: cpu
+
+Creating GMM with discrete labels...
+  GMM: 128 classes with labels randomly assigned from {1, ..., 128}
+  First 10 class labels: [120. 105.  52.  46.  69.  94.  90.  54. 101.  83.]
+
+Generating data...
+  Train: 50000 samples | Val: 5000 samples
+
+Creating model...
+  Initialized WTA Chemical Reaction ICL model
+  Species: 8, Classes: 128, Context: 4
+  Label modulation: False
+  α=1.00, R0=2.00
+  f_j activation: softplus
+  Y_j non-negativity: softplus activation
+  Learn K_j: True, Learn β_j: True
+  Sparsity W: rho_edge=1.000, rho_all=1.000
+  W sparsity: 0.000 (160/160 active)
+  Parameters: 208
+
+Training...
+======================================================================
+Epoch  10 | Train: 48.61% | Val: 48.54% | IWL: 2.00% | ICL: 43.60%
+Epoch  20 | Train: 52.43% | Val: 52.32% | IWL: 1.80% | ICL: 52.20%
+Epoch  30 | Train: 68.18% | Val: 68.42% | IWL: 3.00% | ICL: 67.40%
+Epoch  40 | Train: 84.62% | Val: 83.88% | IWL: 1.80% | ICL: 82.40%
+Epoch  50 | Train: 85.33% | Val: 84.46% | IWL: 2.60% | ICL: 86.00%
+Epoch  60 | Train: 85.43% | Val: 83.80% | IWL: 4.40% | ICL: 84.40%
+Epoch  70 | Train: 95.76% | Val: 95.32% | IWL: 3.00% | ICL: 96.60%
+Epoch  80 | Train: 96.15% | Val: 96.34% | IWL: 5.00% | ICL: 96.60%
+Epoch  90 | Train: 96.44% | Val: 96.06% | IWL: 3.80% | ICL: 96.20%
+Epoch 100 | Train: 96.64% | Val: 96.48% | IWL: 4.00% | ICL: 97.20%
+Epoch 110 | Train: 96.79% | Val: 96.16% | IWL: 3.40% | ICL: 94.60%
+Epoch 120 | Train: 96.96% | Val: 96.94% | IWL: 3.20% | ICL: 96.20%
+Epoch 130 | Train: 96.93% | Val: 96.30% | IWL: 4.20% | ICL: 96.20%
+Epoch 140 | Train: 97.01% | Val: 95.78% | IWL: 3.00% | ICL: 95.80%
+Epoch 150 | Train: 97.10% | Val: 96.78% | IWL: 4.20% | ICL: 95.40%
+Epoch 160 | Train: 97.01% | Val: 96.34% | IWL: 4.40% | ICL: 96.20%
+Epoch 170 | Train: 97.08% | Val: 96.60% | IWL: 3.20% | ICL: 97.00%
+Epoch 180 | Train: 97.18% | Val: 97.02% | IWL: 2.80% | ICL: 97.00%
+Epoch 190 | Train: 97.27% | Val: 96.24% | IWL: 3.60% | ICL: 96.00%
+Epoch 200 | Train: 97.16% | Val: 96.76% | IWL: 4.80% | ICL: 96.60%
+Epoch 210 | Train: 97.31% | Val: 96.36% | IWL: 4.40% | ICL: 96.40%
+Epoch 220 | Train: 97.21% | Val: 95.98% | IWL: 5.00% | ICL: 94.80%
+Epoch 230 | Train: 97.03% | Val: 97.26% | IWL: 3.80% | ICL: 96.80%
+Epoch 240 | Train: 97.19% | Val: 97.18% | IWL: 5.60% | ICL: 97.40%
+Epoch 250 | Train: 97.26% | Val: 97.10% | IWL: 2.60% | ICL: 97.00%
+Epoch 260 | Train: 96.98% | Val: 96.62% | IWL: 4.00% | ICL: 97.00%
+Epoch 270 | Train: 97.15% | Val: 96.74% | IWL: 3.80% | ICL: 96.80%
+Epoch 280 | Train: 97.10% | Val: 97.20% | IWL: 2.40% | ICL: 98.00%
+Epoch 290 | Train: 97.26% | Val: 96.94% | IWL: 3.60% | ICL: 95.60%
+Epoch 300 | Train: 97.06% | Val: 97.36% | IWL: 5.20% | ICL: 97.40%
+Epoch 310 | Train: 97.06% | Val: 96.94% | IWL: 3.00% | ICL: 96.60%
+Epoch 320 | Train: 97.03% | Val: 96.82% | IWL: 3.00% | ICL: 97.20%
+Epoch 330 | Train: 97.00% | Val: 97.06% | IWL: 4.20% | ICL: 97.00%
+Epoch 340 | Train: 97.06% | Val: 97.40% | IWL: 3.60% | ICL: 97.20%
+Epoch 350 | Train: 97.26% | Val: 96.48% | IWL: 3.80% | ICL: 97.80%
+Epoch 360 | Train: 97.03% | Val: 97.22% | IWL: 4.00% | ICL: 98.40%
+Epoch 370 | Train: 96.98% | Val: 96.88% | IWL: 2.80% | ICL: 97.60%
+Epoch 380 | Train: 97.12% | Val: 97.28% | IWL: 3.80% | ICL: 95.60%
+Epoch 390 | Train: 97.01% | Val: 96.14% | IWL: 3.60% | ICL: 96.40%
+Epoch 400 | Train: 96.97% | Val: 97.16% | IWL: 4.20% | ICL: 96.40%
+Epoch 410 | Train: 97.00% | Val: 96.92% | IWL: 5.00% | ICL: 96.80%
+Epoch 420 | Train: 96.90% | Val: 96.82% | IWL: 3.20% | ICL: 97.00%
+Epoch 430 | Train: 96.84% | Val: 96.78% | IWL: 3.40% | ICL: 96.20%
+Epoch 440 | Train: 96.94% | Val: 96.74% | IWL: 4.00% | ICL: 96.80%
+Epoch 450 | Train: 97.00% | Val: 97.30% | IWL: 4.60% | ICL: 98.40%
+Epoch 460 | Train: 96.95% | Val: 96.64% | IWL: 4.60% | ICL: 96.40%
+Epoch 470 | Train: 96.95% | Val: 96.76% | IWL: 4.20% | ICL: 97.40%
+Epoch 480 | Train: 96.88% | Val: 96.24% | IWL: 3.40% | ICL: 96.00%
+Epoch 490 | Train: 96.76% | Val: 96.40% | IWL: 4.40% | ICL: 96.20%
+Epoch 500 | Train: 96.79% | Val: 96.44% | IWL: 3.40% | ICL: 95.60%
+Epoch 510 | Train: 96.70% | Val: 96.54% | IWL: 4.20% | ICL: 96.00%
+Epoch 520 | Train: 96.93% | Val: 96.96% | IWL: 3.80% | ICL: 95.60%
+Epoch 530 | Train: 96.65% | Val: 96.62% | IWL: 3.60% | ICL: 95.60%
+Epoch 540 | Train: 96.75% | Val: 96.52% | IWL: 3.60% | ICL: 97.00%
+Epoch 550 | Train: 96.56% | Val: 96.76% | IWL: 3.60% | ICL: 95.40%
+Epoch 560 | Train: 96.99% | Val: 97.20% | IWL: 3.40% | ICL: 97.20%
+Epoch 570 | Train: 96.68% | Val: 95.86% | IWL: 3.80% | ICL: 94.00%
+Epoch 580 | Train: 96.52% | Val: 95.98% | IWL: 3.60% | ICL: 95.40%
+Epoch 590 | Train: 96.53% | Val: 96.62% | IWL: 3.60% | ICL: 97.60%
+Epoch 600 | Train: 96.61% | Val: 96.72% | IWL: 4.20% | ICL: 95.80%
+Epoch 610 | Train: 96.79% | Val: 96.42% | IWL: 3.60% | ICL: 95.60%
+Epoch 620 | Train: 96.79% | Val: 96.74% | IWL: 4.60% | ICL: 95.60%
+Epoch 630 | Train: 96.70% | Val: 96.12% | IWL: 3.80% | ICL: 95.60%
+Epoch 640 | Train: 96.53% | Val: 96.90% | IWL: 4.40% | ICL: 96.80%
+Epoch 650 | Train: 96.33% | Val: 95.42% | IWL: 2.20% | ICL: 94.80%
+Epoch 660 | Train: 96.75% | Val: 96.56% | IWL: 4.40% | ICL: 94.80%
+Epoch 670 | Train: 96.83% | Val: 96.82% | IWL: 2.60% | ICL: 96.60%
+Epoch 680 | Train: 96.13% | Val: 96.16% | IWL: 4.00% | ICL: 96.40%
+Epoch 690 | Train: 96.33% | Val: 96.38% | IWL: 4.40% | ICL: 95.20%
+Epoch 700 | Train: 96.29% | Val: 96.24% | IWL: 2.40% | ICL: 97.00%
+Epoch 710 | Train: 96.50% | Val: 96.20% | IWL: 2.80% | ICL: 95.20%
+Epoch 720 | Train: 96.12% | Val: 95.26% | IWL: 3.60% | ICL: 97.00%
+Epoch 730 | Train: 96.58% | Val: 94.34% | IWL: 4.60% | ICL: 93.80%
+Epoch 740 | Train: 96.56% | Val: 96.84% | IWL: 4.40% | ICL: 97.20%
+Epoch 750 | Train: 96.45% | Val: 94.32% | IWL: 2.20% | ICL: 91.40%
+Epoch 760 | Train: 96.44% | Val: 96.40% | IWL: 4.40% | ICL: 97.80%
+Epoch 770 | Train: 96.80% | Val: 96.64% | IWL: 4.00% | ICL: 96.40%
+Epoch 780 | Train: 96.71% | Val: 96.60% | IWL: 5.00% | ICL: 95.40%
+Epoch 790 | Train: 96.55% | Val: 96.22% | IWL: 4.40% | ICL: 97.00%
+Epoch 800 | Train: 96.31% | Val: 96.58% | IWL: 3.60% | ICL: 96.20%
+Epoch 810 | Train: 96.54% | Val: 96.68% | IWL: 5.00% | ICL: 95.60%
+Epoch 820 | Train: 96.21% | Val: 94.30% | IWL: 4.20% | ICL: 93.60%
+Epoch 830 | Train: 96.72% | Val: 95.76% | IWL: 3.60% | ICL: 95.40%
+Epoch 840 | Train: 96.19% | Val: 95.96% | IWL: 2.20% | ICL: 93.20%
+Epoch 850 | Train: 95.69% | Val: 96.12% | IWL: 5.00% | ICL: 95.40%
+Epoch 860 | Train: 96.54% | Val: 96.30% | IWL: 4.40% | ICL: 97.40%
+Epoch 870 | Train: 95.68% | Val: 96.32% | IWL: 3.80% | ICL: 96.20%
+Epoch 880 | Train: 96.41% | Val: 95.14% | IWL: 3.80% | ICL: 95.20%
+Epoch 890 | Train: 96.00% | Val: 96.12% | IWL: 4.00% | ICL: 96.60%
+Epoch 900 | Train: 96.47% | Val: 96.46% | IWL: 4.40% | ICL: 95.00%
+Epoch 910 | Train: 96.76% | Val: 96.60% | IWL: 4.40% | ICL: 95.00%
+Epoch 920 | Train: 96.40% | Val: 96.70% | IWL: 4.00% | ICL: 96.40%
+Epoch 930 | Train: 96.42% | Val: 96.30% | IWL: 3.20% | ICL: 96.40%
+Epoch 940 | Train: 96.33% | Val: 95.94% | IWL: 2.40% | ICL: 94.80%
+Epoch 950 | Train: 96.97% | Val: 96.38% | IWL: 2.40% | ICL: 97.00%
+Epoch 960 | Train: 96.90% | Val: 96.28% | IWL: 4.80% | ICL: 96.80%
+Epoch 970 | Train: 96.99% | Val: 96.16% | IWL: 3.00% | ICL: 95.60%
+Epoch 980 | Train: 96.47% | Val: 95.70% | IWL: 3.40% | ICL: 95.80%
+Epoch 990 | Train: 96.45% | Val: 96.40% | IWL: 2.40% | ICL: 95.60%
+Epoch 1000 | Train: 96.57% | Val: 96.58% | IWL: 4.20% | ICL: 96.20%
+
+Training time: 2384.35 seconds
+
+======================================================================
+TESTING IN-CONTEXT LEARNING (CLASSIFICATION)
+======================================================================
+
+1. In-Distribution Test (classes 1 to 128):
+   Accuracy: 96.60% (966/1000)
+
+2. Out-of-Distribution Test (novel means, classes 1 to 128) - TRUE ICL:
+   Accuracy: 95.00% (950/1000)
+
+======================================================================
+  In-Distribution:  96.60%
+  Novel Classes:    95.00%
+  Temperature:      0.10
+  ✓ SUCCESS: ICL working!
+======================================================================
+
+✓ Saved model to /orcd/home/002/aadarwal/MarkovComputations/ICL/results/wta_n_nodes_rhoall_seed/8_1.0_32/model.pt
+✓ Saved results to /orcd/home/002/aadarwal/MarkovComputations/ICL/results/wta_n_nodes_rhoall_seed/8_1.0_32/results.pkl
+✓ Execution Time: 2384.35 seconds
