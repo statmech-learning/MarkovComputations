@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Topology of In-Context Learning in Chemical Reaction Networks</title>
+<style>
+  *{box-sizing:border-box}
+  :root{
+    --bg:#fcfcfa; --ink:#23211e; --mut:#6c6860; --line:#e4e2db;
+    --accent:#1f5066; --tint:#f3f2ed;
+  }
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:18px/1.65 Palatino,"Palatino Linotype","Iowan Old Style",Georgia,serif}
+  .wrap{max-width:768px;margin:0 auto;padding:62px 22px 40px}
+  h1,h2,h3,.kicker,.meta,figcaption,th,.pipe,.summary h2,nav,.foot{
+    font-family:"Helvetica Neue",-apple-system,system-ui,"Segoe UI",Arial,sans-serif}
+  .kicker{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin:0 0 13px}
+  h1{font-size:34px;line-height:1.2;font-weight:700;margin:0 0 14px;letter-spacing:-.012em}
+  .dek{font-size:19.5px;line-height:1.5;color:var(--mut);margin:0 0 20px}
+  .meta{font-size:12.5px;color:var(--mut);border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);padding:11px 0;margin:0 0 36px;letter-spacing:.01em}
+  h2{font-size:23px;font-weight:700;margin:54px 0 4px;letter-spacing:-.01em;line-height:1.25}
+  h2 .no{color:var(--accent);margin-right:.45em}
+  h3{font-size:16px;font-weight:700;margin:26px 0 2px}
+  p{margin:13px 0}
+  a{color:var(--accent)}
+  strong{font-weight:700}
+  ul,ol{padding-left:1.35em}
+  li{margin:6px 0}
+  i.v{font-style:italic}
+  sub,sup{font-size:.72em}
+
+  .summary{background:var(--tint);border:1px solid var(--line);border-radius:8px;
+    padding:20px 24px;margin:28px 0}
+  .summary h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;
+    margin:0 0 6px;color:var(--accent);font-weight:700}
+  .summary p{margin:8px 0}
+  .summary ol{margin:10px 0 4px}
+  .summary li{margin:9px 0}
+
+  nav{font-size:13.5px;margin:26px 0 8px;color:var(--mut)}
+  nav a{display:inline-block;margin:0 14px 6px 0;text-decoration:none}
+  nav a:hover{text-decoration:underline}
+
+  .eq{background:var(--tint);border-left:3px solid var(--accent);
+    padding:13px 18px;margin:16px 0;font-size:17px;line-height:1.95;overflow-x:auto}
+  .eq .lbl{float:right;color:var(--mut);font-size:13px;
+    font-family:"Helvetica Neue",sans-serif}
+
+  .pipe{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch;margin:22px 0;font-size:12px}
+  .pipe .step{background:#fff;border:1px solid var(--line);border-radius:6px;
+    padding:9px 8px;flex:1;min-width:104px;text-align:center;line-height:1.4}
+  .pipe .step b{display:block;font-size:12.5px;color:var(--accent);margin-bottom:2px}
+  .pipe .arr{align-self:center;color:var(--mut);font-size:15px}
+
+  figure{margin:30px 0}
+  figure img{width:100%;display:block;border:1px solid var(--line);
+    border-radius:6px;background:#fff}
+  figcaption{font-size:13.5px;line-height:1.56;color:var(--mut);margin-top:9px}
+  figcaption b{color:var(--ink);font-weight:700}
+
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:15px}
+  th,td{text-align:left;padding:7px 11px;border-bottom:1px solid var(--line)}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:700}
+  td.n{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;text-align:right;font-size:14px}
+  tr.hi td{background:var(--tint);font-weight:700}
+
+  .foot{margin-top:58px;border-top:1px solid var(--line);padding-top:18px;
+    font-size:12.5px;color:var(--mut);line-height:1.7}
+  .foot code{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--ink)}
+  @media(max-width:600px){h1{font-size:27px}.wrap{padding:38px 16px 30px}body{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="kicker">Mechanistic analysis</p>
+<h1>Topology of In-Context Learning in Chemical Reaction Networks</h1>
+<p class="dek">A Winner-Take-All chemical reaction network learns to classify in
+context with no attention mechanism. We open up 15 trained networks and recover
+how it works.</p>
+<p class="meta">15 trained networks &middot; capacity sweep n = 2&ndash;12 &middot;
+seed replicates at n = 8, 12 &middot; trained on MIT Engaging &middot;
+repo <code style="font-family:inherit">statmech-learning/MarkovComputations</code>,
+branch <code style="font-family:inherit">wta-icl-reproduction</code></p>
+
+<div class="summary">
+<h2>Summary</h2>
+<p>In-context learning (ICL) in these chemical reaction networks is not a
+discrete winner-take-all computation and not attention. It emerges at a hard
+capacity threshold, runs on a graded mixture of chemical species, and is
+implemented by a degenerate family of circuits. Four results:</p>
+<ol>
+<li><strong>ICL emerges at a capacity threshold.</strong> Accuracy is at chance
+with 2 species and saturates near 99% from 8 species &mdash; with four context
+positions, reliable ICL needs <strong>n &asymp; 2&middot;N<sub>c</sub></strong>.</li>
+<li><strong>The mechanism is global subspace projection</strong>, not pairwise
+attention. The whole context+query vector is projected onto learned
+comparison subspaces.</li>
+<li><strong>A soft mixture does the computation.</strong> The &ldquo;winner&rdquo;
+holds only ~60% of the concentration; decoding from it alone reproduces the
+network only ~a third of the time.</li>
+<li><strong>The learned topology is degenerate.</strong> Independent training
+runs reach parametrically different circuits (cross-seed weight similarity
+&asymp; chance) that nonetheless cover the same comparison subspaces.</li>
+</ol>
+<p>We also establish an exact <strong>gauge symmetry</strong> of the model
+(&sect;7) which makes the bare reaction parameters K and &beta; individually
+unphysical.</p>
+</div>
+
+<nav>
+<a href="#model">1 &middot; The model</a>
+<a href="#method">2 &middot; Checkpoints &amp; method</a>
+<a href="#r1">3 &middot; Emergence</a>
+<a href="#r2">4 &middot; Subspace projection</a>
+<a href="#r3">5 &middot; The soft mixture</a>
+<a href="#r4">6 &middot; Degeneracy</a>
+<a href="#gauge">7 &middot; The gauge symmetry</a>
+<a href="#synthesis">8 &middot; What it means</a>
+</nav>
+
+<h2 id="model"><span class="no">1</span>The model</h2>
+
+<p><strong>The task.</strong> The network is shown a sequence of N&nbsp;=&nbsp;4
+context examples, each a point in D&nbsp;=&nbsp;4 dimensions drawn near a
+Gaussian-mixture class mean, each carrying a discrete label (one of L&nbsp;=&nbsp;128).
+A query is appended that exactly copies one of the context examples; the network
+must output that example&rsquo;s label. The decisive test uses
+<i class="v">novel classes</i> &mdash; class means never seen during training &mdash;
+so the answer cannot be memorised in the weights. It must be read off the
+context. That is in-context learning.</p>
+
+<p><strong>The network.</strong> There is no transformer, and no attention in the
+usual sense: nowhere is a query&ndash;key dot product
+<i class="v">z<sub>i</sub></i>&middot;<i class="v">z<sub>q</sub></i> computed.
+Instead the whole sequence is flattened into one vector
+<i class="v">X</i>&nbsp;&isin;&nbsp;&#8477;<sup>(N+1)D</sup>&nbsp;=&nbsp;&#8477;<sup>20</sup>,
+and a set of <i class="v">n</i> chemical species compete over it.</p>
+
+<div class="pipe">
+  <div class="step"><b>input</b> X &isin; &#8477;<sup>20</sup><br>context + query</div>
+  <div class="arr">&rarr;</div>
+  <div class="step"><b>rates</b> f<sub>j</sub><br>project &amp; soft-rectify</div>
+  <div class="arr">&rarr;</div>
+  <div class="step"><b>soft WTA</b> Y<br>species compete</div>
+  <div class="arr">&rarr;</div>
+  <div class="step"><b>decode</b> q = Y&#7488;B<br>softmax over positions</div>
+  <div class="arr">&rarr;</div>
+  <div class="step"><b>label</b><br>vote context labels</div>
+</div>
+
+<p>Each species <i class="v">j</i> projects the entire input through a learned
+weight vector <i class="v">W<sub>j</sub></i> and a soft-rectifier, giving a
+reaction rate:</p>
+
+<div class="eq"><span class="lbl">(1)</span>
+f<sub>j</sub>(X) &nbsp;=&nbsp; softplus(<i class="v">W<sub>j</sub></i> &middot; X) / K<sub>j</sub>
+</div>
+
+<p>The species compete through a selection score
+<i class="v">r<sub>j</sub></i>&nbsp;=&nbsp;&beta;<sub>j</sub>/f<sub>j</sub>;
+the network favours the species of <i>smallest</i> score. At steady state the
+chemical concentrations are</p>
+
+<div class="eq"><span class="lbl">(2)</span>
+Y<sub>j</sub> &nbsp;=&nbsp; softmin(r;&nbsp;&tau;)<sub>j</sub> &nbsp;&middot;&nbsp;
+K<sub>j</sub> &middot; softplus(R<sup>0</sup> f<sub>j</sub>/&beta;<sub>j</sub> &minus; 1)
+</div>
+
+<p>and a learned decoder <i class="v">B</i> maps the concentration vector onto the
+four context positions, which then vote their labels:</p>
+
+<div class="eq"><span class="lbl">(3)</span>
+q = Y<sup>&#7488;</sup>B &nbsp;&middot;&middot;&middot;&nbsp;
+attention = softmax(q / T) &nbsp;&middot;&middot;&middot;&nbsp;
+prediction = label at argmax<sub>m</sub> attention<sub>m</sub>
+</div>
+
+<p>The learnable parameters are the projections <i class="v">W</i>, the per-species
+constants <i class="v">K<sub>j</sub></i> and <i class="v">&beta;<sub>j</sub></i>,
+and the decoder <i class="v">B</i> &mdash; on the order of 200&ndash;300 numbers
+in total. The temperature &tau; of the soft winner-take-all is small (0.01).</p>
+
+<p><strong>Comparison subspaces.</strong> To answer correctly a species must fire
+when the query matches context item <i class="v">i</i> &mdash; that is, detect
+membership in the subspace
+M<sub>i</sub>&nbsp;=&nbsp;{X : z<sub>i</sub>&nbsp;&asymp;&nbsp;z<sub>query</sub>}.
+A clean comparator has its weight vector <i class="v">W<sub>j</sub></i>
+<i>equal and opposite</i> across the context-<i class="v">i</i> block and the
+query block, so that <i class="v">W<sub>j</sub></i>&middot;X measures the
+difference z<sub>i</sub>&nbsp;&minus;&nbsp;z<sub>query</sub>. The paper calls this
+mechanism <i>subspace projection</i>; &sect;4 confirms it is what the trained
+networks actually do.</p>
+
+<h2 id="method"><span class="no">2</span>Checkpoints &amp; method</h2>
+
+<p>We analyse <strong>15 trained networks</strong>: the two original paper
+checkpoints, their reproductions retrained from scratch on the MIT Engaging
+cluster, a capacity sweep over n&nbsp;=&nbsp;2,&nbsp;4,&nbsp;6,&nbsp;8,&nbsp;10,&nbsp;12
+species, and seed replicates at the two headline sizes n&nbsp;=&nbsp;8 and
+n&nbsp;=&nbsp;12. Every retrain reproduces the paper&rsquo;s novel-class accuracy
+to within ~0.5%.</p>
+
+<p>Each network is probed on one fixed evaluation set of 2,000 sequences
+(in-distribution and novel-class) through a single instrumented forward pass, so
+that every analysis &mdash; connectivity, species utilisation, routing, decision
+geometry, reaction parameters, and cross-model comparison &mdash; reads exactly
+the same internal traces. All quantities below are on the novel-class split:
+true in-context generalisation.</p>
+
+<h2 id="r1"><span class="no">3</span>Result 1 &mdash; ICL emerges at a capacity threshold</h2>
+
+<p><strong>In-context learning is absent in small networks and appears, sharply,
+once the network has about eight species.</strong></p>
+
+<table>
+<thead><tr><th>species n</th><th>novel-class accuracy</th><th>regime</th></tr></thead>
+<tbody>
+<tr><td class="n">2</td><td class="n">25.9%</td><td>chance (4-way task)</td></tr>
+<tr><td class="n">4</td><td class="n">70.8%</td><td>one detector per position &mdash; insufficient</td></tr>
+<tr><td class="n">6</td><td class="n">85.0%</td><td>partial</td></tr>
+<tr class="hi"><td class="n">8</td><td class="n">98.2%</td><td>ICL works &mdash; n = 2&middot;N<sub>c</sub></td></tr>
+<tr><td class="n">10</td><td class="n">99.2%</td><td>saturated</td></tr>
+<tr><td class="n">12</td><td class="n">99.2%</td><td>saturated (over-provisioned)</td></tr>
+</tbody>
+</table>
+
+<p>With N<sub>c</sub>&nbsp;=&nbsp;4 context positions, a network with only four
+species &mdash; one detector per position &mdash; reaches just 71%. Reliable ICL
+arrives at <strong>n&nbsp;&asymp;&nbsp;8&nbsp;=&nbsp;2&middot;N<sub>c</sub></strong>:
+roughly two detector species per comparison subspace. Beyond that, accuracy is
+flat; the extra species in the n&nbsp;=&nbsp;10 and 12 networks are not converted
+into extra performance.</p>
+
+<figure>
+<img src="figures/f1-capacity.png" alt="Accuracy and effective species count versus network size">
+<figcaption><b>Figure 1.</b> Novel-class accuracy and effective species count as a
+function of network size <i>n</i>. Accuracy is at chance for n&nbsp;=&nbsp;2,
+climbs through n&nbsp;=&nbsp;4&ndash;6, and saturates near 99% from n&nbsp;=&nbsp;8
+&mdash; twice the number of context positions.</figcaption>
+</figure>
+
+<h2 id="r2"><span class="no">4</span>Result 2 &mdash; The mechanism is subspace projection</h2>
+
+<p><strong>The species are comparators: each projects the whole input onto a
+context-versus-query difference subspace. The structure that solves the task
+lives in projection space, not in the input.</strong></p>
+
+<p>In every working network, all four context positions are covered by clean
+comparator species &mdash; weight vectors that are equal and opposite across a
+context block and the query block, with alignment cosines reaching 1.0. This is
+the <i>subspace projection</i> mechanism made explicit: no pairwise score is
+ever formed; the comparison is done by a single linear projection of the
+joint context&ndash;query vector.</p>
+
+<figure>
+<img src="figures/f2-comparators.png" alt="Per-species comparison scores for every network">
+<figcaption><b>Figure 2.</b> Comparison scores for every network: rows are
+species, columns the four context positions. A bright cell means that
+species&rsquo; weight vector is equal-and-opposite across that context block and
+the query block &mdash; a clean &ldquo;position&nbsp;<i>i</i> vs query&rdquo;
+comparator. Every working network covers all four positions.</figcaption>
+</figure>
+
+<p>The same point shows in the geometry. Embedding the 2,000 evaluation inputs
+in their raw form reveals no class structure at all. Embedding them in
+<i>projection space</i> &mdash; the per-species scores
+<i class="v">W<sub>j</sub></i>&middot;X &mdash; reveals clear structure, and that
+structure is organised <i>by which species fires</i>, not by the answer. The
+network builds its partition; the input does not contain one.</p>
+
+<figure>
+<img src="figures/f3-score-space.png" alt="Score-space versus input-space embedding of an n=8 network">
+<figcaption><b>Figure 3.</b> An n&nbsp;=&nbsp;8 network. <b>Left, centre:</b>
+evaluation inputs embedded in projection space <i>W</i>&middot;X, coloured by
+dominant species and by the correct answer position. <b>Right:</b> the same
+inputs in raw input space. Separable structure exists only in projection space,
+and it tracks the active species &mdash; decoding to a position happens
+downstream.</figcaption>
+</figure>
+
+<h2 id="r3"><span class="no">5</span>Result 3 &mdash; A soft mixture, not a winner</h2>
+
+<p><strong>Despite the name, the winner-take-all does not pick one species. The
+steady state spreads over two to three species, and that graded mixture &mdash;
+not the single strongest species &mdash; carries the computation.</strong></p>
+
+<p>The dominant species holds only ~56&ndash;68% of the total concentration. To
+test whether that dominant species is the computation, we decode from it alone
+&mdash; route through its decoder row only &mdash; and compare to the network&rsquo;s
+real answer. For the working networks (n&nbsp;&ge;&nbsp;8) the dominant species
+alone reproduces the answer just <strong>~33%</strong> of the time. The mixture
+overrides the dominant species in roughly 65% of examples, and when it does it
+is correct ~99% of the time. The graded combination is the algorithm.</p>
+
+<figure>
+<img src="figures/f4-soft-mixture.png" alt="Dominant-species-only decoding versus the full mixture">
+<figcaption><b>Figure 4.</b> Decoding from the single dominant species alone
+(red) versus the network&rsquo;s true graded decode (green), per network. The
+dominant species alone recovers only about a third of the answers; the full
+species mixture is needed to reach ~99%.</figcaption>
+</figure>
+
+<p>Roughly 2.2 species decode to each context target, and species that share a
+target have near-orthogonal weight vectors &mdash; they are genuinely different
+detectors, not redundant copies. This is the &ldquo;branch&rdquo; structure
+behind the 2&middot;N<sub>c</sub> capacity threshold of Result&nbsp;1: each
+comparison subspace is covered by a small set of distinct detectors whose
+graded combination, not whose winner, gives the answer.</p>
+
+<figure>
+<img src="figures/f5-boundary.png" alt="Query interpolation sweep across a decision boundary">
+<figcaption><b>Figure 5.</b> Sliding the query along a straight line between two
+context class means. Decoder attention crosses over smoothly and the
+concentration peak-share dips at the midpoint &mdash; the decision boundary is a
+graded transition, not a hard threshold.</figcaption>
+</figure>
+
+<h2 id="r4"><span class="no">6</span>Result 4 &mdash; The topology is degenerate</h2>
+
+<p><strong>There is no canonical circuit. Networks trained from different random
+seeds reach parametrically different solutions &mdash; while still covering the
+same comparison subspaces.</strong></p>
+
+<p>Across 23 cross-seed pairs of same-size networks, we align species optimally
+and measure how similar the aligned weight vectors are. The cross-seed weight
+cosine is only <strong>~0.25</strong> &mdash; barely above the magnitude
+expected for random 20-dimensional vectors. Independent runs share almost no
+weight-level structure.</p>
+
+<p>What <i>is</i> shared is the function. The comparison-subspace pattern &mdash;
+which context-versus-query subspaces are detected &mdash; aligns at cosine
+~0.59, well above chance. So the picture is precise: the topology is
+<i>parametrically degenerate but functionally constrained</i>. Many distinct
+circuits implement in-context learning; what they have in common is not a weight
+pattern but the set of comparison subspaces they cover.</p>
+
+<figure>
+<img src="figures/f6-degeneracy.png" alt="Species alignment between independently trained networks">
+<figcaption><b>Figure 6.</b> Species alignment between independently trained
+networks of the same size. Cross-seed weight-vector similarity is near the
+chance level for 20-dimensional vectors; the comparison-subspace pattern is
+substantially more conserved. Different runs reach different circuits that solve
+the same task.</figcaption>
+</figure>
+
+<h2 id="gauge"><span class="no">7</span>The gauge symmetry</h2>
+
+<p><strong>The model has an exact symmetry that makes its bare reaction
+parameters unphysical &mdash; and ignoring it corrupts measurement.</strong></p>
+
+<p>For any species <i class="v">r</i> and any &lambda;&nbsp;&gt;&nbsp;0, the
+transformation</p>
+
+<div class="eq">
+(K<sub>r</sub>, &beta;<sub>r</sub>, B<sub>r</sub>) &nbsp;&rarr;&nbsp;
+(&lambda;K<sub>r</sub>, &beta;<sub>r</sub>/&lambda;, B<sub>r</sub>/&lambda;)
+</div>
+
+<p>leaves the network&rsquo;s input&ndash;output function <i>exactly</i>
+unchanged &mdash; verified numerically: predictions do not move, and attention
+shifts by less than 10<sup>&minus;4</sup>. A trained K<sub>r</sub> or
+&beta;<sub>r</sub> therefore carries no meaning on its own; only the gauge-invariant
+combinations &mdash; the projections <i class="v">W</i>, the products
+K<sub>r</sub>&middot;&beta;<sub>r</sub>, and the effective decoder
+K<sub>r</sub>&middot;B<sub>r</sub> &mdash; are physical.</p>
+
+<p>This is not a technicality. A species&rsquo; concentration is gauge-dependent:
+under a random gauge transform the normalised concentration vector moves by up
+to 0.3. Measured naively, the &ldquo;effective number of species used&rdquo;
+averages 6.7; measured on the gauge-invariant contribution it averages 4.9. The
+analyses above use only gauge-invariant quantities. The n&nbsp;=&nbsp;12 networks
+are visibly over-provisioned: 63% capacity utilisation, with 21 idle
+near-zero-weight &ldquo;default&rdquo; species across the set.</p>
+
+<figure>
+<img src="figures/f7-gauge.png" alt="Gauge-invariant reaction parameters across networks">
+<figcaption><b>Figure 7.</b> Gauge-invariant parameters across networks: the
+products K<sub>j</sub>&middot;&beta;<sub>j</sub> and the effective decoder
+K<sub>j</sub>&middot;B<sub>j</sub>. The bare K<sub>j</sub> and &beta;<sub>j</sub>
+are deliberately not shown &mdash; individually they are gauge and carry no
+physical content.</figcaption>
+</figure>
+
+<h2 id="synthesis"><span class="no">8</span>What it means</h2>
+
+<p>In-context learning in these chemical reaction networks emerges at a hard
+capacity threshold of roughly two detector species per context position. It is
+executed not by a discrete winner but by a soft, graded mixture of chemical
+species. And it is implemented by a parametrically degenerate family of circuits
+constrained only to cover the right comparison subspaces &mdash; there is no
+single canonical topology, and the underlying reaction parameters K and &beta;
+are individually unidentifiable.</p>
+
+<p>The headline of the model &mdash; that a tiny attention-free reaction network
+does in-context learning &mdash; survives scrutiny. But the form of the
+computation is not the one the name suggests: it is subspace projection feeding
+a graded mixture, and the &ldquo;winner-take-all&rdquo; is, in practice, soft.</p>
+
+<div class="foot">
+<p>Analysis code: <code>ICL/topology_analysis/</code> (six modules
+m1&ndash;m6 over a shared instrumented core, plus <code>run_all.py</code>).
+Full output &mdash; 112 figures and <code>summary.json</code> &mdash;
+<code>ICL/results/topology_analysis/</code>. Checkpoints:
+<code>ICL/paper_checkpoints/</code> and
+<code>ICL/results/wta_n_nodes_rhoall_seed/</code>.</p>
+<p>Repository <code>statmech-learning/MarkovComputations</code>, branch
+<code>wta-icl-reproduction</code>. Model: the Winner-Take-All ICL chemical
+reaction network (arXiv 2601.06712).</p>
+</div>
+
+</div>
+</body>
+</html>
