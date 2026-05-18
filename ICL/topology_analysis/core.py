@@ -24,6 +24,16 @@ time -- pick the right one for your analysis:
     winner       = argmin_j (beta_j / f_j)   -- the WTA *selection rule*
     dom_species  = argmax_j Y_j              -- the species that *dominates* Y
 
+GAUGE SYMMETRY (important for K/beta/B analysis): the model has an exact
+per-species gauge freedom -- for any lambda>0,
+    (K_r, beta_r, B[r,:]) -> (lambda*K_r, beta_r/lambda, B[r,:]/lambda)
+leaves the model's function IDENTICALLY unchanged. So K_r and beta_r are
+individually UNPHYSICAL. The identifiable (gauge-invariant) quantities are:
+    W                W is untouched by the gauge
+    K_r * beta_r     sets the winner / softmin score
+    K_r * B[r,:]     the effective decoder weight
+Use physical_params() to get these; never compare raw K or beta across runs.
+
 Public API:
     discover_checkpoints() -> list[Checkpoint]
     load_checkpoint(path)  -> Checkpoint
@@ -32,6 +42,8 @@ Public API:
     instrument(model, eval_set, temperature) -> Trace
     get_traces(checkpoint, eval_sets=None)   -> {'in_dist': Trace, 'novel': Trace}
     load_all(n_eval=N_EVAL) -> (list[Checkpoint], dict[label -> {split: Trace}])
+    physical_params(model)  -> gauge-invariant W / Kbeta / eff_decoder
+    comparison_scores(W, N, D) -> (n, N) subspace-projection diagnostic
     setup_style() / module_outdir(name) / save_fig(fig, outdir, name)
 """
 
@@ -275,6 +287,47 @@ def load_all(n_eval=N_EVAL):
     eval_sets = make_eval_sets(n_samples=n_eval)
     traces = {ck.label: get_traces(ck, eval_sets) for ck in checkpoints}
     return checkpoints, traces
+
+
+# ===========================================================================
+# Physical / gauge-invariant parameter helpers
+# ===========================================================================
+def physical_params(model) -> dict:
+    """Gauge-invariant (identifiable) parameters of a WTA model, as numpy.
+
+    See the module docstring on the gauge symmetry. Returns:
+        W            (n, (N+1)*D)  input projections (gauge-invariant)
+        Kbeta        (n,)          K_r * beta_r  -- winner / softmin score scale
+        eff_decoder  (n, N)        K_r * B[r,:]  -- effective decoder weight
+        K, beta, B                 raw params (GAUGE-DEPENDENT -- diagnostics only)
+    """
+    W = model.W.detach().cpu().numpy()
+    K = np.exp(model.log_K.detach().cpu().numpy())
+    beta = np.exp(model.log_beta.detach().cpu().numpy())
+    B = model.B.detach().cpu().numpy()
+    return dict(W=W, Kbeta=K * beta, eff_decoder=K[:, None] * B,
+                K=K, beta=beta, B=B)
+
+
+def comparison_scores(W, N, D) -> np.ndarray:
+    """Diagnostic for the paper's 'subspace projection' mechanism.
+
+    A species that computes the comparison (z_i ~ z_query) has equal-and-
+    opposite weights on context-block i and the query block:
+    W[i,:] ~ -W[query,:]. Given W (n, (N+1)*D), returns (n, N): entry (j,i)
+    is the cosine similarity between species j's context-block-i weights and
+    its NEGATED query-block weights. Near +1 => j is a clean
+    'context position i vs query' comparator.
+    """
+    W = np.asarray(W).reshape(-1, N + 1, D)        # (n, N+1, D)
+    qblk = W[:, N, :]                               # (n, D)
+    out = np.zeros((W.shape[0], N))
+    for i in range(N):
+        cblk = W[:, i, :]
+        num = -(cblk * qblk).sum(1)
+        den = np.linalg.norm(cblk, axis=1) * np.linalg.norm(qblk, axis=1)
+        out[:, i] = num / (den + 1e-12)
+    return out
 
 
 # ===========================================================================

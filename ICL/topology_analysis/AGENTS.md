@@ -7,31 +7,51 @@ This file is the brief: read it fully, then build your assigned module.
 
 ## 0. The model — how it actually computes (read this first)
 
-For an input `X` = flattened `[ctx0, ctx1, ctx2, ctx3, query]` ∈ ℝ²⁰, each
-species `j` (of `n_nodes`) does:
+The paper's claim: chemical reaction networks do ICL **without transformer-style
+pairwise attention**. There is no `z_i·z_q` dot product anywhere. Instead the
+mechanism is **global subspace projection → soft winner-take-all → learned
+decoding**. For input `X` = flattened `[ctx0, ctx1, ctx2, ctx3, query]` ∈ ℝ²⁰:
 
-1. **Linear feature** `Wⱼ·X` (bias `w0` is hard-zeroed, not learned) → `softplus`.
-2. **Rate** `fⱼ = softplus(Wⱼ·X) / Kⱼ`.
-3. **Selection score** `ratioⱼ = βⱼ / fⱼ`.
-4. **Soft winner-take-all**: `Y = softmin(ratios; τ) ⊙ Y_potential`, where
-   `Y_potentialⱼ = Kⱼ · softplus(R0·fⱼ/βⱼ − 1)`.
-5. **Routing** `q = Y @ B` (B is `n × 4`) → `attention = softmax(q/temp)` over
-   the 4 context positions → predict the attended position's label.
+1. **Encoder — global projection.** Each species `j` projects the *whole*
+   input: `Wⱼ·X` (bias `w0` is hard-zeroed). The species are meant to detect
+   the **comparison subspaces** `Mᵢ = {X : zᵢ ≈ z_query}` — i.e. "the query
+   matches context item `i`". A clean comparator has `Wⱼ` equal-and-opposite
+   across context-block `i` and the query block.
+2. **Rate** `fⱼ = softplus(Wⱼ·X) / Kⱼ`; **selection score** `ratioⱼ = βⱼ/fⱼ`.
+3. **Soft winner-take-all** `Y = softmin(ratios; τ) ⊙ Y_potential`,
+   `Y_potentialⱼ = Kⱼ·softplus(R0·fⱼ/βⱼ − 1)`.
+4. **Decoder** `q = Y @ B` → `attention = softmax(q/temp)` over 4 context
+   positions → predict the attended position's label.
 
-**⚠️ The WTA is SOFT — this is verified empirically, do not assume otherwise.**
-`Y` spreads over **~2.5–3 species** (the top species holds only ~56–68% of
-total `Y`). `Y` is a point on a **simplex**, not a one-hot vector; `q` is a
-**graded mixture** of `B`-rows. Treat the discrete "winner" as a *summary
-statistic* and always *measure* how concentrated `Y` is — never assume it.
+**⚠️ Three facts that must shape every analysis (all verified empirically):**
 
-Two winner notions exist and disagree ~24% of the time:
-- `winner` = `argmin βⱼ/fⱼ` — the WTA *selection rule*.
-- `dom_species` = `argmax Yⱼ` — the species that actually *dominates* `Y`.
-Use `dom_species` + `Y_frac` for "which species is active"; `winner` for the
-literal selection rule.
+- **The WTA is SOFT.** `Y` spreads over **~2.5–3 species** (top species holds
+  only ~56–68% of total `Y`). `Y` is a point on a **simplex**, not one-hot;
+  `q` is a **graded mixture** of `B`-rows. Treat the discrete "winner" as a
+  *summary statistic* and always *measure* `Y`'s concentration — never assume.
+  Two winner notions (disagree ~24%): `winner`=`argmin βⱼ/fⱼ` (selection rule),
+  `dom_species`=`argmax Yⱼ` (dominant species). Use `dom_species`/`Y_frac` for
+  "which species is active"; `winner` for the literal selection rule.
 
-**Topology** = (a) connectivity `W`, (b) the (soft, graded) species usage,
-(c) how the `Y`-mixture maps to attention/answers.
+- **GAUGE SYMMETRY.** `(Kᵣ,βᵣ,Bᵣ) → (λKᵣ, βᵣ/λ, Bᵣ/λ)` leaves the model's
+  function *identically* unchanged. So **raw `K` and `β` are unphysical**. The
+  identifiable quantities are `W`, the products `Kᵣβᵣ`, and the effective
+  decoder `Kᵣ·Bᵣ`. Use `core.physical_params()`; never compare raw `K`, `β`,
+  or raw `B` across runs.
+
+- **Default/threshold species may exist.** A species with `Wⱼ ≈ 0` has a
+  near-constant score and wins "by default" when no real detector fires. Flag
+  near-zero-`W` species — they are part of the mechanism, not dead weight.
+
+**Topology** = (a) connectivity `W` and which comparison subspaces it covers,
+(b) the soft, graded species usage, (c) how the `Y`-mixture decodes to answers.
+
+**Hypothesis to TEST (do not assume):** the paper's degree-counting suggests
+~`2·N_c` detector species are needed — roughly **2 detectors per context
+position** (so ≈8 for the n=8 model, ≈3-per-position for n=12), because each
+comparison subspace may need covering in more than one "branch". Whether
+species actually group ~2-per-B-target, and whether such branch structure is
+real, is something M2/M3 must *measure*, not presuppose.
 
 ---
 
@@ -50,6 +70,8 @@ Key API (see `core.py` docstring for full detail):
 - `core.load_all(n_eval=2000)` → `(checkpoints, traces)`
 - `core.instrument(model, eval_set, temperature)` → `Trace` (build your own
   probe inputs and call this — m4 needs it)
+- `core.physical_params(model)` → gauge-invariant `W / Kbeta / eff_decoder`
+- `core.comparison_scores(W, N, D)` → `(n, N)` subspace-projection diagnostic
 - `Checkpoint`: `.label .origin .n_nodes .seed .model .params .results .history`
 - `Trace`: per-example arrays `z_flat, f, ratios, winner, dom_species,
   softmin_w, Y, Y_frac, q, attention, pred_pos, true_pos, pred_label, target,
@@ -72,24 +94,24 @@ Key API (see `core.py` docstring for full detail):
   ```
   Also support `python mX_<name>.py` standalone (call `core.load_all()` then `run`).
 - **Generality**: handle *any* number of checkpoints and *any* `n_nodes`. The
-  training grid adds ~11 more checkpoints; your code must pick them up with no
-  changes (iterate `checkpoints`, never hard-code labels or `n=8/12`).
+  training grid adds ~11 more checkpoints; iterate `checkpoints`, never
+  hard-code labels or `n=8/12`.
 - **Develop now** against the 4 checkpoints already present
   (`ICL/paper_checkpoints/`, `ICL/results/wta_n_nodes_rhoall_seed/`). Grid
   checkpoints appear later and are picked up automatically.
 - **Do NOT git-commit or push.** Shared tree. Create only your file; the lead
   agent (W2) commits everything once all modules are done.
-- Figures go to `outdir` (provided). Use the `novel` split as primary (that is
-  true ICL); use `in_dist` only where a contrast is informative.
-- Return JSON-serializable scalars from `run()` (floats/ints/lists/dicts).
+- Figures → `outdir`. Use the `novel` split as primary (true ICL); use
+  `in_dist` only for an informative contrast.
+- Return JSON-serializable scalars from `run()`.
 
 ---
 
 ## 3. Agent assignments (tmux windows 2–7)
 
-Each agent has an Engaging SSH pane beside it. Honest note: only **W2** needs
-it heavily (training grid). W3–W7: use the pane only to `git pull` when grid
-checkpoints land — analysis itself is local and runs in seconds.
+Each agent has an Engaging SSH pane. Honest note: only **W2** needs it heavily
+(training grid). W3–W7 use the pane only to `git pull` when grid checkpoints
+land — analysis itself is local and runs in seconds.
 
 ### W2 — LEAD: training grid + M6 comparison + integration
 File: `m6_comparison.py`, plus `run_all.py`.
@@ -101,74 +123,85 @@ cd /orcd/home/002/aadarwal/MarkovComputations && git pull
 WTA_JOBS="2 1.0 30;4 1.0 30;6 1.0 30;10 1.0 30;12 1.0 30;8 1.0 31;8 1.0 32;8 1.0 33;12 1.0 31;12 1.0 32;12 1.0 33" \
   bash ICL/engaging/run_on_engaging.sh
 ```
-Monitor `squeue -u aadarwal`; as runs finish, `verify_checkpoints.py` each,
-then `git add ICL/results/wta_n_nodes_rhoall_seed && git commit && git push`.
+Monitor `squeue`; as runs finish, `verify_checkpoints.py` each, then
+`git add ICL/results/wta_n_nodes_rhoall_seed && git commit && git push`.
 
-**M6 — is the learned topology canonical?**
-- For each group of same-`n_nodes` checkpoints: align species pairwise via
-  Hungarian matching — *parametric* (cosine similarity of `W` rows) and
-  *functional* (co-occurrence of `dom_species` on the shared eval set).
-  Report agreement %. High → canonical; low → degenerate solution space.
-- 8-node vs 12-node: compare effective node count + accuracy.
-- Capacity-sweep curve: accuracy (and effective node count) vs `n_nodes`,
-  using all checkpoints' stored `results` + traces.
-- Outputs: alignment matrices, agreement bars, sweep curves.
+**M6 — is the learned topology canonical?** Align species across same-`n_nodes`
+checkpoints. Two comparison regimes — keep them SEPARATE:
+- **Same-seed pair** (paper vs engaging, both seed 30 / 20): they differ only
+  by CPU/BLAS numerical noise. Agreement here measures **training stability**,
+  NOT canonicality. Report it as such.
+- **Cross-seed** (grid seeds 31/32/33 vs 30): genuinely independent inits.
+  Agreement here is the **canonical-vs-degenerate** result.
+Align using **gauge-invariant** quantities only: `core.comparison_scores(W)`
+and `W`-row cosine (parametric), and `dom_species` co-occurrence on the shared
+eval set (functional). Do **not** align on raw `B` or raw `K`/`β`. Then 8 vs 12
+(effective node count, accuracy) and the capacity-sweep curves.
 
-**Integration**: write `run_all.py` — discover checkpoints, `core.load_all()`,
-call `m1..m6` `run()` with their `core.module_outdir(...)`, merge the returned
-dicts into `ICL/results/topology_analysis/summary.json`. Run it, commit
-everything (modules + figures + summary).
+**Integration**: write `run_all.py` — `core.load_all()`, call `m1..m6` `run()`
+with `core.module_outdir(...)`, merge returned dicts into
+`ICL/results/topology_analysis/summary.json`. Run it, commit everything.
 
-### W3 — M1: connectivity (`m1_connectivity.py`)
-Question: *what linear feature does each species detect?*
-- Reshape each `Wⱼ` to (5 positions × 4 dims); heatmap grid per checkpoint.
-- SVD of `W` → scree plot (effective rank).
-- Column-norm grouped by position → does the model weight the query slot vs
-  the 4 context slots differently?
-- Return: effective rank, query-vs-context norm ratio, per checkpoint.
+### W3 — M1: connectivity & subspace projection (`m1_connectivity.py`)
+Question: *what does each species' projection `Wⱼ` detect?*
+- **Headline**: heatmap of `core.comparison_scores(W, N, D)` `(n × N_c)` per
+  checkpoint — which species are clean "position i vs query" comparators.
+- Reshape each `Wⱼ` to (5 positions × 4 dims); heatmap grid.
+- SVD of `W` → effective rank; flag near-zero-norm **default species**.
+- Return: per-checkpoint effective rank, count of comparator vs default
+  species, which positions are covered.
 
 ### W4 — M2: node utilization (`m2_utilization.py`)
 Question: *how many species does the model actually use?*
-- Histogram of `dom_species`; bar of mean `Y_frac` per species (graded use).
+- `dom_species` histogram; mean `Y_frac` per species (graded use).
 - **Effective node count** = participation ratio `(Σpᵢ)²/Σpᵢ²` of mean
-  `Y_frac`. Plot it vs `n_nodes` across the capacity sweep.
-- WTA hardness: distribution of `peak_share`, mean count of species with
+  `Y_frac`. Plot vs `n_nodes` across the capacity sweep.
+- WTA hardness: `peak_share` distribution; mean count of species with
   `Y_frac>5%`.
-- Return: effective_node_count, mean_peak_share, per checkpoint.
+- Interpretation guide: ~`2·N_c` active ⇒ branch-covering solution;
+  ~`N_c` ⇒ compressed/default-threshold solution; `<N_c` ⇒ suspect.
+- Return: effective_node_count, mean_peak_share, n_active, per checkpoint.
 
 ### W5 — M3: the routing algorithm (`m3_routing.py`)
-Question: *how does species activity map to the answer?*
-- Per species: `softmax(B[j,:]/temp)` — its attention pattern over 4 positions.
-- `dom_species` × `true_pos` confusion matrix — does the dominant species
-  predict the right context position?
-- **Because the WTA is soft**: quantify how much the mixture matters — compare
-  actual `pred_pos` to a "dominant-species-only" prediction (`q` from that one
-  `B`-row). Report agreement; low agreement ⇒ the graded mixture is essential.
-- Return: routing accuracy, dom-only agreement, per checkpoint.
+Question: *how does species activity decode to the answer?*
+- Per species: `softmax(B[j,:]/temp)` attention pattern; group species by
+  `argmax B[j,:]` (decoded position) — **test** whether ~2–3 species share
+  each of the `N_c` targets (the branch hypothesis). If species share a
+  target, probe whether their `Wⱼ` rows differ systematically — define any
+  "branch" structure *empirically*, do not impose a sign label.
+- `dom_species` × `true_pos` confusion matrix.
+- **Soft-mixture check**: compare actual `pred_pos` to a dominant-species-only
+  prediction (`q` from that one `B`-row). Low agreement ⇒ the graded mixture
+  is essential to the computation.
+- Return: routing accuracy, dom-only agreement, species-per-target grouping.
 
 ### W6 — M4: decision geometry (`m4_geometry.py`)
 Question: *how is the input space partitioned?*
-- PCA (2D) of `z_flat`, colored by `dom_species` and by `true_pos`.
-- Simplex/ternary plot of `Y_frac` (top-3 species) — visualize the soft mix.
+- Embed in **score space**, not raw `z_flat`: PCA of the per-species score
+  matrix `{Wⱼ·X}` (or `f`, or `ratios`), colored by `dom_species` and
+  `true_pos`. (Raw `z_flat` PCA is visually weak — use it only as a contrast.)
+- Simplex/ternary plot of `Y_frac` (top-3 species).
 - 1-D **query-interpolation sweep**: fix 4 context means, slide the query
-  along a line between two of them; build inputs, `core.instrument`, plot
-  `dom_species`, `peak_share`, `attention` vs the interpolation parameter.
-- Return: qualitative (figure paths); any scalars optional.
+  between two of them; build inputs, `core.instrument`, plot `dom_species`,
+  `peak_share`, `attention` vs the interpolation parameter. Note boundaries
+  are piecewise-smooth (curved near softplus knees), not exact hyperplanes.
+- Return: figure paths; scalars optional.
 
-### W7 — M5: reaction parameters (`m5_parameters.py`)
-Question: *what do `K` and `β` do?*
-- Per species: `Kⱼ`, `βⱼ`, gain `gⱼ = 1/(Kⱼ·βⱼ)`. Bar plots.
-- Note `winner = argmax softplus(Wⱼ·X)/(Kⱼ·βⱼ)` — selection depends only on
-  the **product** `Kⱼ·βⱼ`. Confirm empirically.
-- Scatter gain `gⱼ` vs species utilization (mean `Y_frac`) — do high-gain
-  species win more?
-- Return: correlation(gain, utilization), per checkpoint.
+### W7 — M5: physical reaction parameters (`m5_parameters.py`)
+Question: *what do the (gauge-invariant) parameters do?*
+- Use `core.physical_params(model)`. Plot the **gauge-invariant** quantities:
+  `W`-row norms, the products `Kᵣβᵣ`, and the effective decoder `Kᵣ·Bᵣ`.
+  Raw `K`/`β` are gauge — if you plot them, label them as such.
+- Confirm empirically: the winner ranking / softmin depends only on `Kᵣβᵣ`.
+- Scatter `Kᵣβᵣ` (and `W`-norm) vs species utilization (mean `Y_frac`) — do
+  low-score / high-`W` species win more? Identify default species.
+- Return: correlation(score, utilization), per checkpoint.
 
 ---
 
 ## 4. Definition of done
 
-All six `mX_*.py` files exist and run standalone without error on the current
-4 checkpoints; `run_all.py` produces figures under
+All six `mX_*.py` files run standalone without error on the current 4
+checkpoints; `run_all.py` produces figures under
 `ICL/results/topology_analysis/` and a `summary.json`; the lead agent has
 committed everything and confirmed the grid checkpoints are also analyzed.
