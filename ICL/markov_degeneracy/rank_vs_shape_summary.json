@@ -1,0 +1,316 @@
+{
+  "n_masks": 16,
+  "predictor_collinearity": {
+    "effective_rank_D_masked ~ condition_number_D_masked": -0.8058823529411765,
+    "effective_rank_D_masked ~ comparison_branch_common_d_rel_mean": 0.7114439580505432,
+    "effective_rank_D_masked ~ comparison_branch_d_rel_mean": 0.8677218312746248,
+    "effective_rank_D_masked ~ input_coord_load_gini": -0.8677218312746248,
+    "condition_number_D_masked ~ comparison_branch_common_d_rel_mean": -0.7011117843859088,
+    "condition_number_D_masked ~ comparison_branch_d_rel_mean": -0.8677218312746248,
+    "condition_number_D_masked ~ input_coord_load_gini": 0.8677218312746248,
+    "comparison_branch_common_d_rel_mean ~ comparison_branch_d_rel_mean": 0.8709296863229079,
+    "comparison_branch_common_d_rel_mean ~ input_coord_load_gini": -0.8709296863229079,
+    "comparison_branch_d_rel_mean ~ input_coord_load_gini": -1.0
+  },
+  "collinearity_abs": {
+    "min": 0.7011117843859088,
+    "median": 0.8677218312746248,
+    "max": 1.0
+  },
+  "decorrelation_search": "INSEPARABLE",
+  "accuracy_vs_metric": {
+    "effective_rank_D_masked": {
+      "ceiling_spearman": 0.5552288790250542,
+      "ceiling_p": 0.025571443872130846,
+      "mean_spearman": 0.6088235294117647,
+      "mean_p": 0.012315203198246461
+    },
+    "condition_number_D_masked": {
+      "ceiling_spearman": -0.6863041316330909,
+      "ceiling_p": 0.0033261485525963087,
+      "mean_spearman": -0.6588235294117648,
+      "mean_p": 0.005511422336343683
+    },
+    "comparison_branch_common_d_rel_mean": {
+      "ceiling_spearman": 0.6947541099149721,
+      "ceiling_p": 0.0028177479604792645,
+      "mean_spearman": 0.7011117843859088,
+      "mean_p": 0.002478245897234376
+    },
+    "comparison_branch_d_rel_mean": {
+      "ceiling_spearman": 0.8011100337255134,
+      "ceiling_p": 0.00019158895139307993,
+      "mean_spearman": 0.7592566023652968,
+      "mean_p": 0.0006466657737292299
+    },
+    "input_coord_load_gini": {
+      "ceiling_spearman": -0.8011100337255134,
+      "ceiling_p": 0.00019158895139307993,
+      "mean_spearman": -0.7592566023652968,
+      "mean_p": 0.0006466657737292299
+    }
+  },
+  "within_stratum": {
+    "balanced": {
+      "n": 8,
+      "eff_rank_vs_ceiling_spearman": -0.45509797952703834,
+      "p": 0.2571920854587725,
+      "acc_ceiling_range": [
+        93.9,
+        98.5
+      ]
+    },
+    "imbalanced": {
+      "n": 8,
+      "eff_rank_vs_ceiling_spearman": -0.5000000000000001,
+      "p": 0.20703124999999997,
+      "acc_ceiling_range": [
+        85.6,
+        94.7
+      ]
+    }
+  },
+  "verdict": "Rank/coverage and load-shape are not separable predictors -- on density-0.5 masks they are one quantity (the decorrelation search found zero overlap). That single coverage quantity sets the accuracy ceiling: effective_rank_D_masked vs ceiling Spearman r=+0.555. The prior program's regression horse-race between 'rank', 'tree-diff' and 'load' metrics was comparing one quantity with itself. Graph-shape (vs coverage) is untestable on this grid because the graph is fixed; that needs a multi-graph follow-up.",
+  "masks": [
+    {
+      "mask": "prospective_balanced_load_0008_c200_seed60626",
+      "stratum": "balanced",
+      "n_seeds": 5,
+      "acc_mean": 90.1,
+      "acc_ceiling": 96.2,
+      "acc_std": 5.232207946937888,
+      "metrics": {
+        "effective_rank_D_masked": 182.74998086297978,
+        "condition_number_D_masked": 3.8736343094623553,
+        "comparison_branch_common_d_rel_mean": 19.5,
+        "comparison_branch_d_rel_mean": 40.0,
+        "input_coord_load_gini": 0.0
+      }
+    },
+    {
+      "mask": "prospective_balanced_load_0024_c200_seed60642",
+      "stratum": "balanced",
+      "n_seeds": 5,
+      "acc_mean": 95.11999999999999,
+      "acc_ceiling": 98.2,
+      "acc_std": 2.820921835145382,
+      "metrics": {
+        "effective_rank_D_masked": 181.49170194126415,
+        "condition_number_D_masked": 3.700180926499629,
+        "comparison_branch_common_d_rel_mean": 17.75,
+        "comparison_branch_d_rel_mean": 40.0,
+        "input_coord_load_gini": 0.0
+      }
+    },
+    {
+      "mask": "prospective_balanced_load_0035_c200_seed60653",
+      "stratum": "balanced",
+      "n_seeds": 5,
+      "acc_mean": 88.17999999999999,
+      "acc_ceiling": 93.9,
+      "acc_std": 5.326687526033418,
+      "metrics": {
+        "effective_rank_D_masked": 182.5055334583034,
+        "condition_number_D_masked": 3.3548055728836945,
+        "comparison_branch_common_d_rel_mean": 18.0,
+        "comparison_branch_d_rel_mean": 40.0,
+        "input_coord_load_gini": 0.0
+      }
+    },
+    {
+      "mask": "prospective_balanced_load_0047_c200_seed60665",
+      "stratum": "balanced",
+      "n_seeds": 5,
+      "acc_mean": 93.87999999999998,
+      "acc_ceiling": 96.6,
+      "acc_std": 2.2622113075484305,
+      "metrics": {
+        "effective_rank_D_masked": 182.556865231697,
+        "condition_number_D_masked": 3.35208392527147,
+        "comparison_branch_common_d_rel_mean": 18.75,
+        "comparison_branch_d_rel_mean": 40.0,
+        "input_coord_load_gini": 0.0
+      }
+    },
+    {
+      "mask": "prospective_balanced_load_0066_c200_seed60684",
+      "stratum": "balanced",
+      "n_seeds": 5,
+      "acc_mean": 92.5,
+      "acc_ceiling": 96.6,
+      "acc_std": 6.673230102431656,
+      "metrics": {
+        "effective_rank_D_masked": 181.05688906581253,
+        "condition_number_D_masked": 3.967145899868776,
+        "comparison_branch_common_d_rel_mean": 20.0,
+        "comparison_branch_d_rel_mean": 40.0,
+        "input_coord_load_gini": 0.0
+      }
+    },
+    {
+      "mask": "prospective_balanced_load_0104_c200_seed60722",
+      "stratum": "balanced",
+      "n_seeds": 5,
+      "acc_mean": 82.38,
+      "acc_ceiling": 97.5,
+      "acc_std": 8.151171694916014,
+      "metrics": {
+        "effective_rank_D_masked": 181.43455909020386,
+        "condition_number_D_masked": 3.730954637188485,
+        "comparison_branch_common_d_rel_mean": 18.5,
+        "comparison_branch_d_rel_mean": 40.0,
+        "input_coord_load_gini": 0.0
+      }
+    },
+    {
+      "mask": "prospective_balanced_load_0114_c200_seed60732",
+      "stratum": "balanced",
+      "n_seeds": 5,
+      "acc_mean": 93.75999999999999,
+      "acc_ceiling": 98.5,
+      "acc_std": 4.506262309275834,
+      "metrics": {
+        "effective_rank_D_masked": 181.5561711456465,
+        "condition_number_D_masked": 3.8746092544263457,
+        "comparison_branch_common_d_rel_mean": 19.5,
+        "comparison_branch_d_rel_mean": 40.0,
+        "input_coord_load_gini": 0.0
+      }
+    },
+    {
+      "mask": "prospective_balanced_load_0135_c200_seed60753",
+      "stratum": "balanced",
+      "n_seeds": 5,
+      "acc_mean": 91.97999999999999,
+      "acc_ceiling": 98.1,
+      "acc_std": 7.662480016287157,
+      "metrics": {
+        "effective_rank_D_masked": 182.4218618690275,
+        "condition_number_D_masked": 3.384915002606738,
+        "comparison_branch_common_d_rel_mean": 20.0,
+        "comparison_branch_d_rel_mean": 40.0,
+        "input_coord_load_gini": 0.0
+      }
+    },
+    {
+      "mask": "prospective_imbalanced_coord_load_0193_c200_seed60651",
+      "stratum": "imbalanced",
+      "n_seeds": 5,
+      "acc_mean": 72.52,
+      "acc_ceiling": 91.0,
+      "acc_std": 12.071685880605079,
+      "metrics": {
+        "effective_rank_D_masked": 177.09719874828136,
+        "condition_number_D_masked": 4.543227223565183,
+        "comparison_branch_common_d_rel_mean": 8.75,
+        "comparison_branch_d_rel_mean": 20.0,
+        "input_coord_load_gini": 0.25
+      }
+    },
+    {
+      "mask": "prospective_imbalanced_coord_load_0206_c200_seed60664",
+      "stratum": "imbalanced",
+      "n_seeds": 5,
+      "acc_mean": 83.78,
+      "acc_ceiling": 94.0,
+      "acc_std": 6.4179124331826145,
+      "metrics": {
+        "effective_rank_D_masked": 175.49393110179227,
+        "condition_number_D_masked": 4.14429823703538,
+        "comparison_branch_common_d_rel_mean": 10.75,
+        "comparison_branch_d_rel_mean": 20.0,
+        "input_coord_load_gini": 0.25
+      }
+    },
+    {
+      "mask": "prospective_imbalanced_coord_load_0207_c200_seed60665",
+      "stratum": "imbalanced",
+      "n_seeds": 5,
+      "acc_mean": 78.74,
+      "acc_ceiling": 89.0,
+      "acc_std": 5.858873611881382,
+      "metrics": {
+        "effective_rank_D_masked": 175.36518520827886,
+        "condition_number_D_masked": 4.3932134787348005,
+        "comparison_branch_common_d_rel_mean": 10.25,
+        "comparison_branch_d_rel_mean": 20.0,
+        "input_coord_load_gini": 0.25
+      }
+    },
+    {
+      "mask": "prospective_imbalanced_coord_load_0218_c200_seed60676",
+      "stratum": "imbalanced",
+      "n_seeds": 5,
+      "acc_mean": 82.89999999999999,
+      "acc_ceiling": 93.4,
+      "acc_std": 8.84601605243852,
+      "metrics": {
+        "effective_rank_D_masked": 175.2312348662209,
+        "condition_number_D_masked": 5.041767355917125,
+        "comparison_branch_common_d_rel_mean": 11.25,
+        "comparison_branch_d_rel_mean": 20.0,
+        "input_coord_load_gini": 0.25
+      }
+    },
+    {
+      "mask": "prospective_imbalanced_coord_load_0220_c200_seed60678",
+      "stratum": "imbalanced",
+      "n_seeds": 5,
+      "acc_mean": 79.52,
+      "acc_ceiling": 85.6,
+      "acc_std": 3.396115427955885,
+      "metrics": {
+        "effective_rank_D_masked": 176.03173781603795,
+        "condition_number_D_masked": 5.428055907953582,
+        "comparison_branch_common_d_rel_mean": 10.75,
+        "comparison_branch_d_rel_mean": 20.0,
+        "input_coord_load_gini": 0.25
+      }
+    },
+    {
+      "mask": "prospective_imbalanced_coord_load_0252_c200_seed60710",
+      "stratum": "imbalanced",
+      "n_seeds": 5,
+      "acc_mean": 83.5,
+      "acc_ceiling": 94.7,
+      "acc_std": 7.767367636464752,
+      "metrics": {
+        "effective_rank_D_masked": 175.1398312460997,
+        "condition_number_D_masked": 4.509367180193841,
+        "comparison_branch_common_d_rel_mean": 10.0,
+        "comparison_branch_d_rel_mean": 20.0,
+        "input_coord_load_gini": 0.25
+      }
+    },
+    {
+      "mask": "prospective_imbalanced_coord_load_0261_c200_seed60719",
+      "stratum": "imbalanced",
+      "n_seeds": 5,
+      "acc_mean": 84.3,
+      "acc_ceiling": 93.9,
+      "acc_std": 8.072174428244226,
+      "metrics": {
+        "effective_rank_D_masked": 175.9067632301569,
+        "condition_number_D_masked": 5.053365169113896,
+        "comparison_branch_common_d_rel_mean": 10.0,
+        "comparison_branch_d_rel_mean": 20.0,
+        "input_coord_load_gini": 0.25
+      }
+    },
+    {
+      "mask": "prospective_imbalanced_coord_load_0279_c200_seed60737",
+      "stratum": "imbalanced",
+      "n_seeds": 5,
+      "acc_mean": 79.5,
+      "acc_ceiling": 90.3,
+      "acc_std": 6.471475874945373,
+      "metrics": {
+        "effective_rank_D_masked": 176.2852163994139,
+        "condition_number_D_masked": 4.283454749106988,
+        "comparison_branch_common_d_rel_mean": 10.25,
+        "comparison_branch_d_rel_mean": 20.0,
+        "input_coord_load_gini": 0.25
+      }
+    }
+  ]
+}

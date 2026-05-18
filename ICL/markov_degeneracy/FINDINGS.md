@@ -84,11 +84,54 @@ that topology acts only through the **accuracy ceiling** it permits (a
 coverage/rank quantity), and even that is measurable only with multi-seed,
 converged runs.
 
+## Direction C — is the accuracy ceiling set by rank/coverage or load-shape?
+
+The WTA mechanism (global subspace projection) predicts ICL capacity is set
+by how well the input-coupled projection *covers* the input space, not by
+graph/mask shape. The prior program tried to settle this by regressing
+accuracy on a bag of mask metrics. The corrected answer:
+
+1. **The candidate predictors are one quantity.** An 8000-mask search
+   (`make_decorrelated_masks.py`) shows coord-load gini ("shape") and
+   `effective_rank_D_masked` ("coverage") are r = −0.95 collinear with **zero
+   achievable overlap** — no density-0.5 mask is even-but-low-coverage or
+   uneven-but-high-coverage. On the 16-mask grid all five varying mask
+   metrics are mutually collinear (Spearman |r| = 0.70–1.00). The prior
+   program's regression horse-race between "rank", "tree-diff" and "load"
+   metrics was comparing one quantity with itself.
+
+2. **Why they coincide.** Coverage is computed coordinate-by-coordinate; a
+   starved input coordinate (few coupled edges) is rank-deficient and
+   contributes nothing. An uneven mask starves coordinates. So load-evenness
+   *is* projection coverage — not correlated, identical.
+
+3. **That single quantity sets the accuracy ceiling.** Converged: high-
+   coverage (balanced) masks reach a 94–98% ceiling; low-coverage
+   (imbalanced) masks 86–95%; the gap is larger in the mean because low-
+   coverage masks also lose more seeds to bad basins. Accuracy-ceiling vs the
+   coverage axis: Spearman r ≈ +0.55 to +0.80 (every collinear proxy).
+   Consistent with the WTA global-projection mechanism: ICL capacity is a
+   coverage property.
+
+4. **No within-stratum signal.** Within the 8 balanced or 8 imbalanced masks,
+   effective rank does not predict the ceiling (p > 0.2, n = 8) — the effect
+   is entirely the between-stratum coverage axis. Prior per-mask single-seed
+   numbers were seed noise on top of a two-level coverage signal.
+
+5. **What this grid cannot answer.** All 16 masks sit on **one fixed graph**,
+   so whether the *graph's* shape matters beyond the mask is untestable here.
+   That is the genuine open follow-up — it needs multiple graphs.
+
 ## Files
 
-- `degeneracy_test.py` — the test (`--grid`, `--tag` select the checkpoint set)
-- `retrain.py` — retrains topologies to convergence
+- `degeneracy_test.py` — the degeneracy test (`--grid`, `--tag` select the set)
+- `retrain.py` — retrains all 16 masks to convergence
+- `make_decorrelated_masks.py` — 8000-mask search; rank/shape inseparability
+- `rank_vs_shape.py` — predictor collinearity + accuracy-vs-coverage analysis
 - `degeneracy_summary.json` / `_report.md` / `_scatter.png` — 100-epoch run
 - `degeneracy_summary_converged.json` / `_report_converged.md` /
   `_scatter_converged.png` — converged run
-- `retrained_grid/` — 4 topologies × 5 seeds, converged checkpoints
+- `rank_vs_shape_summary.json` / `_report.md` / `rank_vs_shape.png` — Direction C
+- `decorrelated_masks/` — search summary, `achievable_region.png`,
+  `scene_explained.png`
+- `retrained_grid/` — 16 masks × 5 seeds, converged checkpoints
