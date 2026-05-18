@@ -109,9 +109,13 @@ Key API (see `core.py` docstring for full detail):
 
 ## 3. Agent assignments (tmux windows 2–7)
 
-Each agent has an Engaging SSH pane. Honest note: only **W2** needs it heavily
-(training grid). W3–W7 use the pane only to `git pull` when grid checkpoints
-land — analysis itself is local and runs in seconds.
+**Cluster access:** only **W2** touches the Engaging cluster — to submit and
+monitor the training grid. **W3–W7 need no cluster access at all**: they run
+locally (the repo's `.venv`) on checkpoints in the local repo, and receive the
+grid's checkpoints via `git pull` from GitHub once W2 has committed them
+(`git pull` ≠ Engaging). An agent cannot clear Duo 2FA on its own, so W2's
+Engaging session must be opened by the user; W2 then drives that live pane via
+tmux. `git pull` here works anonymously (public repo).
 
 ### W2 — LEAD: training grid + M6 comparison + integration
 File: `m6_comparison.py`, plus `run_all.py`.
