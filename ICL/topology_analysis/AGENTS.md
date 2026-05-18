@@ -120,15 +120,24 @@ tmux. `git pull` here works anonymously (public repo).
 ### W2 — LEAD: training grid + M6 comparison + integration
 File: `m6_comparison.py`, plus `run_all.py`.
 
-**First, on the Engaging pane**, submit the training grid (SLURM runs all 11
-in parallel, ~40 min):
+**You are the W2 agent, on tmux window 2.** The pane directly beside you holds
+a *pre-authenticated, live* SSH session into the MIT Engaging cluster, opened
+for you by the user. **That pane is your ONLY way to reach the cluster** —
+drive it with `tmux send-keys` / `tmux capture-pane`, and treat it as a
+persistent shell already logged in at `/orcd/home/002/aadarwal/...`. Do NOT run
+a fresh `ssh`: Engaging requires Duo 2FA (a push to a human's phone) and a new
+login will just hang. The cluster work is yours alone — no other agent (W3–W7)
+has or needs cluster access; they work purely locally.
+
+**Step 1 — submit the training grid** through that pane (SLURM runs all 11 in
+parallel, ~40 min):
 ```bash
 cd /orcd/home/002/aadarwal/MarkovComputations && git pull
 WTA_JOBS="2 1.0 30;4 1.0 30;6 1.0 30;10 1.0 30;12 1.0 30;8 1.0 31;8 1.0 32;8 1.0 33;12 1.0 31;12 1.0 32;12 1.0 33" \
   bash ICL/engaging/run_on_engaging.sh
 ```
-Monitor `squeue`; as runs finish, `verify_checkpoints.py` each, then
-`git add ICL/results/wta_n_nodes_rhoall_seed && git commit && git push`.
+Monitor `squeue` (via the pane); as runs finish, `verify_checkpoints.py` each,
+then `git add ICL/results/wta_n_nodes_rhoall_seed && git commit && git push`.
 
 **M6 — is the learned topology canonical?** Align species across same-`n_nodes`
 checkpoints. Two comparison regimes — keep them SEPARATE:
