@@ -1,0 +1,31 @@
+{
+  "search": {
+    "n": 8000,
+    "coord_gini_range": [
+      0.05549999999999988,
+      0.4135
+    ],
+    "eff_rank_range": [
+      166.86619506473156,
+      183.28208639867358
+    ]
+  },
+  "gini_bins": {
+    "low": 0.09479511278195484,
+    "high": 0.34531869510664986,
+    "low_eff_rank_range": [
+      177.94263713663537,
+      183.28208639867358
+    ],
+    "high_eff_rank_range": [
+      166.86619506473156,
+      174.87626467218567
+    ]
+  },
+  "eff_rank_overlap": [
+    177.94263713663537,
+    174.87626467218567
+  ],
+  "verdict": "INSEPARABLE",
+  "note": "coord-load gini and effective_rank_D_masked cannot be decorrelated on density-0.5 edge-balanced masks: they are effectively one quantity."
+}
