@@ -124,6 +124,10 @@ same function. This survives training to convergence.</li>
 <li><strong>Capacity is projection coverage.</strong> The accuracy ceiling is
 set by how well the input mask covers the input space. The prior effort&rsquo;s
 competing topology metrics turn out to be that one quantity in disguise.</li>
+<li><strong>The capacity curve saturates at the predicted dimension.</strong>
+Swept down through starvation, ICL accuracy rises with coverage and saturates
+right where the prior effort&rsquo;s required-dimension formula said it should
+&mdash; but as a graceful ramp, not the WTA network&rsquo;s hard threshold.</li>
 </ol>
 </div>
 
@@ -138,7 +142,8 @@ competing topology metrics turn out to be that one quantity in disguise.</li>
 <a href="#markov">8 &middot; The Markov network</a>
 <a href="#r5">9 &middot; Markov degeneracy</a>
 <a href="#r6">10 &middot; Capacity is coverage</a>
-<a href="#synthesis">11 &middot; What it means</a>
+<a href="#r7">11 &middot; The capacity curve</a>
+<a href="#synthesis">12 &middot; What it means</a>
 </nav>
 
 <h2 id="model"><span class="no">1</span>The model</h2>
@@ -566,14 +571,66 @@ every other, confirming they measure one thing.</figcaption>
 reaction graph, so whether the <i>graph&rsquo;s</i> own shape matters beyond the
 mask is untestable here. That is the open follow-up.</p>
 
-<h2 id="synthesis"><span class="no">11</span>What it means</h2>
+<h2 id="r7"><span class="no">11</span>Result 7 &mdash; The capacity curve saturates at the predicted dimension</h2>
+
+<p><strong>Swept from starvation to saturation, ICL accuracy is governed by
+projection coverage. It saturates exactly where the prior program&rsquo;s
+required-dimension formula predicts &mdash; but as a graceful ramp, not the WTA
+network&rsquo;s hard threshold.</strong></p>
+
+<p>Result&nbsp;6 showed accuracy tracking coverage, but every mask there had
+ample coverage &mdash; the network was never seen to fail. Here we sweep the
+coverage axis down through failure: 12 levels of input-mask density, with the
+masked relative dimension <i class="v">d<sub>rel</sub></i> ranging from 20 to
+300, five seeds each, trained to convergence. The natural scale is the
+<i>required dimension</i> the prior program derived from the task,
+<i class="v">n<sub>req</sub></i>&nbsp;=&nbsp;2N(N+1)D&nbsp;=&nbsp;160 &mdash; a
+formula it defined but never tested, because all of its runs sat above it.</p>
+
+<figure>
+<img src="figures/f11-capacity.png" alt="ICL accuracy versus projection coverage">
+<figcaption><b>Figure 11.</b> Novel-class ICL accuracy against coverage
+<i>d<sub>rel</sub></i>&thinsp;/&thinsp;<i>n<sub>req</sub></i>, swept by input-mask
+density (best seed and mean over five; band is &plusmn;1 s.d.). Accuracy rises
+from ~50% under starvation and saturates near 98% at
+<i>d<sub>rel</sub></i>&nbsp;&asymp;&nbsp;<i>n<sub>req</sub></i> (red line). The
+rise is a graded ramp, and the network never falls to the 25% chance
+level.</figcaption>
+</figure>
+
+<ul>
+<li><strong>Coverage is a capacity variable.</strong> Best-seed accuracy rises
+monotonically from ~53% when the mask is starved
+(<i>d<sub>rel</sub></i>&nbsp;=&nbsp;20) to ~98% when coverage is ample &mdash; a
+45-point span. Result&nbsp;6&rsquo;s narrow range was just the top of this
+curve.</li>
+<li><strong>Saturation lands at the predicted dimension.</strong> The ceiling is
+reached at <i>d<sub>rel</sub></i>&nbsp;&asymp;&nbsp;160&nbsp;=&nbsp;<i>n<sub>req</sub></i>.
+The prior program&rsquo;s required-dimension formula, never tested in its own
+work, correctly marks where accuracy stops improving.</li>
+<li><strong>The transition is graded, the failure graceful.</strong> The curve
+is a smooth ramp, not a step. Even at <i>d<sub>rel</sub></i>&nbsp;=&nbsp;20
+&mdash; eight times below <i>n<sub>req</sub></i> &mdash; the network holds ~50% on
+the four-way task, far above chance. It degrades; it does not collapse.</li>
+</ul>
+
+<p>This is the sharpest point of contact with Part&nbsp;I. Both networks have the
+<i>same</i> capacity variable &mdash; projection coverage &mdash; and the Markov
+network saturates at the dimension the task analysis predicts. What differs is
+the <i>shape</i> of the transition: the discrete-species WTA network switches on
+hard at n&nbsp;=&nbsp;2N<sub>c</sub> (&sect;3), at chance below it; the
+steady-state Markov network ramps on smoothly and never quite fails. Two
+implementations of one capacity principle, with different sharpness.</p>
+
+<h2 id="synthesis"><span class="no">12</span>What it means</h2>
 
 <p><strong>Two attention-free reaction networks, one mechanism.</strong> In both,
 in-context learning is <i>subspace projection</i>: the joint context&ndash;query
 vector is projected onto learned comparison directions, and capacity is set by
-how well those projections cover the input space &mdash; a hard threshold for the
-WTA network (&sect;3, two detectors per context position), a graded coverage axis
-for the Markov network (&sect;10). Neither forms a query&ndash;key product;
+how well those projections cover the input space &mdash; a hard threshold at
+n&nbsp;=&nbsp;2N<sub>c</sub> for the WTA network (&sect;3), a graded ramp
+saturating at the task&rsquo;s required dimension for the Markov network
+(&sect;10&ndash;11). Neither forms a query&ndash;key product;
 neither needs attention. The WTA computation runs on a soft, graded mixture of
 species, not a discrete winner.</p>
 

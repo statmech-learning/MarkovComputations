@@ -1,0 +1,163 @@
+{
+  "n_req": 160,
+  "chance": 25.0,
+  "levels": [
+    {
+      "density": 0.05,
+      "d_rel": 20,
+      "effective_rank": 19.716228879351842,
+      "d_rel_over_n_req": 0.125,
+      "n_seeds": 5,
+      "acc_mean": 47.339999999999996,
+      "acc_std": 4.816886961513629,
+      "acc_ceiling": 53.1,
+      "acc_min": 41.1
+    },
+    {
+      "density": 0.1,
+      "d_rel": 40,
+      "effective_rank": 39.14845871014773,
+      "d_rel_over_n_req": 0.25,
+      "n_seeds": 5,
+      "acc_mean": 55.6,
+      "acc_std": 7.326663633605681,
+      "acc_ceiling": 63.3,
+      "acc_min": 42.5
+    },
+    {
+      "density": 0.15,
+      "d_rel": 60,
+      "effective_rank": 58.7503190420374,
+      "d_rel_over_n_req": 0.375,
+      "n_seeds": 5,
+      "acc_mean": 56.46,
+      "acc_std": 3.2512151574449835,
+      "acc_ceiling": 60.2,
+      "acc_min": 52.3
+    },
+    {
+      "density": 0.2,
+      "d_rel": 80,
+      "effective_rank": 76.62945382487818,
+      "d_rel_over_n_req": 0.5,
+      "n_seeds": 5,
+      "acc_mean": 68.8,
+      "acc_std": 2.6145745351777614,
+      "acc_ceiling": 73.4,
+      "acc_min": 65.7
+    },
+    {
+      "density": 0.25,
+      "d_rel": 100,
+      "effective_rank": 95.1642525653445,
+      "d_rel_over_n_req": 0.625,
+      "n_seeds": 5,
+      "acc_mean": 67.47999999999999,
+      "acc_std": 7.532702038445436,
+      "acc_ceiling": 80.2,
+      "acc_min": 58.4
+    },
+    {
+      "density": 0.3,
+      "d_rel": 120,
+      "effective_rank": 111.76674924333845,
+      "d_rel_over_n_req": 0.75,
+      "n_seeds": 5,
+      "acc_mean": 84.2,
+      "acc_std": 6.4494961043479995,
+      "acc_ceiling": 90.8,
+      "acc_min": 72.6
+    },
+    {
+      "density": 0.35,
+      "d_rel": 140,
+      "effective_rank": 129.1660687173418,
+      "d_rel_over_n_req": 0.875,
+      "n_seeds": 5,
+      "acc_mean": 74.52000000000001,
+      "acc_std": 8.611945192579896,
+      "acc_ceiling": 91.0,
+      "acc_min": 65.9
+    },
+    {
+      "density": 0.4,
+      "d_rel": 160,
+      "effective_rank": 148.0743977905618,
+      "d_rel_over_n_req": 1.0,
+      "n_seeds": 5,
+      "acc_mean": 87.28,
+      "acc_std": 6.209476628509041,
+      "acc_ceiling": 96.8,
+      "acc_min": 80.3
+    },
+    {
+      "density": 0.45,
+      "d_rel": 180,
+      "effective_rank": 162.97251464135815,
+      "d_rel_over_n_req": 1.125,
+      "n_seeds": 5,
+      "acc_mean": 83.66,
+      "acc_std": 11.253017373131529,
+      "acc_ceiling": 95.3,
+      "acc_min": 62.5
+    },
+    {
+      "density": 0.5,
+      "d_rel": 200,
+      "effective_rank": 180.60117972966273,
+      "d_rel_over_n_req": 1.25,
+      "n_seeds": 5,
+      "acc_mean": 95.50000000000001,
+      "acc_std": 1.9318385025669242,
+      "acc_ceiling": 97.2,
+      "acc_min": 92.1
+    },
+    {
+      "density": 0.6,
+      "d_rel": 240,
+      "effective_rank": 211.88225254415164,
+      "d_rel_over_n_req": 1.5,
+      "n_seeds": 5,
+      "acc_mean": 95.8,
+      "acc_std": 1.0620734437881414,
+      "acc_ceiling": 97.1,
+      "acc_min": 94.1
+    },
+    {
+      "density": 0.75,
+      "d_rel": 300,
+      "effective_rank": 256.2420470050135,
+      "d_rel_over_n_req": 1.875,
+      "n_seeds": 5,
+      "acc_mean": 97.75999999999999,
+      "acc_std": 0.9604165762834398,
+      "acc_ceiling": 99.0,
+      "acc_min": 96.1
+    }
+  ],
+  "logistic_fits": {
+    "mean": {
+      "floor": 20.80473568697629,
+      "ceiling": 99.99999999999987,
+      "x0_d_rel_over_n_req": 0.392166143123894,
+      "width": 0.41207641594342664,
+      "r2": 0.9415355598871212
+    },
+    "ceiling": {
+      "floor": 52.47862574768517,
+      "ceiling": 97.68726098730878,
+      "x0_d_rel_over_n_req": 0.5401486841535766,
+      "width": 0.15344018289727268,
+      "r2": 0.9798861182701096
+    }
+  },
+  "verdict": {
+    "midpoint_d_rel_over_n_req": 0.5401486841535766,
+    "width": 0.15344018289727268,
+    "saturation_d_rel_over_n_req": 1.0,
+    "lowest_coverage_accuracy": 47.339999999999996,
+    "reaches_chance": false,
+    "sharp_threshold": false,
+    "statement": "Coverage controls ICL accuracy: a graded capacity curve. Accuracy saturates at d_rel \u2248 160 (1.00 n_req); the prior program's required dimension n_req matches the saturation point. At the lowest coverage tested (d_rel 20) accuracy is 47% \u2014 well above chance: graceful degradation."
+  }
+}

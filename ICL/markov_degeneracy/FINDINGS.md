@@ -122,12 +122,41 @@ accuracy on a bag of mask metrics. The corrected answer:
    so whether the *graph's* shape matters beyond the mask is untestable here.
    That is the genuine open follow-up — it needs multiple graphs.
 
+## Capacity sweep — is coverage actually a capacity variable?
+
+Result 6 showed accuracy tracks coverage, but all 16 masks sat at d_rel = 200,
+above the task requirement n_req = 2·N·(N+1)·D = 160 — the model was never seen
+to fail. The capacity sweep (`capacity_sweep.py`, `capacity_analysis.py`)
+extends the coverage axis *down through starvation*: 12 mask-density levels,
+d_rel from 20 to 300 (0.12–1.9 × n_req), 5 seeds each, trained to convergence.
+
+1. **Coverage is a capacity variable.** Ceiling accuracy rises monotonically
+   from ~53% (d_rel = 20, starved) to ~98% (d_rel ≥ 200) — a 45-point swing.
+   Result 6's 12-point spread was the top of a real capacity curve.
+
+2. **Saturation lands at d_rel ≈ n_req.** The model reaches its ~98% ceiling
+   right around d_rel ≈ 160 = n_req. The prior program *defined* n_req but never
+   tested it (every run sat above it); it correctly predicts where accuracy
+   stops improving.
+
+3. **The curve is graded, and degradation is graceful.** The logistic transition
+   width is ≈ 0.15 in n_req units — a smooth ramp, not a sharp step. Even at
+   d_rel = 20 (8× below n_req) the model holds ~50% on a 4-way task, far above
+   the 25% chance floor. The Markov network degrades; it does not collapse.
+
+**Contrast with WTA.** Both networks have capacity = projection coverage, and the
+Markov model saturates at the predicted dimension. The difference is the
+*transition shape*: a hard threshold for the discrete-species WTA network
+(chance below n = 2·N_c), a graceful ramp for the steady-state Markov network.
+
 ## Files
 
 - `degeneracy_test.py` — the degeneracy test (`--grid`, `--tag` select the set)
 - `retrain.py` — retrains all 16 masks to convergence
 - `make_decorrelated_masks.py` — 8000-mask search; rank/shape inseparability
 - `rank_vs_shape.py` — predictor collinearity + accuracy-vs-coverage analysis
+- `capacity_sweep.py` / `capacity_analysis.py` — capacity sweep + threshold fit
+- `capacity_summary.json` / `capacity_report.md` / `capacity_curve.png`
 - `degeneracy_summary.json` / `_report.md` / `_scatter.png` — 100-epoch run
 - `degeneracy_summary_converged.json` / `_report_converged.md` /
   `_scatter_converged.png` — converged run

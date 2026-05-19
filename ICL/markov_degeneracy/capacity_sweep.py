@@ -81,7 +81,7 @@ def density_mask(density, rng):
 def precheck():
     D, topo = build_D()
     rng = np.random.default_rng(42)
-    densities = [0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45,
+    densities = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45,
                  0.50, 0.60, 0.75, 1.00]
     print(f"n_req = 2*N*(N+1)*D = {N_REQ}\n")
     print(f"{'density':>8} {'edges/coord':>12} {'d_rel':>14} "
